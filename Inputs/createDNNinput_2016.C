@@ -5,6 +5,7 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TH1.h"
+#include "TList.h"
 
 double luminosity = 35866;
 
@@ -22,10 +23,10 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
 
   // Define the subsamples that belong to a certain proccess
   vector<TString> MuonEG_Run2016  = { "MuonEG_Run2016B" , "MuonEG_Run2016C" , "MuonEG_Run2016D" , "MuonEG_Run2016E" , "MuonEG_Run2016F" , "MuonEG_Run2016G" , "MuonEG_Run2016H" };
-  vector<TString> DYJets          = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" /*, "EWKZ2Jets_ZToLL_M-50"*/ };
-  vector<TString> WJets           = { "W1JetsToLNu" , "W2JetsToLNu" , "W3JetsToLNu" , "W4JetsToLNu" , "WJetsToLNu" , "WGToLNuG" , "WGstarToLNuEE" , "WGstarToLNuMuMu" /*, "EWKWPlus2Jets_WToLNu" , "EWKWMinus2Jets_WToLNu"*/ };
+  vector<TString> DYJets          = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" , "EWKZ2Jets" };
+  vector<TString> WJets           = { "W1JetsToLNu" , "W2JetsToLNu" , "W3JetsToLNu" , "W4JetsToLNu" , "WJetsToLNu" , "WGToLNuG" , "WGstarToLNuEE" , "WGstarToLNuMuMu" , "EWKWPlus2Jet" , "EWKWMinus2Jet" };
   vector<TString> TTbar           = { "TTbar" };
-  vector<TString> SingleTop       = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_antitop" };
+  vector<TString> SingleTop       = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
   vector<TString> Diboson         = { "VVTo2L2Nu" , "WZJToLLLNu" , "WZTo1L1Nu2Q" , "WZTo1L3Nu" , "WZTo2L2Q" , "ZZTo2L2Q" , "ZZTo4L" , "WWToLNuQQ" };
   vector<TString> GluGluHToTauTau = { "GluGluHToTauTau_M125" };
   vector<TString> VBFHToTauTau    = { "VBFHToTauTau_M125" };
@@ -73,9 +74,9 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
     { "WGToLNuG"                 , 489.0 },
     { "WGstarToLNuMuMu"          , 2.793 },
     { "WGstarToLNuEE"            , 3.526 },
-    { "EWKWPlus2Jets_WToLNu"     , 25.62 },
-    { "EWKWMinus2Jets_WToLNu"    , 20.20 },
-    { "EWKZ2Jets_ZToLL_M-50"     , 3.987 },
+    { "EWKWPlus2Jet"             , 25.62 },
+    { "EWKWMinus2Jet"            , 20.20 },
+    { "EWKZ2Jets"                , 3.987 },
     { "GluGluHToTauTau_M125"     , 48.58*0.0627 },
     { "VBFHToTauTau_M125"        , 3.782*0.0627 }
   };
@@ -110,10 +111,11 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
     TFile *outFile = new TFile("NTuples_2016/" + sample.first + ".root","RECREATE");
     TTree *outTree = new TTree("TauCheck", "tree created as DNN input");
     bool firstTree = true;
+    TList* treeList = new TList();
 
-    for(auto const& subsample: sample.second) {
+    for(TString const& subsample: sample.second) {
 
-      cout << "  - " << subsample << endl;
+      cout << "  - " << subsample << " : ";
 
       TFile *inFile  = new TFile( inputDir + "/" + subsample + ".root" ,"READ");
       TTree *inTree  = (TTree*) inFile -> Get("TauCheck");
@@ -139,15 +141,18 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
       inTree->SetBranchAddress("metFilters",&metFilters);
       inTree->SetBranchAddress("trg_muonelectron",&trg_muonelectron);
 
-      // Create a branch for lumi_xsec_weight
       outFile->cd();
+      TTree *currentTree = new TTree(subsample,"temporary tree");
+
+      // Create a branch for lumi_xsec_weight
       float lumi_xsec_weight;
       if(firstTree){
 	outTree    = inTree->CloneTree(0);
 	TBranch *w = outTree->Branch("lumi_xsec_weight", &lumi_xsec_weight, "lumi_xsec_weight/F");
 	firstTree  = false;
       }
-      outTree->SetBranchAddress("lumi_xsec_weight",&lumi_xsec_weight);
+      currentTree = inTree->CloneTree(0);
+      TBranch *w  = currentTree->Branch("lumi_xsec_weight", &lumi_xsec_weight, "lumi_xsec_weight/F");
 
       for (int i=0; i<inTree->GetEntries(); i++) {
 	inTree->GetEntry(i);
@@ -186,12 +191,17 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
 
 	if( sample.first.Contains("MuonEG")) lumi_xsec_weight = 1.;
 
-	outTree->Fill();
+	currentTree->Fill();
       }
-
-      outTree->AutoSave();
-
+      cout<<currentTree->GetEntries()<<endl;
+      treeList->Add(currentTree);
+      inFile->Delete();
     }
+    outTree = TTree::MergeTrees(treeList);
+    cout<<"Together : "<<outTree->GetEntries()<<endl;
+    outTree  -> Write();
+    treeList -> Delete();
+    outFile  -> Close();
   }
   cout << endl; 
 }
