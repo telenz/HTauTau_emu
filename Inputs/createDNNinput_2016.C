@@ -154,6 +154,13 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
       currentTree = inTree->CloneTree(0);
       TBranch *w  = currentTree->Branch("lumi_xsec_weight", &lumi_xsec_weight, "lumi_xsec_weight/F");
 
+      // lumi-xsec-weight added
+      if( xsec_map.find(subsample) == xsec_map.end() && !sample.first.Contains("MuonEG")){
+	cout << endl << endl << "Sample " << subsample << " is missing in xsec_map. Exit code." << endl << endl ;
+	exit(-1);
+      }
+      float xsec = xsec_map[subsample];
+
       for (int i=0; i<inTree->GetEntries(); i++) {
 	inTree->GetEntry(i);
 
@@ -166,12 +173,7 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
 	if( metFilters < 0.5 )          continue;
 	if( trg_muonelectron < 0.5 )    continue;
 
-	// lumi-xsec-weight added
-	if( xsec_map.find(subsample) == xsec_map.end() && !sample.first.Contains("MuonEG")){
-	  cout << endl << endl << "Sample " << subsample << " is missing in xsec_map. Exit code." << endl << endl ;
-	  exit(-1);
-	}
-	lumi_xsec_weight = xsec_map[subsample]*luminosity/nevents;
+	lumi_xsec_weight = xsec*luminosity/nevents;
 	
 	// Stitching only for wjets MC in n-jet binned samples in npartons
 	if( sample.first.Contains("WJets") ){
@@ -181,7 +183,7 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
 	  else if(npartons == 4) lumi_xsec_weight = luminosity / ( neventsW4Jets/xsecW4Jets + neventsWIncl/xsecWIncl );
 	  else                   lumi_xsec_weight = luminosity / ( neventsWIncl/xsecWIncl );
 	}
-	else if( sample.first.Contains("DYJets") ){
+	else if( sample.first.Contains("DYJets") && sample.first.Contains("M-50") ){
 	  if(npartons == 1)      lumi_xsec_weight = luminosity / ( neventsDY1Jets/xsecDY1Jets + neventsDYIncl/xsecDYIncl );
 	  else if(npartons == 2) lumi_xsec_weight = luminosity / ( neventsDY2Jets/xsecDY2Jets + neventsDYIncl/xsecDYIncl );
 	  else if(npartons == 3) lumi_xsec_weight = luminosity / ( neventsDY3Jets/xsecDY3Jets + neventsDYIncl/xsecDYIncl );
