@@ -35,13 +35,13 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
   TString channel = "em";
   map< TString , vector<TString> > samples_map = {
     { "MuonEG_Run2016_dnn_" + channel + "_" + version , MuonEG_Run2016 },
-    { "DYJets_dnn_" + channel + "_" +version          , DYJets  },
-    { "WJets_dnn_" + channel + "_" +version           , WJets  },
-    { "TTbar_dnn_" + channel + "_" +version           , TTbar },
-    { "SingleTop_dnn_" + channel + "_" +version       , SingleTop },
-    { "Diboson_dnn_" + channel + "_" +version         , Diboson },
-    { "ggH_dnn_" + channel + "_" +version             , GluGluHToTauTau  },
-    { "VBFH_dnn_" + channel + "_" +version            , VBFHToTauTau  }
+    { "DYJets_dnn_"         + channel + "_" + version , DYJets },
+    { "WJets_dnn_"          + channel + "_" + version , WJets },
+    { "TTbar_dnn_"          + channel + "_" + version , TTbar },
+    { "SingleTop_dnn_"      + channel + "_" + version , SingleTop },
+    { "Diboson_dnn_"        + channel + "_" + version , Diboson },
+    { "ggH_dnn_"            + channel + "_" + version , GluGluHToTauTau },
+    { "VBFH_dnn_"           + channel + "_" + version , VBFHToTauTau }
   };
 
   // Cross-section map (taken from AN2016_355_v10 with minor unrelevant deviations - everything was checked)
@@ -107,7 +107,7 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
 
     cout << endl << sample.first << "  :  " << endl ;
 
-    TFile *outFile = new TFile(sample.first + ".root","RECREATE");
+    TFile *outFile = new TFile("NTuples_2016/" + sample.first + ".root","RECREATE");
     TTree *outTree = new TTree("TauCheck", "tree created as DNN input");
     bool firstTree = true;
 
