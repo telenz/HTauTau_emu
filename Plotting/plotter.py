@@ -23,7 +23,7 @@ f7,tree_VBFH      = f.openTree(inDir+"/VBFH_dnn_"+channel+"_"+version+".root","T
 selection = "pt_2>30 && pt_1>30"
 
 # define weights to apply
-weight = "lumi_xsec_weight*mcweight*puweight*effweight" #checked
+weight = "xsec_lumi_weight*mcweight*puweight*effweight" # checked
 
 # create canvas
 c = f.createCanvas()
