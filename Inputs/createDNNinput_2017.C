@@ -20,17 +20,36 @@ double getNEventsProcessed(TString filename)
   return nevents;
 }
 
-void createDNNinput_2017(TString inputDir=""){
+void createDNNinput_2017(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/"){
 
   // Define the subsamples that belong to a certain proccess
-  vector<TString> MuonEG_Run2017  = { "MuonEG_Run2017B" , "MuonEG_Run2017C" , "MuonEG_Run2017D" , "MuonEG_Run2017E" , "MuonEG_Run2017F" , "MuonEG_Run2017G" , "MuonEG_Run2017H" };
-  vector<TString> DYJets          = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" , "EWKZ2Jets" };
-  vector<TString> WJets           = { "W1JetsToLNu" , "W2JetsToLNu" , "W3JetsToLNu" , "W4JetsToLNu" , "WJetsToLNu" , "WGToLNuG" , "WGstarToLNuEE" , "WGstarToLNuMuMu" , "EWKWPlus2Jet" , "EWKWMinus2Jet" };
-  vector<TString> TTbar           = { "TTTo2L2Nu" , "TTToHadronic" , "TTToSemiLeptonic" };
-  vector<TString> SingleTop       = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
-  vector<TString> Diboson         = { "VVTo2L2Nu" , "WZJToLLLNu" , "WZTo1L1Nu2Q" , "WZTo1L3Nu" , "WZTo2L2Q" , "ZZTo2L2Q" , "ZZTo4L" , "WWToLNuQQ" };
-  vector<TString> GluGluHToTauTau = { "GluGluHToTauTau_M125" };
-  vector<TString> VBFHToTauTau    = { "VBFHToTauTau_M125" };
+  vector<TString> MuonEG_Run2017  = { "MuonEG_Run2017B" ,
+				      "MuonEG_Run2017C" ,
+				      "MuonEG_Run2017D" ,
+				      "MuonEG_Run2017E" ,
+				      "MuonEG_Run2017F" };
+  vector<TString> DYJets          = { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+				      "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+				      "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+				      "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+				      "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" };
+  vector<TString> WJets           = { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+				      "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+				      "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+				      "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+				      "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" };
+  vector<TString> TTbar           = { "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8" ,
+				      "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8" ,
+				      "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8" };
+  vector<TString> SingleTop       = { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" ,
+				      "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" ,
+				      "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" ,
+				      "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" };
+  vector<TString> Diboson         = { "WW_TuneCP5_13TeV-pythia8" ,
+				      "WZ_TuneCP5_13TeV-pythia8" ,
+				      "ZZ_TuneCP5_13TeV-pythia8" };
+  // vector<TString> GluGluHToTauTau = { "GluGluHToTauTau_M125" };
+  // vector<TString> VBFHToTauTau    = { "VBFHToTauTau_M125" };
 
   // Mapping of subsamples to output root-file
   TString version = "v1";
@@ -42,59 +61,58 @@ void createDNNinput_2017(TString inputDir=""){
     { "TTbar_dnn_"          + channel + "_" + version , TTbar },
     { "SingleTop_dnn_"      + channel + "_" + version , SingleTop },
     { "Diboson_dnn_"        + channel + "_" + version , Diboson },
-    { "ggH_dnn_"            + channel + "_" + version , GluGluHToTauTau },
-    { "VBFH_dnn_"           + channel + "_" + version , VBFHToTauTau }
+    // { "ggH_dnn_"            + channel + "_" + version , GluGluHToTauTau },
+    // { "VBFH_dnn_"           + channel + "_" + version , VBFHToTauTau }
   };
 
-  // Cross-section map ( needs to be checked )
+  // Cross-section map ( needs to be checked again )
   map<TString, double> xsec_map = {
-    { "DYJetsToLL_M-10to50"      , 15820*1.079 },
-    { "DYJetsToLL_M-50"          , 5345*1.079 },
-    { "DY1JetsToLL_M-50"         , 875.7*1.079 },
-    { "DY2JetsToLL_M-50"         , 306.9*1.079 },
-    { "DY3JetsToLL_M-50"         , 111.9*1.079 },
-    { "DY4JetsToLL_M-50"         , 43.97*1.079 },
-    { "WJetsToLNu"               , 52760*1.166 },
-    { "W1JetsToLNu"              , 8104.*1.166 },
-    { "W2JetsToLNu"              , 2796.*1.166 },
-    { "W3JetsToLNu"              , 993.5*1.166 },
-    { "W4JetsToLNu"              , 544.4*1.166 },
-    { "TTTo2L2Nu"                , 88.29 },
-    { "TTToHadronic"             , 377.96 },
-    { "TTToSemiLeptonic"         , 365.34 },
-    { "ST_t-channel_antitop"     , 26.38 },
-    { "ST_t-channel_top"         , 44.33 },
-    { "ST_tW_antitop"            , 35.85 },
-    { "ST_tW_top"                , 35.85 },
-    { "VVTo2L2Nu"                , 11.95 },
-    { "WW"                , 49.997 },
-    { "WZ"                 , 5.595 },
-    { "ZZ"              , 10.71 },
-    { "GluGluHToTauTau_M125"     , 48.58*0.0627 },
-    { "VBFHToTauTau_M125"        , 3.782*0.0627 }
+    // { "DYJetsToLL_M-10to50"      , 15820*1.079 },
+    { "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"  , 5345*1.079 },
+    { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 875.7*1.079 },
+    { "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 306.9*1.079 },
+    { "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 111.9*1.079 },
+    { "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 43.97*1.079 },
+    { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 52760*1.166 },
+    { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 8104.*1.166 },
+    { "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 2796.*1.166 },
+    { "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 993.5*1.166 },
+    { "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 544.4*1.166 },
+    { "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8"        , 88.29 },
+    { "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8"     , 377.96 },
+    { "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8" , 365.34 },
+    { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" , 26.38 },
+    { "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8"     , 44.33 },
+    { "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                  , 35.85 },
+    { "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                      , 35.85 },
+    { "WW_TuneCP5_13TeV-pythia8" , 49.997 },
+    { "WZ_TuneCP5_13TeV-pythia8" , 5.595 },
+    { "ZZ_TuneCP5_13TeV-pythia8" , 10.71 },
+    // { "GluGluHToTauTau_M125"     , 48.58*0.0627 },
+    // { "VBFHToTauTau_M125"        , 3.782*0.0627 }
   };
 
   // Needed for stitching
-  double xsecWIncl      = xsec_map["WJetsToLNu"];
-  double xsecW1Jets     = xsec_map["W1JetsToLNu"];
-  double xsecW2Jets     = xsec_map["W2JetsToLNu"];
-  double xsecW3Jets     = xsec_map["W3JetsToLNu"];
-  double xsecW4Jets     = xsec_map["W4JetsToLNu"];
-  double xsecDYIncl     = xsec_map["DYJetsToLL_M-50"];
-  double xsecDY1Jets    = xsec_map["DY1JetsToLL_M-50"];
-  double xsecDY2Jets    = xsec_map["DY2JetsToLL_M-50"];
-  double xsecDY3Jets    = xsec_map["DY3JetsToLL_M-50"];
-  double xsecDY4Jets    = xsec_map["DY4JetsToLL_M-50"];
-  double neventsWIncl   = getNEventsProcessed(inputDir+"/WJetsToLNu.root");
-  double neventsW1Jets  = getNEventsProcessed(inputDir+"/W1JetsToLNu.root");
-  double neventsW2Jets  = getNEventsProcessed(inputDir+"/W2JetsToLNu.root");
-  double neventsW3Jets  = getNEventsProcessed(inputDir+"/W3JetsToLNu.root");
-  double neventsW4Jets  = getNEventsProcessed(inputDir+"/W4JetsToLNu.root");
-  double neventsDYIncl  = getNEventsProcessed(inputDir+"/DYJetsToLL_M-50.root");
-  double neventsDY1Jets = getNEventsProcessed(inputDir+"/DY1JetsToLL_M-50.root");
-  double neventsDY2Jets = getNEventsProcessed(inputDir+"/DY2JetsToLL_M-50.root");
-  double neventsDY3Jets = getNEventsProcessed(inputDir+"/DY3JetsToLL_M-50.root");
-  double neventsDY4Jets = getNEventsProcessed(inputDir+"/DY4JetsToLL_M-50.root");
+  double xsecWIncl      = xsec_map["WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"];
+  double xsecW1Jets     = xsec_map["W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"];
+  double xsecW2Jets     = xsec_map["W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"];
+  double xsecW3Jets     = xsec_map["W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"];
+  double xsecW4Jets     = xsec_map["W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"];
+  double xsecDYIncl     = xsec_map["DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"];
+  double xsecDY1Jets    = xsec_map["DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"];
+  double xsecDY2Jets    = xsec_map["DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"];
+  double xsecDY3Jets    = xsec_map["DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"];
+  double xsecDY4Jets    = xsec_map["DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"];
+  double neventsWIncl   = getNEventsProcessed(inputDir+"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root");
+  double neventsW1Jets  = getNEventsProcessed(inputDir+"/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root");
+  double neventsW2Jets  = getNEventsProcessed(inputDir+"/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root");
+  double neventsW3Jets  = getNEventsProcessed(inputDir+"/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root");
+  double neventsW4Jets  = getNEventsProcessed(inputDir+"/W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root");
+  double neventsDYIncl  = getNEventsProcessed(inputDir+"/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root");
+  double neventsDY1Jets = getNEventsProcessed(inputDir+"/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root");
+  double neventsDY2Jets = getNEventsProcessed(inputDir+"/DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root");
+  double neventsDY3Jets = getNEventsProcessed(inputDir+"/DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root");
+  double neventsDY4Jets = getNEventsProcessed(inputDir+"/DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root");
   
   // Loop over all samples
   for (auto const& sample : samples_map){
