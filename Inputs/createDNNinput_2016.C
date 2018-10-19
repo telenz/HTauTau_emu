@@ -8,6 +8,7 @@
 #include "TList.h"
 
 double luminosity = 35866;
+bool applyPreselection = true;
 
 double getNEventsProcessed(TString filename)
 {
@@ -165,25 +166,26 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
 	inTree->GetEntry(i);
 
 	// Add here preselection if necessary
-	if( iso_1 > 0.15 )              continue;
-	if( iso_2 > 0.2)                continue;
-	if( extraelec_veto > 0.5)       continue;
-	if( extramuon_veto > 0.5)       continue;
-	if( TMath::Max(pt_1,pt_2) < 24) continue;
-	if( metFilters < 0.5 )          continue;
-	if( trg_muonelectron < 0.5 )    continue;
-
+	if(applyPreselection){
+	  if( iso_1 > 0.15 )              continue;
+	  if( iso_2 > 0.2)                continue;
+	  if( extraelec_veto > 0.5)       continue;
+	  if( extramuon_veto > 0.5)       continue;
+	  if( TMath::Max(pt_1,pt_2) < 24) continue;
+	  if( metFilters < 0.5 )          continue;
+	  if( trg_muonelectron < 0.5 )    continue;
+	}
 	xsec_lumi_weight = xsec*luminosity/nevents;
 	
 	// Stitching only for wjets MC in n-jet binned samples in npartons
-	if( sample.first.Contains("WJets") ){
+	if( subsample.Contains("W") && subsample.Contains("JetsToLNu") ){
 	  if(npartons == 1)      xsec_lumi_weight = luminosity / ( neventsW1Jets/xsecW1Jets + neventsWIncl/xsecWIncl );
 	  else if(npartons == 2) xsec_lumi_weight = luminosity / ( neventsW2Jets/xsecW2Jets + neventsWIncl/xsecWIncl );
 	  else if(npartons == 3) xsec_lumi_weight = luminosity / ( neventsW3Jets/xsecW3Jets + neventsWIncl/xsecWIncl );
 	  else if(npartons == 4) xsec_lumi_weight = luminosity / ( neventsW4Jets/xsecW4Jets + neventsWIncl/xsecWIncl );
 	  else                   xsec_lumi_weight = luminosity / ( neventsWIncl/xsecWIncl );
 	}
-	else if( sample.first.Contains("DYJets") && sample.first.Contains("M-50") ){
+	else if( subsample.Contains("DY") && subsample.Contains("JetsToLL_M-50") ){
 	  if(npartons == 1)      xsec_lumi_weight = luminosity / ( neventsDY1Jets/xsecDY1Jets + neventsDYIncl/xsecDYIncl );
 	  else if(npartons == 2) xsec_lumi_weight = luminosity / ( neventsDY2Jets/xsecDY2Jets + neventsDYIncl/xsecDYIncl );
 	  else if(npartons == 3) xsec_lumi_weight = luminosity / ( neventsDY3Jets/xsecDY3Jets + neventsDYIncl/xsecDYIncl );
@@ -201,7 +203,7 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
     }
     outTree = TTree::MergeTrees(treeList);
     cout<<"Together : "<<outTree->GetEntries()<<endl;
-    outTree  -> Write();
+    outTree  -> Write( "" , TObject::kOverwrite );
     treeList -> Delete();
     outFile  -> Close();
   }
