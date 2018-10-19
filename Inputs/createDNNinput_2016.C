@@ -144,15 +144,15 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
       outFile->cd();
       TTree *currentTree = new TTree(subsample,"temporary tree");
 
-      // Create a branch for lumi_xsec_weight
-      float lumi_xsec_weight;
+      // Create a branch for xsec_lumi_weight
+      float xsec_lumi_weight;
       if(firstTree){
 	outTree    = inTree->CloneTree(0);
-	TBranch *w = outTree->Branch("lumi_xsec_weight", &lumi_xsec_weight, "lumi_xsec_weight/F");
+	TBranch *w = outTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
 	firstTree  = false;
       }
       currentTree = inTree->CloneTree(0);
-      TBranch *w  = currentTree->Branch("lumi_xsec_weight", &lumi_xsec_weight, "lumi_xsec_weight/F");
+      TBranch *w  = currentTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
 
       // lumi-xsec-weight added
       if( xsec_map.find(subsample) == xsec_map.end() && !sample.first.Contains("MuonEG")){
@@ -173,25 +173,25 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
 	if( metFilters < 0.5 )          continue;
 	if( trg_muonelectron < 0.5 )    continue;
 
-	lumi_xsec_weight = xsec*luminosity/nevents;
+	xsec_lumi_weight = xsec*luminosity/nevents;
 	
 	// Stitching only for wjets MC in n-jet binned samples in npartons
 	if( sample.first.Contains("WJets") ){
-	  if(npartons == 1)      lumi_xsec_weight = luminosity / ( neventsW1Jets/xsecW1Jets + neventsWIncl/xsecWIncl );
-	  else if(npartons == 2) lumi_xsec_weight = luminosity / ( neventsW2Jets/xsecW2Jets + neventsWIncl/xsecWIncl );
-	  else if(npartons == 3) lumi_xsec_weight = luminosity / ( neventsW3Jets/xsecW3Jets + neventsWIncl/xsecWIncl );
-	  else if(npartons == 4) lumi_xsec_weight = luminosity / ( neventsW4Jets/xsecW4Jets + neventsWIncl/xsecWIncl );
-	  else                   lumi_xsec_weight = luminosity / ( neventsWIncl/xsecWIncl );
+	  if(npartons == 1)      xsec_lumi_weight = luminosity / ( neventsW1Jets/xsecW1Jets + neventsWIncl/xsecWIncl );
+	  else if(npartons == 2) xsec_lumi_weight = luminosity / ( neventsW2Jets/xsecW2Jets + neventsWIncl/xsecWIncl );
+	  else if(npartons == 3) xsec_lumi_weight = luminosity / ( neventsW3Jets/xsecW3Jets + neventsWIncl/xsecWIncl );
+	  else if(npartons == 4) xsec_lumi_weight = luminosity / ( neventsW4Jets/xsecW4Jets + neventsWIncl/xsecWIncl );
+	  else                   xsec_lumi_weight = luminosity / ( neventsWIncl/xsecWIncl );
 	}
 	else if( sample.first.Contains("DYJets") && sample.first.Contains("M-50") ){
-	  if(npartons == 1)      lumi_xsec_weight = luminosity / ( neventsDY1Jets/xsecDY1Jets + neventsDYIncl/xsecDYIncl );
-	  else if(npartons == 2) lumi_xsec_weight = luminosity / ( neventsDY2Jets/xsecDY2Jets + neventsDYIncl/xsecDYIncl );
-	  else if(npartons == 3) lumi_xsec_weight = luminosity / ( neventsDY3Jets/xsecDY3Jets + neventsDYIncl/xsecDYIncl );
-	  else if(npartons == 4) lumi_xsec_weight = luminosity / ( neventsDY4Jets/xsecDY4Jets + neventsDYIncl/xsecDYIncl );
-	  else                   lumi_xsec_weight = luminosity / ( neventsDYIncl/xsecDYIncl );
+	  if(npartons == 1)      xsec_lumi_weight = luminosity / ( neventsDY1Jets/xsecDY1Jets + neventsDYIncl/xsecDYIncl );
+	  else if(npartons == 2) xsec_lumi_weight = luminosity / ( neventsDY2Jets/xsecDY2Jets + neventsDYIncl/xsecDYIncl );
+	  else if(npartons == 3) xsec_lumi_weight = luminosity / ( neventsDY3Jets/xsecDY3Jets + neventsDYIncl/xsecDYIncl );
+	  else if(npartons == 4) xsec_lumi_weight = luminosity / ( neventsDY4Jets/xsecDY4Jets + neventsDYIncl/xsecDYIncl );
+	  else                   xsec_lumi_weight = luminosity / ( neventsDYIncl/xsecDYIncl );
 	}
 
-	if( sample.first.Contains("MuonEG")) lumi_xsec_weight = 1.;
+	if( sample.first.Contains("MuonEG")) xsec_lumi_weight = 1.;
 
 	currentTree->Fill();
       }
