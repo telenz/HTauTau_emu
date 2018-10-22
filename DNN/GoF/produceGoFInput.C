@@ -106,15 +106,15 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   //************************************************************************************************
   // Define samples
-  sample Data( "Data"      , "MuonEG_Run2016.root" );
+  sample Data( "Data"      , "MuonEG_Run2016_dnn_em_v1.root" );
   sample ZTT(  "ZTT"       , "DYJets_dnn_em_v1.root" );
   sample ZLL(  "ZLL"       , "DYJets_dnn_em_v1.root" );
-  sample EWKZ( "EWKZ"      , "EWKZ_dnn_em_v1.root" );
+  sample EWKZ( "EWKZ"      , "EWKZ_em_v1.root" );
   sample W(    "WJets"     , "WJets_dnn_em_v1.root" );
   sample TT(   "TTbar"     , "TTbar_dnn_em_v1.root" );
   sample ST(   "SingleTop" , "SingleTop_dnn_em_v1.root" );
   sample VV(   "Diboson"   , "Diboson_dnn_em_v1.root" );
-  sample QCD(  "QCD"       , "MuonEG_Run2016.root" );
+  sample QCD(  "QCD"       , "MuonEG_Run2016_dnn_em_v1.root" );
   sample ggH(  "ggH"       , "ggH_dnn_em_v1.root" );
   sample VBFH( "VBFH"      , "VBFH_dnn_em_v1.root" );
   
@@ -133,6 +133,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     sampleName.weightStringSS     = Weight+qcdweight;
     sampleName.cutStringSSrelaxed = "(os<0.5"+CutsSS+")";
     sampleName.weightStringSSrelaxed = Weight+qcdweight;
+
+    sampleName.variable = "m_vis : pt_2";
   }
 
   // Define sample specific cuts
@@ -167,24 +169,30 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   //************************************************************************************************
   // Define systematic uncertainties
 
-  // Common uncertainties
+  // Uncertainties common for all samples
   // 1.) Electron scale
   sysUncertainty eScaleUp("_CMS_scale_e_em_13TeVUp");
   eScaleUp.cutString.ReplaceAll("dzeta","dzeta_eUp");
   eScaleUp.cutString.ReplaceAll("pt_1","pt_Up_1");
   eScaleUp.cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eUp");
+  eScaleUp.variable.ReplaceAll("m_vis","m_vis_eUp");
+  eScaleUp.variable.ReplaceAll("m_sv","m_sv_eUp");
   sysUncertainty eScaleDown("_CMS_scale_e_em_13TeVDown");
   eScaleDown.cutString.ReplaceAll("dzeta","dzeta_eDown");
   eScaleDown.cutString.ReplaceAll("pt_1","pt_Down_1");
   eScaleDown.cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eDown");
+  eScaleDown.variable.ReplaceAll("m_vis","m_vis_eDown");
+  eScaleDown.variable.ReplaceAll("m_sv","m_sv_eDown");
 
   // 2.) JES
   sysUncertainty jScaleUp("_CMS_scale_j_em_13TeVUp");
   jScaleUp.cutString.ReplaceAll("njets","njets_Up");
   jScaleUp.cutString.ReplaceAll("mjj","mjj_Up");
+  jScaleUp.variable.ReplaceAll("mjj","mjj_Up");
   sysUncertainty jScaleDown("_CMS_scale_j_em_13TeVDown");
   jScaleDown.cutString.ReplaceAll("njets","njets_Down");
   jScaleDown.cutString.ReplaceAll("mjj","mjj_Down");
+  jScaleDown.variable.ReplaceAll("mjj","mjj_Down");
 
   // 3.) MET scale
   sysUncertainty metScaleUp("_CMS_scale_met_em_13TeVUp");
@@ -218,7 +226,9 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 				    bFakeUp , bFakeDown
   };
 
-  for(sample & sampleName : sampleVec) sampleName.uncertainties = uncVec;
+  for(sample & sampleName : sampleVec){
+    sampleName.uncertainties = uncVec;
+  }
 
   // Sample-specific uncertainties
   // 7.) TTbar shape
@@ -253,14 +263,25 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   // 1.) Fill nominal histograms
   for(auto &sample : sampleVec){
 
-    TFile *file = new TFile( directory + sample.filename );
+    cout << sample.name << " : " << sample.filename << endl;
+    TFile *file = new TFile( directory + "/" + sample.filename );
     TTree *tree = (TTree*) file->Get("TauCheck");
-
+    const int nBinsX = sizeof(em_inclusive.binsX)/sizeof(float) - 1;
+    const int nBinsY = sizeof(em_inclusive.binsY)/sizeof(float) - 1;
+    sample.hist = new TH2D(sample.name + "_os" , "" , nBinsX , em_inclusive.binsX , nBinsY , em_inclusive.binsY );
+    cout << sample.name << " : " << sample.variable << endl;
+    cout << sample.name << " : " << sample.weightString << endl;
+    cout << sample.name << " : " << sample.cutString << endl << endl;
     tree -> Draw( sample.variable + ">>" + sample.hist->GetName() , sample.weightString + "*(" + sample.cutString + ")" );
     // do here the unfolding ???
       
     // now start the loop over the sys uncertainties
+    cout << "start filling uncertainty histograms ..." << endl;
     for(auto &sys : sample.uncertainties){
+      cout << sys.name << " : " << sys.variable << endl;
+      cout << sys.name << " : " << sys.weightString << endl;
+      cout << sys.name << " : " << sys.cutString << endl << endl;
+      sys.hist = new TH2D(sys.name + "_os" , "" , nBinsX , em_inclusive.binsX , nBinsY , em_inclusive.binsY );
       tree -> Draw( sys.variable + ">>" +  sys.hist->GetName() , sys.weightString + "*(" + sys.cutString + ")" );
 
     }
