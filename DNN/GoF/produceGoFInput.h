@@ -4,11 +4,13 @@
 #include "TTree.h"
 #include <iostream>
 #include <vector>
+#include <map>
 #include "HttStylesNew.cc"
 #include "Unfold.C"
 #include "CMS_lumi.C"
 
-class analyzer_instance_2D {
+// ********************************************************************************************
+class Analyzer2D {
 
 public :
   TString name;
@@ -31,47 +33,29 @@ public :
   
   TString variable = "m_vis : pt_2";
 
-  analyzer_instance_2D(TString name = ""){
+  Analyzer2D(TString name = ""){
     name = name;
-    /* hist          = new TH2D(name+"_os","",100,0,200,100,0,200); */
-    /* histSS        = new TH2D(name+"_ss","",100,0,200,100,0,200); */
-    /* histSSrelaxed = new TH2D(name+"_ss_relaxed","",100,0,200,100,0,200); */
   }
 };
+// ********************************************************************************************
 
-
-class sysUncertainty : public analyzer_instance_2D {
-
-public :
-  
-  TString sysName;
-  
-  sysUncertainty(TString sysName = ""){
-    name = sysName;
-    /* hist          = new TH2D("","",100,0,200,100,0,200); */
-    /* histSSrelaxed = new TH2D("","",100,0,200,100,0,200); */
-  }
-};
-
-class sample : public analyzer_instance_2D {
+// ********************************************************************************************
+class Sample : public Analyzer2D {
 
 public :  
-
   TString filename;
-  vector<sysUncertainty> uncertainties;
+  map< TString , Sample > uncertainties;
   double norm = 1;
  
- sample(TString sampleName = "", TString filepath = "")
-    {
-      name     = sampleName;
-      filename = filepath;
-      cout<<filename<<endl;
-      /* hist          = new TH2D(name+"_os","",100,0,200,100,0,200); */
-      /* histSSrelaxed = new TH2D(name+"_ss_relaxed","",100,0,200,100,0,200); */
-    }
+  Sample(TString sampleName = "", TString filepath = ""){
+    name     = sampleName;
+    filename = filepath;
+  }
 };
 
-class category {
+// ********************************************************************************************
+
+class Category {
 
 public :   
   TString name = "";
@@ -80,9 +64,9 @@ public :
   TString variable   = "";
   float *binsX;
   float *binsY;
-  vector<sample> *sampleList;
+  vector<Sample> *sampleList;
 
-  category(TString catName){
+  Category(TString catName){
     name = catName;
   }
 };

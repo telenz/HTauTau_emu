@@ -7,6 +7,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   SetStyle();
 
   double lumi = 35900;
+  bool verbose = true;
 
   bool logY = true;
   bool blindData = false;
@@ -61,10 +62,10 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   // Define different category cuts
   // still needs to set ggscaleweight, labelBins, yeThreshols, change variale for eUp and jesUp, OSSS_categ +err
 
-  class category em_inclusive("em_inclusive");
-  class category em_0jet("em_0jet");
-  class category em_boosted("em_boosted");
-  class category em_vbf("em_vbf");
+  class Category em_inclusive("em_inclusive");
+  class Category em_0jet("em_0jet");
+  class Category em_boosted("em_boosted");
+  class Category em_vbf("em_vbf");
 
   // Inclusive category
   em_inclusive.cutString   = CutsKine + CutsIso + CutsCategory;
@@ -101,40 +102,47 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   em_vbf.variable   = "m_sv:mjj";
 
   // Make a vector from these categories
-  vector<class category> categoryVec = { em_inclusive };
+  vector<class Category> category_vec = { em_inclusive };
   //************************************************************************************************
 
   //************************************************************************************************
   // Define samples
-  sample Data( "Data"      , "MuonEG_Run2016_dnn_em_v1.root" );
-  sample ZTT(  "ZTT"       , "DYJets_dnn_em_v1.root" );
-  sample ZLL(  "ZLL"       , "DYJets_dnn_em_v1.root" );
-  sample EWKZ( "EWKZ"      , "EWKZ_em_v1.root" );
-  sample W(    "WJets"     , "WJets_dnn_em_v1.root" );
-  sample TT(   "TTbar"     , "TTbar_dnn_em_v1.root" );
-  sample ST(   "SingleTop" , "SingleTop_dnn_em_v1.root" );
-  sample VV(   "Diboson"   , "Diboson_dnn_em_v1.root" );
-  sample QCD(  "QCD"       , "MuonEG_Run2016_dnn_em_v1.root" );
-  sample ggH(  "ggH"       , "ggH_dnn_em_v1.root" );
-  sample VBFH( "VBFH"      , "VBFH_dnn_em_v1.root" );
+  Sample Data( "Data"      , "MuonEG_Run2016_dnn_em_v1.root" );
+  Sample ZTT(  "ZTT"       , "DYJets_dnn_em_v1.root" );
+  Sample ZLL(  "ZLL"       , "DYJets_dnn_em_v1.root" );
+  Sample EWKZ( "EWKZ"      , "EWKZ_em_v1.root" );
+  Sample W(    "WJets"     , "WJets_dnn_em_v1.root" );
+  Sample TT(   "TTbar"     , "TTbar_dnn_em_v1.root" );
+  Sample ST(   "SingleTop" , "SingleTop_dnn_em_v1.root" );
+  Sample VV(   "Diboson"   , "Diboson_dnn_em_v1.root" );
+  Sample QCD(  "QCD"       , "MuonEG_Run2016_dnn_em_v1.root" );
+  Sample ggH(  "ggH"       , "ggH_dnn_em_v1.root" );
+  Sample VBFH( "VBFH"      , "VBFH_dnn_em_v1.root" );
   
   // Define pre-defined norms
   ZTT.norm = 1.02;
   ZLL.norm = 1.02;
   QCD.norm = 0.503821;
 
-  vector<sample> sampleVec= { Data , ZTT , ZLL , EWKZ , W , TT , ST , VV , QCD , ggH , VBFH };
+  vector<Sample> sample_vec= { Data , ZTT , ZLL , EWKZ , W , TT , ST , VV , QCD , ggH , VBFH };
+  
+  if(verbose){
+    cout << endl << endl << "... Background classes ... "<< endl ;
+    for(Sample & smpl : sample_vec ){
+      cout << " - " << smpl.name << endl;
+    }
+  }
 
   // Define common cut strings  
-  for(sample & sampleName : sampleVec){
-    sampleName.cutString          = "(os>0.5"+Cuts+")";
-    sampleName.weightString       = Weight;
-    sampleName.cutStringSS        = "(os<0.5"+Cuts+")";
-    sampleName.weightStringSS     = Weight+qcdweight;
-    sampleName.cutStringSSrelaxed = "(os<0.5"+CutsSS+")";
-    sampleName.weightStringSSrelaxed = Weight+qcdweight;
-
-    sampleName.variable = "m_vis : pt_2";
+  for(Sample & smpl : sample_vec){
+    
+    smpl.cutString          = "(os>0.5"+Cuts+")";
+    smpl.weightString       = Weight;
+    smpl.cutStringSS        = "(os<0.5"+Cuts+")";
+    smpl.weightStringSS     = Weight+qcdweight;
+    smpl.cutStringSSrelaxed = "(os<0.5"+CutsSS+")";
+    smpl.weightStringSSrelaxed = Weight+qcdweight;
+    smpl.variable = "m_vis : pt_2";
   }
 
   // Define sample specific cuts
@@ -160,509 +168,170 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   ZLL.weightStringSSrelaxed += zptmassweight;
   ZLL.cutStringSSrelaxed += "&&!isZTT";
   TT.weightStringSSrelaxed += topweight;
-
-  // for(auto &cat : categoryVec){
-  //   cat.sampleList = &sampleVec;
-  // }
   //************************************************************************************************
 
   //************************************************************************************************
   // Define systematic uncertainties
 
   // Uncertainties common for all samples
-  // 1.) Electron scale
-  sysUncertainty eScaleUp("_CMS_scale_e_em_13TeVUp");
-  eScaleUp.cutString.ReplaceAll("dzeta","dzeta_eUp");
-  eScaleUp.cutString.ReplaceAll("pt_1","pt_Up_1");
-  eScaleUp.cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eUp");
-  eScaleUp.variable.ReplaceAll("m_vis","m_vis_eUp");
-  eScaleUp.variable.ReplaceAll("m_sv","m_sv_eUp");
-  sysUncertainty eScaleDown("_CMS_scale_e_em_13TeVDown");
-  eScaleDown.cutString.ReplaceAll("dzeta","dzeta_eDown");
-  eScaleDown.cutString.ReplaceAll("pt_1","pt_Down_1");
-  eScaleDown.cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eDown");
-  eScaleDown.variable.ReplaceAll("m_vis","m_vis_eDown");
-  eScaleDown.variable.ReplaceAll("m_sv","m_sv_eDown");
+  for(Sample & smpl : sample_vec){
 
-  // 2.) JES
-  sysUncertainty jScaleUp("_CMS_scale_j_em_13TeVUp");
-  jScaleUp.cutString.ReplaceAll("njets","njets_Up");
-  jScaleUp.cutString.ReplaceAll("mjj","mjj_Up");
-  jScaleUp.variable.ReplaceAll("mjj","mjj_Up");
-  sysUncertainty jScaleDown("_CMS_scale_j_em_13TeVDown");
-  jScaleDown.cutString.ReplaceAll("njets","njets_Down");
-  jScaleDown.cutString.ReplaceAll("mjj","mjj_Down");
-  jScaleDown.variable.ReplaceAll("mjj","mjj_Down");
+    if( smpl.name == "Data" || smpl.name == "QCD" ) continue;
 
-  // 3.) MET scale
-  sysUncertainty metScaleUp("_CMS_scale_met_em_13TeVUp");
-  metScaleUp.cutString.ReplaceAll("dzeta","dzeta_scaleUp");
-  sysUncertainty metScaleDown("_CMS_scale_met_em_13TeVDown");
-  metScaleDown.cutString.ReplaceAll("dzeta","dzeta_scaleDown");
+    // 1.) Electron scale
+    Sample eScaleUp   = smpl;
+    Sample eScaleDown = smpl;
+    smpl.uncertainties.insert( make_pair("eScaleUp"   , eScaleUp) );
+    smpl.uncertainties.insert( make_pair("eScaleDown" , eScaleDown) );
+    smpl.uncertainties["eScaleUp"].name += "_CMS_scale_e_em_13TeVUp";
+    smpl.uncertainties["eScaleDown"].name += "_CMS_scale_e_em_13TeVDown";
+    smpl.uncertainties["eScaleUp"].cutString.ReplaceAll("dzeta","dzeta_eUp");
+    smpl.uncertainties["eScaleUp"].cutString.ReplaceAll("pt_1","pt_Up_1");
+    smpl.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eUp");
+    smpl.uncertainties["eScaleUp"].variable.ReplaceAll("m_vis","m_vis_eUp");
+    smpl.uncertainties["eScaleUp"].variable.ReplaceAll("m_sv","m_sv_eUp");
+    smpl.uncertainties["eScaleDown"].cutString.ReplaceAll("dzeta","dzeta_eDown");
+    smpl.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_Down_1");
+    smpl.uncertainties["eScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eDown");
+    smpl.uncertainties["eScaleDown"].variable.ReplaceAll("m_vis","m_vis_eDown");
+    smpl.uncertainties["eScaleDown"].variable.ReplaceAll("m_sv","m_sv_eDown");
 
-  // 4.) MET resolution
-  sysUncertainty metResoUp("_CMS_reso_met_em_13TeVUp");
-  metResoUp.cutString.ReplaceAll("dzeta","dzeta_resoUp");
-  sysUncertainty metResoDown("_CMS_reso_met_em_13TeVDown");
-  metResoDown.cutString.ReplaceAll("dzeta","dzeta_resoDown");
+    // 2.) JES
+    Sample jScaleUp = smpl;
+    Sample jScaleDown = smpl;
+    smpl.uncertainties.insert( make_pair("jScaleUp"   , jScaleUp) );
+    smpl.uncertainties.insert( make_pair("jScaleDown" , jScaleDown) );
+    smpl.uncertainties["jScaleUp"].name += "_CMS_scale_j_em_13TeVUp";
+    smpl.uncertainties["jScaleDown"].name += "_CMS_scale_j_em_13TeVDown";
+    smpl.uncertainties["jScaleUp"].cutString.ReplaceAll("njets","njets_Up");
+    smpl.uncertainties["jScaleUp"].cutString.ReplaceAll("mjj","mjj_Up");
+    smpl.uncertainties["jScaleUp"].variable.ReplaceAll("mjj","mjj_Up");
+    smpl.uncertainties["jScaleDown"].cutString.ReplaceAll("njets","njets_Down");
+    smpl.uncertainties["jScaleDown"].cutString.ReplaceAll("mjj","mjj_Down");
+    smpl.uncertainties["jScaleDown"].variable.ReplaceAll("mjj","mjj_Down");
 
-  // 5.) B-tag efficiency
-  sysUncertainty bEffUp("_CMS_eff_b_13TeVUp");
-  bEffUp.cutString+=btagVetoUp;
-  sysUncertainty bEffDown("_CMS_eff_b_13TeVDown");
-  bEffDown.cutString+=btagVetoDown;
+    // 3.) MET scale
+    Sample metScaleUp = smpl;
+    Sample metScaleDown = smpl;
+    smpl.uncertainties.insert( make_pair("metScaleUp"   , metScaleUp) );
+    smpl.uncertainties.insert( make_pair("metScaleDown" , metScaleDown) );
+    smpl.uncertainties["metScaleUp"].name += "_CMS_scale_met_em_13TeVUp";
+    smpl.uncertainties["metScaleDown"].name += "_CMS_scale_met_em_13TeVDown";
+    smpl.uncertainties["metScaleUp"].cutString.ReplaceAll("dzeta","dzeta_scaleUp");
+    smpl.uncertainties["metScaleDown"].cutString.ReplaceAll("dzeta","dzeta_scaleDown");
 
-  // 6.) Mis-tag efficiency
-  sysUncertainty bFakeUp("_CMS_fake_b_13TeVUp");
-  bFakeUp.cutString +=mistagVetoUp;
-  sysUncertainty bFakeDown("_CMS_fake_b_13TeVDown");
-  bFakeDown.cutString +=mistagVetoDown;
+    // 4.) MET resolution
+    Sample metResoUp = smpl;
+    Sample metResoDown = smpl;
+    smpl.uncertainties.insert( make_pair("metResoUp"   , metResoUp) );
+    smpl.uncertainties.insert( make_pair("metResoDown" , metResoDown) );
+    smpl.uncertainties["metResoUp"].name += "_CMS_reso_met_em_13TeVUp";
+    smpl.uncertainties["metResoDown"].name += "_CMS_reso_met_em_13TeVDown";
+    smpl.uncertainties["metResoUp"].cutString.ReplaceAll("dzeta","dzeta_resoUp");
+    smpl.uncertainties["metResoDown"].cutString.ReplaceAll("dzeta","dzeta_resoDown");
 
-  vector<sysUncertainty> uncVec = { eScaleUp , eScaleUp ,
-				    jScaleUp , jScaleDown ,
-				    metScaleUp , metScaleDown ,
-				    metResoUp , metResoDown ,
-				    bEffUp , bEffDown ,
-				    bFakeUp , bFakeDown
-  };
+    // 5.) B-tag efficiency
+    Sample bEffUp = smpl;
+    Sample bEffDown = smpl;
+    smpl.uncertainties.insert( make_pair("bEffUp"   , bEffUp) );
+    smpl.uncertainties.insert( make_pair("bEffDown" , bEffDown) );
+    smpl.uncertainties["bEffUp"].name += "_CMS_eff_b_13TeVUp";
+    smpl.uncertainties["bEffDown"].name += "_CMS_eff_b_13TeVDown";
+    smpl.uncertainties["bEffUp"].cutString+=btagVetoUp;
+    smpl.uncertainties["bEffDown"].cutString+=btagVetoDown;
 
-  for(sample & sampleName : sampleVec){
-    sampleName.uncertainties = uncVec;
+    // 6.) Mis-tag efficiency
+    Sample bFakeUp = smpl;
+    Sample bFakeDown = smpl;
+    smpl.uncertainties.insert( make_pair("bFakeUp"   , bFakeUp) );
+    smpl.uncertainties.insert( make_pair("bFakeDown" , bFakeDown) );
+    smpl.uncertainties["bFakeUp"].name += "_CMS_fake_b_13TeVUp";
+    smpl.uncertainties["bFakeDown"].name += "_CMS_fake_b_13TeVDown";
+    smpl.uncertainties["bFakeUp"].cutString +=mistagVetoUp;
+    smpl.uncertainties["bFakeDown"].cutString +=mistagVetoDown;
+
+    // Sample-specific uncertainties
+    // 7.) TTbar shape
+    if(smpl.name == "TTbar"){
+      Sample ttbarShapeUp = smpl;
+      Sample ttbarShapeDown = smpl;
+      smpl.uncertainties.insert( make_pair("ttbarShapeUp"   , ttbarShapeUp) );
+      smpl.uncertainties.insert( make_pair("ttbarShapeDown" , ttbarShapeDown) );
+      smpl.uncertainties["ttbarShapeUp"].name += "_CMS_htt_ttbarShape_13TeVUp";
+      smpl.uncertainties["ttbarShapeDown"].name += "_CMS_htt_ttbarShape_13TeVDown";
+      smpl.uncertainties["ttbarShapeUp"].topweight = "topptweightRun2*topptWeightRun2";
+      smpl.uncertainties["ttbarShapeDown"].topweight = "";
+    }
+
+    // 8.) DY shape (EWKZ sample should be added here)
+    if(smpl.name == "ZTT" || smpl.name == "ZLL" || smpl.name == "EWKZ" ){
+      Sample dyShapeUp = smpl;
+      Sample dyShapeDown = smpl;
+      smpl.uncertainties.insert( make_pair("dyShapeUp"   , dyShapeUp) );
+      smpl.uncertainties.insert( make_pair("dyShapeDown" , dyShapeDown) );
+      smpl.uncertainties["dyShapeUp"].name += "_CMS_htt_dyShape_13TeVUp";
+      smpl.uncertainties["dyShapeDown"].name += "_CMS_htt_dyShape_13TeVDown";
+      smpl.uncertainties["dyShapeUp"].zptmassweight="(1.0+1.1*(zptmassweight-1))*";
+      smpl.uncertainties["dyShapeDown"].zptmassweight="(1.0+0.9*(zptmassweight-1))*";
+    }
+
+    // // 9.) ggScale
+    if(smpl.name == "ggH"){
+      Sample ggScaleUp = smpl;
+      Sample ggScaleDown = smpl;
+      smpl.uncertainties.insert( make_pair("ggScaleUp"   , ggScaleUp) );
+      smpl.uncertainties.insert( make_pair("ggScaleDown" , ggScaleDown) );
+      smpl.uncertainties["ggScaleUp"].name += "_CMS_scale_gg_13TeVUp";
+      smpl.uncertainties["ggScaleDown"].name += "_CMS_scale_gg_13TeVDown";
+      smpl.uncertainties["ggScaleUp"].ggscaleweight=ggScaleWeightUp;
+      smpl.uncertainties["ggScaleDown"].ggscaleweight=ggScaleWeightDown;
+    }
+  }
+   
+  if(verbose){
+    cout << endl << endl << "... Uncertainties of samples ... " << endl << endl ;
+    for(Sample & smpl : sample_vec){
+      cout << smpl.name << " : " <<endl;
+      for(auto& unc : smpl.uncertainties) cout<<"  - "<<unc.first<<" : "<<unc.second.name<<endl;
+    }
   }
 
-  // Sample-specific uncertainties
-  // 7.) TTbar shape
-  sysUncertainty ttbarshapeUp("_CMS_htt_ttbarShape_13TeVUp");
-  ttbarshapeUp.topweight = "topptweightRun2*topptWeightRun2";
-  sysUncertainty ttbarshapeDown("_CMS_htt_ttbarShape_13TeVDown");
-  ttbarshapeDown.topweight = "";
-  TT.uncertainties.push_back(ttbarshapeUp);
-  TT.uncertainties.push_back(ttbarshapeDown);
-
-  // 8.) DY shape (EWKZ sample should be added here)
-  sysUncertainty dyShapeUp("_CMS_htt_dyShape_13TeVUp");
-  dyShapeUp.zptmassweight="(1.0+1.1*(zptmassweight-1))*";
-  sysUncertainty dyShapeDown("_CMS_htt_dyShape_13TeVUp");
-  dyShapeDown.zptmassweight="(1.0+0.9*(zptmassweight-1))*";
-  ZTT.uncertainties.push_back(dyShapeUp);
-  ZTT.uncertainties.push_back(dyShapeDown);
-  ZLL.uncertainties.push_back(dyShapeUp);
-  ZLL.uncertainties.push_back(dyShapeDown);
-  
-  // 9.) ggScale
-  sysUncertainty ggScaleUp("_CMS_scale_gg_13TeVUp");
-  ggScaleUp.ggscaleweight=ggScaleWeightUp;
-  sysUncertainty ggScaleDown("_CMS_scale_gg_13TeVDown");
-  ggScaleDown.ggscaleweight=ggScaleWeightDown;
-  ggH.uncertainties.push_back(ggScaleUp);
-  ggH.uncertainties.push_back(ggScaleDown);
 
   //************************************************************************************************
   // Fill histograms (first open trees)
 
   // 1.) Fill nominal histograms
-  for(auto &sample : sampleVec){
+  cout << endl << endl << "... Drawing ... " << endl;
+  for(Sample & smpl : sample_vec){
 
-    cout << sample.name << " : " << sample.filename << endl;
-    TFile *file = new TFile( directory + "/" + sample.filename );
+    cout << endl << "**************************************" << endl;
+    cout << smpl.name << " : " << smpl.filename << endl;
+    TFile *file = new TFile( directory + "/" + smpl.filename );
     TTree *tree = (TTree*) file->Get("TauCheck");
     const int nBinsX = sizeof(em_inclusive.binsX)/sizeof(float) - 1;
     const int nBinsY = sizeof(em_inclusive.binsY)/sizeof(float) - 1;
-    sample.hist = new TH2D(sample.name + "_os" , "" , nBinsX , em_inclusive.binsX , nBinsY , em_inclusive.binsY );
-    cout << sample.name << " : " << sample.variable << endl;
-    cout << sample.name << " : " << sample.weightString << endl;
-    cout << sample.name << " : " << sample.cutString << endl << endl;
-    tree -> Draw( sample.variable + ">>" + sample.hist->GetName() , sample.weightString + "*(" + sample.cutString + ")" );
+    smpl.hist = new TH2D(smpl.name + "_os" , "" , nBinsX , em_inclusive.binsX , nBinsY , em_inclusive.binsY );
+    if(verbose){
+      cout << smpl.name << " : " << smpl.variable << endl;
+      cout << smpl.name << " : " << smpl.weightString << endl;
+      cout << smpl.name << " : " << smpl.cutString << endl << endl;
+    }
+    tree -> Draw( smpl.variable + ">>" + smpl.hist->GetName() , smpl.weightString + "*(" + smpl.cutString + ")" );
     // do here the unfolding ???
       
     // now start the loop over the sys uncertainties
-    cout << "start filling uncertainty histograms ..." << endl;
-    for(auto &sys : sample.uncertainties){
-      cout << sys.name << " : " << sys.variable << endl;
-      cout << sys.name << " : " << sys.weightString << endl;
-      cout << sys.name << " : " << sys.cutString << endl << endl;
-      sys.hist = new TH2D(sys.name + "_os" , "" , nBinsX , em_inclusive.binsX , nBinsY , em_inclusive.binsY );
-      tree -> Draw( sys.variable + ">>" +  sys.hist->GetName() , sys.weightString + "*(" + sys.cutString + ")" );
-
+    for(auto &sys : smpl.uncertainties){
+      if(verbose){
+	cout << sys.first << " : " << sys.second.variable << endl;
+	cout << sys.first << " : " << sys.second.weightString << endl;
+	cout << sys.first << " : " << sys.second.cutString << endl << endl;
+      }
+      sys.second.hist = new TH2D(sys.second.name + "_os" , "" , nBinsX , em_inclusive.binsX , nBinsY , em_inclusive.binsY );
+      tree -> Draw( sys.second.variable + ">>" +  sys.second.hist->GetName() , sys.second.weightString + "*(" + sys.second.cutString + ")" );
     }
   }
 
-  // // *******************************
-  // // ***** Drell-Yan samples *******
-  // // *******************************
 
-  // TH1D * histZtt[10];
-  // TH1D * histZttSys[10][20];
-  // TH1D * histZttSS[10];
-  // TH1D * histZttSSrelaxed[10];
-
-  // TH1D * histZll[10];
-  // TH1D * histZllSys[10][20];
-  // TH1D * histZllSS[10];
-  // TH1D * histZllSSrelaxed[10];
-
-  // TString refSamples[5] = {"DYJetsToLL_M-50_13TeV-madgraphMLM",
-  // 			   "DY1JetsToLL_M-50_13TeV-madgraphMLM",
-  // 			   "DY2JetsToLL_M-50_13TeV-madgraphMLM",
-  // 			   "DY3JetsToLL_M-50_13TeV-madgraphMLM",
-  // 			   "DY4JetsToLL_M-50_13TeV-madgraphMLM"
-  // };
-  // double refXSec[5] = {DYNorm*5765,
-  // 		       DYNorm*1.164*1012.5,
-  // 		       DYNorm*1.164*332.8,
-  // 		       DYNorm*1.164*101.8,
-  // 		       DYNorm*1.164*54.8};
-
-  // double refEvents[5] = {0,0,0,0,0};
-
-  // for (int iDY=0; iDY<5; ++iDY) {
-  //   TFile * file = new TFile(directory+refSamples[iDY]+".root");
-  //   TH1D * histWeightsH = (TH1D*)file->Get("histWeightsH");
-  //   refEvents[iDY] = histWeightsH->GetSumOfWeights();
-  // }
-  // TString dySampleNames[9] = {"DYJetsToLL_M-50_13TeV-madgraphMLM",
-  // 			      "DYJetsToLL_M-50_13TeV-madgraphMLM",
-  // 			      "DYJetsToLL_M-50_13TeV-madgraphMLM",
-  // 			      "DYJetsToLL_M-50_13TeV-madgraphMLM",
-  // 			      "DYJetsToLL_M-50_13TeV-madgraphMLM",
-  // 			      "DY1JetsToLL_M-50_13TeV-madgraphMLM",
-  // 			      "DY2JetsToLL_M-50_13TeV-madgraphMLM",
-  // 			      "DY3JetsToLL_M-50_13TeV-madgraphMLM",
-  // 			      "DY4JetsToLL_M-50_13TeV-madgraphMLM"
-  // };
-
-  // double dyNorm[9];
-  // dyNorm[0] = lumi*refXSec[0]/refEvents[0];
-  // dyNorm[1] = lumi/(refEvents[0]/refXSec[0]+refEvents[1]/refXSec[1]);
-  // dyNorm[2] = lumi/(refEvents[0]/refXSec[0]+refEvents[2]/refXSec[2]);
-  // dyNorm[3] = lumi/(refEvents[0]/refXSec[0]+refEvents[3]/refXSec[3]);
-  // dyNorm[4] = lumi/(refEvents[0]/refXSec[0]+refEvents[4]/refXSec[4]);
-  // dyNorm[5] = lumi/(refEvents[0]/refXSec[0]+refEvents[1]/refXSec[1]);
-  // dyNorm[6] = lumi/(refEvents[0]/refXSec[0]+refEvents[2]/refXSec[2]);
-  // dyNorm[7] = lumi/(refEvents[0]/refXSec[0]+refEvents[3]/refXSec[3]);
-  // dyNorm[8] = lumi/(refEvents[0]/refXSec[0]+refEvents[4]/refXSec[4]);
-
-  // TString npartonCuts[9] = {"&&(npartons==0||npartons>4)",
-  // 			    "&&npartons==1",
-  // 			    "&&npartons==2",
-  // 			    "&&npartons==3",
-  // 			    "&&npartons==4",
-  // 			    "",
-  // 			    "",
-  // 			    "",
-  // 			    ""
-  // };
-
-  // TString cutsZtt[9];
-  // TString cutsZttSS[9];
-  // TString cutsZttSSrelaxed[9];
-  
-  // TString cutsZttSys[9][20];
-
-  // TString cutsZll[9];
-  // TString cutsZllSS[9];
-  // TString cutsZllSSrelaxed[9];
-  
-  // TString cutsZllSys[9][20];
-
-  // for (int iDY=0; iDY<9; ++iDY) {
-  //   cutsZtt[iDY]   = Weight+zptmassweight+"(os>0.5"+Cuts+npartonCuts[iDY]+"&&isZTT>0.5)";
-  //   cutsZttSS[iDY] = Weight+zptmassweight+qcdweight+"(os<0.5"+Cuts+npartonCuts[iDY]+"&&isZTT>0.5)";
-  //   cutsZttSSrelaxed[iDY] = Weight+zptmassweight+qcdweight+"(os<0.5"+CutsSS+npartonCuts[iDY]+"&&isZTT>0.5)";
-  //   cutsZll[iDY]   = Weight+zptmassweight+"(os>0.5"+Cuts+npartonCuts[iDY]+"&&isZTT<0.5)";
-  //   cutsZllSS[iDY] = Weight+zptmassweight+qcdweight+"(os<0.5"+Cuts+npartonCuts[iDY]+"&&isZTT<0.5)";
-  //   cutsZllSSrelaxed[iDY] = Weight+zptmassweight+qcdweight+"(os<0.5"+CutsSS+npartonCuts[iDY]+"&&isZTT<0.5)";
-  //   for (int iSys=0; iSys<nSys; ++iSys) {
-  //     cutsZttSys[iDY][iSys] = Weight+zptmassweightSys[iSys]+"(os>0.5"+CutsSys[iSys]+npartonCuts[iDY]+"&&isZTT>0.5)";
-  //     cutsZllSys[iDY][iSys] = Weight+zptmassweightSys[iSys]+"(os>0.5"+CutsSys[iSys]+npartonCuts[iDY]+"&&isZTT<0.5)";
-  //   }
-
-  // }
-
-  // int nSamplesDY = 9;
-
-  // // filling histograms for DY samples
-  // for (int i=0; i<nSamplesDY; ++i) { // run over samples
-
-  //   TFile * file = new TFile(directory+dySampleNames[i]+".root");
-  //   TTree * tree = (TTree*)file->Get(TauCheck);
-  //   double norm = dyNorm[i];
-
-  //   TString histNameZtt          = dySampleNames[i] + Variable + "_ztt_os";
-  //   TString histNameZttSS        = dySampleNames[i] + Variable + "_ztt_ss";
-  //   TString histNameZttSSrelaxed = dySampleNames[i] + Variable + "_ztt_ss_relaxed";
-  //   TString histNameZll          = dySampleNames[i] + Variable + "_zll_os";
-  //   TString histNameZllSS        = dySampleNames[i] + Variable + "_zll_ss";
-  //   TString histNameZllSSrelaxed = dySampleNames[i] + Variable + "_zll_ss_relaxed";
-    
-  //   TH2D * histZtt2D          = new TH2D(histNameZtt,"",nBinsX,binsX,nBinsY,binsY);
-  //   TH2D * histZttSS2D        = new TH2D(histNameZttSS,"",nBinsX,binsX,nBinsY,binsY);
-  //   TH2D * histZttSSrelaxed2D = new TH2D(histNameZttSSrelaxed,"",nBinsX,binsX,nBinsY,binsY);
-
-  //   TH2D * histZll2D          = new TH2D(histNameZll,"",nBinsX,binsX,nBinsY,binsY);
-  //   TH2D * histZllSS2D        = new TH2D(histNameZllSS,"",nBinsX,binsX,nBinsY,binsY);
-  //   TH2D * histZllSSrelaxed2D = new TH2D(histNameZllSSrelaxed,"",nBinsX,binsX,nBinsY,binsY);
-
-  //   histZtt2D->Sumw2();
-  //   histZttSS2D->Sumw2();
-  //   histZttSSrelaxed2D->Sumw2();
-  //   histZll2D->Sumw2();
-  //   histZllSS2D->Sumw2();
-  //   histZllSSrelaxed2D->Sumw2();
-
-  //   tree->Draw(Variable+">>"+histNameZtt,  cutsZtt[i]);
-  //   tree->Draw(Variable+">>"+histNameZttSS,cutsZttSS[i]);
-  //   tree->Draw(Variable+">>"+histNameZttSSrelaxed,cutsZttSSrelaxed[i]);
-  //   tree->Draw(Variable+">>"+histNameZll,  cutsZll[i]);
-  //   tree->Draw(Variable+">>"+histNameZllSS,cutsZllSS[i]);
-  //   tree->Draw(Variable+">>"+histNameZllSSrelaxed,cutsZllSSrelaxed[i]);
-
-  //   histZtt[i]          = (TH1D*)Unfold(histZtt2D);
-  //   histZttSS[i]        = (TH1D*)Unfold(histZttSS2D);
-  //   histZttSSrelaxed[i] = (TH1D*)Unfold(histZttSSrelaxed2D);
-  //   histZll[i]          = (TH1D*)Unfold(histZll2D);
-  //   histZllSS[i]        = (TH1D*)Unfold(histZllSS2D);
-  //   histZllSSrelaxed[i] = (TH1D*)Unfold(histZllSSrelaxed2D);
-
-  //   // systematics
-  //   for (int iSys=0; iSys<nSys; ++iSys ) {
-  //     TH2D * histZttSys2D = new TH2D(histNameZtt+sysName[iSys],"",nBinsX,binsX,nBinsY,binsY);
-  //     TH2D * histZllSys2D = new TH2D(histNameZll+sysName[iSys],"",nBinsX,binsX,nBinsY,binsY);
-  //     histZttSys2D->Sumw2();
-  //     histZllSys2D->Sumw2();
-  //     tree->Draw(VariableSys[iSys]+">>"+histNameZtt+sysName[iSys],cutsZttSys[i][iSys]);
-  //     tree->Draw(VariableSys[iSys]+">>"+histNameZll+sysName[iSys],cutsZllSys[i][iSys]);
-  //     histZttSys[i][iSys] = (TH1D*)Unfold(histZttSys2D);
-  //     histZllSys[i][iSys] = (TH1D*)Unfold(histZllSys2D);
-  //   }
-  //   for (int iB=1; iB<=nBins; ++iB) {
-
-  //     double x = histZtt[i]->GetBinContent(iB);
-  //     double e = histZtt[i]->GetBinError(iB);
-  //     histZtt[i]->SetBinContent(iB,norm*x);
-  //     histZtt[i]->SetBinError(iB,norm*e);
-  //     x = histZttSS[i]->GetBinContent(iB);
-  //     e = histZttSS[i]->GetBinError(iB);
-  //     histZttSS[i]->SetBinContent(iB,norm*x);
-  //     histZttSS[i]->SetBinError(iB,norm*e);
-  //     x = histZttSSrelaxed[i]->GetBinContent(iB);
-  //     e = histZttSSrelaxed[i]->GetBinError(iB);
-  //     histZttSSrelaxed[i]->SetBinContent(iB,norm*x);
-  //     histZttSSrelaxed[i]->SetBinError(iB,norm*e);
-      
-  //     x = histZll[i]->GetBinContent(iB);
-  //     e = histZll[i]->GetBinError(iB);
-  //     histZll[i]->SetBinContent(iB,norm*x);
-  //     histZll[i]->SetBinError(iB,norm*e);
-  //     x = histZllSS[i]->GetBinContent(iB);
-  //     e = histZllSS[i]->GetBinError(iB);
-  //     histZllSS[i]->SetBinContent(iB,norm*x);
-  //     histZllSS[i]->SetBinError(iB,norm*e);
-  //     x = histZllSSrelaxed[i]->GetBinContent(iB);
-  //     e = histZllSSrelaxed[i]->GetBinError(iB);
-  //     histZllSSrelaxed[i]->SetBinContent(iB,norm*x);
-  //     histZllSSrelaxed[i]->SetBinError(iB,norm*e);
-      
-  //     for (int iSys=0; iSys<nSys; ++iSys) {
-  // 	x = histZttSys[i][iSys]->GetBinContent(iB);
-  // 	e = histZttSys[i][iSys]->GetBinError(iB);
-  // 	histZttSys[i][iSys]->SetBinContent(iB,norm*x);
-  // 	histZttSys[i][iSys]->SetBinError(iB,norm*e);
-  // 	x = histZllSys[i][iSys]->GetBinContent(iB);
-  // 	e = histZllSys[i][iSys]->GetBinError(iB);
-  // 	histZllSys[i][iSys]->SetBinContent(iB,norm*x);
-  // 	histZllSys[i][iSys]->SetBinError(iB,norm*e);
-  //     }
-  //   }
-  //   std::cout << dySampleNames[i] << " -> ZTT = " << histZtt[i]->GetEntries() << " : " << histZtt[i]->GetSumOfWeights() 
-  // 	      << "    ZLL = " << histZll[i]->GetEntries() << " : " << histZll[i]->GetSumOfWeights() << std::endl;
-  //   //    delete file;
-  // }
-
-  // hist[1]   = histZtt[0];
-  // histSS[1] = histZttSS[0];
-  // histSSrelaxed[1] = histZttSSrelaxed[0];
-  // hist[2]   = histZll[0];
-  // histSS[2] = histZllSS[0];
-  // histSSrelaxed[2] = histZllSSrelaxed[0];
-  
-  // for (int iSys=0; iSys<nSys; ++iSys) {
-  //   histSys[1][iSys] = histZttSys[0][iSys];
-  //   histSys[2][iSys] = histZllSys[0][iSys];
-  // }
-
-  // for (int iDY=1; iDY<9; ++iDY) {
-  //   hist[1]->Add(hist[1],histZtt[iDY]);
-  //   hist[2]->Add(hist[2],histZll[iDY]);
-  //   histSS[1]->Add(histSS[1],histZttSS[iDY]);
-  //   histSS[2]->Add(histSS[2],histZllSS[iDY]);
-  //   histSSrelaxed[1]->Add(histSSrelaxed[1],histZttSSrelaxed[iDY]);
-  //   histSSrelaxed[2]->Add(histSSrelaxed[2],histZllSSrelaxed[iDY]);
-  //   for (int iSys=0; iSys<nSys; ++iSys) {
-  //     histSys[1][iSys]->Add(histSys[1][iSys],histZttSys[iDY][iSys]);
-  //     histSys[2][iSys]->Add(histSys[2][iSys],histZllSys[iDY][iSys]);
-  //   }
-  // }
-
-  // // *********************************
-  // // ****** End of DY+Jets samples ***
-  // // *********************************
-
-
-  // // *******************************
-  // // ***** W+Jets samples *******
-  // // *******************************
-
-  // TH1D * histW[10];
-  // TH1D * histWSys[10][20];
-  // TH1D * histWSS[10];
-  // TH1D * histWSSrelaxed[10];
-
-  // // redefine reference cross sections
-  // // and reference samples
-
-  // refSamples[0] = "WJetsToLNu_13TeV-madgraphMLM";
-  // refSamples[1] = "W1JetsToLNu_13TeV-madgraphMLM";
-  // refSamples[2] = "W2JetsToLNu_13TeV-madgraphMLM";
-  // refSamples[3] = "W3JetsToLNu_13TeV-madgraphMLM";
-  // refSamples[4] = "W4JetsToLNu_13TeV-madgraphMLM";
-
-  // refXSec[0] = 61527;
-  // refXSec[1] = 1.221*9644.5;
-  // refXSec[2] = 1.221*3144.5;
-  // refXSec[3] = 1.221*954.8;
-  // refXSec[4] = 1.221*485.6;
-
-  // refEvents[0] = 0;
-  // refEvents[1] = 0;
-  // refEvents[2] = 0;
-  // refEvents[3] = 0;
-  // refEvents[4] = 0;
-
-  // for (int iDY=0; iDY<5; ++iDY) {
-  //   TFile * file = new TFile(directory+refSamples[iDY]+".root");
-  //   TH1D * histWeightsH = (TH1D*)file->Get("histWeightsH");
-  //   refEvents[iDY] = histWeightsH->GetSumOfWeights();
-  // }
-  // TString wSampleNames[9] = {"WJetsToLNu_13TeV-madgraphMLM",
-  // 			     "WJetsToLNu_13TeV-madgraphMLM",
-  // 			     "WJetsToLNu_13TeV-madgraphMLM",
-  // 			     "WJetsToLNu_13TeV-madgraphMLM",
-  // 			     "WJetsToLNu_13TeV-madgraphMLM",
-  // 			     "W1JetsToLNu_13TeV-madgraphMLM",
-  // 			     "W2JetsToLNu_13TeV-madgraphMLM",
-  // 			     "W3JetsToLNu_13TeV-madgraphMLM",
-  // 			     "W4JetsToLNu_13TeV-madgraphMLM"
-  // };
-
-  // double wNorm[9];
-  // wNorm[0] = lumi*refXSec[0]/refEvents[0];
-  // wNorm[1] = lumi/(refEvents[0]/refXSec[0]+refEvents[1]/refXSec[1]);
-  // wNorm[2] = lumi/(refEvents[0]/refXSec[0]+refEvents[2]/refXSec[2]);
-  // wNorm[3] = lumi/(refEvents[0]/refXSec[0]+refEvents[3]/refXSec[3]);
-  // wNorm[4] = lumi/(refEvents[0]/refXSec[0]+refEvents[4]/refXSec[4]);
-  // wNorm[5] = lumi/(refEvents[0]/refXSec[0]+refEvents[1]/refXSec[1]);
-  // wNorm[6] = lumi/(refEvents[0]/refXSec[0]+refEvents[2]/refXSec[2]);
-  // wNorm[7] = lumi/(refEvents[0]/refXSec[0]+refEvents[3]/refXSec[3]);
-  // wNorm[8] = lumi/(refEvents[0]/refXSec[0]+refEvents[4]/refXSec[4]);
-
-  // TString cutsW[9];
-  // TString cutsWSS[9];
-  // TString cutsWSSrelaxed[9];
-  
-  // TString cutsWSys[9][20];
-
-  // for (int iDY=0; iDY<9; ++iDY) {
-  //   cutsW[iDY]   = Weight+"(os>0.5"+Cuts+npartonCuts[iDY]+")";
-  //   cutsWSS[iDY] = Weight+qcdweight+"(os<0.5"+Cuts+npartonCuts[iDY]+")";
-  //   cutsWSSrelaxed[iDY] = Weight+qcdweight+"(os<0.5"+CutsSS+npartonCuts[iDY]+")";
-  //   for (int iSys=0; iSys<nSys; ++iSys) {
-  //     cutsWSys[iDY][iSys] = Weight+"(os>0.5"+CutsSys[iSys]+npartonCuts[iDY]+")";
-  //   }
-  // }
-
-  // // filling histograms for WJets samples
-  // for (int i=0; i<nSamplesDY; ++i) { // run over samples
-
-  //   TFile * file = new TFile(directory+wSampleNames[i]+".root");
-  //   TTree * tree = (TTree*)file->Get(TauCheck);
-  //   double norm = wNorm[i];
-
-  //   TString histNameW   = wSampleNames[i] + Variable + "_w_os";
-  //   TString histNameWSS = wSampleNames[i] + Variable + "_w_ss";
-  //   TString histNameWSSrelaxed = wSampleNames[i] + Variable + "_w_ss_relaxed";
-
-  //   TH2D * histW2D = new TH2D(histNameW,"",nBinsX,binsX,nBinsY,binsY);
-  //   TH2D * histWSS2D = new TH2D(histNameWSS,"",nBinsX,binsX,nBinsY,binsY);
-  //   TH2D * histWSSrelaxed2D = new TH2D(histNameWSSrelaxed,"",nBinsX,binsX,nBinsY,binsY);
-
-  //   histW2D->Sumw2();
-  //   histWSS2D->Sumw2();
-  //   histWSSrelaxed2D->Sumw2();
-
-  //   tree->Draw(Variable+">>"+histNameW,  cutsW[i]);
-  //   tree->Draw(Variable+">>"+histNameWSS,cutsWSS[i]);
-  //   tree->Draw(Variable+">>"+histNameWSSrelaxed,cutsWSSrelaxed[i]);
-
-  //   histW[i]   = (TH1D*)Unfold(histW2D);
-  //   histWSS[i] = (TH1D*)Unfold(histWSS2D);
-  //   histWSSrelaxed[i] = (TH1D*)Unfold(histWSSrelaxed2D);
-
-  //   // systematics
-  //   for (int iSys=0; iSys<nSys; ++iSys ) {
-  //     TH2D * histWSys2D = new TH2D(histNameW+sysName[iSys],"",nBinsX,binsX,nBinsY,binsY);
-  //     histWSys2D->Sumw2();
-  //     tree->Draw(VariableSys[iSys]+">>"+histNameW+sysName[iSys],cutsWSys[i][iSys]);
-  //     histWSys[i][iSys] = (TH1D*)Unfold(histWSys2D);
-  //   }
-  //   for (int iB=1; iB<=nBins; ++iB) {
-
-  //     double x = histW[i]->GetBinContent(iB);
-  //     double e = histW[i]->GetBinError(iB);
-  //     histW[i]->SetBinContent(iB,norm*x);
-  //     histW[i]->SetBinError(iB,norm*e);
-  //     x = histWSS[i]->GetBinContent(iB);
-  //     e = histWSS[i]->GetBinError(iB);
-  //     histWSS[i]->SetBinContent(iB,norm*x);
-  //     histWSS[i]->SetBinError(iB,norm*e);
-  //     x = histWSSrelaxed[i]->GetBinContent(iB);
-  //     e = histWSSrelaxed[i]->GetBinError(iB);
-  //     histWSSrelaxed[i]->SetBinContent(iB,norm*x);
-  //     histWSSrelaxed[i]->SetBinError(iB,norm*e);
-      
-  //     for (int iSys=0; iSys<nSys; ++iSys) {
-  // 	x = histWSys[i][iSys]->GetBinContent(iB);
-  // 	e = histWSys[i][iSys]->GetBinError(iB);
-  // 	histWSys[i][iSys]->SetBinContent(iB,norm*x);
-  // 	histWSys[i][iSys]->SetBinError(iB,norm*e);
-  //     }
-  //   }
-  //   std::cout << wSampleNames[i] << " -> W = " << histW[i]->GetEntries() << " : " << histW[i]->GetSumOfWeights() 
-  // 	      << std::endl;
-  //   //    delete file;
-  // }
-
-  // hist[5]   = histW[0];
-  // histSS[5] = histWSS[0];
-  // histSSrelaxed[5] = histWSSrelaxed[0];
-  
-  // for (int iSys=0; iSys<nSys; ++iSys) {
-  //   histSys[5][iSys] = histWSys[0][iSys];
-  // }
-
-
-  // for (int iDY=1; iDY<9; ++iDY) {
-  //   hist[5]->Add(hist[5],histW[iDY]);
-  //   histSS[5]->Add(histSS[5],histWSS[iDY]);
-  //   histSSrelaxed[5]->Add(histSSrelaxed[5],histWSSrelaxed[iDY]);
-  //   for (int iSys=0; iSys<nSys; ++iSys) {
-  //     histSys[5][iSys]->Add(histSys[5][iSys],histWSys[iDY][iSys]);
-  //   }
-  // }
-
-  // // ********************************
-  // // ***** END OF W+Jets SAMPLES ****
-  // // ********************************
 
   // hist[1]->Add(hist[1],hist[3]); // ZTT low mass + high mass
   // hist[2]->Add(hist[2],hist[4]); // ZLL low mass + high mass
