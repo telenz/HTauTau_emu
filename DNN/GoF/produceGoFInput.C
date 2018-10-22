@@ -1,75 +1,10 @@
-#include "TH2D.h"
-#include "TString.h"
-#include<iostream>
-#include<vector>
-#include "HttStylesNew.cc"
-#include "Unfold.C"
-#include "CMS_lumi.C"
+#include "produceGoFInput.h"
 
 
-class sysUncertainty {
-
-public :
-  TString name;
-  TString cutString = "";
-  TString topweight = "topptweightRun2*";
-  TString zptmassweight = "zptmassweight*";
-  TString ggscaleweight = "";
-  TString treeVar;
-  TH1D *hist;
-  TH1D *histSS;
-  sysUncertainty(TString sysName=""){
-    name = sysName;
-    hist          = new TH1D("","",100,0,200);
-    histSS        = new TH1D("","",100,0,200);
-  }
-};
-
-class sample {
-
-public :  
-  TString name;
-  TString filename;
-  TString cutString;
-  TString cutStringSS;
-  TString cutStringSSrelaxed;
-  TH1D *hist;
-  TH1D *histSS;
-  TH1D *histSSrelaxed;
-  vector<sysUncertainty> *uncertainties;
- 
-  sample(TString sampleName="", TString filename=""){
-    name = sampleName;
-    filename = filename;
-    hist          = new TH1D(name+"_os","",100,0,200);
-    histSS        = new TH1D(name+"_ss","",100,0,200);
-    histSSrelaxed = new TH1D(name+"_ss_relaxed","",100,0,200);
-
-  }
-};
-
-class category {
-
-public :   
-  TString name = "";
-  TString cutString   = "";
-  TString cutStringSS = "";
-  TString variable   = "";
-  float *binsX;
-  float *binsY;
-  TH1D* histo = 0;
-  TH1D* histoSS = 0;
-  vector<sample> *sampleList;
-
-  category(TString catName){
-    name = catName;
-  }
-};
+void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
 
-void produceGoFInput(TString directory = "./msv_v2/",
-		     TString category = "em_0jet",
-		     TString Suffix = "0jet") {
+  SetStyle();
 
   double lumi = 35900;
 
@@ -79,17 +14,32 @@ void produceGoFInput(TString directory = "./msv_v2/",
   TString xtitle = "bins";
   TString ytitle = "Events / bin";
 
-  TString DataFile = "MuonEG_Run2016";
 
-  double DYNorm = 1.02;
+  // Weights
+  TString Weight = "mcweight*puweight*effweight*0.978824*0.985*";
+  TString qcdweight("2.30*");
+  //  TString topweight("topptweight*");
+  TString topweight("topptweightRun2*");
+  TString zptmassweight("zptmassweight*");
 
+  float OSSS_inclusive = 2.3;
+  float OSSS_categ = 2.3;
+  float OSSS_categ_err = 0.26;
+  TString ggScaleWeightUp="(0.9421 - 0.00001699*pt_2)*";
+  TString ggScaleWeightDown="(1.0579 + 0.00001699*pt_2)*";
+  // Drell-Yan corrections (in slices of mjj/pt_sv)
+  float dyCorr2D[10];
+  TString labelsBins[10];
+  float yeThreshold = 1;
+  for (int iDY=0; iDY<10; ++iDY)
+    dyCorr2D[iDY] = 1;
+
+  // Definition of cuts
   TString btagVeto("&&nbtag==0");
   TString btagVetoUp("&&nbtag==0");
   TString btagVetoDown("&&nbtag==0");
   TString mistagVetoUp("&&nbtag==0");
   TString mistagVetoDown("&&nbtag==0");
-  
-  SetStyle();
 
   TString mTCut("&&mTdileptonMET<60");
   TString CutsKine= "&&pt_1>13&&pt_2>15&&TMath::Max(pt_1,pt_2)>24";
@@ -97,23 +47,30 @@ void produceGoFInput(TString directory = "./msv_v2/",
 
   TString CutsIso          = "&&iso_1<0.15&&iso_2<0.2&&extraelec_veto<0.5&&extramuon_veto<0.5";
   TString CutsIsoSS        = "&&iso_1<0.50&&iso_2>0.2&&iso_2<0.5&&extraelec_veto<0.5&&extramuon_veto<0.5";
+  
+  TString CutsCategory             = "&&dzeta>-35";
+  CutsCategory += btagVeto;
+
+  TString Cuts   = CutsKine + CutsIso   + CutsCategory;
+  TString CutsSS = CutsKine + CutsIsoSS + CutsCategory;
+
+
+
+  
+  //************************************************************************************************
+  // Define different category cuts
+  // still needs to set ggscaleweight, labelBins, yeThreshols, change variale for eUp and jesUp, OSSS_categ +err
 
   class category em_inclusive("em_inclusive");
   class category em_0jet("em_0jet");
   class category em_boosted("em_boosted");
   class category em_vbf("em_vbf");
-  
-  TString CutsCategory             = "&&dzeta>-35";
-  CutsCategory += btagVeto;
-  
-  //************************************************************************************************
-  // Define different category cuts
-  // still needs to set ggscaleweight, labelBins, yeThreshols, change variale for eUp and jesUp, OSSS_categ +err
+
   // Inclusive category
   em_inclusive.cutString   = CutsKine + CutsIso + CutsCategory;
   em_inclusive.cutStringSS = CutsKine + CutsIsoSS + CutsCategory;
-  em_inclusive.binsX = new float[1]{10};
-  em_inclusive.binsY = new float[1]{10};
+  em_inclusive.binsX = new float[13]{0,50,55,60,65,70,75,80,85,90,95,100,400};
+  em_inclusive.binsY = new float[7]{15,20,25,30,35,40,300};
   em_inclusive.variable = "m_vis:pt_2";
 
   // 0jet category
@@ -144,80 +101,74 @@ void produceGoFInput(TString directory = "./msv_v2/",
   em_vbf.variable   = "m_sv:mjj";
 
   // Make a vector from these categories
-  vector<class category> categoryVec = {em_inclusive , em_0jet , em_boosted , em_vbf};
+  vector<class category> categoryVec = { em_inclusive };
   //************************************************************************************************
-
-  // Weights
-  TString Weight = "mcweight*puweight*effweight*0.978824*0.985*";
-  TString qcdweight("2.30*");
-  //  TString topweight("topptweight*");
-  TString topweight("topptweightRun2*");
-  TString zptmassweight("zptmassweight*");
-
-  float OSSS_inclusive = 2.3;
-  float OSSS_categ = 2.3;
-  float OSSS_categ_err = 0.26;
-  TString ggScaleWeightUp="(0.9421 - 0.00001699*pt_2)*";
-  TString ggScaleWeightDown="(1.0579 + 0.00001699*pt_2)*";
-  // Drell-Yan corrections (in slices of mjj/pt_sv)
-  float dyCorr2D[10];
-  TString labelsBins[10];
-  float yeThreshold = 1;
-  for (int iDY=0; iDY<10; ++iDY)
-    dyCorr2D[iDY] = 1;
 
   //************************************************************************************************
   // Define samples
   sample Data( "Data"      , "MuonEG_Run2016.root" );
   sample ZTT(  "ZTT"       , "DYJets_dnn_em_v1.root" );
   sample ZLL(  "ZLL"       , "DYJets_dnn_em_v1.root" );
+  sample EWKZ( "EWKZ"      , "EWKZ_dnn_em_v1.root" );
   sample W(    "WJets"     , "WJets_dnn_em_v1.root" );
   sample TT(   "TTbar"     , "TTbar_dnn_em_v1.root" );
   sample ST(   "SingleTop" , "SingleTop_dnn_em_v1.root" );
   sample VV(   "Diboson"   , "Diboson_dnn_em_v1.root" );
+  sample QCD(  "QCD"       , "MuonEG_Run2016.root" );
   sample ggH(  "ggH"       , "ggH_dnn_em_v1.root" );
   sample VBFH( "VBFH"      , "VBFH_dnn_em_v1.root" );
-  vector<sample> sampleVec= { Data , ZTT , ZLL , W , TT , ST , VV , ggH , VBFH };
+  
+  // Define pre-defined norms
+  ZTT.norm = 1.02;
+  ZLL.norm = 1.02;
+  QCD.norm = 0.503821;
 
-  TString Cuts   = CutsKine + CutsIso   + CutsCategory;
-  TString CutsSS = CutsKine + CutsIsoSS + CutsCategory;
+  vector<sample> sampleVec= { Data , ZTT , ZLL , EWKZ , W , TT , ST , VV , QCD , ggH , VBFH };
 
   // Define common cut strings  
   for(sample & sampleName : sampleVec){
-    sampleName.cutString          = Weight+"(os>0.5"+Cuts+")";
-    sampleName.cutStringSS        = Weight+qcdweight+"(os<0.5"+Cuts+")";
-    sampleName.cutStringSSrelaxed = Weight+qcdweight+"(os<0.5"+CutsSS+")";
+    sampleName.cutString          = "(os>0.5"+Cuts+")";
+    sampleName.weightString       = Weight;
+    sampleName.cutStringSS        = "(os<0.5"+Cuts+")";
+    sampleName.weightStringSS     = Weight+qcdweight;
+    sampleName.cutStringSSrelaxed = "(os<0.5"+CutsSS+")";
+    sampleName.weightStringSSrelaxed = Weight+qcdweight;
   }
 
   // Define sample specific cuts
-  Data.cutString = "(os>0.5"+Cuts+")";
-  ZTT.cutString  = Weight+zptmassweight+"(os>0.5"+Cuts+"&&isZTT)";
-  ZLL.cutString  = Weight+zptmassweight+"(os>0.5"+Cuts+"&&!isZTT)";
-  TT.cutString   = Weight+topweight+"(os>0.5"+Cuts+")"; 
-  Data.cutStringSS = "(os<0.5"+Cuts+")";
-  ZTT.cutStringSS  = Weight+zptmassweight+qcdweight+"(os<0.5"+Cuts+"&&isZTT)";
-  ZLL.cutStringSS  = Weight+zptmassweight+qcdweight+"(os<0.5"+Cuts+"&&!isZTT)";
-  TT.cutStringSS   = Weight+topweight+qcdweight+"(os<0.5"+Cuts+")";
-  Data.cutStringSSrelaxed = "(os<0.5"+CutsSS+")";
-  ZTT.cutStringSSrelaxed  = Weight+zptmassweight+qcdweight+"(os<0.5"+CutsSS+"&&isZTT)";
-  ZLL.cutStringSSrelaxed  = Weight+zptmassweight+qcdweight+"(os<0.5"+CutsSS+"&&!isZTT)";
-  TT.cutStringSSrelaxed   = Weight+topweight+qcdweight+"(os<0.5"+CutsSS+")";
+  Data.weightString = "";
+  ZTT.weightString += zptmassweight;
+  ZTT.cutString += "&&isZTT";
+  ZLL.weightString += zptmassweight;
+  ZLL.cutString += "&&!isZTT";
+  TT.weightString   += topweight;
+  QCD.weightString  += qcdweight;
+  QCD.cutString += "(os<0.5"+CutsSS+")";
 
-  for(auto &cat : categoryVec){
-    cat.sampleList = &sampleVec;
-  }
+  Data.weightStringSS = "";
+  ZTT.weightStringSS += zptmassweight;
+  ZTT.cutStringSS += "&&isZTT";
+  ZLL.weightStringSS += zptmassweight;
+  ZLL.cutStringSS += "&&!isZTT";
+  TT.weightStringSS += topweight;
+
+  Data.weightStringSSrelaxed = "";
+  ZTT.weightStringSSrelaxed += zptmassweight;
+  ZTT.cutStringSSrelaxed += "&&isZTT";
+  ZLL.weightStringSSrelaxed += zptmassweight;
+  ZLL.cutStringSSrelaxed += "&&!isZTT";
+  TT.weightStringSSrelaxed += topweight;
+
+  // for(auto &cat : categoryVec){
+  //   cat.sampleList = &sampleVec;
+  // }
   //************************************************************************************************
 
   //************************************************************************************************
-  // Define sys uncertainties
+  // Define systematic uncertainties
 
-  // 1.) TTbar shape
-  sysUncertainty ttbarshapeUp("_CMS_htt_ttbarShape_13TeVUp");
-  ttbarshapeUp.topweight = "topptweightRun2*topptWeightRun2";
-  sysUncertainty ttbarshapeDown("_CMS_htt_ttbarShape_13TeVDown");
-  ttbarshapeDown.topweight = "";
-
-  // 2.) Electron scale
+  // Common uncertainties
+  // 1.) Electron scale
   sysUncertainty eScaleUp("_CMS_scale_e_em_13TeVUp");
   eScaleUp.cutString.ReplaceAll("dzeta","dzeta_eUp");
   eScaleUp.cutString.ReplaceAll("pt_1","pt_Up_1");
@@ -227,7 +178,7 @@ void produceGoFInput(TString directory = "./msv_v2/",
   eScaleDown.cutString.ReplaceAll("pt_1","pt_Down_1");
   eScaleDown.cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eDown");
 
-  // 3.) JES
+  // 2.) JES
   sysUncertainty jScaleUp("_CMS_scale_j_em_13TeVUp");
   jScaleUp.cutString.ReplaceAll("njets","njets_Up");
   jScaleUp.cutString.ReplaceAll("mjj","mjj_Up");
@@ -235,163 +186,85 @@ void produceGoFInput(TString directory = "./msv_v2/",
   jScaleDown.cutString.ReplaceAll("njets","njets_Down");
   jScaleDown.cutString.ReplaceAll("mjj","mjj_Down");
 
-  // 4.) MET scale
+  // 3.) MET scale
   sysUncertainty metScaleUp("_CMS_scale_met_em_13TeVUp");
   metScaleUp.cutString.ReplaceAll("dzeta","dzeta_scaleUp");
   sysUncertainty metScaleDown("_CMS_scale_met_em_13TeVDown");
   metScaleDown.cutString.ReplaceAll("dzeta","dzeta_scaleDown");
 
-  // 5.) MET resolution
+  // 4.) MET resolution
   sysUncertainty metResoUp("_CMS_reso_met_em_13TeVUp");
   metResoUp.cutString.ReplaceAll("dzeta","dzeta_resoUp");
   sysUncertainty metResoDown("_CMS_reso_met_em_13TeVDown");
   metResoDown.cutString.ReplaceAll("dzeta","dzeta_resoDown");
 
-  // 6.) DY shape
-  sysUncertainty dyShapeUp("_CMS_htt_dyShape_13TeVUp");
-  dyShapeUp.zptmassweight="(1.0+1.1*(zptmassweight-1))*";
-  sysUncertainty dyShapeDown("_CMS_htt_dyShape_13TeVUp");
-  dyShapeDown.zptmassweight="(1.0+0.9*(zptmassweight-1))*";
-
-  // 7.) ggScale
-  sysUncertainty ggScaleUp("_CMS_scale_gg_13TeVUp");
-  ggScaleUp.ggscaleweight=ggScaleWeightUp;
-  sysUncertainty ggScaleDown("_CMS_scale_gg_13TeVDown");
-  ggScaleDown.ggscaleweight=ggScaleWeightDown;
-
-  // 8.) B-tag efficiency
+  // 5.) B-tag efficiency
   sysUncertainty bEffUp("_CMS_eff_b_13TeVUp");
   bEffUp.cutString+=btagVetoUp;
   sysUncertainty bEffDown("_CMS_eff_b_13TeVDown");
   bEffDown.cutString+=btagVetoDown;
 
-  // 9.) Mis-tag efficiency
+  // 6.) Mis-tag efficiency
   sysUncertainty bFakeUp("_CMS_fake_b_13TeVUp");
   bFakeUp.cutString +=mistagVetoUp;
   sysUncertainty bFakeDown("_CMS_fake_b_13TeVDown");
   bFakeDown.cutString +=mistagVetoDown;
 
-  // 10.) Z->mumu shape
-  sysUncertainty zmmShapeUp("_CMS_htt_zmumuShape_0jet_13TeVUp");
-
-  vector<sysUncertainty> uncVec = { ttbarshapeUp,
-  				    eScaleUp
+  vector<sysUncertainty> uncVec = { eScaleUp , eScaleUp ,
+				    jScaleUp , jScaleDown ,
+				    metScaleUp , metScaleDown ,
+				    metResoUp , metResoDown ,
+				    bEffUp , bEffDown ,
+				    bFakeUp , bFakeDown
   };
 
-  for(sample & sampleName : sampleVec){
-    sampleName.uncertainties = &uncVec;
+  for(sample & sampleName : sampleVec) sampleName.uncertainties = uncVec;
+
+  // Sample-specific uncertainties
+  // 7.) TTbar shape
+  sysUncertainty ttbarshapeUp("_CMS_htt_ttbarShape_13TeVUp");
+  ttbarshapeUp.topweight = "topptweightRun2*topptWeightRun2";
+  sysUncertainty ttbarshapeDown("_CMS_htt_ttbarShape_13TeVDown");
+  ttbarshapeDown.topweight = "";
+  TT.uncertainties.push_back(ttbarshapeUp);
+  TT.uncertainties.push_back(ttbarshapeDown);
+
+  // 8.) DY shape (EWKZ sample should be added here)
+  sysUncertainty dyShapeUp("_CMS_htt_dyShape_13TeVUp");
+  dyShapeUp.zptmassweight="(1.0+1.1*(zptmassweight-1))*";
+  sysUncertainty dyShapeDown("_CMS_htt_dyShape_13TeVUp");
+  dyShapeDown.zptmassweight="(1.0+0.9*(zptmassweight-1))*";
+  ZTT.uncertainties.push_back(dyShapeUp);
+  ZTT.uncertainties.push_back(dyShapeDown);
+  ZLL.uncertainties.push_back(dyShapeUp);
+  ZLL.uncertainties.push_back(dyShapeDown);
+  
+  // 9.) ggScale
+  sysUncertainty ggScaleUp("_CMS_scale_gg_13TeVUp");
+  ggScaleUp.ggscaleweight=ggScaleWeightUp;
+  sysUncertainty ggScaleDown("_CMS_scale_gg_13TeVDown");
+  ggScaleDown.ggscaleweight=ggScaleWeightDown;
+  ggH.uncertainties.push_back(ggScaleUp);
+  ggH.uncertainties.push_back(ggScaleDown);
+
+  //************************************************************************************************
+  // Fill histograms (first open trees)
+
+  // 1.) Fill nominal histograms
+  for(auto &sample : sampleVec){
+
+    TFile *file = new TFile( directory + sample.filename );
+    TTree *tree = (TTree*) file->Get("TauCheck");
+
+    tree -> Draw( sample.variable + ">>" + sample.hist->GetName() , sample.weightString + "*(" + sample.cutString + ")" );
+    // do here the unfolding ???
+      
+    // now start the loop over the sys uncertainties
+    for(auto &sys : sample.uncertainties){
+      tree -> Draw( sys.variable + ">>" +  sys.hist->GetName() , sys.weightString + "*(" + sys.cutString + ")" );
+
+    }
   }
-  
-  TString CutsKineSys[20];
-  TString CutsCategorySys[20];
-  TString VariableSys[20];
-  TString CutsSys[20];
-
-  for (int iSys=0; iSys<20; ++iSys) {
-    CutsKineSys[iSys] = CutsKine;
-    CutsCategorySys[iSys] = CutsCategory;
-  }
-
-  for (int iSys=0; iSys<20; ++iSys)
-    CutsSys[iSys] = CutsKineSys[iSys] + CutsIso + CutsCategorySys[iSys];
-
-
-
-  // if (category=="em_boosted") {
-  //   sysName[18] = "_CMS_htt_zmumuShape_boosted_13TeVUp";
-  //   sysName[19] = "_CMS_htt_zmumuShape_boosted_13TeVDown";
-  // }
-
-  // if (category=="em_vbf") {
-  //   sysName[18] = "_CMS_htt_zmumuShape_VBF_13TeVUp";
-  //   sysName[19] = "_CMS_htt_zmumuShape_VBF_13TeVDown";
-  // }
-
-  
-
-  // // Systematics ->
-  // for (int iSys=0; iSys<nSys; ++iSys) {
-
-  //   for (int i=0; i<40; ++i) 
-  //     cutsSys[i][iSys] = Weight+"(os>0.5"+CutsSys[iSys]+")";
-
-  //   cutsSys[0][iSys] = "(os>0.5"+CutsSys[iSys]+")";
-  //   cutsSys[1][iSys] = Weight+zptmassweightSys[iSys]+"(os>0.5"+CutsSys[iSys]+"&&isZTT)";
-  //   cutsSys[2][iSys] = Weight+zptmassweightSys[iSys]+"(os>0.5"+CutsSys[iSys]+"&&!isZTT)";
-  //   cutsSys[3][iSys] = Weight+"(os>0.5"+CutsSys[iSys]+"&&isZTT)";
-  //   cutsSys[4][iSys] = Weight+"(os>0.5"+CutsSys[iSys]+"&&!isZTT)";
-  //   cutsSys[6][iSys] = Weight+topweightSys[iSys]+"(os>0.5"+CutsSys[iSys]+")";
-  //   cutsSys[25][iSys] = Weight+ggscaleweightSys[iSys]+"(os>0.5"+CutsSys[iSys]+")";
-  //   cutsSys[22][iSys] = Weight+zptmassweightSys[iSys]+"(os>0.5"+CutsSys[iSys]+")";
-
-  // }
-
-  // TCanvas * dummyCanv = new TCanvas("dummy","",500,500);
-  
-  // int nSamples = 33;
-
-  // // filling histograms data and bkgd MC
-  // for (int i=0; i<nSamples; ++i) { // run over samples
-  //   //    std::cout << sampleNames[i] << std::endl;
-  //   TFile * file = new TFile(directory+sampleNames[i]+".root");
-  //   TH1D * histWeightsH = (TH1D*)file->Get("histWeightsH");
-  //   TTree * tree = (TTree*)file->Get(TauCheck);
-  //   double norm = xsec[i]*lumi/histWeightsH->GetSumOfWeights();
-
-  //   TString histName = sampleNames[i] + Variable + "_os";
-  //   TString histNameSS = sampleNames[i] + Variable + "_ss";
-  //   TString histNameSSrelaxed = sampleNames[i] + Variable + "_ss_relaxed";
-
-  //   TH2D * hist2D = new TH2D(histName,"",nBinsX,binsX,nBinsY,binsY);
-  //   TH2D * hist2DSS = new TH2D(histNameSS,"",nBinsX,binsX,nBinsY,binsY);
-  //   TH2D * hist2DSSrelaxed = new TH2D(histNameSSrelaxed,"",nBinsX,binsX,nBinsY,binsY);
-
-  //   hist2D->Sumw2();
-  //   hist2DSS->Sumw2();
-  //   hist2DSSrelaxed->Sumw2();
-
-  //   tree->Draw(Variable+">>"+histName,cuts[i]);
-  //   tree->Draw(Variable+">>"+histNameSS,cutsSS[i]);
-  //   tree->Draw(Variable+">>"+histNameSSrelaxed,cutsSSrelaxed[i]);
-
-  //   hist[i] = (TH1D*)Unfold(hist2D);
-  //   histSS[i] = (TH1D*)Unfold(hist2DSS);
-  //   histSSrelaxed[i] = (TH1D*)Unfold(hist2DSSrelaxed);
-
-  //   if (i>0) { // MC samples should be normalized
-  //     // systematics
-  //     for (int iSys=0; iSys<nSys; ++iSys ) {
-  // 	TH2D * hist2DSys = new TH2D(histName+sysName[iSys],"",nBinsX,binsX,nBinsY,binsY);
-  // 	hist2DSys->Sumw2();
-  // 	tree->Draw(VariableSys[iSys]+">>"+histName+sysName[iSys],cutsSys[i][iSys]);
-  // 	histSys[i][iSys] = (TH1D*)Unfold(hist2DSys);
-  //     }
-
-  //     for (int iB=1; iB<=nBins; ++iB) {
-  // 	double x = hist[i]->GetBinContent(iB);
-  // 	double e = hist[i]->GetBinError(iB);
-  //   	hist[i]->SetBinContent(iB,norm*x);
-  //   	hist[i]->SetBinError(iB,norm*e);
-  // 	x = histSS[i]->GetBinContent(iB);
-  // 	e = histSS[i]->GetBinError(iB);
-  //   	histSS[i]->SetBinContent(iB,norm*x);
-  //   	histSS[i]->SetBinError(iB,norm*e);
-  // 	x = histSSrelaxed[i]->GetBinContent(iB);
-  // 	e = histSSrelaxed[i]->GetBinError(iB);
-  //   	histSSrelaxed[i]->SetBinContent(iB,norm*x);
-  //   	histSSrelaxed[i]->SetBinError(iB,norm*e);
-  // 	for (int iSys=0; iSys<nSys; ++iSys) {
-  // 	  x = histSys[i][iSys]->GetBinContent(iB);
-  // 	  e = histSys[i][iSys]->GetBinError(iB);
-  // 	  histSys[i][iSys]->SetBinContent(iB,norm*x);
-  // 	  histSys[i][iSys]->SetBinError(iB,norm*e);
-  // 	}
-  //     }
-  //   }
-  //   std::cout << sampleNames[i] << " -> entries = " << hist[i]->GetEntries() << " : sumOfWeights = " << hist[i]->GetSumOfWeights() << std::endl;
-  //   //    delete file;
-  // }
-
 
   // // *******************************
   // // ***** Drell-Yan samples *******
