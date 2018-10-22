@@ -9,9 +9,51 @@
 // em_vbf_low
 // em_vbf_high
 
-void CreateDatacardsSM(TString directory = "./",
+class sysUncertainty {
+  
+public :
+
+  TString name;
+  TString cutString;
+  TString topWeight;
+  TString zptmassWeight;
+  TString treeVar;
+  TH1D *hist;
+  TH1D *histSS;
+
+  sysUncertainty(TString sampleName, TString variable, TString sysName){
+    name = sysName;
+    hist = new TH1D(sampleName+variable+sysName)
+  }
+};
+
+class sample {
+  
+public :
+  
+  TString name;
+  TString cutString;
+  TString cutStringSS;
+  TString cutStringSSrelaxed;
+  TH1D *hist;
+  TH1D *histSS;
+  TH1D *histSSrelaxed;
+  vector<sysUncertainty> *uncertainties;
+  
+  sysUncertainty(TString sampleName){
+    sample = sampleName;
+    name = sysName;
+    hist = new TH1D(sampleName+variable+sysName)
+  }
+};
+
+void CreateDatacardsSM(TString directory = "../../Inputs/NTuples_2016",
 		       TString category = "em_1jet_low",
 		       TString Suffix = "btag_1jet_low") {
+
+
+  TH1::SetDefaultSumw2();
+  TH2::SetDefaultSumw2();
 
   float xmin = 0;
   float xmax = 240;
@@ -135,86 +177,24 @@ void CreateDatacardsSM(TString directory = "./",
   Cuts   = Cuts   + CutsCategory + btagVeto;
   CutsSS = CutsSS + CutsCategorySS + btagVeto;
 
-  TH1::SetDefaultSumw2();
-  TH2::SetDefaultSumw2();
-
   double lumi = 36800;
 
-  TString sampleNames[31] = {
-    DataFile, // data (0)
-    "DYJetsToLL_M-50_13TeV-madgraphMLM", // isZTT (1)
-    "DYJetsToLL_M-50_13TeV-madgraphMLM", // !isZTT (2)
-    "DYJetsToLL_M-10to50_13TeV-madgraphMLM", // isZTT (3)
-    "DYJetsToLL_M-10to50_13TeV-madgraphMLM", // !isZTT (4)
-    "WJetsToLNu_13TeV-madgraphMLM",    // (5)
-    "TTJets_13TeV-powheg",             // (6)
-    "ST_t-channel_top_4f_leptonDecays_13TeV-powheg",     // (7)
-    "ST_t-channel_antitop_4f_leptonDecays_13TeV-powheg", // (8)
-    "ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg",     // (9)
-    "ST_tW_top_5f_inclusiveDecays_13TeV-powheg",         // (10)
-    "VVTo2L2Nu_13TeV_amcatnloFXFX",    // (11)
-    "WWToLNuQQ_13TeV_powheg",          // (12)
-    "WZTo2L2Q_13TeV_amcatnloFXFX",     // (13)
-    "WZTo1L1Nu2Q_13TeV_amcatnloFXFX",  // (14)
-    "WZTo1L3Nu_13TeV_amcatnloFXFX",    // (15)
-    "WZJToLLLNu_13TeV_amcatnloFXFX",           // (16)
-    "ZZTo4L_13TeV_powheg",             // (17)
-    "ZZTo2L2Q_13TeV_amcatnloFXFX",     // (18)
-    "WGToLNuG_13TeV-madgraphMLM",            // (19)
-    "EWKWPlus2Jets_WToLNu_13TeV-madgraph",   // (20)
-    "EWKWMinus2Jets_WToLNu_13TeV-madgraph",  // (21)
-    "EWKZ2Jets_ZToLL_M-50_13TeV-madgraph",   // (22) 
-    "GluGluHToTauTau_M125_13TeV_powheg",  // (23)
-    "VBFHToTauTau_M125_13TeV_powheg",     // (24)
-    "WplusHToTauTau_M125_13TeV_powheg",   // (25)
-    "WminusHToTauTau_M125_13TeV_powheg",  // (26)
-    "ZHToTauTau_M125_13TeV_powheg",       // (27)
-    "ttHJetToTT_M125_13TeV_amcatnloFXFX", // (28)
-    "GluGluHToWW_M125_13TeV_powheg",      // (29)
-    "VBFHToWW_M125_13TeV_powheg"  // (30)
+  vector<TString> sampleNames = {
+    DataFile ,
+    "DYJets_dnn_em_v1" , 
+    "WJets_dnn_em_v1" ,
+    "TTbar_dnn_em_v1" ,
+    "SingleTop_dnn_em_v1" , 
+    "Diboson_dnn_em_v1" , 
+    "ggH_dnn_em_v1" , 
+    "VBFH_dnn_em_v1" , 
   };
-
-
-  double xsec[31] = {1, // data (0)
-		     5765, // DY (1)
-		     5765, // DY (2)
-		     18610,
-		     18610,
-		     //		     3.987,
-		     //		     3.987,
-		     61526.7, // WJets (5)
-		     831.76,  // TT (6)
-		     136.95*3*0.108, // ST_t-channel_top (7)
-		     80.95*3*0.108,  // ST_t-channel_antitop (8)
-		     35.6,           // ST_tW_antitop (9)
-		     35.6,           // ST_tW_top_5f (10)
-		     11.95,  // VV (11)
-		     49.997, // WWToLNuQQ (12)
-		     5.595,  // WZTo2L2Q (13)
-		     10.71,  // WZTo1L1Nu2Q (14)
-		     3.05,   // WZTo1L3Nu (15)
-		     5.26,   // WZJets (3L1Nu) (16)
-		     1.212,  // ZZTo4L (17)
-		     3.22,   // ZZTo2L2Q (18)
-		     489.0,  // WGToLNuG        (19)
-		     25.62,  // EWKWPlus        (20)
-		     20.25,  // EWKWminus       (21)
-		     3.987,  // EWK Z  (22)
-		     43.92*0.0632,            // gg->H  (23)
-		     3.748*0.0632,            // qqH    (24)
-		     0.5*1.380*0.0632,        // WplusH (25)
-		     0.5*1.380*0.0632,        // Wminus (26)
-		     0.8696*0.0632,           // ZH     (27)
-		     0.5085*0.0632,           // ttH    (28)
-		     43.92*0.215*0.324*0.324, // (29)
-		     3.748*0.215*0.324*0.324  // (30)
-  };      
-  
-
 
   TH1D * hist[31];
   TH1D * histSS[31];
   TH1D * histSSrelaxed[31];
+
+  
 
   TString CutsSys[12] = {"&&dzeta>-35 && pt_1>13      && pt_2>15       && TMath::Max(pt_1,pt_2)>24",
 			 "&&dzeta>-35 && pt_1>13      && pt_2>15       && TMath::Max(pt_1,pt_2)>24",
@@ -258,42 +238,6 @@ void CreateDatacardsSM(TString directory = "./",
 				  "zptmassweight*",
 				  "zptmassweight*zptmassweight*",
 				  ""
-  };
-
-  TString variableSys[12] = {Variable, // topPtUp
-			     Variable, // topPtDown
-			     Variable+"_muUp", // muonScaleUp
-			     Variable+"_muDown", // muonScaleDown
-			     Variable+"_eUp", // eleScaleUp
-			     Variable+"_eDown", // eleScaleDown
-			     Variable+"_scaleUp",  // metScaleUp
-			     Variable+"_scaleDown",  // metScaleDown
-			     Variable, // metScaleUp 
-			     Variable, // metScaleDown
-			     Variable, // zPtMassUp
-			     Variable  // zPtMassDown
-  };
-
-  TH1D * histSys[31][12];
-
-  TString qcdweightSys[2] = {"qcdweightup*",
-			     "(qcdweight*qcdweight/qcdweightup)*"};
-
-  TString sysNameSS[2] = {"_CMS_htt_em_qcdShape_13TeVUp",
-			  "_CMS_htt_em_qcdShape_13TeVDown"};
-
-  TString sysName[12] = {"_CMS_htt_ttbarShape_13TeVUp",
-			 "_CMS_htt_ttbarShape_13TeVDown",
-			 "_CMS_scale_m_em_13TeVUp",
-			 "_CMS_scale_m_em_13TeVDown",
-			 "_CMS_scale_e_em_13TeVUp",
-			 "_CMS_scale_e_em_13TeVDown",
-			 "_CMS_scale_met_em_13TeVUp",
-			 "_CMS_scale_met_em_13TeVDown",
-			 "_CMS_reso_met_em_13TeVUp",
-			 "_CMS_reso_met_em_13TeVDown",
-			 "_CMS_htt_dyShape_13TeVUp",
-			 "_CMS_htt_dyShape_13TeVDown"
   };
 
   TString cuts[31];
@@ -358,33 +302,74 @@ void CreateDatacardsSM(TString directory = "./",
 
   TCanvas * dummyCanv = new TCanvas("dummy","",500,500);
   
-  int nSamples = 31;
+  vector<TH1D*> hist;
+  vector<TH1D*> histSS;
+  vector<TH1D*> histSSrelaxed;
+
+  vector<TString> variableSys = { Variable, // topPtUp
+				  Variable, // topPtDown
+				  Variable + "_muUp", // muonScaleUp
+				  Variable + "_muDown", // muonScaleDown
+				  Variable + "_eUp", // eleScaleUp
+				  Variable + "_eDown", // eleScaleDown
+				  Variable + "_scaleUp",  // metScaleUp
+				  Variable + "_scaleDown",  // metScaleDown
+				  Variable, // metScaleUp 
+				  Variable, // metScaleDown
+				  Variable, // zPtMassUp
+				  Variable  // zPtMassDown
+  };
+
+  vector<TString> qcdweightSys = { "qcdweightup*",
+				   "(qcdweight*qcdweight/qcdweightup)*"
+  };
+
+  vector<TString> sysNameSS = { "_CMS_htt_em_qcdShape_13TeVUp",
+			        "_CMS_htt_em_qcdShape_13TeVDown"
+  };
+
+  vector<TString> sysNames = { "_CMS_htt_ttbarShape_13TeVUp",
+			       "_CMS_htt_ttbarShape_13TeVDown",
+			       "_CMS_scale_m_em_13TeVUp",
+			       "_CMS_scale_m_em_13TeVDown",
+			       "_CMS_scale_e_em_13TeVUp",
+			       "_CMS_scale_e_em_13TeVDown",
+			       "_CMS_scale_met_em_13TeVUp",
+			       "_CMS_scale_met_em_13TeVDown",
+			       "_CMS_reso_met_em_13TeVUp",
+			       "_CMS_reso_met_em_13TeVDown",
+			       "_CMS_htt_dyShape_13TeVUp",
+			       "_CMS_htt_dyShape_13TeVDown"
+  };
+
+
+  vector<vector<TH1D*>> histSys;
+
 
   // filling histograms data and bkgd MC
-  for (int i=0; i<nSamples; ++i) { // run over samples
-    //    std::cout << sampleNames[i] << std::endl;
-    TFile * file = new TFile(directory+sampleNames[i]+".root");
-    TH1D * histWeightsH = (TH1D*)file->Get("histWeightsH");
-    TTree * tree = (TTree*)file->Get(TauCheck);
-    double norm = xsec[i]*lumi/histWeightsH->GetSumOfWeights();
-    TString histName = sampleNames[i] + Variable + "_os";
-    TString histNameSS = sampleNames[i] + Variable + "_ss";
-    TString histNameSSrelaxed = sampleNames[i] + Variable + "_ss_relaxed";
-    hist[i] = new TH1D(histName,"",nBins,bins);
-    histSS[i] = new TH1D(histNameSS,"",nBins,bins);
-    histSSrelaxed[i] = new TH1D(histNameSSrelaxed,"",nBins,bins);
-    hist[i]->Sumw2();
-    histSS[i]->Sumw2();
-    histSSrelaxed[i]->Sumw2();
-    tree->Draw(Variable+">>"+histName,cuts[i]);
-    tree->Draw(Variable+">>"+histNameSS,cutsSS[i]);
-    tree->Draw(Variable+">>"+histNameSSrelaxed,cutsSSrelaxed[i]);
+  for(TString const& sampleName : sampleNames) {
+
+    TFile * file = new TFile( directory + sampleName + ".root" );
+    TTree * tree = (TTree*) file -> Get(TauCheck);
+    TString histName          = sampleName + Variable + "_os";
+    TString histNameSS        = sampleName + Variable + "_ss";
+    TString histNameSSrelaxed = sampleName + Variable + "_ss_relaxed";
+    TH1D *hist_          = new TH1D(histName,"",nBins,bins);
+    TH1D *histSS_        = new TH1D(histNameSS,"",nBins,bins);
+    TH1D *histSSrelaxed_ = new TH1D(histNameSSrelaxed,"",nBins,bins);
+    hist          -> push_back(hist_);
+    histSS        -> push_back(histSS_);
+    histSSrelaxed -> push_back(histSSrelaxed_);
+    tree -> Draw(Variable+">>"+histName,cuts[i]);
+    tree -> Draw(Variable+">>"+histNameSS,cutsSS[i]);
+    tree -> Draw(Variable+">>"+histNameSSrelaxed,cutsSSrelaxed[i]);
 
     // systematics
-    for (int iSys=0; iSys<12; ++iSys ) {
+    for ( TString const& sysName : sysNames ) {
+      TH1D *histSys_ = new TH1D(histName+sysName,"",nBins,bins);
+      histSys.push_back(histSys_); 
       histSys[i][iSys] = new TH1D(histName+sysName[iSys],"",nBins,bins);
-      histSys[i][iSys]->Sumw2();
-      tree->Draw(variableSys[iSys]+">>"+histName+sysName[iSys],cutsSys[i][iSys]);
+      tree -> Draw(variableSys+">>"+histName+sysName,cutsSys[i][iSys]);
     }
 
     if (i>0) { // MC samples should be normalized
