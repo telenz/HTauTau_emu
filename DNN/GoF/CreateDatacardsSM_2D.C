@@ -7,7 +7,7 @@
 // em_boosted
 // em_vbf
 
-void CreateDatacardsSM_2D(TString directory = "./msv_v2/",
+void CreateDatacardsSM_2D(TString directory = "/nfs/dust/cms/user/rasp/Run/Run2016/EMu_2016/msv_v2/",
 			  TString category = "em_0jet",
 			  TString Suffix = "0jet") {
 
