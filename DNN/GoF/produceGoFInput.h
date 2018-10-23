@@ -49,11 +49,14 @@ class Category {
 
 public :   
   TString name = "";
+  TString suffix = "";
 
   TString cutString   = "";
   TString cutStringSS = "";
   TString variable    = "";
 
+  int nBinsX = 1;
+  int nBinsY = 1;
   float *binsX;
   float *binsY;
 
