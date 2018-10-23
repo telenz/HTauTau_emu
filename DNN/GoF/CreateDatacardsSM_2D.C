@@ -8,8 +8,8 @@
 // em_vbf
 
 void CreateDatacardsSM_2D(TString directory = "/nfs/dust/cms/user/rasp/Run/Run2016/EMu_2016/msv_v2/",
-			  TString category = "em_0jet",
-			  TString Suffix = "0jet") {
+			  TString category = "em_inclusive",
+			  TString Suffix = "inclusive") {
 
   bool logY = true;
   bool blindData = false;
