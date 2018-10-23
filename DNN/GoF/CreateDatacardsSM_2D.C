@@ -1274,7 +1274,7 @@ void CreateDatacardsSM_2D(TString directory = "/nfs/dust/cms/user/rasp/Run/Run20
   ggHWW125->Write("HWW_gg125");
   qqHWW125->Write("HWW_qq125");
 
-  for (int iSys=2; iSys<; ++iSys) {
+  for (int iSys=2; iSys<nSys; ++iSys) {
     histSys[1][iSys]->Write("ZTT"+sysName[iSys]);
     histSys[2][iSys]->Write("ZL"+sysName[iSys]);
     histSys[5][iSys]->Write("W"+sysName[iSys]);
