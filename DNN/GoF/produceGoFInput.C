@@ -6,58 +6,28 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   SetStyle();
 
-  double lumi = 35900;
   bool verbose = true;
 
-  bool logY = true;
-  bool blindData = false;
-
-  TString xtitle = "bins";
-  TString ytitle = "Events / bin";
-
-
-  // Weights
-  TString Weight = "mcweight*puweight*effweight*0.978824*0.985*";
-  TString qcdweight("2.30*");
-  //  TString topweight("topptweight*");
-  TString topweight("topptweightRun2*");
-  TString zptmassweight("zptmassweight*");
-
-  float OSSS_inclusive = 2.3;
-  float OSSS_categ = 2.3;
-  float OSSS_categ_err = 0.26;
-  TString ggScaleWeightUp="(0.9421 - 0.00001699*pt_2)*";
-  TString ggScaleWeightDown="(1.0579 + 0.00001699*pt_2)*";
-  // Drell-Yan corrections (in slices of mjj/pt_sv)
-  float dyCorr2D[10];
-  TString labelsBins[10];
-  float yeThreshold = 1;
-  for (int iDY=0; iDY<10; ++iDY)
-    dyCorr2D[iDY] = 1;
+  //************************************************************************************************
+  // Define some common weights and cuts
+  TString Weight    = "mcweight*puweight*effweight*0.978824*0.985*";
+  TString qcdweight = "2.30*";
 
   // Definition of cuts
-  TString btagVeto("&&nbtag==0");
-  TString btagVetoUp("&&nbtag==0");
-  TString btagVetoDown("&&nbtag==0");
-  TString mistagVetoUp("&&nbtag==0");
-  TString mistagVetoDown("&&nbtag==0");
-
-  TString mTCut("&&mTdileptonMET<60");
-  TString CutsKine= "&&pt_1>13&&pt_2>15&&TMath::Max(pt_1,pt_2)>24";
+  TString mTCut    = "&&mTdileptonMET<60";
+  TString CutsKine = "&&pt_1>13&&pt_2>15&&TMath::Max(pt_1,pt_2)>24";
   CutsKine += mTCut;
 
-  TString CutsIso          = "&&iso_1<0.15&&iso_2<0.2&&extraelec_veto<0.5&&extramuon_veto<0.5";
-  TString CutsIsoSS        = "&&iso_1<0.50&&iso_2>0.2&&iso_2<0.5&&extraelec_veto<0.5&&extramuon_veto<0.5";
-  
-  TString CutsCategory             = "&&dzeta>-35";
+  TString CutsIso   = "&&iso_1<0.15&&iso_2<0.2&&extraelec_veto<0.5&&extramuon_veto<0.5";
+  TString CutsIsoSS = "&&iso_1<0.50&&iso_2>0.2&&iso_2<0.5&&extraelec_veto<0.5&&extramuon_veto<0.5";
+
+  TString btagVeto     = "&&nbtag==0";
+  TString CutsCategory = "&&dzeta>-35";
   CutsCategory += btagVeto;
 
   TString Cuts   = CutsKine + CutsIso   + CutsCategory;
   TString CutsSS = CutsKine + CutsIsoSS + CutsCategory;
 
-
-
-  
   //************************************************************************************************
   // Define different category cuts
   // still needs to set ggscaleweight, labelBins, yeThreshols, change variale for eUp and jesUp, OSSS_categ +err
@@ -103,7 +73,6 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   // Make a vector from these categories
   vector<class Category> category_vec = { em_inclusive };
-  //************************************************************************************************
 
   //************************************************************************************************
   // Define samples
@@ -135,7 +104,6 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   // Define common cut strings  
   for(Sample & smpl : sample_vec){
-    
     smpl.cutString          = "(os>0.5"+Cuts+")";
     smpl.weightString       = Weight;
     smpl.cutStringSS        = "(os<0.5"+Cuts+")";
@@ -147,37 +115,31 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   // Define sample specific cuts
   Data.weightString = "";
-  ZTT.weightString += zptmassweight;
   ZTT.cutString += "&&isZTT";
-  ZLL.weightString += zptmassweight;
   ZLL.cutString += "&&!isZTT";
-  TT.weightString   += topweight;
-  QCD.weightString  += qcdweight;
-  QCD.cutString += "(os<0.5"+CutsSS+")";
 
   Data.weightStringSS = "";
-  ZTT.weightStringSS += zptmassweight;
   ZTT.cutStringSS += "&&isZTT";
-  ZLL.weightStringSS += zptmassweight;
   ZLL.cutStringSS += "&&!isZTT";
-  TT.weightStringSS += topweight;
 
   Data.weightStringSSrelaxed = "";
-  ZTT.weightStringSSrelaxed += zptmassweight;
   ZTT.cutStringSSrelaxed += "&&isZTT";
-  ZLL.weightStringSSrelaxed += zptmassweight;
   ZLL.cutStringSSrelaxed += "&&!isZTT";
-  TT.weightStringSSrelaxed += topweight;
-  //************************************************************************************************
+
+  // Define sample specific weights
+  TT.topweight = "topptweightRun2*";
+  ZTT.zptmassweight = "zptmassweight*";
+  ZLL.zptmassweight = "zptmassweight*";
+  EWKZ.zptmassweight = "zptmassweight*";
 
   //************************************************************************************************
   // Define systematic uncertainties
 
-  // Uncertainties common for all samples
   for(Sample & smpl : sample_vec){
 
     if( smpl.name == "Data" || smpl.name == "QCD" ) continue;
 
+    // Uncertainties common for all samples
     // 1.) Electron scale
     Sample eScaleUp   = smpl;
     Sample eScaleDown = smpl;
@@ -231,6 +193,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     smpl.uncertainties["metResoDown"].cutString.ReplaceAll("dzeta","dzeta_resoDown");
 
     // 5.) B-tag efficiency
+    TString btagVetoUp     = "&&nbtag==0";
+    TString btagVetoDown   = "&&nbtag==0";
     Sample bEffUp = smpl;
     Sample bEffDown = smpl;
     smpl.uncertainties.insert( make_pair("bEffUp"   , bEffUp) );
@@ -241,6 +205,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     smpl.uncertainties["bEffDown"].cutString+=btagVetoDown;
 
     // 6.) Mis-tag efficiency
+    TString mistagVetoUp   = "&&nbtag==0";
+    TString mistagVetoDown = "&&nbtag==0";
     Sample bFakeUp = smpl;
     Sample bFakeDown = smpl;
     smpl.uncertainties.insert( make_pair("bFakeUp"   , bFakeUp) );
@@ -277,6 +243,9 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
     // // 9.) ggScale
     if(smpl.name == "ggH"){
+      TString ggScaleWeightUp="(0.9421 - 0.00001699*pt_2)*";
+      TString ggScaleWeightDown="(1.0579 + 0.00001699*pt_2)*";
+
       Sample ggScaleUp = smpl;
       Sample ggScaleDown = smpl;
       smpl.uncertainties.insert( make_pair("ggScaleUp"   , ggScaleUp) );
@@ -311,57 +280,33 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     const int nBinsX = sizeof(em_inclusive.binsX)/sizeof(float) - 1;
     const int nBinsY = sizeof(em_inclusive.binsY)/sizeof(float) - 1;
     smpl.hist = new TH2D(smpl.name + "_os" , "" , nBinsX , em_inclusive.binsX , nBinsY , em_inclusive.binsY );
+    TString full_weight_string = smpl.weightString + smpl.topweight + smpl.zptmassweight + smpl.ggscaleweight;
     if(verbose){
       cout << smpl.name << " : " << smpl.variable << endl;
-      cout << smpl.name << " : " << smpl.weightString << endl;
+      cout << smpl.name << " : " << full_weight_string << endl;
       cout << smpl.name << " : " << smpl.cutString << endl << endl;
     }
-    tree -> Draw( smpl.variable + ">>" + smpl.hist->GetName() , smpl.weightString + "*(" + smpl.cutString + ")" );
+    tree -> Draw( smpl.variable + ">>" + smpl.hist->GetName() , full_weight_string + "(" + smpl.cutString + ")" );
     // do here the unfolding ???
       
     // now start the loop over the sys uncertainties
     for(auto &sys : smpl.uncertainties){
+
+      full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight;
       if(verbose){
 	cout << sys.first << " : " << sys.second.variable << endl;
-	cout << sys.first << " : " << sys.second.weightString << endl;
+	cout << sys.first << " : " << full_weight_string << endl;
 	cout << sys.first << " : " << sys.second.cutString << endl << endl;
       }
       sys.second.hist = new TH2D(sys.second.name + "_os" , "" , nBinsX , em_inclusive.binsX , nBinsY , em_inclusive.binsY );
-      tree -> Draw( sys.second.variable + ">>" +  sys.second.hist->GetName() , sys.second.weightString + "*(" + sys.second.cutString + ")" );
+      tree -> Draw( sys.second.variable + ">>" +  sys.second.hist->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
     }
   }
 
+  //************************************************************************************************
+  // Determine QCD background (subtracting other background from the SS region
+  
 
-
-  // hist[1]->Add(hist[1],hist[3]); // ZTT low mass + high mass
-  // hist[2]->Add(hist[2],hist[4]); // ZLL low mass + high mass
-  // for (int iSys=0; iSys<nSys; ++iSys) {
-  //   histSys[1][iSys]->Add(histSys[1][iSys],histSys[3][iSys]);
-  //   histSys[2][iSys]->Add(histSys[2][iSys],histSys[4][iSys]);
-  // }
-
-  // //  adding up single top and VV backgrounds
-  // for (int iH=8; iH<19; ++iH) {
-  //   hist[7]->Add(hist[7],hist[iH]);
-  //   for (int iSys=0; iSys<nSys; ++iSys)
-  //     histSys[7][iSys]->Add(histSys[7][iSys],histSys[iH][iSys]);
-  // }
-
-  // // adding up W+Jets and W+gamma samples
-  // for (int iH=19; iH<22; ++iH) {
-  //   hist[5]->Add(hist[5],hist[iH]);
-  //   for (int iSys=0; iSys<nSys; ++iSys)
-  //     histSys[5][iSys]->Add(histSys[5][iSys],histSys[iH][iSys]);
-  // }
-  // for (int iH=23; iH<25; ++iH) {
-  //   hist[5]->Add(hist[5],hist[iH]);
-  //   for (int iSys=0; iSys<nSys; ++iSys)
-  //     histSys[5][iSys]->Add(histSys[5][iSys],histSys[iH][iSys]);
-  // }
-
-  // std::cout << "Data in SS region = " << histSS[0]->GetSumOfWeights() << std::endl;
-  // std::cout << "Data is SS relaxed region = " << histSSrelaxed[0]->GetSumOfWeights() << std::endl;
- 
   // // subtracting background from SS
   // for (int iH=1; iH<25; ++iH) {
   //   histSS[0]->Add(histSS[0],histSS[iH],1,-1);

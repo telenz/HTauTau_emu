@@ -10,63 +10,57 @@
 #include "CMS_lumi.C"
 
 // ********************************************************************************************
-class Analyzer2D {
+class Sample {
 
-public :
+public :  
+
   TString name;
+  TString filename;
 
   TString cutString    = "";
-  TString weightString = "";
+  TString weightString = "1*";
   TString cutStringSS    = "";
-  TString weightStringSS = "";
+  TString weightStringSS = "1*";
   TString cutStringSSrelaxed    = "";
-  TString weightStringSSrelaxed = "";
+  TString weightStringSSrelaxed = "1*";
 
-  TString topweight     = "";
-  TString zptmassweight = "";
-  TString qcdweight     = "";
-  TString ggscaleweight = "";
+  TString topweight     = "1*";
+  TString zptmassweight = "1*";
+  TString ggscaleweight = "1*";
+  double norm = 1;
+
+  TString variable = "m_vis : pt_2";
 
   TH2D *hist;
   TH2D *histSS;
   TH2D *histSSrelaxed;
-  
-  TString variable = "m_vis : pt_2";
 
-  Analyzer2D(TString name = ""){
-    name = name;
-  }
-};
-// ********************************************************************************************
-
-// ********************************************************************************************
-class Sample : public Analyzer2D {
-
-public :  
-  TString filename;
   map< TString , Sample > uncertainties;
-  double norm = 1;
- 
+
   Sample(TString sampleName = "", TString filepath = ""){
     name     = sampleName;
     filename = filepath;
   }
 };
-
 // ********************************************************************************************
 
+// ********************************************************************************************
 class Category {
 
 public :   
   TString name = "";
+
   TString cutString   = "";
   TString cutStringSS = "";
-  TString variable   = "";
+  TString variable    = "";
+
   float *binsX;
   float *binsY;
+
   vector<Sample> *sampleList;
 
   Category(TString catName){
     name = catName;
   }
 };
+// ********************************************************************************************
