@@ -1255,7 +1255,7 @@ void CreateDatacardsSM_2D(TString directory = "/nfs/dust/cms/user/rasp/Run/Run20
 
   TString BaseName = "htt_em.inputs-sm-13TeV_" +Suffix;
   TString rootFileName = BaseName+".root";
-  TFile * fileInputs = new TFile(rootFileName,"recreate"); 
+  TFile * fileInputs = new TFile("output/"+rootFileName,"recreate");
   fileInputs->mkdir(category);
   fileInputs->cd(category);
   histData->Write("data_obs");
