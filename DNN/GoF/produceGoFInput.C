@@ -6,7 +6,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   gROOT->SetBatch(kTRUE);
   SetStyle();
 
-  bool verbose = true;
+  bool verbose = false;
   bool plot_2d = true;
 
   //************************************************************************************************
@@ -93,16 +93,16 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   //************************************************************************************************
   // Define samples
-  Sample Data( "Data"      , "MuonEG_Run2016_dnn_em_v1.root" );
-  Sample ZTT(  "ZTT"       , "DYJets_dnn_em_v1.root" );
-  Sample ZLL(  "ZLL"       , "DYJets_dnn_em_v1.root" );
-  Sample EWKZ( "EWKZ"      , "EWKZ_em_v1.root" );
-  Sample W(    "WJets"     , "WJets_dnn_em_v1.root" );
-  Sample TT(   "TTbar"     , "TTbar_dnn_em_v1.root" );
-  Sample VV(   "Diboson"   , "Diboson_dnn_em_v1.root" );
-  Sample QCD(  "QCD"       , "MuonEG_Run2016_dnn_em_v1.root" );
-  Sample ggH(  "ggH"       , "ggH_dnn_em_v1.root" );
-  Sample VBFH( "VBFH"      , "VBFH_dnn_em_v1.root" );
+  Sample Data( "data_obs" , "MuonEG_Run2016_dnn_em_v1.root" );
+  Sample ZTT(  "ZTT"      , "DYJets_dnn_em_v1.root" );
+  Sample ZLL(  "ZL"       , "DYJets_dnn_em_v1.root" );
+  Sample EWKZ( "EWKZ"     , "EWKZ_em_v1.root" );
+  Sample W(    "W"        , "WJets_dnn_em_v1.root" );
+  Sample TT(   "TT"       , "TTbar_dnn_em_v1.root" );
+  Sample VV(   "VV"       , "Diboson_dnn_em_v1.root" );
+  Sample QCD(  "QCD"      , "MuonEG_Run2016_dnn_em_v1.root" );
+  Sample ggH(  "ggH"      , "ggH_dnn_em_v1.root" );
+  Sample qqH(  "qqH"      , "VBFH_dnn_em_v1.root" );
   
   // Define pre-defined norms
   ZTT.norm = "1.02*";
@@ -116,12 +116,12 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 				     { "TT"   , TT } ,
 				     { "VV"   , VV } ,
 				     { "QCD"  , QCD },
-				     { "ggH"  , ggH },
-				     { "VBFH" , VBFH }
+				     { "ggH125" , ggH },
+				     { "qqH125" , qqH }
   };
 
   if(verbose){
-    cout << endl << endl << "... Background classes ... "<< endl ;
+    cout << endl << endl << "... Sample categories ... "<< endl ;
     for(auto & smpl : sample_map ) cout << " - " << smpl.second.name << endl;
   }
 
@@ -163,8 +163,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   for(auto & smpl : sample_map){
 
-    cout<<"name = " <<smpl.second.name<<endl;
-    if( smpl.second.name == "Data" || smpl.second.name == "QCD" ) continue;
+    if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
 
     // Uncertainties common for all samples
     // 1.) Electron scale
@@ -190,13 +189,15 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     Sample jScaleDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("jScaleUp"   , jScaleUp) );
     smpl.second.uncertainties.insert( make_pair("jScaleDown" , jScaleDown) );
-    smpl.second.uncertainties["jScaleUp"].name += "_CMS_scale_j_em_13TeVUp";
+    smpl.second.uncertainties["jScaleUp"].name   += "_CMS_scale_j_em_13TeVUp";
     smpl.second.uncertainties["jScaleDown"].name += "_CMS_scale_j_em_13TeVDown";
     smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("njets","njets_Up");
     smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("mjj","mjj_Up");
+    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("mjj","mjj_Up");
     smpl.second.uncertainties["jScaleUp"].variable_2d.ReplaceAll("mjj","mjj_Up");
     smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("njets","njets_Down");
     smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("mjj","mjj_Down");
+    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("mjj","mjj_Down");
     smpl.second.uncertainties["jScaleDown"].variable_2d.ReplaceAll("mjj","mjj_Down");
 
     // 3.) MET scale
@@ -204,7 +205,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     Sample metScaleDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("metScaleUp"   , metScaleUp) );
     smpl.second.uncertainties.insert( make_pair("metScaleDown" , metScaleDown) );
-    smpl.second.uncertainties["metScaleUp"].name += "_CMS_scale_met_em_13TeVUp";
+    smpl.second.uncertainties["metScaleUp"].name   += "_CMS_scale_met_em_13TeVUp";
     smpl.second.uncertainties["metScaleDown"].name += "_CMS_scale_met_em_13TeVDown";
     smpl.second.uncertainties["metScaleUp"].cutString.ReplaceAll("dzeta","dzeta_scaleUp");
     smpl.second.uncertainties["metScaleDown"].cutString.ReplaceAll("dzeta","dzeta_scaleDown");
@@ -214,61 +215,37 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     Sample metResoDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("metResoUp"   , metResoUp) );
     smpl.second.uncertainties.insert( make_pair("metResoDown" , metResoDown) );
-    smpl.second.uncertainties["metResoUp"].name += "_CMS_reso_met_em_13TeVUp";
+    smpl.second.uncertainties["metResoUp"].name   += "_CMS_reso_met_em_13TeVUp";
     smpl.second.uncertainties["metResoDown"].name += "_CMS_reso_met_em_13TeVDown";
     smpl.second.uncertainties["metResoUp"].cutString.ReplaceAll("dzeta","dzeta_resoUp");
     smpl.second.uncertainties["metResoDown"].cutString.ReplaceAll("dzeta","dzeta_resoDown");
 
-    // // 5.) B-tag efficiency
-    // TString btagVetoUp     = "&&nbtag==0";
-    // TString btagVetoDown   = "&&nbtag==0";
-    // Sample bEffUp = smpl.second;
-    // Sample bEffDown = smpl.second;
-    // smpl.second.uncertainties.insert( make_pair("bEffUp"   , bEffUp) );
-    // smpl.second.uncertainties.insert( make_pair("bEffDown" , bEffDown) );
-    // smpl.second.uncertainties["bEffUp"].name += "_CMS_eff_b_13TeVUp";
-    // smpl.second.uncertainties["bEffDown"].name += "_CMS_eff_b_13TeVDown";
-    // smpl.second.uncertainties["bEffUp"].cutString+=btagVetoUp;
-    // smpl.second.uncertainties["bEffDown"].cutString+=btagVetoDown;
-
-    // // 6.) Mis-tag efficiency
-    // TString mistagVetoUp   = "&&nbtag==0";
-    // TString mistagVetoDown = "&&nbtag==0";
-    // Sample bFakeUp = smpl.second;
-    // Sample bFakeDown = smpl.second;
-    // smpl.second.uncertainties.insert( make_pair("bFakeUp"   , bFakeUp) );
-    // smpl.second.uncertainties.insert( make_pair("bFakeDown" , bFakeDown) );
-    // smpl.second.uncertainties["bFakeUp"].name += "_CMS_fake_b_13TeVUp";
-    // smpl.second.uncertainties["bFakeDown"].name += "_CMS_fake_b_13TeVDown";
-    // smpl.second.uncertainties["bFakeUp"].cutString +=mistagVetoUp;
-    // smpl.second.uncertainties["bFakeDown"].cutString +=mistagVetoDown;
-
     // Sample-specific uncertainties
-    // 7.) TTbar shape
+    // 5.) TTbar shape
     if(smpl.second.name == "TTbar"){
       Sample ttbarShapeUp = smpl.second;
       Sample ttbarShapeDown = smpl.second;
       smpl.second.uncertainties.insert( make_pair("ttbarShapeUp"   , ttbarShapeUp) );
       smpl.second.uncertainties.insert( make_pair("ttbarShapeDown" , ttbarShapeDown) );
-      smpl.second.uncertainties["ttbarShapeUp"].name += "_CMS_htt_ttbarShape_13TeVUp";
+      smpl.second.uncertainties["ttbarShapeUp"].name   += "_CMS_htt_ttbarShape_13TeVUp";
       smpl.second.uncertainties["ttbarShapeDown"].name += "_CMS_htt_ttbarShape_13TeVDown";
       smpl.second.uncertainties["ttbarShapeUp"].topweight = "topptweightRun2*topptweightRun2*";
       smpl.second.uncertainties["ttbarShapeDown"].topweight = "";
     }
 
-    // 8.) DY shape (EWKZ sample should be added here)
+    // 6.) DY shape (EWKZ sample should be added here)
     if(smpl.second.name == "ZTT" || smpl.second.name == "ZLL" || smpl.second.name == "EWKZ" ){ // FIXME
       Sample dyShapeUp = smpl.second;
       Sample dyShapeDown = smpl.second;
       smpl.second.uncertainties.insert( make_pair("dyShapeUp"   , dyShapeUp) );
       smpl.second.uncertainties.insert( make_pair("dyShapeDown" , dyShapeDown) );
-      smpl.second.uncertainties["dyShapeUp"].name += "_CMS_htt_dyShape_13TeVUp";
+      smpl.second.uncertainties["dyShapeUp"].name   += "_CMS_htt_dyShape_13TeVUp";
       smpl.second.uncertainties["dyShapeDown"].name += "_CMS_htt_dyShape_13TeVDown";
       smpl.second.uncertainties["dyShapeUp"].zptmassweight="(1.0+1.1*(zptmassweight-1))*";
       smpl.second.uncertainties["dyShapeDown"].zptmassweight="(1.0+0.9*(zptmassweight-1))*";
     }
 
-    // // 9.) ggScale
+    // 7.) ggScale
     if(smpl.second.name == "ggH"){
       TString ggScaleWeightUp="(0.9421 - 0.00001699*pt_2)*";
       TString ggScaleWeightDown="(1.0579 + 0.00001699*pt_2)*";
@@ -277,7 +254,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
       Sample ggScaleDown = smpl.second;
       smpl.second.uncertainties.insert( make_pair("ggScaleUp"   , ggScaleUp) );
       smpl.second.uncertainties.insert( make_pair("ggScaleDown" , ggScaleDown) );
-      smpl.second.uncertainties["ggScaleUp"].name += "_CMS_scale_gg_13TeVUp";
+      smpl.second.uncertainties["ggScaleUp"].name   += "_CMS_scale_gg_13TeVUp";
       smpl.second.uncertainties["ggScaleDown"].name += "_CMS_scale_gg_13TeVDown";
       smpl.second.uncertainties["ggScaleUp"].ggscaleweight=ggScaleWeightUp;
       smpl.second.uncertainties["ggScaleDown"].ggscaleweight=ggScaleWeightDown;
@@ -387,10 +364,10 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   // 1.) Take the shape from ss relaxed region
   for(auto & smpl : sample_map){
-    if( smpl.second.name == "ggH"  ||
-	smpl.second.name == "VBFH" ||
-	smpl.second.name == "Data" ||
-	smpl.second.name == "QCD"    ) continue;
+    if( smpl.first == "ggH"  ||
+	smpl.first == "qqH"  ||
+	smpl.first == "Data" ||
+	smpl.first == "QCD"    ) continue;
     sample_map["QCD"].histSS_1d        -> Add( smpl.second.histSS_1d , -1 );
     sample_map["QCD"].histSSrelaxed_1d -> Add( smpl.second.histSSrelaxed_1d , -1 );
   }
@@ -405,20 +382,18 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   cout << endl << endl << "... Writing histograms to output file ... " << endl;
 
   TString rootFileName = "htt_em.inputs-sm-13TeV_" + em_incl.suffix + "_NEW.root";
-  TFile * fileOut      = new TFile(rootFileName,"recreate");
+  TFile * fileOut      = new TFile( "output/" + rootFileName , "RECREATE" );
   fileOut             -> mkdir(em_incl.name);
   fileOut             -> cd(em_incl.name);
 
   for(auto & smpl : sample_map){
-    smpl.second.hist_1d -> Write();
-    for(auto & sys : smpl.second.uncertainties){
-      sys.second.hist_1d -> Write();
-    }
+    smpl.second.hist_1d -> Write( smpl.second.name );
+    for(auto & sys : smpl.second.uncertainties)  sys.second.hist_1d -> Write( sys.second.name );
   }
   fileOut -> Close();
 
   // Write the final sum of weights of the nominal selection
-  cout << endl << " Final histogram content : "<< endl;
+  cout << endl << "... Final histogram content : "<< endl;
   for(auto & smpl : sample_map) cout << smpl.second.name << " : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
   cout << endl;
 }
