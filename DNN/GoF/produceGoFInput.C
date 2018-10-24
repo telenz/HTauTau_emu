@@ -2,7 +2,6 @@
 #include "TROOT.h"
 #include "Unfold.C"
 #include "HttStylesNew.cc"
-#include "CMS_lumi.C"
 
 void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
@@ -10,7 +9,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   SetStyle();
 
   bool verbose = false;
-  bool plot_2d = true;
+  bool plot_2d = false;
 
   //************************************************************************************************
   // Define some common weights and cuts
@@ -280,6 +279,11 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   cout << endl << endl << "... Drawing ... " << endl;
   for(auto & smpl : sample_map){
 
+    if( smpl.first == "Data" ){
+      if( !plot_2d ) cout << endl << "Variable = " << smpl.second.variable_1d << endl;
+      else           cout << endl << "Variable = " << smpl.second.variable_2d << endl;
+    }
+
     cout << endl << "**************************************" << endl;
     cout << smpl.second.name << " : " << smpl.second.filename << endl;
     TFile *file = new TFile( directory + "/" + smpl.second.filename );
@@ -397,6 +401,13 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   // Write the final sum of weights of the nominal selection
   cout << endl << "... Final histogram content : "<< endl;
-  for(auto & smpl : sample_map) cout << smpl.second.name << " : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
+  TH1D * allBkg = (TH1D*) sample_map["QCD"].hist_1d -> Clone();
+  for(auto & smpl : sample_map) {
+    cout << smpl.second.name << " : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
+    // Add all background
+    if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
+    allBkg->Add(smpl.second.hist_1d);
+  }
+  cout << "Bkg together : " << allBkg -> GetSumOfWeights() << endl;
   cout << endl;
 }
