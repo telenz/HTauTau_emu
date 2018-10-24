@@ -11,8 +11,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   //************************************************************************************************
   // Define some common weights and cuts
-  TString Weight    = "mcweight*puweight*effweight*0.978824*0.985*";
-  TString qcdweight = "2.30*";
+  TString Weight    = "xsec_lumi_weight*mcweight*puweight*effweight*0.978824*0.985*";
+  TString qcdweight = "2.30*"; // what is this weight (FIXME)
 
   // Definition of cuts
   TString mTCut    = "&& mTdileptonMET<60 ";
@@ -99,16 +99,14 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   Sample EWKZ( "EWKZ"      , "EWKZ_em_v1.root" );
   Sample W(    "WJets"     , "WJets_dnn_em_v1.root" );
   Sample TT(   "TTbar"     , "TTbar_dnn_em_v1.root" );
-  Sample ST(   "SingleTop" , "SingleTop_dnn_em_v1.root" );
   Sample VV(   "Diboson"   , "Diboson_dnn_em_v1.root" );
   Sample QCD(  "QCD"       , "MuonEG_Run2016_dnn_em_v1.root" );
   Sample ggH(  "ggH"       , "ggH_dnn_em_v1.root" );
   Sample VBFH( "VBFH"      , "VBFH_dnn_em_v1.root" );
   
   // Define pre-defined norms
-  ZTT.norm = 1.02;
-  ZLL.norm = 1.02;
-  QCD.norm = 0.503821;
+  ZTT.norm = "1.02*";
+  ZLL.norm = "1.02*";
 
   map<TString,Sample> sample_map = { { "Data" , Data },
 				     { "ZTT"  , ZTT } ,
@@ -116,7 +114,6 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 				     { "EWKZ" , EWKZ } ,
 				     { "W"    , W } ,
 				     { "TT"   , TT } ,
-				     { "ST"   , ST } ,
 				     { "VV"   , VV } ,
 				     { "QCD"  , QCD },
 				     { "ggH"  , ggH },
@@ -136,19 +133,22 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     smpl.second.weightStringSS     = Weight+qcdweight;
     smpl.second.cutStringSSrelaxed = "os<0.5"+CutsSS;
     smpl.second.weightStringSSrelaxed = Weight+qcdweight;
-    smpl.second.variable_2d = "pt_2 : m_vis";
+    smpl.second.variable_2d = "pt_2 : m_vis"; // which order -> to be clarified (FIXME)
   }
 
   // Define sample specific cuts
   sample_map["Data"].weightString = "1*";
+  sample_map["QCD"].weightString  = "1*";
   sample_map["ZTT"].cutString += "&&isZTT";
   sample_map["ZLL"].cutString += "&&!isZTT";
 
-  sample_map["Data"].weightStringSS = "1*";
+  sample_map["Data"].weightStringSS = qcdweight;
+  sample_map["QCD"].weightStringSS  = qcdweight;
   sample_map["ZTT"].cutStringSS += "&&isZTT";
   sample_map["ZLL"].cutStringSS += "&&!isZTT";
 
-  sample_map["Data"].weightStringSSrelaxed = "1*";
+  sample_map["Data"].weightStringSSrelaxed = qcdweight;
+  sample_map["QCD"].weightStringSSrelaxed  = qcdweight;
   sample_map["ZTT"].cutStringSSrelaxed += "&&isZTT";
   sample_map["ZLL"].cutStringSSrelaxed += "&&!isZTT";
 
@@ -156,7 +156,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   sample_map["TT"].topweight = "topptweightRun2*";
   sample_map["ZTT"].zptmassweight = "zptmassweight*";
   sample_map["ZLL"].zptmassweight = "zptmassweight*";
-  sample_map["EWKZ"].zptmassweight = "zptmassweight*";
+  // sample_map["EWKZ"].zptmassweight = "zptmassweight*"; // ! to be clarified (FIXME)
 
   //************************************************************************************************
   // Define systematic uncertainties
@@ -257,7 +257,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     }
 
     // 8.) DY shape (EWKZ sample should be added here)
-    if(smpl.second.name == "ZTT" || smpl.second.name == "ZLL" || smpl.second.name == "EWKZ" ){
+    if(smpl.second.name == "ZTT" || smpl.second.name == "ZLL" || smpl.second.name == "EWKZ" ){ // FIXME
       Sample dyShapeUp = smpl.second;
       Sample dyShapeDown = smpl.second;
       smpl.second.uncertainties.insert( make_pair("dyShapeUp"   , dyShapeUp) );
@@ -300,7 +300,6 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   cout << endl << endl << "... Drawing ... " << endl;
   for(auto & smpl : sample_map){
 
-    // if(smpl.second.name != "Data") continue;
     cout << endl << "**************************************" << endl;
     cout << smpl.second.name << " : " << smpl.second.filename << endl;
     TFile *file = new TFile( directory + "/" + smpl.second.filename );
@@ -314,9 +313,9 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     smpl.second.histSS_2d        = new TH2D(smpl.second.name + "_ss_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
     smpl.second.histSSrelaxed_2d = new TH2D(smpl.second.name + "_ss_relaxed_2d" , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
 
-    TString full_weight_string            = smpl.second.weightString + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight;
-    TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight;
-    TString full_weight_string_ss_relaxed = smpl.second.weightStringSSrelaxed + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight;
+    TString full_weight_string            = smpl.second.weightString + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
+    TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
+    TString full_weight_string_ss_relaxed = smpl.second.weightStringSSrelaxed + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
 
     if(verbose){
       cout << "Variable_2d          " << " : " << smpl.second.variable_2d << endl;
@@ -337,21 +336,18 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
       tree -> Draw( smpl.second.variable_2d + ">>" + smpl.second.hist_2d->GetName() , full_weight_string + "(" + smpl.second.cutString + ")" );
       tree -> Draw( smpl.second.variable_2d + ">>" + smpl.second.histSS_2d->GetName() , full_weight_string_ss + "(" + smpl.second.cutStringSS + ")" );
       tree -> Draw( smpl.second.variable_2d + ">>" + smpl.second.histSSrelaxed_2d->GetName() , full_weight_string_ss_relaxed + "(" + smpl.second.cutStringSSrelaxed + ")" );
-      
-      // cout << smpl.second.name << " 2D : " << smpl.second.hist_2d -> GetSumOfWeights() << endl;
 
       smpl.second.hist_1d          = (TH1D*) Unfold(smpl.second.hist_2d);
       smpl.second.histSS_1d        = (TH1D*) Unfold(smpl.second.histSS_2d);
       smpl.second.histSSrelaxed_1d = (TH1D*) Unfold(smpl.second.histSSrelaxed_2d);
     }
 
-    // cout << smpl.second.name << " 1D : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
-
     // now start the loop over the sys uncertainties
     for(auto &sys : smpl.second.uncertainties){
 
-      full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight;
-      full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight;
+      full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
+      full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
+      full_weight_string_ss_relaxed = sys.second.weightStringSSrelaxed + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
       if(verbose){
 	cout << "Variable_2d          " << " : " << sys.second.variable_2d << endl;
 	cout << "weight string        " << " : " << full_weight_string << endl;
@@ -385,22 +381,24 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
       }
     }
   }
-  // exit(-1);
   //************************************************************************************************
   // Determine QCD background (subtracting other background from the SS region
   cout << endl << endl << "... Determining QCD background ... " << endl;
 
-  sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSS_1d -> Clone();
-
+  // 1.) Take the shape from ss relaxed region
   for(auto & smpl : sample_map){
     if( smpl.second.name == "ggH"  ||
 	smpl.second.name == "VBFH" ||
 	smpl.second.name == "Data" ||
 	smpl.second.name == "QCD"    ) continue;
-    sample_map["QCD"].hist_1d -> Add( smpl.second.histSS_1d , -1 );
+    sample_map["QCD"].histSS_1d        -> Add( smpl.second.histSS_1d , -1 );
+    sample_map["QCD"].histSSrelaxed_1d -> Add( smpl.second.histSSrelaxed_1d , -1 );
   }
+  sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSSrelaxed_1d -> Clone();
 
-  // Normalize QCD (FIXME)
+  // 2.) Calculate normalization via ss/ss_relaxed
+  double qcd_norm = sample_map["QCD"].histSS_1d->GetSumOfWeights()/sample_map["QCD"].histSSrelaxed_1d->GetSumOfWeights();
+  sample_map["QCD"].hist_1d -> Scale(qcd_norm);
 
   //************************************************************************************************
   // Write all histograms to output file
