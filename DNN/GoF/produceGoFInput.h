@@ -5,9 +5,6 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include "HttStylesNew.cc"
-#include "Unfold.C"
-#include "CMS_lumi.C"
 
 // ********************************************************************************************
 class Sample {

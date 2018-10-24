@@ -1,5 +1,8 @@
 #include "produceGoFInput.h"
 #include "TROOT.h"
+#include "Unfold.C"
+#include "HttStylesNew.cc"
+#include "CMS_lumi.C"
 
 void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
