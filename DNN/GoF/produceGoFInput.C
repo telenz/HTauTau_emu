@@ -7,6 +7,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   SetStyle();
 
   bool verbose = true;
+  bool plot_2d = true;
 
   //************************************************************************************************
   // Define some common weights and cuts
@@ -14,15 +15,15 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   TString qcdweight = "2.30*";
 
   // Definition of cuts
-  TString mTCut    = "&&mTdileptonMET<60";
-  TString CutsKine = "&&pt_1>13&&pt_2>15&&TMath::Max(pt_1,pt_2)>24";
+  TString mTCut    = "&& mTdileptonMET<60 ";
+  TString CutsKine = "&& pt_1>13 && pt_2>15 && TMath::Max(pt_1,pt_2)>24 ";
   CutsKine += mTCut;
 
-  TString CutsIso   = "&&iso_1<0.15&&iso_2<0.2&&extraelec_veto<0.5&&extramuon_veto<0.5";
-  TString CutsIsoSS = "&&iso_1<0.50&&iso_2>0.2&&iso_2<0.5&&extraelec_veto<0.5&&extramuon_veto<0.5";
+  TString CutsIso   = "&& iso_1<0.15 && iso_2<0.2 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
+  TString CutsIsoSS = "&& iso_1<0.50 && iso_2>0.2 && iso_2<0.5 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
 
-  TString btagVeto     = "&&nbtag==0";
-  TString CutsCategory = "&&dzeta>-35";
+  TString btagVeto     = "&& nbtag==0 ";
+  TString CutsCategory = "&& dzeta>-35 ";
   CutsCategory += btagVeto;
 
   TString Cuts   = CutsKine + CutsIso   + CutsCategory;
@@ -32,50 +33,63 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   // Define different category cuts
   // still needs to set ggscaleweight, labelBins, yeThreshols, change variale for eUp and jesUp, OSSS_categ +err
 
-  class Category em_inclusive("em_inclusive");
+  class Category em_incl("em_inclusive");
   class Category em_0jet("em_0jet");
   class Category em_boosted("em_boosted");
   class Category em_vbf("em_vbf");
 
   // Inclusive category
-  em_inclusive.cutString   = CutsKine + CutsIso + CutsCategory;
-  em_inclusive.cutStringSS = CutsKine + CutsIsoSS + CutsCategory;
-  em_inclusive.nBinsX = 12;
-  em_inclusive.nBinsY = 6;
-  em_inclusive.binsX = new float[em_inclusive.nBinsX+1]{0,50,55,60,65,70,75,80,85,90,95,100,400};
-  em_inclusive.binsY = new float[em_inclusive.nBinsY+1]{15,20,25,30,35,40,300};
-  em_inclusive.variable = "m_vis:pt_2";
-  em_inclusive.suffix = "inclusive";
+  em_incl.cutString   = CutsKine + CutsIso + CutsCategory;
+  em_incl.cutStringSS = CutsKine + CutsIsoSS + CutsCategory;
+  em_incl.nbins_x_2d = 12;
+  em_incl.nbins_y_2d = 6;
+  em_incl.bins_x_2d  = new float[em_incl.nbins_x_2d+1]{0,50,55,60,65,70,75,80,85,90,95,100,400};
+  em_incl.bins_y_2d  = new float[em_incl.nbins_y_2d+1]{15,20,25,30,35,40,300};
+  em_incl.variable_2d = "pt_2:m_vis";
+  em_incl.nbins_1d = 12;
+  em_incl.bins_1d  = new float[em_incl.nbins_1d+1]{0,50,55,60,65,70,75,80,85,90,95,100,400};
+  em_incl.variable_1d = "m_vis";
+  em_incl.suffix = "inclusive";
 
   // 0jet category
   CutsCategory   = "&&njets==0&&dzeta>-35";
   CutsIsoSS = "&&iso_1<0.3&&iso_2>0.1&&iso_2<0.3&&extraelec_veto<0.5&&extramuon_veto<0.5";
   em_0jet.cutString   = CutsKine + CutsIso + CutsCategory;
   em_0jet.cutStringSS = CutsKine + CutsIsoSS + CutsCategory;
-  em_0jet.binsX = new float[13]{0,50,55,60,65,70,75,80,85,90,95,100,400};
-  em_0jet.binsY = new float[7]{15,20,25,30,35,40,300};
-  em_0jet.variable   = "m_vis:pt_2";
+  em_0jet.nbins_x_2d = 12;
+  em_0jet.nbins_y_2d = 6;
+  em_0jet.bins_x_2d = new float[em_0jet.nbins_x_2d+1]{0,50,55,60,65,70,75,80,85,90,95,100,400};
+  em_0jet.bins_y_2d = new float[em_0jet.nbins_y_2d+1]{15,20,25,30,35,40,300};
+  em_0jet.variable_2d   = "pt_2:m_vis";
+  em_0jet.variable_1d   = "m_vis";
 
   // Boosted category
   CutsCategory   = "&&(njets==1 || (njets==2 && mjj<300) || njets>2)&&dzeta>-35";
   CutsIsoSS = "&&iso_1<0.3&&iso_2>0.1&&iso_2<0.3&&extraelec_veto<0.5&&extramuon_veto<0.5";
   em_boosted.cutString   = CutsKine + CutsIso + CutsCategory;
   em_boosted.cutStringSS = CutsKine + CutsIsoSS + CutsCategory;
-  em_boosted.binsX = new float[11]{0,80,90,100,110,120,130,140,150,160,300};
-  em_boosted.binsY = new float[7]{0,100,150,200,250,300,5000};
-  em_boosted.variable   = "m_sv:pt_sv";
+  em_boosted.nbins_x_2d = 10;
+  em_boosted.nbins_y_2d = 6;
+  em_boosted.bins_x_2d = new float[em_boosted.nbins_x_2d+1]{0,80,90,100,110,120,130,140,150,160,300};
+  em_boosted.bins_y_2d = new float[em_boosted.nbins_y_2d+1]{0,100,150,200,250,300,5000};
+  em_boosted.variable_2d   = "pt_sv;m_sv";
+  em_boosted.variable_1d   = "m_sv";
 
   // VBF category
   CutsCategory = "&& njets==2 && mjj>=300 && dzeta>-10";
   CutsIsoSS = "&&iso_1<0.5&&iso_2>0.2&&iso_2<0.5&&extraelec_veto<0.5&&extramuon_veto<0.5";
   em_vbf.cutString   = CutsKine + CutsIso + CutsCategory;
   em_vbf.cutStringSS = CutsKine + CutsIsoSS + CutsCategory;
-  em_vbf.binsX = new float[6]{0,95,115,135,155,400};
-  em_vbf.binsY = new float[5]{300,700,1100,1500,10000};
-  em_vbf.variable   = "m_sv:mjj";
+  em_vbf.nbins_x_2d = 5;
+  em_vbf.nbins_y_2d = 4;
+  em_vbf.bins_x_2d = new float[em_vbf.nbins_x_2d+1]{0,95,115,135,155,400};
+  em_vbf.bins_y_2d = new float[em_vbf.nbins_y_2d+1]{300,700,1100,1500,10000};
+  em_vbf.variable_2d   = "mjj:m_sv";
 
   // Make a vector from these categories
-  vector<class Category> category_vec = { em_inclusive };
+  vector<class Category> category_vec = { em_incl };
+
+  class Category em_cat_in_use = em_incl;
 
   //************************************************************************************************
   // Define samples
@@ -106,7 +120,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 				     { "VV"   , VV } ,
 				     { "QCD"  , QCD },
 				     { "ggH"  , ggH },
-				     { "VBFH" , VBFH }};
+				     { "VBFH" , VBFH }
+  };
 
   if(verbose){
     cout << endl << endl << "... Background classes ... "<< endl ;
@@ -121,7 +136,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     smpl.second.weightStringSS     = Weight+qcdweight;
     smpl.second.cutStringSSrelaxed = "os<0.5"+CutsSS;
     smpl.second.weightStringSSrelaxed = Weight+qcdweight;
-    smpl.second.variable = "m_vis : pt_2";
+    smpl.second.variable_2d = "pt_2 : m_vis";
   }
 
   // Define sample specific cuts
@@ -148,6 +163,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   for(auto & smpl : sample_map){
 
+    cout<<"name = " <<smpl.second.name<<endl;
     if( smpl.second.name == "Data" || smpl.second.name == "QCD" ) continue;
 
     // Uncertainties common for all samples
@@ -161,13 +177,13 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("dzeta","dzeta_eUp");
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("pt_1","pt_Up_1");
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eUp");
-    smpl.second.uncertainties["eScaleUp"].variable.ReplaceAll("m_vis","m_vis_eUp");
-    smpl.second.uncertainties["eScaleUp"].variable.ReplaceAll("m_sv","m_sv_eUp");
+    smpl.second.uncertainties["eScaleUp"].variable_2d.ReplaceAll("m_vis","m_vis_eUp");
+    smpl.second.uncertainties["eScaleUp"].variable_2d.ReplaceAll("m_sv","m_sv_eUp");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("dzeta","dzeta_eDown");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_Down_1");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eDown");
-    smpl.second.uncertainties["eScaleDown"].variable.ReplaceAll("m_vis","m_vis_eDown");
-    smpl.second.uncertainties["eScaleDown"].variable.ReplaceAll("m_sv","m_sv_eDown");
+    smpl.second.uncertainties["eScaleDown"].variable_2d.ReplaceAll("m_vis","m_vis_eDown");
+    smpl.second.uncertainties["eScaleDown"].variable_2d.ReplaceAll("m_sv","m_sv_eDown");
 
     // 2.) JES
     Sample jScaleUp = smpl.second;
@@ -178,10 +194,10 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     smpl.second.uncertainties["jScaleDown"].name += "_CMS_scale_j_em_13TeVDown";
     smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("njets","njets_Up");
     smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("mjj","mjj_Up");
-    smpl.second.uncertainties["jScaleUp"].variable.ReplaceAll("mjj","mjj_Up");
+    smpl.second.uncertainties["jScaleUp"].variable_2d.ReplaceAll("mjj","mjj_Up");
     smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("njets","njets_Down");
     smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("mjj","mjj_Down");
-    smpl.second.uncertainties["jScaleDown"].variable.ReplaceAll("mjj","mjj_Down");
+    smpl.second.uncertainties["jScaleDown"].variable_2d.ReplaceAll("mjj","mjj_Down");
 
     // 3.) MET scale
     Sample metScaleUp = smpl.second;
@@ -203,29 +219,29 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     smpl.second.uncertainties["metResoUp"].cutString.ReplaceAll("dzeta","dzeta_resoUp");
     smpl.second.uncertainties["metResoDown"].cutString.ReplaceAll("dzeta","dzeta_resoDown");
 
-    // 5.) B-tag efficiency
-    TString btagVetoUp     = "&&nbtag==0";
-    TString btagVetoDown   = "&&nbtag==0";
-    Sample bEffUp = smpl.second;
-    Sample bEffDown = smpl.second;
-    smpl.second.uncertainties.insert( make_pair("bEffUp"   , bEffUp) );
-    smpl.second.uncertainties.insert( make_pair("bEffDown" , bEffDown) );
-    smpl.second.uncertainties["bEffUp"].name += "_CMS_eff_b_13TeVUp";
-    smpl.second.uncertainties["bEffDown"].name += "_CMS_eff_b_13TeVDown";
-    smpl.second.uncertainties["bEffUp"].cutString+=btagVetoUp;
-    smpl.second.uncertainties["bEffDown"].cutString+=btagVetoDown;
+    // // 5.) B-tag efficiency
+    // TString btagVetoUp     = "&&nbtag==0";
+    // TString btagVetoDown   = "&&nbtag==0";
+    // Sample bEffUp = smpl.second;
+    // Sample bEffDown = smpl.second;
+    // smpl.second.uncertainties.insert( make_pair("bEffUp"   , bEffUp) );
+    // smpl.second.uncertainties.insert( make_pair("bEffDown" , bEffDown) );
+    // smpl.second.uncertainties["bEffUp"].name += "_CMS_eff_b_13TeVUp";
+    // smpl.second.uncertainties["bEffDown"].name += "_CMS_eff_b_13TeVDown";
+    // smpl.second.uncertainties["bEffUp"].cutString+=btagVetoUp;
+    // smpl.second.uncertainties["bEffDown"].cutString+=btagVetoDown;
 
-    // 6.) Mis-tag efficiency
-    TString mistagVetoUp   = "&&nbtag==0";
-    TString mistagVetoDown = "&&nbtag==0";
-    Sample bFakeUp = smpl.second;
-    Sample bFakeDown = smpl.second;
-    smpl.second.uncertainties.insert( make_pair("bFakeUp"   , bFakeUp) );
-    smpl.second.uncertainties.insert( make_pair("bFakeDown" , bFakeDown) );
-    smpl.second.uncertainties["bFakeUp"].name += "_CMS_fake_b_13TeVUp";
-    smpl.second.uncertainties["bFakeDown"].name += "_CMS_fake_b_13TeVDown";
-    smpl.second.uncertainties["bFakeUp"].cutString +=mistagVetoUp;
-    smpl.second.uncertainties["bFakeDown"].cutString +=mistagVetoDown;
+    // // 6.) Mis-tag efficiency
+    // TString mistagVetoUp   = "&&nbtag==0";
+    // TString mistagVetoDown = "&&nbtag==0";
+    // Sample bFakeUp = smpl.second;
+    // Sample bFakeDown = smpl.second;
+    // smpl.second.uncertainties.insert( make_pair("bFakeUp"   , bFakeUp) );
+    // smpl.second.uncertainties.insert( make_pair("bFakeDown" , bFakeDown) );
+    // smpl.second.uncertainties["bFakeUp"].name += "_CMS_fake_b_13TeVUp";
+    // smpl.second.uncertainties["bFakeDown"].name += "_CMS_fake_b_13TeVDown";
+    // smpl.second.uncertainties["bFakeUp"].cutString +=mistagVetoUp;
+    // smpl.second.uncertainties["bFakeDown"].cutString +=mistagVetoDown;
 
     // Sample-specific uncertainties
     // 7.) TTbar shape
@@ -284,34 +300,52 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   cout << endl << endl << "... Drawing ... " << endl;
   for(auto & smpl : sample_map){
 
-    if(smpl.second.name != "Data") continue;
+    // if(smpl.second.name != "Data") continue;
     cout << endl << "**************************************" << endl;
     cout << smpl.second.name << " : " << smpl.second.filename << endl;
     TFile *file = new TFile( directory + "/" + smpl.second.filename );
     TTree *tree = (TTree*) file->Get("TauCheck");
 
-    Float_t binsX[]={0,50,55,60,65,70,75,80,85,90,95,100,400};
-    Float_t binsY[]={15,20,25,30,35,40,300};
-    const int nBinsX = sizeof(binsX)/sizeof(Float_t)-1;
-    const int nBinsY = sizeof(binsY)/sizeof(Float_t)-1;
+    smpl.second.hist_1d          = new TH1D(smpl.second.name + "_os_1d"         , "" , em_cat_in_use.nbins_1d , em_cat_in_use.bins_1d );
+    smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , em_cat_in_use.nbins_1d , em_cat_in_use.bins_1d );
+    smpl.second.histSSrelaxed_1d = new TH1D(smpl.second.name + "_ss_relaxed_1d" , "" , em_cat_in_use.nbins_1d , em_cat_in_use.bins_1d );
 
-    smpl.second.hist   = new TH2D(smpl.second.name + "_os" , "" , nBinsX , binsX , nBinsY , binsY );
-    smpl.second.histSS = new TH2D(smpl.second.name + "_ss" , "" , nBinsX , binsX , nBinsY , binsY );
+    smpl.second.hist_2d          = new TH2D(smpl.second.name + "_os_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
+    smpl.second.histSS_2d        = new TH2D(smpl.second.name + "_ss_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
+    smpl.second.histSSrelaxed_2d = new TH2D(smpl.second.name + "_ss_relaxed_2d" , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
 
-    TString full_weight_string    = smpl.second.weightString + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight;
-    TString full_weight_string_ss = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight;
+    TString full_weight_string            = smpl.second.weightString + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight;
+    TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight;
+    TString full_weight_string_ss_relaxed = smpl.second.weightStringSSrelaxed + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight;
 
     if(verbose){
-      cout << "Variable        " << " : " << smpl.second.variable << endl;
-      cout << "weight string   " << " : " << full_weight_string << endl;
-      cout << "weight string ss" << " : " << full_weight_string_ss << endl;
-      cout << "cut string      " << " : " << smpl.second.cutString << endl;
-      cout << "cut string ss   " << " : " << smpl.second.cutStringSS << endl << endl;
+      cout << "Variable_2d          " << " : " << smpl.second.variable_2d << endl;
+      cout << "weight string        " << " : " << full_weight_string << endl;
+      cout << "weight string ss     " << " : " << full_weight_string_ss << endl;
+      cout << "weight string ss rel." << " : " << full_weight_string_ss_relaxed << endl;
+      cout << "cut string           " << " : " << smpl.second.cutString << endl;
+      cout << "cut string ss        " << " : " << smpl.second.cutStringSS << endl;
+      cout << "cut string ss rel.   " << " : " << smpl.second.cutStringSSrelaxed << endl << endl;
     }
 
-    tree -> Draw( smpl.second.variable + ">>" + smpl.second.hist->GetName() , full_weight_string + "(" + smpl.second.cutString + ")" );
-    tree -> Draw( smpl.second.variable + ">>" + smpl.second.histSS->GetName() , full_weight_string_ss + "(" + smpl.second.cutStringSS + ")" );
-    // do here the unfolding ???
+    if(!plot_2d){
+      tree -> Draw( smpl.second.variable_1d + ">>" + smpl.second.hist_1d->GetName() , full_weight_string + "(" + smpl.second.cutString + ")" );
+      tree -> Draw( smpl.second.variable_1d + ">>" + smpl.second.histSS_1d->GetName() , full_weight_string_ss + "(" + smpl.second.cutStringSS + ")" );
+      tree -> Draw( smpl.second.variable_1d + ">>" + smpl.second.histSSrelaxed_1d->GetName() , full_weight_string_ss_relaxed + "(" + smpl.second.cutStringSSrelaxed + ")" );
+    }
+    else{
+      tree -> Draw( smpl.second.variable_2d + ">>" + smpl.second.hist_2d->GetName() , full_weight_string + "(" + smpl.second.cutString + ")" );
+      tree -> Draw( smpl.second.variable_2d + ">>" + smpl.second.histSS_2d->GetName() , full_weight_string_ss + "(" + smpl.second.cutStringSS + ")" );
+      tree -> Draw( smpl.second.variable_2d + ">>" + smpl.second.histSSrelaxed_2d->GetName() , full_weight_string_ss_relaxed + "(" + smpl.second.cutStringSSrelaxed + ")" );
+      
+      // cout << smpl.second.name << " 2D : " << smpl.second.hist_2d -> GetSumOfWeights() << endl;
+
+      smpl.second.hist_1d          = (TH1D*) Unfold(smpl.second.hist_2d);
+      smpl.second.histSS_1d        = (TH1D*) Unfold(smpl.second.histSS_2d);
+      smpl.second.histSSrelaxed_1d = (TH1D*) Unfold(smpl.second.histSSrelaxed_2d);
+    }
+
+    // cout << smpl.second.name << " 1D : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
 
     // now start the loop over the sys uncertainties
     for(auto &sys : smpl.second.uncertainties){
@@ -319,33 +353,51 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
       full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight;
       full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight;
       if(verbose){
-	cout << sys.second.name    << " : " << endl;
-	cout << "Variable        " << " : " << sys.second.variable << endl;
-	cout << "weight string   " << " : " << full_weight_string << endl;
-	cout << "weight string ss" << " : " << full_weight_string_ss << endl;
-	cout << "cut string      " << " : " << sys.second.cutString << endl;
-	cout << "cut string ss   " << " : " << sys.second.cutStringSS << endl << endl;
+	cout << "Variable_2d          " << " : " << sys.second.variable_2d << endl;
+	cout << "weight string        " << " : " << full_weight_string << endl;
+	cout << "weight string ss     " << " : " << full_weight_string_ss << endl;
+	cout << "weight string ss rel." << " : " << full_weight_string_ss_relaxed << endl;
+	cout << "cut string           " << " : " << sys.second.cutString << endl;
+	cout << "cut string ss        " << " : " << sys.second.cutStringSS << endl;
+	cout << "cut string ss rel.   " << " : " << sys.second.cutStringSSrelaxed << endl << endl;
       }
-      sys.second.hist   = new TH2D(sys.second.name + "_os" , "" , nBinsX , binsX , nBinsY , binsY );
-      sys.second.histSS = new TH2D(sys.second.name + "_ss" , "" , nBinsX , binsX , nBinsY , binsY );
+      sys.second.hist_1d          = new TH1D(sys.second.name + "_os_1d"         , "" , em_cat_in_use.nbins_1d , em_cat_in_use.bins_1d );
+      sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , em_cat_in_use.nbins_1d , em_cat_in_use.bins_1d );
+      sys.second.histSSrelaxed_1d = new TH1D(sys.second.name + "_ss_relaxed_1d" , "" , em_cat_in_use.nbins_1d , em_cat_in_use.bins_1d );
 
-      tree -> Draw( sys.second.variable + ">>" +  sys.second.hist->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
-      tree -> Draw( sys.second.variable + ">>" +  sys.second.histSS->GetName() , full_weight_string_ss + "(" + sys.second.cutStringSS + ")" );
+      sys.second.hist_2d          = new TH2D(sys.second.name + "_os_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
+      sys.second.histSS_2d        = new TH2D(sys.second.name + "_ss_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
+      sys.second.histSSrelaxed_2d = new TH2D(sys.second.name + "_ss_relaxed_2d" , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
+
+      if(!plot_2d){
+	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.hist_1d->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
+	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSS_1d->GetName() , full_weight_string_ss + "(" + sys.second.cutStringSS + ")" );
+	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSSrelaxed_1d->GetName() , full_weight_string_ss_relaxed + "(" + sys.second.cutStringSSrelaxed + ")" );
+      }
+      else{
+	tree -> Draw( sys.second.variable_2d + ">>" + sys.second.hist_2d->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
+	tree -> Draw( sys.second.variable_2d + ">>" + sys.second.histSS_2d->GetName() , full_weight_string_ss + "(" + sys.second.cutStringSS + ")" );
+	tree -> Draw( sys.second.variable_2d + ">>" + sys.second.histSSrelaxed_2d->GetName() , full_weight_string_ss_relaxed + "(" + sys.second.cutStringSSrelaxed + ")" );
+
+      sys.second.hist_1d          = (TH1D*) Unfold(sys.second.hist_2d);
+      sys.second.histSS_1d        = (TH1D*) Unfold(sys.second.histSS_2d);
+      sys.second.histSSrelaxed_1d = (TH1D*) Unfold(sys.second.histSSrelaxed_2d);
+      }
     }
   }
-  exit(-1);
+  // exit(-1);
   //************************************************************************************************
   // Determine QCD background (subtracting other background from the SS region
   cout << endl << endl << "... Determining QCD background ... " << endl;
 
-  sample_map["QCD"].hist = (TH2D*) sample_map["QCD"].histSS -> Clone();
+  sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSS_1d -> Clone();
 
   for(auto & smpl : sample_map){
     if( smpl.second.name == "ggH"  ||
 	smpl.second.name == "VBFH" ||
 	smpl.second.name == "Data" ||
 	smpl.second.name == "QCD"    ) continue;
-    sample_map["QCD"].hist -> Add( smpl.second.histSS , -1 );
+    sample_map["QCD"].hist_1d -> Add( smpl.second.histSS_1d , -1 );
   }
 
   // Normalize QCD (FIXME)
@@ -354,23 +406,21 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   // Write all histograms to output file
   cout << endl << endl << "... Writing histograms to output file ... " << endl;
 
-  TString rootFileName = "htt_em.inputs-sm-13TeV_" + em_inclusive.suffix + "_NEW.root";
+  TString rootFileName = "htt_em.inputs-sm-13TeV_" + em_incl.suffix + "_NEW.root";
   TFile * fileOut      = new TFile(rootFileName,"recreate");
-  fileOut             -> mkdir(em_inclusive.name);
-  fileOut             -> cd(em_inclusive.name);
+  fileOut             -> mkdir(em_incl.name);
+  fileOut             -> cd(em_incl.name);
 
   for(auto & smpl : sample_map){
-    smpl.second.hist -> Write();
+    smpl.second.hist_1d -> Write();
     for(auto & sys : smpl.second.uncertainties){
-      sys.second.hist->Write();
+      sys.second.hist_1d -> Write();
     }
   }
   fileOut -> Close();
 
   // Write the final sum of weights of the nominal selection
   cout << endl << " Final histogram content : "<< endl;
-  for(auto & smpl : sample_map){
-    cout << smpl.second.name << " : " << smpl.second.hist -> GetSumOfWeights() << endl;
-  }
+  for(auto & smpl : sample_map) cout << smpl.second.name << " : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
   cout << endl;
 }

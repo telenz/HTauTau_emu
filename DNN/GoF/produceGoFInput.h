@@ -29,11 +29,16 @@ public :
   TString ggscaleweight = "1*";
   double norm = 1;
 
-  TString variable = "m_vis : pt_2";
+  TString variable_1d = "m_vis";
+  TString variable_2d = "m_vis : pt_2";
 
-  TH2D *hist;
-  TH2D *histSS;
-  TH2D *histSSrelaxed;
+  TH1D *hist_1d;
+  TH1D *histSS_1d;
+  TH1D *histSSrelaxed_1d;
+
+  TH2D *hist_2d;
+  TH2D *histSS_2d;
+  TH2D *histSSrelaxed_2d;
 
   map< TString , Sample > uncertainties;
 
@@ -53,12 +58,15 @@ public :
 
   TString cutString   = "";
   TString cutStringSS = "";
-  TString variable    = "";
+  TString variable_1d = "";
+  TString variable_2d = "";
 
-  int nBinsX = 1;
-  int nBinsY = 1;
-  float *binsX;
-  float *binsY;
+  int nbins_1d  = 1;
+  int nbins_x_2d = 1;
+  int nbins_y_2d = 1;
+  float *bins_1d;
+  float *bins_x_2d;
+  float *bins_y_2d;
 
   vector<Sample> *sampleList;
 
