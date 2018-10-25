@@ -9,12 +9,16 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   SetStyle();
 
   bool verbose = false;
-  bool plot_2d = false;
+  bool plot_2d = true;
+
+  TString variable_1d = "m_vis";
+  TString variable_2d = "pt_2 : m_vis"; // convention for TH2D is "var_y : var_x"
 
   //************************************************************************************************
   // Define some common weights and cuts
+
   TString Weight    = "xsec_lumi_weight*mcweight*puweight*effweight*0.978824*0.985*";
-  TString qcdweight = "2.30*"; // what is this weight (FIXME)
+  TString qcdweight = "2.30*";
 
   // Definition of cuts
   TString mTCut    = "&& mTdileptonMET<60 ";
@@ -32,8 +36,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   TString CutsSS = CutsKine + CutsIsoSS + CutsCategory;
 
   //************************************************************************************************
-  // Define different category cuts
-  // still needs to set ggscaleweight, labelBins, yeThreshols, change variale for eUp and jesUp, OSSS_categ +err
+  // Define different categories (use of category "em_cat_in_use" which is set below the definition)
+  // For now the used attributes of the category class are only the binning and the name definitions
 
   class Category em_incl("em_inclusive");
   class Category em_0jet("em_0jet");
@@ -41,52 +45,31 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   class Category em_vbf("em_vbf");
 
   // Inclusive category
-  em_incl.cutString   = CutsKine + CutsIso + CutsCategory;
-  em_incl.cutStringSS = CutsKine + CutsIsoSS + CutsCategory;
   em_incl.nbins_x_2d = 12;
   em_incl.nbins_y_2d = 6;
   em_incl.bins_x_2d  = new float[em_incl.nbins_x_2d+1]{0,50,55,60,65,70,75,80,85,90,95,100,400};
   em_incl.bins_y_2d  = new float[em_incl.nbins_y_2d+1]{15,20,25,30,35,40,300};
-  em_incl.variable_2d = "pt_2:m_vis";
   em_incl.nbins_1d = 12;
   em_incl.bins_1d  = new float[em_incl.nbins_1d+1]{0,50,55,60,65,70,75,80,85,90,95,100,400};
-  em_incl.variable_1d = "m_vis";
   em_incl.suffix = "inclusive";
 
   // 0jet category
-  CutsCategory   = "&&njets==0&&dzeta>-35";
-  CutsIsoSS = "&&iso_1<0.3&&iso_2>0.1&&iso_2<0.3&&extraelec_veto<0.5&&extramuon_veto<0.5";
-  em_0jet.cutString   = CutsKine + CutsIso + CutsCategory;
-  em_0jet.cutStringSS = CutsKine + CutsIsoSS + CutsCategory;
   em_0jet.nbins_x_2d = 12;
   em_0jet.nbins_y_2d = 6;
   em_0jet.bins_x_2d = new float[em_0jet.nbins_x_2d+1]{0,50,55,60,65,70,75,80,85,90,95,100,400};
   em_0jet.bins_y_2d = new float[em_0jet.nbins_y_2d+1]{15,20,25,30,35,40,300};
-  em_0jet.variable_2d   = "pt_2:m_vis";
-  em_0jet.variable_1d   = "m_vis";
 
   // Boosted category
-  CutsCategory   = "&&(njets==1 || (njets==2 && mjj<300) || njets>2)&&dzeta>-35";
-  CutsIsoSS = "&&iso_1<0.3&&iso_2>0.1&&iso_2<0.3&&extraelec_veto<0.5&&extramuon_veto<0.5";
-  em_boosted.cutString   = CutsKine + CutsIso + CutsCategory;
-  em_boosted.cutStringSS = CutsKine + CutsIsoSS + CutsCategory;
   em_boosted.nbins_x_2d = 10;
   em_boosted.nbins_y_2d = 6;
   em_boosted.bins_x_2d = new float[em_boosted.nbins_x_2d+1]{0,80,90,100,110,120,130,140,150,160,300};
   em_boosted.bins_y_2d = new float[em_boosted.nbins_y_2d+1]{0,100,150,200,250,300,5000};
-  em_boosted.variable_2d   = "pt_sv;m_sv";
-  em_boosted.variable_1d   = "m_sv";
 
   // VBF category
-  CutsCategory = "&& njets==2 && mjj>=300 && dzeta>-10";
-  CutsIsoSS = "&&iso_1<0.5&&iso_2>0.2&&iso_2<0.5&&extraelec_veto<0.5&&extramuon_veto<0.5";
-  em_vbf.cutString   = CutsKine + CutsIso + CutsCategory;
-  em_vbf.cutStringSS = CutsKine + CutsIsoSS + CutsCategory;
   em_vbf.nbins_x_2d = 5;
   em_vbf.nbins_y_2d = 4;
   em_vbf.bins_x_2d = new float[em_vbf.nbins_x_2d+1]{0,95,115,135,155,400};
   em_vbf.bins_y_2d = new float[em_vbf.nbins_y_2d+1]{300,700,1100,1500,10000};
-  em_vbf.variable_2d   = "mjj:m_sv";
 
   // Make a vector from these categories
   vector<class Category> category_vec = { em_incl };
@@ -95,6 +78,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 
   //************************************************************************************************
   // Define samples
+
   Sample Data( "data_obs" , "MuonEG_Run2016_dnn_em_v1.root" );
   Sample ZTT(  "ZTT"      , "DYJets_dnn_em_v1.root" );
   Sample ZLL(  "ZL"       , "DYJets_dnn_em_v1.root" );
@@ -105,7 +89,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   Sample QCD(  "QCD"      , "MuonEG_Run2016_dnn_em_v1.root" );
   Sample ggH(  "ggH"      , "ggH_dnn_em_v1.root" );
   Sample qqH(  "qqH"      , "VBFH_dnn_em_v1.root" );
-  
+
   // Define pre-defined norms
   ZTT.norm = "1.02*";
   ZLL.norm = "1.02*";
@@ -122,10 +106,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 				     { "qqH125" , qqH }
   };
 
-  if(verbose){
-    cout << endl << endl << "... Sample categories ... "<< endl ;
-    for(auto & smpl : sample_map ) cout << " - " << smpl.second.name << endl;
-  }
+  cout << endl << endl << "... Sample categories ... "<< endl ;
+  for(auto & smpl : sample_map ) cout << " - " << smpl.second.name << endl;
 
   // Define common cut strings  
   for(auto & smpl : sample_map){
@@ -135,10 +117,11 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     smpl.second.weightStringSS     = Weight+qcdweight;
     smpl.second.cutStringSSrelaxed = "os<0.5"+CutsSS;
     smpl.second.weightStringSSrelaxed = Weight+qcdweight;
-    smpl.second.variable_2d = "pt_2 : m_vis"; // which order -> to be clarified (FIXME)
+    smpl.second.variable_1d = variable_1d;
+    smpl.second.variable_2d = variable_2d;
   }
 
-  // Define sample specific cuts
+  // Define sample specific cutStrings and weightStrings
   sample_map["Data"].weightString = "1*";
   sample_map["QCD"].weightString  = "1*";
   sample_map["ZTT"].cutString += "&&isZTT";
@@ -158,7 +141,6 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   sample_map["TT"].topweight = "topptweightRun2*";
   sample_map["ZTT"].zptmassweight = "zptmassweight*";
   sample_map["ZLL"].zptmassweight = "zptmassweight*";
-  // sample_map["EWKZ"].zptmassweight = "zptmassweight*"; // ! to be clarified (FIXME)
 
   //************************************************************************************************
   // Define systematic uncertainties
@@ -236,7 +218,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     }
 
     // 6.) DY shape (EWKZ sample should be added here)
-    if(smpl.second.name == "ZTT" || smpl.second.name == "ZLL" || smpl.second.name == "EWKZ" ){ // FIXME
+    if(smpl.second.name == "ZTT" || smpl.second.name == "ZLL" ){
       Sample dyShapeUp = smpl.second;
       Sample dyShapeDown = smpl.second;
       smpl.second.uncertainties.insert( make_pair("dyShapeUp"   , dyShapeUp) );
@@ -271,9 +253,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
     }
   }
 
-
   //************************************************************************************************
-  // Fill histograms (first open trees)
+  // Fill histograms
 
   // 1.) Fill nominal histograms
   cout << endl << endl << "... Drawing ... " << endl;
@@ -284,7 +265,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
       else           cout << endl << "Variable = " << smpl.second.variable_2d << endl;
     }
 
-    cout << endl << "**************************************" << endl;
+    cout << "**************************************" << endl;
     cout << smpl.second.name << " : " << smpl.second.filename << endl;
     TFile *file = new TFile( directory + "/" + smpl.second.filename );
     TTree *tree = (TTree*) file->Get("TauCheck");
@@ -326,7 +307,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
       smpl.second.histSSrelaxed_1d = (TH1D*) Unfold(smpl.second.histSSrelaxed_2d);
     }
 
-    // now start the loop over the sys uncertainties
+    // Loop over systematic uncertainties
     for(auto &sys : smpl.second.uncertainties){
 
       full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
@@ -359,15 +340,14 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
 	tree -> Draw( sys.second.variable_2d + ">>" + sys.second.histSS_2d->GetName() , full_weight_string_ss + "(" + sys.second.cutStringSS + ")" );
 	tree -> Draw( sys.second.variable_2d + ">>" + sys.second.histSSrelaxed_2d->GetName() , full_weight_string_ss_relaxed + "(" + sys.second.cutStringSSrelaxed + ")" );
 
-      sys.second.hist_1d          = (TH1D*) Unfold(sys.second.hist_2d);
-      sys.second.histSS_1d        = (TH1D*) Unfold(sys.second.histSS_2d);
-      sys.second.histSSrelaxed_1d = (TH1D*) Unfold(sys.second.histSSrelaxed_2d);
+	sys.second.hist_1d          = (TH1D*) Unfold(sys.second.hist_2d);
+	sys.second.histSS_1d        = (TH1D*) Unfold(sys.second.histSS_2d);
+	sys.second.histSSrelaxed_1d = (TH1D*) Unfold(sys.second.histSSrelaxed_2d);
       }
     }
   }
   //************************************************************************************************
-  // Determine QCD background (subtracting other background from the SS region
-  cout << endl << endl << "... Determining QCD background ... " << endl;
+  // Determine QCD background
 
   // 1.) Take the shape from ss relaxed region
   for(auto & smpl : sample_map){
@@ -388,10 +368,14 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   // Write all histograms to output file
   cout << endl << endl << "... Writing histograms to output file ... " << endl;
 
-  TString rootFileName = "htt_em.inputs-sm-13TeV_" + em_incl.suffix + "_NEW.root";
+  TString rootFileName = "htt_em.inputs-sm-13TeV-";
+  variable_1d.ReplaceAll(" ","");
+  variable_2d.ReplaceAll(" ","");
+  if(!plot_2d) rootFileName += variable_1d + ".root";
+  else         rootFileName += variable_2d( 0 , variable_2d.First(":") ) + "-" + variable_2d( variable_2d.First(":")+1 , variable_2d.Length() ) + ".root";
   TFile * fileOut      = new TFile( "output/" + rootFileName , "RECREATE" );
-  fileOut             -> mkdir(em_incl.name);
-  fileOut             -> cd(em_incl.name);
+  fileOut             -> mkdir(em_cat_in_use.name);
+  fileOut             -> cd(em_cat_in_use.name);
 
   for(auto & smpl : sample_map){
     smpl.second.hist_1d -> Write( smpl.second.name );
@@ -410,4 +394,5 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   }
   cout << "Bkg together : " << allBkg -> GetSumOfWeights() << endl;
   cout << endl;
+  cout << "output file : " << rootFileName << endl << endl;
 }
