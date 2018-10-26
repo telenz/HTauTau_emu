@@ -24,11 +24,13 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
 
   // Define the subsamples that belong to a certain proccess
   vector<TString> MuonEG_Run2016  = { "MuonEG_Run2016B" , "MuonEG_Run2016C" , "MuonEG_Run2016D" , "MuonEG_Run2016E" , "MuonEG_Run2016F" , "MuonEG_Run2016G" , "MuonEG_Run2016H" };
-  vector<TString> DYJets          = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" , "EWKZ2Jets" };
+  vector<TString> DYJets          = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" };
+  vector<TString> EWKZ            = { "EWKZ2Jets" };
+  vector<TString> DYJetsEWKZ      = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" , "EWKZ2Jets" };
   vector<TString> WJets           = { "W1JetsToLNu" , "W2JetsToLNu" , "W3JetsToLNu" , "W4JetsToLNu" , "WJetsToLNu" , "WGToLNuG" , "WGstarToLNuEE" , "WGstarToLNuMuMu" , "EWKWPlus2Jet" , "EWKWMinus2Jet" };
   vector<TString> TTbar           = { "TTbar" };
-  vector<TString> SingleTop       = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
-  vector<TString> Diboson         = { "VVTo2L2Nu" , "WZJToLLLNu" , "WZTo1L1Nu2Q" , "WZTo1L3Nu" , "WZTo2L2Q" , "ZZTo2L2Q" , "ZZTo4L" , "WWToLNuQQ" };
+  // vector<TString> SingleTop       = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
+  vector<TString> Diboson         = { "VVTo2L2Nu" , "WZJToLLLNu" , "WZTo1L1Nu2Q" , "WZTo1L3Nu" , "WZTo2L2Q" , "ZZTo2L2Q" , "ZZTo4L" , "WWToLNuQQ" ,"ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
   vector<TString> GluGluHToTauTau = { "GluGluHToTauTau_M125" };
   vector<TString> VBFHToTauTau    = { "VBFHToTauTau_M125" };
 
@@ -39,8 +41,10 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
     { "MuonEG_Run2016_dnn_" + channel + "_" + version , MuonEG_Run2016 },
     { "DYJets_dnn_"         + channel + "_" + version , DYJets },
     { "WJets_dnn_"          + channel + "_" + version , WJets },
+    { "EWKZ_dnn_"           + channel + "_" + version , EWKZ },
+    { "DYJetsEWKZ_dnn_"     + channel + "_" + version , DYJetsEWKZ },
     { "TTbar_dnn_"          + channel + "_" + version , TTbar },
-    { "SingleTop_dnn_"      + channel + "_" + version , SingleTop },
+    // { "SingleTop_dnn_"      + channel + "_" + version , SingleTop },
     { "Diboson_dnn_"        + channel + "_" + version , Diboson },
     { "ggH_dnn_"            + channel + "_" + version , GluGluHToTauTau },
     { "VBFH_dnn_"           + channel + "_" + version , VBFHToTauTau }
