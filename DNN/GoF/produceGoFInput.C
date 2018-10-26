@@ -3,7 +3,7 @@
 #include "Unfold.C"
 #include "HttStylesNew.cc"
 
-void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
+void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
@@ -29,7 +29,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   TString CutsIsoSS = "&& iso_1<0.50 && iso_2>0.2 && iso_2<0.5 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
 
   TString btagVeto     = "&& nbtag==0 ";
-  TString CutsCategory = "&& dzeta>-35 ";
+  TString CutsCategory = "&& dzeta>-35 && metFilters && trg_muonelectron";
   CutsCategory += btagVeto;
 
   TString Cuts   = CutsKine + CutsIso   + CutsCategory;
@@ -82,7 +82,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016_rasp/") {
   Sample Data( "data_obs" , "MuonEG_Run2016_dnn_em_v1.root" );
   Sample ZTT(  "ZTT"      , "DYJets_dnn_em_v1.root" );
   Sample ZLL(  "ZL"       , "DYJets_dnn_em_v1.root" );
-  Sample EWKZ( "EWKZ"     , "EWKZ_em_v1.root" );
+  Sample EWKZ( "EWKZ"     , "EWKZ_dnn_em_v1.root" );
   Sample W(    "W"        , "WJets_dnn_em_v1.root" );
   Sample TT(   "TT"       , "TTbar_dnn_em_v1.root" );
   Sample VV(   "VV"       , "Diboson_dnn_em_v1.root" );
