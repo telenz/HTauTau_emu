@@ -3,7 +3,7 @@
 #include "Unfold.C"
 #include "HttStylesNew.cc"
 
-void produce_gof_input(TString directory = "../../Inputs/NTuples_2016/" , TString variable_1d = "pt_1") {
+void produce_gof_input(TString variable_1d = "pt_1" , TString directory = "../../Inputs/NTuples_2016/") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
