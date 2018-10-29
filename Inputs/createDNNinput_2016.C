@@ -9,6 +9,7 @@
 
 double luminosity = 35866;
 bool applyPreselection = true;
+float qcd_ss_os_iso_relaxed_ratio = 0.49;
 
 double getNEventsProcessed(TString filename)
 {
@@ -149,13 +150,16 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
 
       // Create a branch for xsec_lumi_weight
       float xsec_lumi_weight;
+      float qcd_correction;
       if(firstTree){
 	outTree    = inTree->CloneTree(0);
-	TBranch *w = outTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
+	outTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
+	outTree->Branch("qcd_correction", &qcd_correction, "qcd_correction/F");
 	firstTree  = false;
       }
       currentTree = inTree->CloneTree(0);
-      TBranch *w  = currentTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
+      currentTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
+      currentTree->Branch("qcd_correction", &qcd_correction, "qcd_correction/F");
 
       // lumi-xsec-weight added
       if( xsec_map.find(subsample) == xsec_map.end() && !sample.first.Contains("MuonEG")){
@@ -178,6 +182,7 @@ void createDNNinput_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTa
 	  if( trg_muonelectron < 0.5 )    continue;
 	}
 	xsec_lumi_weight = xsec*luminosity/nevents;
+	qcd_correction = qcd_ss_os_iso_relaxed_ratio;
 	
 	// Stitching only for wjets MC in n-jet binned samples in npartons
 	if( subsample.Contains("W") && subsample.Contains("JetsToLNu") ){
