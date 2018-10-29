@@ -2,7 +2,6 @@ import os
 
 variable_list = [    "m_sv",
                      "m_vis",
-                     "pt_vis",
                      "pt_1",
                      "pt_2",
                      "jpt_2",
@@ -10,15 +9,12 @@ variable_list = [    "m_sv",
                      "jm_2",
                      "bpt_1",
                      "bpt_2",
-                     "bcsv_1",
-                     "bcsv_2",
                      "njets",
                      "nbtag",
                      "mt_1",
                      "mt_2",
                      "pt_tt",
                      "mjj",
-                     "dijetpt",
                      "met"]
 
 # Execute produceGoFInputs.C for all variables
