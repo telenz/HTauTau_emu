@@ -1,4 +1,4 @@
-#include "produceGoFInput.h"
+#include "produce_gof_input.h"
 #include "TROOT.h"
 #include "Unfold.C"
 #include "HttStylesNew.cc"
