@@ -9,8 +9,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
   SetStyle();
 
   bool verbose = false;
-  bool plot_2d = true;
-  bool apply_btag_veto = true;
+  bool plot_2d = false;
+  bool apply_btag_veto = false;
 
   TString variable_1d = "m_vis";
   TString variable_2d = "pt_2 : m_vis"; // convention for TH2D is "var_y : var_x"
@@ -19,7 +19,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
   // Define some common weights and cuts
 
   TString btag_weight = "btag0weight*";
-  TString Weight    = "xsec_lumi_weight*mcweight*puweight*effweight*0.978824*0.985*";
+  TString Weight      = "xsec_lumi_weight*mcweight*puweight*effweight*0.978824*0.985*"; // two numbers are filter efficiencies? FIXME -> alexei 0.979 from Daniel Winterbottom -> which one to use
   if(apply_btag_veto) Weight += btag_weight;
   TString qcdweight = "2.30*";
 
@@ -161,8 +161,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
     Sample eScaleDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("eScaleUp"   , eScaleUp) );
     smpl.second.uncertainties.insert( make_pair("eScaleDown" , eScaleDown) );
-    smpl.second.uncertainties["eScaleUp"].name += "_CMS_scale_e_em_13TeVUp";
-    smpl.second.uncertainties["eScaleDown"].name += "_CMS_scale_e_em_13TeVDown";
+    smpl.second.uncertainties["eScaleUp"].name += "_CMS_scale_e_13TeVUp";
+    smpl.second.uncertainties["eScaleDown"].name += "_CMS_scale_e_13TeVDown";
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("dzeta","dzeta_eUp");
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("pt_1","pt_Up_1");
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eUp");
@@ -179,8 +179,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
     Sample jScaleDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("jScaleUp"   , jScaleUp) );
     smpl.second.uncertainties.insert( make_pair("jScaleDown" , jScaleDown) );
-    smpl.second.uncertainties["jScaleUp"].name   += "_CMS_scale_j_em_13TeVUp";
-    smpl.second.uncertainties["jScaleDown"].name += "_CMS_scale_j_em_13TeVDown";
+    smpl.second.uncertainties["jScaleUp"].name   += "_CMS_scale_j_13TeVUp";
+    smpl.second.uncertainties["jScaleDown"].name += "_CMS_scale_j_13TeVDown";
     smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("njets","njets_Up");
     smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("mjj","mjj_Up");
     smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("mjj","mjj_Up");
@@ -224,7 +224,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
     }
 
     // 6.) DY shape (EWKZ sample should be added here)
-    if(smpl.second.name == "ZTT" || smpl.second.name == "ZLL" ){
+    if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" ){
       Sample dyShapeUp = smpl.second;
       Sample dyShapeDown = smpl.second;
       smpl.second.uncertainties.insert( make_pair("dyShapeUp"   , dyShapeUp) );
