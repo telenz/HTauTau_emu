@@ -90,6 +90,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
   Sample W(    "W"        , "WJets_dnn_em_v1.root" );
   Sample TT(   "TT"       , "TTbar_dnn_em_v1.root" );
   Sample VV(   "VV"       , "Diboson_dnn_em_v1.root" );
+  Sample ST(   "ST"       , "SingleTop_dnn_em_v1.root" );
   Sample QCD(  "QCD"      , "MuonEG_Run2016_dnn_em_v1.root" );
   Sample ggH(  "ggH125"   , "ggH_dnn_em_v1.root" );
   Sample qqH(  "qqH125"   , "VBFH_dnn_em_v1.root" );
@@ -105,7 +106,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
 				     { "W"    , W } ,
 				     { "TT"   , TT } ,
 				     { "VV"   , VV } ,
-				     { "QCD"  , QCD },
+				     { "QCD"  , QCD } ,
+				     { "ST"   , ST } ,
 				     { "ggH125" , ggH },
 				     { "qqH125" , qqH }
   };
