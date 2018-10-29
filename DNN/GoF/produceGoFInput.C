@@ -10,6 +10,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
 
   bool verbose = false;
   bool plot_2d = true;
+  bool apply_btag_veto = true;
 
   TString variable_1d = "m_vis";
   TString variable_2d = "pt_2 : m_vis"; // convention for TH2D is "var_y : var_x"
@@ -17,7 +18,9 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
   //************************************************************************************************
   // Define some common weights and cuts
 
+  TString btag_weight = "btag0weight*";
   TString Weight    = "xsec_lumi_weight*mcweight*puweight*effweight*0.978824*0.985*";
+  if(apply_btag_veto) Weight += btag_weight;
   TString qcdweight = "2.30*";
 
   // Definition of cuts
@@ -28,9 +31,10 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
   TString CutsIso   = "&& iso_1<0.15 && iso_2<0.2 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
   TString CutsIsoSS = "&& iso_1<0.50 && iso_2>0.2 && iso_2<0.5 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
 
-  TString btagVeto     = "&& nbtag==0 ";
+  TString btag_veto     = "&& nbtag==0 ";
   TString CutsCategory = "&& dzeta>-35 && metFilters && trg_muonelectron";
-  CutsCategory += btagVeto;
+  if(apply_btag_veto) CutsCategory += btag_veto;
+
 
   TString Cuts   = CutsKine + CutsIso   + CutsCategory;
   TString CutsSS = CutsKine + CutsIsoSS + CutsCategory;
