@@ -366,6 +366,7 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
 
   // 2.) Calculate normalization via ss/ss_relaxed
   double qcd_norm = sample_map["QCD"].histSS_1d->GetSumOfWeights()/sample_map["QCD"].histSSrelaxed_1d->GetSumOfWeights();
+  cout << endl << "qcd_norm = " << qcd_norm << endl << endl;
   sample_map["QCD"].hist_1d -> Scale(qcd_norm);
 
   //************************************************************************************************
