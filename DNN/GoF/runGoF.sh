@@ -8,10 +8,12 @@ DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
 NUM_TOYS=300
-VAR="m_vis"
+VAR="pt_2"
 BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/
 INPUT_FOLDER=output
 OUTPUT_FOLDER=2016_smhtt
+
+cd ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017
 
 # Produce the datacard for the em channel (please add the em channel in category gof in the morphing script)
 MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=$INPUT_FOLDER --real_data=true --jetfakes=0 --embedding=0 --postfix="-$VAR" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="gof" --gof_category_name="em_inclusive" --era=2016 --output=$OUTPUT_FOLDER --regional_jec=false --ggh_wg1=false
@@ -21,7 +23,7 @@ combineTool.py -M T2W -o workspace.root -m $MASS -i ${CMSSW_BASE}/src/CombineHar
 
 # Rename workspace
 workspace_location=${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/${OUTPUT_FOLDER}/cmb/125/
-cp ${workspace_location}/workspace.root ${workspacce_location}/2016_workspace.root
+cp ${workspace_location}/workspace.root ${workspace_location}/2016_workspace.root
 
 cd ${workspace_location}
 
@@ -32,8 +34,13 @@ combine -M GoodnessOfFit --algo=saturated -m $MASS -d $DATACARD
 combine -M GoodnessOfFit --algo=saturated -m $MASS -d $DATACARD -s $SEED -t $NUM_TOYS
 
 # Collect results
-combineTool.py -M CollectGoodnessOfFit --input higgsCombineTest.GoodnessOfFit.mH$MASS.root higgsCombineTest.GoodnessOfFit.mH$MASS.$SEED.root --output gof.json
+combineTool.py -M CollectGoodnessOfFit --input higgsCombineTest.GoodnessOfFit.mH$MASS.root higgsCombineTest.GoodnessOfFit.mH$MASS.$SEED.root --output gof-${VAR}.json
 
 # Plot
-plotGof.py --statistic saturated --mass $MASS.0 --output gof gof.json
+plotGof.py --statistic saturated --mass $MASS.0 --output gof-${VAR} gof-${VAR}.json
+
+# Get p-value printed out
+echo ""
+grep "p" *.json
+echo ""
 
