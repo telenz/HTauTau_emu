@@ -9,8 +9,8 @@ SEED=1234
 MASS=125
 NUM_TOYS=300
 VAR="pt_2"
-BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/
-INPUT_FOLDER=output
+BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/
+INPUT_FOLDER=var_1d
 OUTPUT_FOLDER=2016_smhtt
 
 cd ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017
