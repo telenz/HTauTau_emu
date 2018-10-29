@@ -91,8 +91,8 @@ void produceGoFInput(TString directory = "../../Inputs/NTuples_2016/") {
   Sample TT(   "TT"       , "TTbar_dnn_em_v1.root" );
   Sample VV(   "VV"       , "Diboson_dnn_em_v1.root" );
   Sample QCD(  "QCD"      , "MuonEG_Run2016_dnn_em_v1.root" );
-  Sample ggH(  "ggH"      , "ggH_dnn_em_v1.root" );
-  Sample qqH(  "qqH"      , "VBFH_dnn_em_v1.root" );
+  Sample ggH(  "ggH125"   , "ggH_dnn_em_v1.root" );
+  Sample qqH(  "qqH125"   , "VBFH_dnn_em_v1.root" );
 
   // Define pre-defined norms
   ZTT.norm = "1.02*";
