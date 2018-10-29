@@ -379,7 +379,11 @@ void produce_gof_input(TString variable_1d = "pt_1" , TString directory = "../..
   variable_2d.ReplaceAll(" ","");
   if(!plot_2d) rootFileName += variable_1d + ".root";
   else         rootFileName += variable_2d( 0 , variable_2d.First(":") ) + "-" + variable_2d( variable_2d.First(":")+1 , variable_2d.Length() ) + ".root";
-  TFile * fileOut      = new TFile( "output/" + rootFileName , "RECREATE" );
+  TString output_directory = "output/";
+  if(!plot_2d) output_directory += "var_1d/";
+  else         output_directory += "var_2d/";
+
+  TFile * fileOut      = new TFile( output_directory + "/" + rootFileName , "RECREATE" );
   fileOut             -> mkdir(em_cat_in_use.name);
   fileOut             -> cd(em_cat_in_use.name);
 
