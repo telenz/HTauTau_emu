@@ -20,7 +20,7 @@ double getNEventsProcessed(TString filename)
   return nevents;
 }
 
-void createDNNinput_2017(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/"){
+void create_dnn_input_2017(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/"){
 
   // Define the subsamples that belong to a certain proccess
   vector<TString> MuonEG_Run2017  = { "MuonEG_Run2017B" ,
