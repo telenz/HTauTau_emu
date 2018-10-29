@@ -37,3 +37,14 @@ git checkout v6.3.2
 cd ../..
 git clone git@github.com:/cms-analysis/CombineHarvester.git CombineHarvester -b SMHTT2017-dev
 scram b -j 8
+
+# Create library
+cd HiggsAnalysis/CombinedLimit/
+make
+cd ../..
+scram b -j8
+
+# Make output directory
+CombineHarvester/HTTSM2017
+mkdir output
+cd -
