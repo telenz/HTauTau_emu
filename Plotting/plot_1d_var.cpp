@@ -6,19 +6,14 @@
 #include "THStack.h"
 #include "TROOT.h"
 void plot_1d_var(
-          TString directory   =  "../DNN/GoF/output/var_1d/",
-          TString category    = "em_inclusive",
-          TString variable    = "dzeta",
-          TString xtitle      = "m_sv [GeV]",
-          TString ytitle      = "Events",
-	  vector<float> range = {20,200}
+		 TString variable    = "m_sv",
+		 TString category    = "em_inclusive",
+		 TString directory   = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/var_1d/"
           ) {
 
    // Set some options
    bool plotLeg = true;
-   int position = 0; // 0 - right, 1 - left, 2 - central
-   bool showSignal = false;
-   bool logY = true;   
+   bool logy = false;
    double scaleSignal = 50;
    bool blindData = false;
 
@@ -34,7 +29,7 @@ void plot_1d_var(
    // Define sample categorization
    SampleForPlotting data("Data",{"data_obs"});
    SampleForPlotting ztt("ZTT",{"ZTT"});
-   SampleForPlotting zl("ZL",{"ZL","EWKZ","VV","W"});
+   SampleForPlotting zl("ZL",{"ZL","EWKZ","VV","W","ST"});
    SampleForPlotting tt("TT",{"TT"});
    SampleForPlotting qcd("QCD",{"QCD"});
 
@@ -44,14 +39,14 @@ void plot_1d_var(
    qcd.color = "#FFCCFF";
 
    ztt.legend_entry  = "Z#rightarrow #tau#tau";
-   zl.legend_entry  = "electroweak";
+   zl.legend_entry   = "electroweak";
    tt.legend_entry   = "t#bar{t}";
    qcd.legend_entry  = "QCD";
    data.legend_entry = "Data";
  
    data.isData = true;
 
-   vector<SampleForPlotting*> sample_vec = { &zl , &qcd , &tt , &ztt , &data };
+   vector<SampleForPlotting*> sample_vec = { &qcd , &zl , &tt , &ztt , &data };
 
 
    TH1D* hist = 0;
@@ -98,8 +93,11 @@ void plot_1d_var(
    upper->Draw();
    upper->cd();
 
+   float yUpper = data.hist->GetMaximum();
    data.hist -> GetXaxis() -> SetTitle(variable);
-   data.hist -> GetYaxis() -> SetTitle(ytitle);
+   data.hist -> GetYaxis() -> SetTitle("Events");
+   if(logy) upper -> SetLogy();
+   else     data.hist -> GetYaxis() -> SetRangeUser(0,1.2*yUpper);
 
 
    data.hist -> Draw("e1");
@@ -109,7 +107,6 @@ void plot_1d_var(
    canv1->Update();
 
    // Draw legend
-   upper->SetLogy(1);    
    TLegend *leg = new TLegend(0.65,0.45,0.9,0.9);
    SetLegendStyle(leg);
    for(auto *smpl : sample_vec){
@@ -131,7 +128,6 @@ void plot_1d_var(
     
    upper->Draw("SAME");
    upper->RedrawAxis();
-   upper->SetLogy();
    upper->Modified();
    upper->Update();
    canv1->cd();
