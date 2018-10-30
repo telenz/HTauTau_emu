@@ -84,7 +84,7 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
 
   Sample Data( "data_obs" , "MuonEG_Run2016_dnn_em_v1.root" );
   Sample ZTT(  "ZTT"      , "DYJets_dnn_em_v1.root" );
-  Sample ZLL(  "ZL"       , "DYJets_dnn_em_v1.root" );
+  Sample ZL(   "ZL"       , "DYJets_dnn_em_v1.root" );
   Sample EWKZ( "EWKZ"     , "EWKZ_dnn_em_v1.root" );
   Sample W(    "W"        , "WJets_dnn_em_v1.root" );
   Sample TT(   "TT"       , "TTbar_dnn_em_v1.root" );
@@ -96,11 +96,11 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
 
   // Define pre-defined norms
   ZTT.norm = "1.02*";
-  ZLL.norm = "1.02*";
+  ZL.norm  = "1.02*";
 
   map<TString,Sample> sample_map = { { "Data" , Data },
 				     { "ZTT"  , ZTT } ,
-				     { "ZLL"  , ZLL } ,
+				     { "ZL"   , ZL } ,
 				     { "EWKZ" , EWKZ } ,
 				     { "W"    , W } ,
 				     { "TT"   , TT } ,
@@ -130,22 +130,22 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
   sample_map["Data"].weightString = "1*";
   sample_map["QCD"].weightString  = "1*";
   sample_map["ZTT"].cutString += "&&isZTT";
-  sample_map["ZLL"].cutString += "&&!isZTT";
+  sample_map["ZL"].cutString += "&&!isZTT";
 
   sample_map["Data"].weightStringSS = qcdweight;
   sample_map["QCD"].weightStringSS  = qcdweight;
   sample_map["ZTT"].cutStringSS += "&&isZTT";
-  sample_map["ZLL"].cutStringSS += "&&!isZTT";
+  sample_map["ZL"].cutStringSS += "&&!isZTT";
 
   sample_map["Data"].weightStringSSrelaxed = qcdweight;
   sample_map["QCD"].weightStringSSrelaxed  = qcdweight;
   sample_map["ZTT"].cutStringSSrelaxed += "&&isZTT";
-  sample_map["ZLL"].cutStringSSrelaxed += "&&!isZTT";
+  sample_map["ZL"].cutStringSSrelaxed += "&&!isZTT";
 
   // Define sample specific weights
   sample_map["TT"].topweight = "topptweightRun2*";
   sample_map["ZTT"].zptmassweight = "zptmassweight*";
-  sample_map["ZLL"].zptmassweight = "zptmassweight*";
+  sample_map["ZL"].zptmassweight = "zptmassweight*";
 
   //************************************************************************************************
   // Define systematic uncertainties
@@ -211,7 +211,7 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
 
     // Sample-specific uncertainties
     // 5.) TTbar shape
-    if(smpl.second.name == "TTbar"){
+    if(smpl.second.name == "TT"){
       Sample ttbarShapeUp = smpl.second;
       Sample ttbarShapeDown = smpl.second;
       smpl.second.uncertainties.insert( make_pair("ttbarShapeUp"   , ttbarShapeUp) );
@@ -235,7 +235,7 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
     }
 
     // 7.) ggScale
-    if(smpl.second.name == "ggH"){
+    if(smpl.second.name == "ggH125"){
       TString ggScaleWeightUp="(0.9421 - 0.00001699*pt_2)*";
       TString ggScaleWeightDown="(1.0579 + 0.00001699*pt_2)*";
 
@@ -356,8 +356,8 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
 
   // 1.) Take the shape from ss relaxed region
   for(auto & smpl : sample_map){
-    if( smpl.first == "ggH"  ||
-	smpl.first == "qqH"  ||
+    if( smpl.first == "ggH125"  ||
+	smpl.first == "qqH125"  ||
 	smpl.first == "Data" ||
 	smpl.first == "QCD"    ) continue;
     sample_map["QCD"].histSS_1d        -> Add( smpl.second.histSS_1d , -1 );
