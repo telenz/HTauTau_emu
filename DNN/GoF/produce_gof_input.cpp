@@ -20,7 +20,7 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
   TString btag_weight = "btag0weight*";
   TString Weight      = "xsec_lumi_weight*mcweight*puweight*effweight*0.978824*0.985*"; // two numbers are filter efficiencies? FIXME -> alexei 0.979 from Daniel Winterbottom -> which one to use
   if(apply_btag_veto) Weight += btag_weight;
-  TString qcdweight = "2.30*";
+  TString qcdweight = "qcdweight*";
 
   // Definition of cuts
   TString mTCut    = "&& mTdileptonMET<60 ";
@@ -363,12 +363,12 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
     sample_map["QCD"].histSS_1d        -> Add( smpl.second.histSS_1d , -1 );
     sample_map["QCD"].histSSrelaxed_1d -> Add( smpl.second.histSSrelaxed_1d , -1 );
   }
-  sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSSrelaxed_1d -> Clone();
+  sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSS_1d -> Clone();
 
   // 2.) Calculate normalization via ss/ss_relaxed
   double qcd_norm = sample_map["QCD"].histSS_1d->GetSumOfWeights()/sample_map["QCD"].histSSrelaxed_1d->GetSumOfWeights();
   cout << endl << "qcd_norm = " << qcd_norm << endl << endl;
-  sample_map["QCD"].hist_1d -> Scale(qcd_norm);
+  // sample_map["QCD"].hist_1d -> Scale(qcd_norm);
 
   //************************************************************************************************
   // Write all histograms to output file
