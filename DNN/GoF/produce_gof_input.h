@@ -47,6 +47,30 @@ public :
 // ********************************************************************************************
 
 // ********************************************************************************************
+class SampleForPlotting {
+
+public :
+
+  TString name = "";
+  vector<TString> subsamples = {};
+  TString hist_name = "";
+
+  bool isData = false;
+  bool isSignal = false;
+  TH1D *hist = 0;
+
+  TString color = "#FFCCFF";
+
+  TString legend_entry = "";
+
+  SampleForPlotting(TString sample_name = "", vector<TString> sample_list={}){
+    name     = sample_name;
+    subsamples = sample_list;
+  }
+};
+// ********************************************************************************************
+
+// ********************************************************************************************
 class Category {
 
 public :   
