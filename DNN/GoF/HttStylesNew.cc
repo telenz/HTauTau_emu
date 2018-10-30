@@ -5,6 +5,7 @@
 #include <TLegend.h>
 #include <TPaveText.h>
 #include "TROOT.h"
+#include "TGaxis.h"
 
 /// define common styles
 void SetStyle();
@@ -33,6 +34,8 @@ void SetPixelStyle()
 {
   TStyle *HttStyle = new TStyle("Htt-Style","The Perfect Style for Plots ;-)");
   gStyle = HttStyle;
+
+  TGaxis::SetMaxDigits(4);
 
   // Canvas
   HttStyle->SetCanvasColor     (0);
