@@ -173,13 +173,13 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
 
 	// Add here preselection if necessary
 	if(applyPreselection){
-	  // if( iso_1 > 0.15 )              continue;
-	  // if( iso_2 > 0.2)                continue;
-	  if( extraelec_veto > 0.5)       continue;
-	  if( extramuon_veto > 0.5)       continue;
-	  if( TMath::Max(pt_1,pt_2) < 24) continue;
-	  if( metFilters < 0.5 )          continue;
-	  if( trg_muonelectron < 0.5 )    continue;
+	  if( iso_1 > 0.5 )                continue;
+	  if( iso_2 > 0.5 )                continue;
+	  if( extraelec_veto > 0.5 )       continue;
+	  if( extramuon_veto > 0.5 )       continue;
+	  if( TMath::Max(pt_1,pt_2) < 24 ) continue;
+	  if( metFilters < 0.5 )           continue;
+	  if( trg_muonelectron < 0.5 )     continue;
 	}
 	xsec_lumi_weight = xsec*luminosity/nevents;
 	qcd_correction = qcd_ss_os_iso_relaxed_ratio;
