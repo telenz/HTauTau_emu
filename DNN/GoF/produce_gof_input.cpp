@@ -10,7 +10,7 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
 
   bool verbose = false;
   bool plot_2d = false;
-  bool apply_btag_veto = false;
+  bool apply_btag_veto = true;
 
   TString variable_2d = "pt_2 : m_vis"; // convention for TH2D is "var_y : var_x"
 
