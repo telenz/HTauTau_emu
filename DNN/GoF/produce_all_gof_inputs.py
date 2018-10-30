@@ -57,5 +57,5 @@ for var in variable_list :
     os.environ["VAR"] = var
     os.system("source ./run_gof.sh")
 
-    # cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\")\""
-    # os.system(cmd)
+    cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\")\""
+    os.system(cmd)
