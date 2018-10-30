@@ -8,10 +8,15 @@ DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
 NUM_TOYS=300
-VAR="pt_2"
+# VAR="pt_2"
 BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/
 INPUT_FOLDER=var_1d
 OUTPUT_FOLDER=2016_smhtt
+CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/CombineHarvester/2017/CMSSW_7_4_7/src
+
+cd ${CMSSW_LOCATION}
+source /cvmfs/cms.cern.ch/cmsset_default.sh
+cmsenv
 
 cd ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017
 
