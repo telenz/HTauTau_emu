@@ -143,7 +143,7 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
   sample_map["ZL"].cutStringSSrelaxed += "&&!isZTT";
 
   // Define sample specific weights
-  sample_map["TT"].topweight = "topptweightRun2*";
+  sample_map["TT"].topweight = "topptweight*";
   sample_map["ZTT"].zptmassweight = "zptmassweight*";
   sample_map["ZL"].zptmassweight = "zptmassweight*";
 
@@ -218,7 +218,7 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
       smpl.second.uncertainties.insert( make_pair("ttbarShapeDown" , ttbarShapeDown) );
       smpl.second.uncertainties["ttbarShapeUp"].name   += "_CMS_htt_ttbarShape_13TeVUp";
       smpl.second.uncertainties["ttbarShapeDown"].name += "_CMS_htt_ttbarShape_13TeVDown";
-      smpl.second.uncertainties["ttbarShapeUp"].topweight = "topptweightRun2*topptweightRun2*";
+      smpl.second.uncertainties["ttbarShapeUp"].topweight = "topptweight*topptweight*";
       smpl.second.uncertainties["ttbarShapeDown"].topweight = "";
     }
 
