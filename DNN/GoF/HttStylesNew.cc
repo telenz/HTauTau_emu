@@ -4,6 +4,7 @@
 #include <TCanvas.h>
 #include <TLegend.h>
 #include <TPaveText.h>
+#include "TROOT.h"
 
 /// define common styles
 void SetStyle();
@@ -28,6 +29,89 @@ void plotchannel(const char* channel, double lowX=0.4, double lowY=0.74);
 /*
   Implementation
 */
+void SetPixelStyle()
+{
+  TStyle *HttStyle = new TStyle("Htt-Style","The Perfect Style for Plots ;-)");
+  gStyle = HttStyle;
+
+  // Canvas
+  HttStyle->SetCanvasColor     (0);
+  HttStyle->SetCanvasBorderSize(10);
+  HttStyle->SetCanvasBorderMode(0);
+  HttStyle->SetCanvasDefH      (700);
+  HttStyle->SetCanvasDefW      (700);
+  HttStyle->SetCanvasDefX      (100);
+  HttStyle->SetCanvasDefY      (100);
+
+  // color palette for 2D temperature plots
+  HttStyle->SetPalette(1,0);
+  
+  // Pads
+  HttStyle->SetPadColor       (0);
+  HttStyle->SetPadBorderSize  (10);
+  HttStyle->SetPadBorderMode  (0);
+  HttStyle->SetPadBottomMargin(0.13);
+  HttStyle->SetPadTopMargin   (0.08);
+  HttStyle->SetPadLeftMargin  (0.15);
+  HttStyle->SetPadRightMargin (0.07);
+  HttStyle->SetPadGridX       (0);
+  HttStyle->SetPadGridY       (0);
+  HttStyle->SetPadTickX       (1);
+  HttStyle->SetPadTickY       (1);
+
+  // Frames
+  HttStyle->SetLineWidth(3);
+  HttStyle->SetFrameFillStyle ( 0);
+  HttStyle->SetFrameFillColor ( 0);
+  HttStyle->SetFrameLineColor ( 1);
+  HttStyle->SetFrameLineStyle ( 0);
+  HttStyle->SetFrameLineWidth ( 2);
+  HttStyle->SetFrameBorderSize(10);
+  HttStyle->SetFrameBorderMode( 0);
+
+  // Histograms
+  HttStyle->SetHistFillColor(2);
+  HttStyle->SetHistFillStyle(0);
+  HttStyle->SetHistLineColor(1);
+  HttStyle->SetHistLineStyle(0);
+  HttStyle->SetHistLineWidth(3);
+  HttStyle->SetNdivisions(505);
+
+  // Functions
+  HttStyle->SetFuncColor(1);
+  HttStyle->SetFuncStyle(0);
+  HttStyle->SetFuncWidth(2);
+
+  // Various
+  HttStyle->SetMarkerStyle(20);
+  HttStyle->SetMarkerColor(kBlack);
+  HttStyle->SetMarkerSize (1.4);
+
+  HttStyle->SetTitleBorderSize(0);
+  HttStyle->SetTitleFillColor (0);
+  HttStyle->SetTitleX         (0.2);
+
+  HttStyle->SetStripDecimals(kFALSE);
+  HttStyle->SetLineStyleString(11,"20 10");
+
+  HttStyle->SetLabelFont  (43,"XY");
+  HttStyle->SetTextFont   (43);
+  HttStyle->SetStatFont   (43);
+  HttStyle->SetTitleFont  (43);
+  HttStyle->SetTitleFont  (43,"XY");
+
+  HttStyle->SetTextSize   (30);
+  HttStyle->SetTitleSize  (30);
+  HttStyle->SetTitleSize  (30 ,"XY");
+  HttStyle->SetTitleOffset(1.600,"XY");
+  HttStyle->SetLabelOffset(0.010,"XY");
+  HttStyle->SetLabelSize  (30,"XY");
+
+  HttStyle->SetOptStat    (0);
+
+  gROOT->ForceStyle();
+  return;
+}
 
 
 void SetStyle()
@@ -217,6 +301,8 @@ void SetLegendStyle(TLegend* leg)
   leg->SetFillStyle (0);
   leg->SetFillColor (0);
   leg->SetBorderSize(0);
+
+  gROOT->ForceStyle();
 }
 
 void CMSPrelim(const char* dataset, double lowX, double lowY)
