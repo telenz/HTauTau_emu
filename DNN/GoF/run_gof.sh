@@ -44,6 +44,8 @@ combineTool.py -M CollectGoodnessOfFit --input higgsCombineTest.GoodnessOfFit.mH
 # Plot
 plotGof.py --statistic saturated --mass $MASS.0 --output gof-${VAR} gof-${VAR}.json
 
+cp gof-${VAR}.json ${BASE_PATH}/${INPUT_FOLDER}/.
+
 # Get p-value printed out
 echo ""
 grep "p" *.json
