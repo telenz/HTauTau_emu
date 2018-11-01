@@ -1,9 +1,8 @@
 #include "../DNN/GoF/HttStylesNew.cc"
 #include "../DNN/GoF/useful_classes.h"
-#include "../DNN/GoF/CMS_lumi.h"
+#include "../DNN/GoF/CMS_lumi.C"
 #include <iomanip>
 #include <iostream>
-#include <algorithm>
 #include "THStack.h"
 #include "TROOT.h"
 #include "TMath.h"
@@ -170,7 +169,7 @@ void plot_1d_var(
    leg->Draw();
    writeExtraText = false;
    extraText = "Preliminary";
-   // CMS_lumi(upper,4,33); 
+   CMS_lumi(upper,4,33);
    plotchannel("e#mu",0.25,0.84);
     
    char KT[100];
