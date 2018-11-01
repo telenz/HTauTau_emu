@@ -24,7 +24,7 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
 
   // Definition of cuts
   TString mTCut    = "&& mTdileptonMET<60 ";
-  TString CutsKine = "&& pt_1>13 && pt_2>15 && TMath::Max(pt_1,pt_2)>24 ";
+  TString CutsKine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 ";
   CutsKine += mTCut;
 
   TString CutsIso   = "&& iso_1<0.15 && iso_2<0.2 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
