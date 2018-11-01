@@ -1,3 +1,6 @@
+#ifndef USEFUL_CLASSES_H
+#define USEFUL_CLASSES_H
+
 #include "TH2D.h"
 #include "TString.h"
 #include "TFile.h"
@@ -96,3 +99,4 @@ public :
   }
 };
 // ********************************************************************************************
+#endif
