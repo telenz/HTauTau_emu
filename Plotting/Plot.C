@@ -10,7 +10,7 @@ void Plot(
           float xmin         =  -45,
           float xmax         =  105,
           TString Weight     = "mcweight*puweight*effweight*0.978824*0.985*xsec_lumi_weight*btag0weight*",
-          TString Cuts       = "&&iso_1<0.15&&iso_2<0.2&&extraelec_veto<0.5&&extramuon_veto<0.5&&pt_1>13&&pt_2>15&TMath::Max(pt_1,pt_2)>24&&metFilters>0.5&&nbtag==0&&mTdileptonMET<60&&dzeta>-35",
+          TString Cuts       = "&&iso_1<0.15&&iso_2<0.2&&extraelec_veto<0.5&&extramuon_veto<0.5&&pt_1>13&&pt_2>10&TMath::Max(pt_1,pt_2)>24&&metFilters>0.5&&nbtag==0&&mTdileptonMET<60&&dzeta>-35",
           TString xtitle     = "D_{#zeta} [GeV]",
           TString ytitle     = "Events / 5 GeV"
           ) {
@@ -38,7 +38,7 @@ void Plot(
    int nbMax = 20;
  
    TString topweight("topptweightRun2*");
-   TString qcdweight("qcdweight*"); //("2.31*");
+   TString qcdweight("2.31*"); //("2.31*");
    TString zptmassweight("zptmassweight*");
    
    //define samples
