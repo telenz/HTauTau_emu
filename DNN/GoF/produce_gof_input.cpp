@@ -188,26 +188,45 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
     smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("mjj","mjj_Down");
     smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("mjj","mjj_Down");
     smpl.second.uncertainties["jScaleDown"].variable_2d.ReplaceAll("mjj","mjj_Down");
+    // smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll(  "njets","njets_Up");
+    // smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("njets","njets_Up");
+    // FIXME : add all relevant variables  (scaleUp +_Up)
 
-    // 3.) MET scale
-    Sample metScaleUp = smpl.second;
-    Sample metScaleDown = smpl.second;
-    smpl.second.uncertainties.insert( make_pair("metScaleUp"   , metScaleUp) );
-    smpl.second.uncertainties.insert( make_pair("metScaleDown" , metScaleDown) );
-    smpl.second.uncertainties["metScaleUp"].name   += "_CMS_scale_met_em_13TeVUp";
-    smpl.second.uncertainties["metScaleDown"].name += "_CMS_scale_met_em_13TeVDown";
-    smpl.second.uncertainties["metScaleUp"].cutString.ReplaceAll("dzeta","dzeta_scaleUp");
-    smpl.second.uncertainties["metScaleDown"].cutString.ReplaceAll("dzeta","dzeta_scaleDown");
-
-    // 4.) MET resolution
-    Sample metResoUp = smpl.second;
-    Sample metResoDown = smpl.second;
-    smpl.second.uncertainties.insert( make_pair("metResoUp"   , metResoUp) );
-    smpl.second.uncertainties.insert( make_pair("metResoDown" , metResoDown) );
-    smpl.second.uncertainties["metResoUp"].name   += "_CMS_reso_met_em_13TeVUp";
-    smpl.second.uncertainties["metResoDown"].name += "_CMS_reso_met_em_13TeVDown";
-    smpl.second.uncertainties["metResoUp"].cutString.ReplaceAll("dzeta","dzeta_resoUp");
-    smpl.second.uncertainties["metResoDown"].cutString.ReplaceAll("dzeta","dzeta_resoDown");
+    // 4.) Unclustered MET scale
+    Sample unclMetScaleUp = smpl.second;
+    Sample unclMetScaleDown = smpl.second;
+    smpl.second.uncertainties.insert( make_pair("unclMetScaleUp"   , unclMetScaleUp) );
+    smpl.second.uncertainties.insert( make_pair("unclMetScaleDown" , unclMetScaleDown) );
+    smpl.second.uncertainties["unclMetScaleUp"].name   += "_CMS_scale_met_unclustered_13TeVUp";
+    smpl.second.uncertainties["unclMetScaleDown"].name += "_CMS_scale_met_unclustered_13TeVDown";
+    smpl.second.uncertainties["unclMetScaleUp"].cutString.ReplaceAll("dzeta","dzeta_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].cutString.ReplaceAll("dzeta","dzeta_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("dzeta","dzeta_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("dzeta","dzeta_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_2d.ReplaceAll("dzeta","dzeta_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_2d.ReplaceAll("dzeta","dzeta_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("m_vis","m_vis_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].Variable_1d.ReplaceAll("m_vis","m_vis_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_2d.ReplaceAll("m_vis","m_vis_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].Variable_2d.ReplaceAll("m_vis","m_vis_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("mTdileptonMET","mTdileptonMET_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("mTdileptonMET","mTdileptonMET_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_2d.ReplaceAll("mTdileptonMET","mTdileptonMET_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_2d.ReplaceAll("mTdileptonMET","mTdileptonMET_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("m_sv","m_sv_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("m_sv","m_sv_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_2d.ReplaceAll("m_sv","m_sv_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_2d.ReplaceAll("m_sv","m_sv_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("mt_sv","mt_sv_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("mt_sv","mt_sv_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_2d.ReplaceAll("mt_sv","mt_sv_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_2d.ReplaceAll("mt_sv","mt_sv_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("met","met_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("met","met_resoDown");
+    smpl.second.uncertainties["unclMetScaleUp"].variable_2d.ReplaceAll("met","met_resoUp");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_2d.ReplaceAll("met","met_resoDown");
 
     // Sample-specific uncertainties
     // 5.) TTbar shape
