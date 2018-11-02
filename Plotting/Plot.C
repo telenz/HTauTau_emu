@@ -37,7 +37,7 @@ void Plot(
    int nbMin = 12;
    int nbMax = 20;
  
-   TString topweight("topptweightRun2*");
+   TString topweight("topptweight*");
    TString qcdweight("2.31*"); //("2.31*");
    TString zptmassweight("zptmassweight*");
    
