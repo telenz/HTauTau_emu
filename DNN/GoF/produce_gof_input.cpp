@@ -3,7 +3,7 @@
 #include "Unfold.C"
 #include "HttStylesNew.cc"
 
-void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,400} , TString directory = "../../Inputs/NTuples_2016/") {
+void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<float> range = {0,400} , TString directory = "../../Inputs/NTuples_2016/") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
@@ -275,9 +275,9 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
     TFile *file = new TFile( directory + "/" + smpl.second.filename );
     TTree *tree = (TTree*) file->Get("TauCheck");
 
-    smpl.second.hist_1d          = new TH1D(smpl.second.name + "_os_1d"         , "" , 8 , range[0] , range [1] );
-    smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , 8 , range[0] , range [1] );
-    smpl.second.histSSrelaxed_1d = new TH1D(smpl.second.name + "_ss_relaxed_1d" , "" , 8 , range[0] , range [1] );
+    smpl.second.hist_1d          = new TH1D(smpl.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
+    smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
+    smpl.second.histSSrelaxed_1d = new TH1D(smpl.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
     smpl.second.hist_2d          = new TH2D(smpl.second.name + "_os_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
     smpl.second.histSS_2d        = new TH2D(smpl.second.name + "_ss_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
@@ -327,9 +327,9 @@ void produce_gof_input(TString variable_1d = "pt_1" , vector<float> range = {0,4
 	cout << "cut string ss        " << " : " << sys.second.cutStringSS << endl;
 	cout << "cut string ss rel.   " << " : " << sys.second.cutStringSSrelaxed << endl << endl;
       }
-      sys.second.hist_1d          = new TH1D(sys.second.name + "_os_1d"         , "" , 8 , range[0] , range [1] );
-      sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , 8 , range[0] , range [1] );
-      sys.second.histSSrelaxed_1d = new TH1D(sys.second.name + "_ss_relaxed_1d" , "" , 8 , range[0] , range [1] );
+      sys.second.hist_1d          = new TH1D(sys.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
+      sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
+      sys.second.histSSrelaxed_1d = new TH1D(sys.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
       sys.second.hist_2d          = new TH2D(sys.second.name + "_os_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
       sys.second.histSS_2d        = new TH2D(sys.second.name + "_ss_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
