@@ -206,9 +206,9 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
     smpl.second.uncertainties["unclMetScaleUp"].variable_2d.ReplaceAll("dzeta","dzeta_resoUp");
     smpl.second.uncertainties["unclMetScaleDown"].variable_2d.ReplaceAll("dzeta","dzeta_resoDown");
     smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("m_vis","m_vis_resoUp");
-    smpl.second.uncertainties["unclMetScaleDown"].Variable_1d.ReplaceAll("m_vis","m_vis_resoDown");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("m_vis","m_vis_resoDown");
     smpl.second.uncertainties["unclMetScaleUp"].variable_2d.ReplaceAll("m_vis","m_vis_resoUp");
-    smpl.second.uncertainties["unclMetScaleDown"].Variable_2d.ReplaceAll("m_vis","m_vis_resoDown");
+    smpl.second.uncertainties["unclMetScaleDown"].variable_2d.ReplaceAll("m_vis","m_vis_resoDown");
     smpl.second.uncertainties["unclMetScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_resoUp");
     smpl.second.uncertainties["unclMetScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_resoDown");
     smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("mTdileptonMET","mTdileptonMET_resoUp");
