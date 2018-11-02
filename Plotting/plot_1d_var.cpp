@@ -127,7 +127,7 @@ void plot_1d_var(
      err_norm_abs.push_back( w.hist->GetBinContent(iB)*err_w_xsec );
      err_norm_abs.push_back( ztt.hist->GetBinContent(iB)*err_dy_xsec );
      err_norm_abs.push_back( qcd.hist->GetBinContent(iB)*err_qcd_norm );
-     float err_total = err_stat;
+     float err_total = err_stat*err_stat;
      for(float err_bin : err_norm_abs) err_total += err_bin*err_bin;
      err_total = TMath::Sqrt(err_total);
      bkgdErr -> SetBinError(iB,err_total);
