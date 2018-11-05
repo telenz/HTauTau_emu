@@ -10,6 +10,7 @@
 double luminosity = 35866;
 bool applyPreselection = true;
 float qcd_ss_os_iso_relaxed_ratio = 0.49;
+float trigger_filter_efficiency = 0.979;
 
 double getNEventsProcessed(TString filename)
 {
@@ -151,15 +152,18 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
       // Create a branch for xsec_lumi_weight
       float xsec_lumi_weight;
       float qcd_correction;
+      float trigger_filter_weight;
       if(firstTree){
 	outTree    = inTree->CloneTree(0);
 	outTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
 	outTree->Branch("qcd_correction", &qcd_correction, "qcd_correction/F");
+	outTree->Branch("trigger_filter_weight", &trigger_filter_weight, "trigger_filter_weight/F");
 	firstTree  = false;
       }
       currentTree = inTree->CloneTree(0);
       currentTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
       currentTree->Branch("qcd_correction", &qcd_correction, "qcd_correction/F");
+      currentTree->Branch("trigger_filter_weight", &trigger_filter_weight, "trigger_filter_weight/F");
 
       // lumi-xsec-weight added
       if( xsec_map.find(subsample) == xsec_map.end() && !sample.first.Contains("MuonEG")){
@@ -183,6 +187,7 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
 	}
 	xsec_lumi_weight = xsec*luminosity/nevents;
 	qcd_correction = qcd_ss_os_iso_relaxed_ratio;
+	trigger_filter_weight = trigger_filter_efficiency;
 	
 	// Stitching only for wjets MC in n-jet binned samples in npartons
 	if( subsample.Contains("W") && subsample.Contains("JetsToLNu") ){
@@ -200,7 +205,10 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
 	  else                   xsec_lumi_weight = luminosity / ( neventsDYIncl/xsecDYIncl );
 	}
 
-	if( sample.first.Contains("MuonEG")) xsec_lumi_weight = 1.;
+	if( sample.first.Contains("MuonEG")){
+	  xsec_lumi_weight = 1.;
+	  trigger_filter_weight = 1.;
+	}
 
 	currentTree->Fill();
       }
