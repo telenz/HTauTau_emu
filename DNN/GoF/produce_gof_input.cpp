@@ -3,13 +3,18 @@
 #include "Unfold.C"
 #include "HttStylesNew.cc"
 
-void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<float> range = {0,400} , TString category_name = "em_inclusive" , TString directory = "../../Inputs/NTuples_2016/") {
+void produce_gof_input( bool plot_2d = false;  
+		        TString variable_1d = "pt_1" ,
+			int nbins = 8 ,
+			vector<float> range = {0,400} ,
+			TString variable_2d = "pt_1:pt_2" ,
+			TString category_name = "em_inclusive" ,
+			TString directory = "../../Inputs/NTuples_2016/") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
 
   bool verbose = false;
-  bool plot_2d = false;
   bool apply_btag_veto = false;
 
   TString variable_2d = "pt_2 : m_vis"; // convention for TH2D is "var_y : var_x"
@@ -18,25 +23,17 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   // Define some common weights and cuts
 
   TString btag_weight = "btag0weight*";
-  TString Weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*";
-  if(apply_btag_veto) Weight += btag_weight;
+  TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*";
+  if(apply_btag_veto) weight += btag_weight;
 
-  // Definition of cuts
-  TString mTCut    = "&& mTdileptonMET<60 ";
-  TString CutsKine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron";
-  CutsKine += mTCut;
+  TString mt_cut    = "&& mTdileptonMET<60 ";
+  TString cuts_kine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron";
+  cuts_kine += mt_cut;
 
-  TString CutsIso   = "&& iso_1<0.15 && iso_2<0.2 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
-  TString CutsIsoSS = "&& iso_1<0.50 && iso_2>0.2 && iso_2<0.5 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
+  TString cuts_iso_general    = "&& iso_1<0.15 && iso_2<0.2 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
+  TString cuts_iso_ss_general = "&& extraelec_veto<0.5 && extramuon_veto<0.5 ";
 
   TString btag_veto    = "&& nbtag==0 ";
-  TString CutsCategory = "&& dzeta>-35";
-  if(apply_btag_veto) CutsCategory += btag_veto;
-
-
-  TString Cuts   = CutsKine + CutsIso   + CutsCategory;
-  TString CutsSS = CutsKine + CutsIsoSS + CutsCategory;
-
   //************************************************************************************************
   // Define different categories (use of category "em_cat_in_use" which is set below the definition)
   // For now the used attributes of the category class are only the binning and the name definitions
@@ -47,9 +44,10 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   class Category em_vbf("em_vbf");
 
   // Inclusive category
+  TString cuts_category_specific = "&& dzeta>-35";
   em_incl.suffix       = "inclusive";
-  em_incl.cutstring    = CutsKine + CutsIso + "dzeta>-35";
-  em_incl.cutstring_ss = CutsKine + CutsIsoSS + "dzeta>-35";
+  em_incl.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
+  em_incl.cutstring_ss = cuts_kine + cuts_iso_ss_general + "&& iso_1<0.50 && iso_2>0.2 && iso_2<0.5" + cuts_category_specific;
   em_incl.variable_2d  = variable_2d;  // first variable corresponds to y-variable
   em_incl.variable_1d  = variable_1d;
   em_incl.qcdweight    = "2.30*";
@@ -64,8 +62,9 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   em_incl.gg_scale_weight_down = "(1.0579 + 0.00001699*pt_2)*";
 
   // 0jet category
-  em_0jet.cutstring    = CutsKine + CutsIso + "&& njets==0 && dzeta>-35 ";
-  em_0jet.cutstring_ss = CutsKine + CutsIsoSS + "dzeta>-35";
+  cuts_category_specific = "&& jets==0 && dzeta>-35";
+  em_0jet.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
+  em_0jet.cutstring_ss = cuts_kine + cuts_iso_ss_general + "&& iso_1<0.3 && iso_2>0.1 && iso_2<0.3" + cuts_category_specific;
   em_0jet.variable_2d = "pt_2:m_vis";  // first variable corresponds to y-variable
   em_0jet.qcdweight   = "2.26*";
   em_0jet.gg_scale_weight_up   = "(0.9421 - 0.00001699*pt_2)*";
@@ -74,8 +73,9 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   em_0jet.bins_y_2d = {15,20,25,30,35,40,300};
 
   // Boosted category
-  em_boosted.cutstring    = CutsKine + CutsIso + "&&(njets==1 || (njets==2 && mjj<300) || njets>2)&&dzeta>-35";
-  em_boosted.cutstring_ss = CutsKine + CutsIsoSS + "dzeta>-35";
+  cuts_category_specific = "&&(njets==1 || (njets==2 && mjj<300) || njets>2)&&dzeta>-35";
+  em_boosted.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
+  em_boosted.cutstring_ss = cuts_kine + cuts_iso_ss_general + "&& iso_1<0.3 && iso_2>0.1 && iso_2<0.3" + cuts_category_specific;
   em_boosted.variable_2d = "pt_sv:m_sv";
   em_boosted.qcdweight   = "2.25*";
   em_boosted.gg_scale_weight_up   = "(0.9358 + 0.00088712 * pt_sv)*";
@@ -84,8 +84,9 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   em_boosted.bins_y_2d = {0,100,150,200,250,300,5000};
 
   // VBF category
-  em_vbf.cutstring    = CutsKine + CutsIso + "&& njets==2 && mjj>=300 && dzeta>-10 ";
-  em_vbf.cutstring_ss = CutsKine + CutsIsoSS + "dzeta>-35";
+  cuts_category_specific = "&& njets==2 && mjj>=300 && dzeta>-10 ";
+  em_vbf.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
+  em_vbf.cutstring_ss = cuts_kine + cuts_iso_ss_general + "&& iso_1<0.5 && iso_2>0.2 && iso_2<0.5" + cuts_category_specific;
   em_vbf.variable_2d = "mjj:m_sv";
   em_vbf.qcdweight   = "2.84*";
   em_vbf.gg_scale_weight_up   = "(1.032 + 0.00010196 * mjj)*";
@@ -100,6 +101,8 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
 					     { em_vbf.name     , em_vbf }};
 
   Category category_in_use = category_map[category_name];
+  if(apply_btag_veto) category_in_use.cutstring    += btag_veto;
+  if(apply_btag_veto) category_in_use.cutstring_ss += btag_veto;
 
   //************************************************************************************************
   // Define samples
@@ -138,12 +141,12 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
 
   // Define common cut strings  
   for(auto & smpl : sample_map){
-    smpl.second.cutString          = "os>0.5"+Cuts;
-    smpl.second.weightString       = Weight;
-    smpl.second.cutStringSS        = "os<0.5"+Cuts;
-    smpl.second.weightStringSS     = Weight+category_in_use.qcdweight;
-    smpl.second.cutStringSSrelaxed = "os<0.5"+CutsSS;
-    smpl.second.weightStringSSrelaxed = Weight+category_in_use.qcdweight;
+    smpl.second.cutString          = "os>0.5" + category_in_use.cutstring;
+    smpl.second.weightString       = weight;
+    smpl.second.cutStringSS        = "os<0.5" + category_in_use.cutstring;
+    smpl.second.weightStringSS     = weight + category_in_use.qcdweight;
+    smpl.second.cutStringSSrelaxed = "os<0.5" + category_in_use.cutstring_ss;
+    smpl.second.weightStringSSrelaxed = weight + category_in_use.qcdweight;
     smpl.second.variable_1d = variable_1d;
     smpl.second.variable_2d = variable_2d;
   }
