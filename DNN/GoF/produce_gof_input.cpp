@@ -182,10 +182,6 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
     smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("m_vis","m_vis_eDown");
     smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("mTtot","mTtot_eUp");
     smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("mTtot","mTtot_eDown");
-    if(variable_1d == "met"){
-      smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("met","met_eUp");
-      smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("met","met_eDown");
-    }
     smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("m_sv","m_sv_eUp");
     smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("m_sv","m_sv_eDown");
     smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("mt_sv","mt_sv_eUp");
