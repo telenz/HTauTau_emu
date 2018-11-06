@@ -224,6 +224,10 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
     smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("metphi","metphi_scaleDown");
     smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("pzetamiss","pzetamiss_scaleUp");
     smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("pzetamiss","pzetamiss_scaleDown");
+    smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("njets","njets_Up");
+    smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("njets","njets_Down");
+    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("njets","njets_Up");
+    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("njets","njets_Down");
 
     // 4.) Unclustered MET scale
     Sample unclMetScaleUp = smpl.second;
