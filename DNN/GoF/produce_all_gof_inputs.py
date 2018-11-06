@@ -156,7 +156,7 @@ for var in variable_list :
     # Get axis ranges (if not specified set to default value of {10,400})
     nbins , xmin , xmax = axis_range.get(var,[8, 0,400])
 
-    cmd = "root -l -b -q produce_gof_input.cpp+\"(\\\""+var+"\\\" , " + str(nbins) + " , {"+str(xmin)+","+str(xmax)+"})\""
+    cmd = "root -l -b -q produce_gof_input.cpp+\"(\\\"em_inclusive\\\",false,\\\""+var+"\\\" , " + str(nbins) + " , {"+str(xmin)+","+str(xmax)+"})\""
     os.system(cmd)
 
     # Now start to make the actual gof test
