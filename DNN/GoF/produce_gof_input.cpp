@@ -117,8 +117,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   Sample qqH(  "qqH125"   , "VBFH_dnn_em_v1.root" );
 
   // Define pre-defined norms
-  ZTT.norm = "1.02*";
-  ZL.norm  = "1.02*";
+  // ZTT.norm = "1.02*";
+  // ZL.norm  = "1.02*";
 
   map<TString,Sample> sample_map = { { "Data" , Data },
 				     { "ZTT"  , ZTT } ,
