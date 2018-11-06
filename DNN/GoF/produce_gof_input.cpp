@@ -29,7 +29,7 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   TString CutsIso   = "&& iso_1<0.15 && iso_2<0.2 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
   TString CutsIsoSS = "&& iso_1<0.50 && iso_2>0.2 && iso_2<0.5 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
 
-  TString btag_veto     = "&& nbtag==0 ";
+  TString btag_veto    = "&& nbtag==0 ";
   TString CutsCategory = "&& dzeta>-35";
   if(apply_btag_veto) CutsCategory += btag_veto;
 
@@ -310,17 +310,14 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
 
     // 7.) ggScale
     if(smpl.second.name == "ggH125"){
-      TString ggScaleWeightUp="(0.9421 - 0.00001699*pt_2)*";
-      TString ggScaleWeightDown="(1.0579 + 0.00001699*pt_2)*";
-
       Sample ggScaleUp = smpl.second;
       Sample ggScaleDown = smpl.second;
       smpl.second.uncertainties.insert( make_pair("ggScaleUp"   , ggScaleUp) );
       smpl.second.uncertainties.insert( make_pair("ggScaleDown" , ggScaleDown) );
       smpl.second.uncertainties["ggScaleUp"].name   += "_CMS_scale_gg_13TeVUp";
       smpl.second.uncertainties["ggScaleDown"].name += "_CMS_scale_gg_13TeVDown";
-      smpl.second.uncertainties["ggScaleUp"].ggscaleweight=ggScaleWeightUp;
-      smpl.second.uncertainties["ggScaleDown"].ggscaleweight=ggScaleWeightDown;
+      smpl.second.uncertainties["ggScaleUp"].ggscaleweight=category_in_use.gg_scale_weight_up;
+      smpl.second.uncertainties["ggScaleDown"].ggscaleweight=category_in_use.gg_scale_weight_down;
     }
   }
 
