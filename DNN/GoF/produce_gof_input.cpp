@@ -144,8 +144,8 @@ void produce_gof_input( bool plot_2d = false,
     smpl.second.weightStringSS     = weight + category_in_use.qcdweight;
     smpl.second.cutStringSSrelaxed = "os<0.5" + category_in_use.cutstring_ss;
     smpl.second.weightStringSSrelaxed = weight + category_in_use.qcdweight;
-    smpl.second.variable_1d = variable_1d;
-    smpl.second.variable_2d = variable_2d;
+    smpl.second.variable_1d = category_in_use.variable_1d;
+    smpl.second.variable_2d = category_in_use.variable_2d;
   }
 
   // Define sample specific cutStrings and weightStrings
