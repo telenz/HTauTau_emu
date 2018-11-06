@@ -18,7 +18,7 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   // Define some common weights and cuts
 
   TString btag_weight = "btag0weight*";
-  TString Weight      = "xsec_lumi_weight*mcweight*puweight*effweight*0.978824*0.985*"; // two numbers are filter efficiencies? FIXME -> alexei 0.979 from Daniel Winterbottom -> which one to use
+  TString Weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*";
   if(apply_btag_veto) Weight += btag_weight;
 
   // Definition of cuts
