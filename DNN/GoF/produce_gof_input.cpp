@@ -166,10 +166,12 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("dzeta","dzeta_eDown");
     smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("dzeta","dzeta_eUp");
     smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("dzeta","dzeta_eDown");
-    smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("pt_1","pt_Up_1");
-    smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_Down_1");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("pt_1","pt_Up_1");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("pt_1","pt_Down_1");
+    if(variable_1d == "pt_1"){
+      smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("pt_1","pt_Up_1");
+      smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_Down_1");
+      smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("pt_1","pt_Up_1");
+      smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("pt_1","pt_Down_1");
+    }
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eUp");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eDown");
     smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("mTdileptonMET","mTdileptonMET_eUp");
@@ -180,8 +182,6 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
     smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("m_vis","m_vis_eDown");
     smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("mTtot","mTtot_eUp");
     smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("mTtot","mTtot_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("m_vis","m_vis_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("m_vis","m_vis_eDown");
     if(variable_1d == "met"){
       smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("met","met_eUp");
       smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("met","met_eDown");
