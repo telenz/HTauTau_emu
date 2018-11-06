@@ -80,17 +80,16 @@ public :
   TString name = "";
   TString suffix = "";
 
-  TString cutString   = "";
-  TString cutStringSS = "";
+  TString cutstring   = "";
+  TString cutstring_ss = "";
+  TString cutstring_ss_relaxed = "";
+  TString weight = "";
   TString variable_1d = "";
   TString variable_2d = "";
 
-  int nbins_1d  = 1;
-  int nbins_x_2d = 1;
-  int nbins_y_2d = 1;
-  float *bins_1d;
-  float *bins_x_2d;
-  float *bins_y_2d;
+  vector<float> bins_1d;
+  vector<float> bins_x_2d;
+  vector<float> bins_y_2d;
 
   vector<Sample> *sampleList;
 

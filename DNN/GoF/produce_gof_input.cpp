@@ -48,31 +48,22 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   class Category em_vbf("em_vbf");
 
   // Inclusive category
-  em_incl.nbins_x_2d = 12;
-  em_incl.nbins_y_2d = 6;
-  em_incl.bins_x_2d  = new float[em_incl.nbins_x_2d+1]{0,50,55,60,65,70,75,80,85,90,95,100,400};
-  em_incl.bins_y_2d  = new float[em_incl.nbins_y_2d+1]{15,20,25,30,35,40,300};
-  em_incl.nbins_1d = 12;
-  em_incl.bins_1d  = new float[em_incl.nbins_1d+1]{0,50,55,60,65,70,75,80,85,90,95,100,400};
+  em_incl.bins_x_2d  = {0,50,55,60,65,70,75,80,85,90,95,100,400};
+  em_incl.bins_y_2d  = {15,20,25,30,35,40,300};
+  em_incl.bins_1d  = {0,50,55,60,65,70,75,80,85,90,95,100,400};
   em_incl.suffix = "inclusive";
 
   // 0jet category
-  em_0jet.nbins_x_2d = 12;
-  em_0jet.nbins_y_2d = 6;
-  em_0jet.bins_x_2d = new float[em_0jet.nbins_x_2d+1]{0,50,55,60,65,70,75,80,85,90,95,100,400};
-  em_0jet.bins_y_2d = new float[em_0jet.nbins_y_2d+1]{15,20,25,30,35,40,300};
+  em_0jet.bins_x_2d = {0,50,55,60,65,70,75,80,85,90,95,100,400};
+  em_0jet.bins_y_2d = {15,20,25,30,35,40,300};
 
   // Boosted category
-  em_boosted.nbins_x_2d = 10;
-  em_boosted.nbins_y_2d = 6;
-  em_boosted.bins_x_2d = new float[em_boosted.nbins_x_2d+1]{0,80,90,100,110,120,130,140,150,160,300};
-  em_boosted.bins_y_2d = new float[em_boosted.nbins_y_2d+1]{0,100,150,200,250,300,5000};
+  em_boosted.bins_x_2d = {0,80,90,100,110,120,130,140,150,160,300};
+  em_boosted.bins_y_2d = {0,100,150,200,250,300,5000};
 
   // VBF category
-  em_vbf.nbins_x_2d = 5;
-  em_vbf.nbins_y_2d = 4;
-  em_vbf.bins_x_2d = new float[em_vbf.nbins_x_2d+1]{0,95,115,135,155,400};
-  em_vbf.bins_y_2d = new float[em_vbf.nbins_y_2d+1]{300,700,1100,1500,10000};
+  em_vbf.bins_x_2d = {0,95,115,135,155,400};
+  em_vbf.bins_y_2d = {300,700,1100,1500,10000};
 
   // Make a vector from these categories
   vector<class Category> category_vec = { em_incl };
@@ -331,9 +322,12 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
     smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
     smpl.second.histSSrelaxed_1d = new TH1D(smpl.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
-    smpl.second.hist_2d          = new TH2D(smpl.second.name + "_os_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
-    smpl.second.histSS_2d        = new TH2D(smpl.second.name + "_ss_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
-    smpl.second.histSSrelaxed_2d = new TH2D(smpl.second.name + "_ss_relaxed_2d" , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
+    const int nbins_x_2d = sizeof(em_cat_in_use.bins_x_2d)/sizeof(float) - 1;
+    const int nbins_y_2d = sizeof(em_cat_in_use.bins_y_2d)/sizeof(float) - 1;
+
+    smpl.second.hist_2d          = new TH2D(smpl.second.name + "_os_2d"         , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
+    smpl.second.histSS_2d        = new TH2D(smpl.second.name + "_ss_2d"         , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
+    smpl.second.histSSrelaxed_2d = new TH2D(smpl.second.name + "_ss_relaxed_2d" , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
 
     TString full_weight_string            = smpl.second.weightString + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
     TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
@@ -383,9 +377,9 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
       sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
       sys.second.histSSrelaxed_1d = new TH1D(sys.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
-      sys.second.hist_2d          = new TH2D(sys.second.name + "_os_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
-      sys.second.histSS_2d        = new TH2D(sys.second.name + "_ss_2d"         , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
-      sys.second.histSSrelaxed_2d = new TH2D(sys.second.name + "_ss_relaxed_2d" , "" , em_cat_in_use.nbins_x_2d , em_cat_in_use.bins_x_2d , em_cat_in_use.nbins_y_2d , em_cat_in_use.bins_y_2d );
+      sys.second.hist_2d          = new TH2D(sys.second.name + "_os_2d"         , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
+      sys.second.histSS_2d        = new TH2D(sys.second.name + "_ss_2d"         , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
+      sys.second.histSSrelaxed_2d = new TH2D(sys.second.name + "_ss_relaxed_2d" , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
 
       if(!plot_2d){
 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.hist_1d->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
