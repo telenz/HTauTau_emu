@@ -3,7 +3,7 @@
 #include "Unfold.C"
 #include "HttStylesNew.cc"
 
-void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<float> range = {0,400} , TString directory = "../../Inputs/NTuples_2016/") {
+void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<float> range = {0,400} , TString category_name = "em_inclusive" , TString directory = "../../Inputs/NTuples_2016/") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
@@ -20,18 +20,17 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   TString btag_weight = "btag0weight*";
   TString Weight      = "xsec_lumi_weight*mcweight*puweight*effweight*0.978824*0.985*"; // two numbers are filter efficiencies? FIXME -> alexei 0.979 from Daniel Winterbottom -> which one to use
   if(apply_btag_veto) Weight += btag_weight;
-  TString qcdweight = "2.30*";
 
   // Definition of cuts
   TString mTCut    = "&& mTdileptonMET<60 ";
-  TString CutsKine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 ";
+  TString CutsKine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron";
   CutsKine += mTCut;
 
   TString CutsIso   = "&& iso_1<0.15 && iso_2<0.2 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
   TString CutsIsoSS = "&& iso_1<0.50 && iso_2>0.2 && iso_2<0.5 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
 
   TString btag_veto     = "&& nbtag==0 ";
-  TString CutsCategory = "&& dzeta>-35 && metFilters && trg_muonelectron";
+  TString CutsCategory = "&& dzeta>-35";
   if(apply_btag_veto) CutsCategory += btag_veto;
 
 
@@ -48,27 +47,59 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   class Category em_vbf("em_vbf");
 
   // Inclusive category
-  em_incl.bins_x_2d  = {0,50,55,60,65,70,75,80,85,90,95,100,400};
-  em_incl.bins_y_2d  = {15,20,25,30,35,40,300};
-  em_incl.bins_1d  = {0,50,55,60,65,70,75,80,85,90,95,100,400};
-  em_incl.suffix = "inclusive";
+  em_incl.suffix       = "inclusive";
+  em_incl.cutstring    = CutsKine + CutsIso + "dzeta>-35";
+  em_incl.cutstring_ss = CutsKine + CutsIsoSS + "dzeta>-35";
+  em_incl.variable_2d  = variable_2d;  // first variable corresponds to y-variable
+  em_incl.variable_1d  = variable_1d;
+  em_incl.qcdweight    = "2.30*";
+  em_incl.bins_x_2d    = {0,50,55,60,65,70,75,80,85,90,95,100,400};
+  em_incl.bins_y_2d    = {15,20,25,30,35,40,300};
+  float bound = range[0];
+  while(bound <= range[1]){
+    em_incl.bins_1d.push_back(bound);
+    bound += (range[1]-range[0])/nbins;
+  }
+  em_incl.gg_scale_weight_up   = "(0.9421 - 0.00001699*pt_2)*";
+  em_incl.gg_scale_weight_down = "(1.0579 + 0.00001699*pt_2)*";
 
   // 0jet category
+  em_0jet.cutstring    = CutsKine + CutsIso + "&& njets==0 && dzeta>-35 ";
+  em_0jet.cutstring_ss = CutsKine + CutsIsoSS + "dzeta>-35";
+  em_0jet.variable_2d = "pt_2:m_vis";  // first variable corresponds to y-variable
+  em_0jet.qcdweight   = "2.26*";
+  em_0jet.gg_scale_weight_up   = "(0.9421 - 0.00001699*pt_2)*";
+  em_0jet.gg_scale_weight_down = "(1.0579 + 0.00001699*pt_2)*";
   em_0jet.bins_x_2d = {0,50,55,60,65,70,75,80,85,90,95,100,400};
   em_0jet.bins_y_2d = {15,20,25,30,35,40,300};
 
   // Boosted category
+  em_boosted.cutstring    = CutsKine + CutsIso + "&&(njets==1 || (njets==2 && mjj<300) || njets>2)&&dzeta>-35";
+  em_boosted.cutstring_ss = CutsKine + CutsIsoSS + "dzeta>-35";
+  em_boosted.variable_2d = "pt_sv:m_sv";
+  em_boosted.qcdweight   = "2.25*";
+  em_boosted.gg_scale_weight_up   = "(0.9358 + 0.00088712 * pt_sv)*";
+  em_boosted.gg_scale_weight_down = "(1.0642 - 0.00088712 * pt_sv)*";
   em_boosted.bins_x_2d = {0,80,90,100,110,120,130,140,150,160,300};
   em_boosted.bins_y_2d = {0,100,150,200,250,300,5000};
 
   // VBF category
+  em_vbf.cutstring    = CutsKine + CutsIso + "&& njets==2 && mjj>=300 && dzeta>-10 ";
+  em_vbf.cutstring_ss = CutsKine + CutsIsoSS + "dzeta>-35";
+  em_vbf.variable_2d = "mjj:m_sv";
+  em_vbf.qcdweight   = "2.84*";
+  em_vbf.gg_scale_weight_up   = "(1.032 + 0.00010196 * mjj)*";
+  em_vbf.gg_scale_weight_down = "(0.968 - 0.00010196 * mjj)*";
   em_vbf.bins_x_2d = {0,95,115,135,155,400};
   em_vbf.bins_y_2d = {300,700,1100,1500,10000};
 
-  // Make a vector from these categories
-  vector<class Category> category_vec = { em_incl };
+  // Make a map from these categories
+  map< TString , Category > category_map = { { em_incl.name    , em_incl },
+					     { em_0jet.name    , em_0jet },
+					     { em_boosted.name , em_boosted },
+					     { em_vbf.name     , em_vbf }};
 
-  class Category em_cat_in_use = em_incl;
+  Category category_in_use = category_map[category_name];
 
   //************************************************************************************************
   // Define samples
@@ -110,9 +141,9 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
     smpl.second.cutString          = "os>0.5"+Cuts;
     smpl.second.weightString       = Weight;
     smpl.second.cutStringSS        = "os<0.5"+Cuts;
-    smpl.second.weightStringSS     = Weight+qcdweight;
+    smpl.second.weightStringSS     = Weight+category_in_use.qcdweight;
     smpl.second.cutStringSSrelaxed = "os<0.5"+CutsSS;
-    smpl.second.weightStringSSrelaxed = Weight+qcdweight;
+    smpl.second.weightStringSSrelaxed = Weight+category_in_use.qcdweight;
     smpl.second.variable_1d = variable_1d;
     smpl.second.variable_2d = variable_2d;
   }
@@ -123,13 +154,13 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   sample_map["ZTT"].cutString += "&&isZTT";
   sample_map["ZL"].cutString += "&&!isZTT";
 
-  sample_map["Data"].weightStringSS = qcdweight;
-  sample_map["QCD"].weightStringSS  = qcdweight;
+  sample_map["Data"].weightStringSS = category_in_use.qcdweight;
+  sample_map["QCD"].weightStringSS  = category_in_use.qcdweight;
   sample_map["ZTT"].cutStringSS += "&&isZTT";
   sample_map["ZL"].cutStringSS += "&&!isZTT";
 
-  sample_map["Data"].weightStringSSrelaxed = qcdweight;
-  sample_map["QCD"].weightStringSSrelaxed  = qcdweight;
+  sample_map["Data"].weightStringSSrelaxed = category_in_use.qcdweight;
+  sample_map["QCD"].weightStringSSrelaxed  = category_in_use.qcdweight;
   sample_map["ZTT"].cutStringSSrelaxed += "&&isZTT";
   sample_map["ZL"].cutStringSSrelaxed += "&&!isZTT";
 
@@ -322,12 +353,12 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
     smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
     smpl.second.histSSrelaxed_1d = new TH1D(smpl.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
-    const int nbins_x_2d = sizeof(em_cat_in_use.bins_x_2d)/sizeof(float) - 1;
-    const int nbins_y_2d = sizeof(em_cat_in_use.bins_y_2d)/sizeof(float) - 1;
+    const int nbins_x_2d = sizeof(category_in_use.bins_x_2d)/sizeof(float) - 1;
+    const int nbins_y_2d = sizeof(category_in_use.bins_y_2d)/sizeof(float) - 1;
 
-    smpl.second.hist_2d          = new TH2D(smpl.second.name + "_os_2d"         , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
-    smpl.second.histSS_2d        = new TH2D(smpl.second.name + "_ss_2d"         , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
-    smpl.second.histSSrelaxed_2d = new TH2D(smpl.second.name + "_ss_relaxed_2d" , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
+    smpl.second.hist_2d          = new TH2D(smpl.second.name + "_os_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
+    smpl.second.histSS_2d        = new TH2D(smpl.second.name + "_ss_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
+    smpl.second.histSSrelaxed_2d = new TH2D(smpl.second.name + "_ss_relaxed_2d" , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
 
     TString full_weight_string            = smpl.second.weightString + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
     TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
@@ -377,9 +408,9 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
       sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
       sys.second.histSSrelaxed_1d = new TH1D(sys.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
-      sys.second.hist_2d          = new TH2D(sys.second.name + "_os_2d"         , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
-      sys.second.histSS_2d        = new TH2D(sys.second.name + "_ss_2d"         , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
-      sys.second.histSSrelaxed_2d = new TH2D(sys.second.name + "_ss_relaxed_2d" , "" , nbins_x_2d , &em_cat_in_use.bins_x_2d[0] , nbins_y_2d , &em_cat_in_use.bins_y_2d[0] );
+      sys.second.hist_2d          = new TH2D(sys.second.name + "_os_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
+      sys.second.histSS_2d        = new TH2D(sys.second.name + "_ss_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
+      sys.second.histSSrelaxed_2d = new TH2D(sys.second.name + "_ss_relaxed_2d" , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
 
       if(!plot_2d){
 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.hist_1d->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
@@ -430,8 +461,8 @@ void produce_gof_input(TString variable_1d = "pt_1" , int nbins = 8 , vector<flo
   else         output_directory += "var_2d/";
 
   TFile * fileOut      = new TFile( output_directory + "/" + rootFileName , "RECREATE" );
-  fileOut             -> mkdir(em_cat_in_use.name);
-  fileOut             -> cd(em_cat_in_use.name);
+  fileOut             -> mkdir(category_in_use.name);
+  fileOut             -> cd(category_in_use.name);
 
   for(auto & smpl : sample_map){
     smpl.second.hist_1d -> Write( smpl.second.name );

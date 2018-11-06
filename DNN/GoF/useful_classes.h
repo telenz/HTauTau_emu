@@ -80,12 +80,15 @@ public :
   TString name = "";
   TString suffix = "";
 
+  TString variable_1d = "";
+  TString variable_2d = "";
   TString cutstring   = "";
   TString cutstring_ss = "";
   TString cutstring_ss_relaxed = "";
   TString weight = "";
-  TString variable_1d = "";
-  TString variable_2d = "";
+  TString qcdweight = "1*";
+  TString gg_scale_weight_up   = "";
+  TString gg_scale_weight_down = "";
 
   vector<float> bins_1d;
   vector<float> bins_x_2d;
@@ -93,7 +96,7 @@ public :
 
   vector<Sample> *sampleList;
 
-  Category(TString catName){
+  Category(TString catName = ""){
     name = catName;
   }
 };
