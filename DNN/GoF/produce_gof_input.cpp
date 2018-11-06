@@ -3,12 +3,12 @@
 #include "Unfold.C"
 #include "HttStylesNew.cc"
 
-void produce_gof_input( bool plot_2d = false,
+void produce_gof_input( TString category_name = "em_inclusive" ,
+			bool plot_2d = false,
 		        TString variable_1d = "pt_1" ,
 			int nbins = 8 ,
 			vector<float> range = {0,400} ,
 			TString variable_2d = "pt_2:m_vis" ,  // convention for TH2D is "var_y : var_x"
-			TString category_name = "em_inclusive" ,
 			TString directory = "../../Inputs/NTuples_2016/") {
 
   gROOT->SetBatch(kTRUE);
@@ -448,16 +448,17 @@ void produce_gof_input( bool plot_2d = false,
   // Write all histograms to output file
   cout << endl << endl << "... Writing histograms to output file ... " << endl;
 
-  TString rootFileName = "htt_em.inputs-sm-13TeV-";
+  TString filename = "htt_em.inputs-sm-13TeV-";
+  if(category_in_use.name != "em_inclusive") filename += category_in_use.name + "-";
   variable_1d.ReplaceAll(" ","");
   variable_2d.ReplaceAll(" ","");
-  if(!plot_2d) rootFileName += variable_1d + ".root";
-  else         rootFileName += variable_2d( 0 , variable_2d.First(":") ) + "-" + variable_2d( variable_2d.First(":")+1 , variable_2d.Length() ) + ".root";
+  if(!plot_2d) filename += variable_1d + ".root";
+  else         filename += variable_2d( 0 , variable_2d.First(":") ) + "-" + variable_2d( variable_2d.First(":")+1 , variable_2d.Length() ) + ".root";
   TString output_directory = "output/";
   if(!plot_2d) output_directory += "var_1d/";
   else         output_directory += "var_2d/";
 
-  TFile * fileOut      = new TFile( output_directory + "/" + rootFileName , "RECREATE" );
+  TFile * fileOut      = new TFile( output_directory + "/" + filename , "RECREATE" );
   fileOut             -> mkdir(category_in_use.name);
   fileOut             -> cd(category_in_use.name);
 
@@ -478,5 +479,5 @@ void produce_gof_input( bool plot_2d = false,
   }
   cout << "Bkg together : " << allBkg -> GetSumOfWeights() << endl;
   cout << endl;
-  cout << "output file : " << rootFileName << endl << endl;
+  cout << "output file : " << filename << endl << endl;
 }
