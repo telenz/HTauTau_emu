@@ -3,11 +3,11 @@
 #include "Unfold.C"
 #include "HttStylesNew.cc"
 
-void produce_gof_input( bool plot_2d = false;  
+void produce_gof_input( bool plot_2d = false,
 		        TString variable_1d = "pt_1" ,
 			int nbins = 8 ,
 			vector<float> range = {0,400} ,
-			TString variable_2d = "pt_1:pt_2" ,
+			TString variable_2d = "pt_2:m_vis" ,  // convention for TH2D is "var_y : var_x"
 			TString category_name = "em_inclusive" ,
 			TString directory = "../../Inputs/NTuples_2016/") {
 
@@ -16,9 +16,6 @@ void produce_gof_input( bool plot_2d = false;
 
   bool verbose = false;
   bool apply_btag_veto = false;
-
-  TString variable_2d = "pt_2 : m_vis"; // convention for TH2D is "var_y : var_x"
-
   //************************************************************************************************
   // Define some common weights and cuts
 
