@@ -337,8 +337,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   for(auto & smpl : sample_map){
 
     if( smpl.first == "Data" ){
-      if( !plot_2d ) cout << endl << "Variable = " << smpl.second.variable_1d << endl;
-      else           cout << endl << "Variable = " << smpl.second.variable_2d << endl;
+      if( !plot_2d ) cout << endl << "Variable 1d = " << smpl.second.variable_1d << endl;
+      else           cout << endl << "Variable 2d = " << smpl.second.variable_2d << endl;
     }
 
     cout << "**************************************" << endl;
