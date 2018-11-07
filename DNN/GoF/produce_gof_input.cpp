@@ -295,8 +295,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
     smpl.second.histSSrelaxed_1d = new TH1D(smpl.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
-    const int nbins_x_2d = sizeof(category_in_use.bins_x_2d)/sizeof(float) - 1;
-    const int nbins_y_2d = sizeof(category_in_use.bins_y_2d)/sizeof(float) - 1;
+    const int nbins_x_2d = category_in_use.bins_x_2d.size() - 1;
+    const int nbins_y_2d = category_in_use.bins_y_2d.size() - 1;
 
     smpl.second.hist_2d          = new TH2D(smpl.second.name + "_os_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
     smpl.second.histSS_2d        = new TH2D(smpl.second.name + "_ss_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
