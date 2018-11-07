@@ -172,6 +172,10 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   //************************************************************************************************
   // Define systematic uncertainties
 
+  // Open one tree to test existence of uncertainty shifts
+  TFile *file_ = new TFile( directory + "/" + Data.filename );
+  TTree *tree_ = (TTree*) file_->Get("TauCheck");
+
   for(auto & smpl : sample_map){
 
     if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
@@ -186,34 +190,13 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.uncertainties["eScaleDown"].name += "_CMS_scale_e_13TeVDown";
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("dzeta","dzeta_eUp");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("dzeta","dzeta_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("dzeta","dzeta_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("dzeta","dzeta_eDown");
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("pt_1","pt_Up_1");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_Down_1");
-    if(variable_1d == "pt_1"){
-      smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("pt_1","pt_Up_1");
-      smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("pt_1","pt_Down_1");
-    }
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eUp");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("mTdileptonMET","mTdileptonMET_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("mTdileptonMET","mTdileptonMET_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("pzetavis","pzetavis_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("pzetavis","pzetavis_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("m_vis","m_vis_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("m_vis","m_vis_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("mTtot","mTtot_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("mTtot","mTtot_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("m_sv","m_sv_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("m_sv","m_sv_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("mt_sv","mt_sv_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("mt_sv","mt_sv_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("pt_sv","pt_sv_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("pt_sv","pt_sv_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("eta_sv","eta_sv_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("eta_sv","eta_sv_eDown");
-    smpl.second.uncertainties["eScaleUp"].variable_1d.ReplaceAll("phi_sv","phi_sv_eUp");
-    smpl.second.uncertainties["eScaleDown"].variable_1d.ReplaceAll("phi_sv","phi_sv_eDown");
+    if(tree_ -> GetBranch(variable_1d+"_eUp"))   smpl.second.uncertainties["eScaleUp"].variable_1d = variable_1d + "_eUp";
+    if(tree_ -> GetBranch(variable_1d+"_eDown")) smpl.second.uncertainties["eScaleDown"].variable_1d = variable_1d + "_eDown";
+    else cout << "No systematic shift for electron scale uncertainty for variable " << variable_1d << " available in tree." << endl;
 
     // 2.) JES
     Sample jScaleUp = smpl.second;
@@ -224,32 +207,11 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.uncertainties["jScaleDown"].name += "_CMS_scale_j_13TeVDown";
     smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("dzeta","dzeta_scaleUp");
     smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("dzeta","dzeta_scaleDown");
-    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("dzeta","dzeta_scaleUp");
-    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("dzeta","dzeta_scaleDown");
     smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_scaleUp");
     smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_scaleDown");
-    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("mTdileptonMET","mTdileptonMET_scaleUp");
-    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("mTdileptonMET","mTdileptonMET_scaleDown");
-    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("m_vis","m_vis_scaleUp");
-    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("m_vis","m_vis_scaleDown");
-    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("mTtot","mTtot_scaleUp");
-    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("mTtot","mTtot_scaleDown");
-    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("m_sv","m_sv_scaleUp");
-    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("m_sv","m_sv_scaleDown");
-    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("mt_sv","mt_sv_scaleUp");
-    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("mt_sv","mt_sv_scaleDown");
-    if(variable_1d == "met"){
-      smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("met","met_scaleUp");
-      smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("met","met_scaleDown");
-    }
-    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("metphi","metphi_scaleUp");
-    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("metphi","metphi_scaleDown");
-    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("pzetamiss","pzetamiss_scaleUp");
-    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("pzetamiss","pzetamiss_scaleDown");
-    smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("njets","njets_Up");
-    smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("njets","njets_Down");
-    smpl.second.uncertainties["jScaleUp"].variable_1d.ReplaceAll("njets","njets_Up");
-    smpl.second.uncertainties["jScaleDown"].variable_1d.ReplaceAll("njets","njets_Down");
+    if(tree_ -> GetBranch(variable_1d+"_scaleUp")) smpl.second.uncertainties["jScaleUp"].variable_1d = variable_1d + "_scaleUp";
+    if(tree_ -> GetBranch(variable_1d+"_scaleDown")) smpl.second.uncertainties["jScaleDown"].variable_1d = variable_1d + "_scaleDown";
+    else cout << "No systematic shift for JES uncertainty for variable " << variable_1d << " available in tree." << endl;
 
     // 4.) Unclustered MET scale
     Sample unclMetScaleUp = smpl.second;
@@ -260,28 +222,11 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.uncertainties["unclMetScaleDown"].name += "_CMS_scale_met_unclustered_13TeVDown";
     smpl.second.uncertainties["unclMetScaleUp"].cutString.ReplaceAll("dzeta","dzeta_resoUp");
     smpl.second.uncertainties["unclMetScaleDown"].cutString.ReplaceAll("dzeta","dzeta_resoDown");
-    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("dzeta","dzeta_resoUp");
-    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("dzeta","dzeta_resoDown");
     smpl.second.uncertainties["unclMetScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_resoUp");
     smpl.second.uncertainties["unclMetScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_resoDown");
-    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("mTdileptonMET","mTdileptonMET_resoUp");
-    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("mTdileptonMET","mTdileptonMET_resoDown");
-    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("m_vis","m_vis_resoUp");
-    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("m_vis","m_vis_resoDown");
-    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("mTtot","mTtot_resoUp");
-    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("mTtot","mTtot_resoDown");
-    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("m_sv","m_sv_resoUp");
-    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("m_sv","m_sv_resoDown");
-    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("mt_sv","mt_sv_resoUp");
-    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("mt_sv","mt_sv_resoDown");
-    if(variable_1d == "met"){
-      smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("met","met_resoUp");
-      smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("met","met_resoDown");
-    }
-    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("metphi","metphi_resoUp");
-    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("metphi","metphi_resoDown");
-    smpl.second.uncertainties["unclMetScaleUp"].variable_1d.ReplaceAll("pzetamiss","pzetamiss_resoUp");
-    smpl.second.uncertainties["unclMetScaleDown"].variable_1d.ReplaceAll("pzetamiss","pzetamiss_resoDown");
+    if(tree_ -> GetBranch(variable_1d+"_resoUp")) smpl.second.uncertainties["unclMetScaleUp"].variable_1d = variable_1d + "_resoUp";
+    if(tree_ -> GetBranch(variable_1d+"_resoDown")) smpl.second.uncertainties["unclMetScaleDown"].variable_1d = variable_1d + "_resoDown";
+    else cout << "No systematic shift for JES uncertainty for variable " << variable_1d << " available in tree." << endl;
 
     // Sample-specific uncertainties
     // 5.) TTbar shape
