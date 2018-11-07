@@ -180,6 +180,16 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
     if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
 
+    TString var1 , var1Up , var1Down , var2 , var2Up , var2Down;
+    if(plot_2d){
+      var1     = variable_2d( 0 , variable_2d.First(":") );
+      var2     = variable_2d( variable_2d.First(":")+1 , variable_2d.Length() );
+      var1Up   = var1;
+      var1Down = var1;
+      var2Up   = var2;
+      var2Down = var2;
+    }
+
     // Uncertainties common for all samples
     // 1.) Electron scale
     Sample eScaleUp   = smpl.second;
@@ -194,9 +204,25 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_Down_1");
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eUp");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_eDown");
-    if(tree_ -> GetBranch(variable_1d+"_eUp"))   smpl.second.uncertainties["eScaleUp"].variable_1d = variable_1d + "_eUp";
-    if(tree_ -> GetBranch(variable_1d+"_eDown")) smpl.second.uncertainties["eScaleDown"].variable_1d = variable_1d + "_eDown";
-    else cout << "No systematic shift for electron scale uncertainty for variable " << variable_1d << " available in tree." << endl;
+    if(!plot_2d){
+      if(tree_ -> GetBranch(variable_1d+"_eUp")){
+	smpl.second.uncertainties["eScaleUp"].variable_1d = variable_1d + "_eUp";
+	smpl.second.uncertainties["eScaleDown"].variable_1d = variable_1d + "_eDown";
+      }
+      else cout << "No systematic shift for electron scale uncertainty for variable " << variable_1d << " available in tree." << endl;
+    }
+    else{
+      if(tree_ -> GetBranch(var1Up+"_eUp")){
+	var1Up   = var1 + "_eUp";
+	var1Down = var1 + "_eDown";
+      }
+      if(tree_ -> GetBranch(var2Up+"_eUp")){
+	var2Up   = var2 + "_eUp";
+	var2Down = var2 + "_eDown";
+      }
+      smpl.second.uncertainties["eScaleUp"].variable_2d   = var1Up   + ":" + var2Up;
+      smpl.second.uncertainties["eScaleDown"].variable_2d = var1Down + ":" + var2Down;
+    }
 
     // 2.) JES
     Sample jScaleUp = smpl.second;
@@ -209,9 +235,25 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("dzeta","dzeta_scaleDown");
     smpl.second.uncertainties["jScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_scaleUp");
     smpl.second.uncertainties["jScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_scaleDown");
-    if(tree_ -> GetBranch(variable_1d+"_scaleUp")) smpl.second.uncertainties["jScaleUp"].variable_1d = variable_1d + "_scaleUp";
-    if(tree_ -> GetBranch(variable_1d+"_scaleDown")) smpl.second.uncertainties["jScaleDown"].variable_1d = variable_1d + "_scaleDown";
-    else cout << "No systematic shift for JES uncertainty for variable " << variable_1d << " available in tree." << endl;
+    if(!plot_2d){
+      if(tree_ -> GetBranch(variable_1d+"_scaleUp")){
+	smpl.second.uncertainties["jScaleUp"].variable_1d = variable_1d + "_scaleUp";
+	smpl.second.uncertainties["jScaleDown"].variable_1d = variable_1d + "_scaleDown";
+      }
+      else cout << "No systematic shift for JES uncertainty for variable " << variable_1d << " available in tree." << endl;
+    }
+    else{
+      if(tree_ -> GetBranch(var1Up+"_eUp")){
+	var1Up   = var1 + "_scaleUp";
+	var1Down = var1 + "_scaleDown";
+      }
+      if(tree_ -> GetBranch(var2Up+"_scaleUp")){
+	var2Up   = var2 + "_scaleUp";
+	var2Down = var2 + "_scaleDown";
+      }
+      smpl.second.uncertainties["jScaleUp"].variable_2d   = var1Up   + ":" + var2Up;
+      smpl.second.uncertainties["jScaleDown"].variable_2d = var1Down + ":" + var2Down;
+    }
 
     // 4.) Unclustered MET scale
     Sample unclMetScaleUp = smpl.second;
@@ -224,9 +266,25 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.uncertainties["unclMetScaleDown"].cutString.ReplaceAll("dzeta","dzeta_resoDown");
     smpl.second.uncertainties["unclMetScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_resoUp");
     smpl.second.uncertainties["unclMetScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_resoDown");
-    if(tree_ -> GetBranch(variable_1d+"_resoUp")) smpl.second.uncertainties["unclMetScaleUp"].variable_1d = variable_1d + "_resoUp";
-    if(tree_ -> GetBranch(variable_1d+"_resoDown")) smpl.second.uncertainties["unclMetScaleDown"].variable_1d = variable_1d + "_resoDown";
-    else cout << "No systematic shift for JES uncertainty for variable " << variable_1d << " available in tree." << endl;
+    if(!plot_2d){
+      if(tree_ -> GetBranch(variable_1d+"_resoUp")){
+	smpl.second.uncertainties["unclMetScaleUp"].variable_1d = variable_1d + "_resoUp";
+	smpl.second.uncertainties["unclMetScaleDown"].variable_1d = variable_1d + "_resoDown";
+      }
+      else cout << "No systematic shift for JES uncertainty for variable " << variable_1d << " available in tree." << endl;
+    }
+    else{
+      if(tree_ -> GetBranch(var1Up+"_eUp")){
+	var1Up   = var1 + "_resoUp";
+	var1Down = var1 + "_resoDown";
+      }
+      if(tree_ -> GetBranch(var2Up+"_resoUp")){
+	var2Up   = var2 + "_resoUp";
+	var2Down = var2 + "_resoDown";
+      }
+      smpl.second.uncertainties["unclMetScaleUp"].variable_2d   = var1Up   + ":" + var2Up;
+      smpl.second.uncertainties["unclMetScaleDown"].variable_2d = var1Down + ":" + var2Down;
+    }
 
     // Sample-specific uncertainties
     // 5.) TTbar shape
