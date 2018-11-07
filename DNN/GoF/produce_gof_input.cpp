@@ -182,8 +182,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
     TString var1 , var1Up , var1Down , var2 , var2Up , var2Down;
     if(plot_2d){
-      var1     = variable_2d( 0 , variable_2d.First(":") );
-      var2     = variable_2d( variable_2d.First(":")+1 , variable_2d.Length() );
+      var1     = smpl.second.variable_2d( 0 , smpl.second.variable_2d.First(":") );
+      var2     = smpl.second.variable_2d( smpl.second.variable_2d.First(":")+1 , smpl.second.variable_2d.Length() );
       var1Up   = var1;
       var1Down = var1;
       var2Up   = var2;
@@ -452,11 +452,12 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   cout << endl << endl << "... Writing histograms to output file ... " << endl;
 
   TString filename = "htt_em.inputs-sm-13TeV-";
-  if(category_in_use.name != "em_inclusive") filename += category_in_use.name + "-";
+  if(category_in_use.name != "em_inclusive") filename += category_in_use.name;
   variable_1d.ReplaceAll(" ","");
-  variable_2d.ReplaceAll(" ","");
-  if(!plot_2d) filename += variable_1d + ".root";
-  else         filename += variable_2d( 0 , variable_2d.First(":") ) + "-" + variable_2d( variable_2d.First(":")+1 , variable_2d.Length() ) + ".root";
+  category_in_use.variable_2d.ReplaceAll(" ","");
+  if(!plot_2d)                                               filename += "-" + variable_1d + ".root";
+  else if(plot_2d && category_in_use.name == "em_inclusive") filename += "-" + category_in_use.variable_2d( 0 , category_in_use.variable_2d.First(":") ) + "-" + category_in_use.variable_2d( category_in_use.variable_2d.First(":")+1 , category_in_use.variable_2d.Length() ) + ".root";
+  else filename += ".root";
   TString output_directory = "output/";
   if(!plot_2d) output_directory += "var_1d/";
   else         output_directory += "var_2d/";
