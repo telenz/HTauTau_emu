@@ -16,13 +16,17 @@ double getNEventsProcessed(TString filename)
 {
   TFile * file = new TFile(filename);
   TH1D * histWeightsH = (TH1D*)file->Get("histWeightsH");
+  if(!histWeightsH){
+    cout << endl << endl << "Histogram histWeightsH doesn't exist in the file "<< filename <<". Quit program." << endl << endl;
+    exit(-1);
+  }
   double nevents = histWeightsH->GetSumOfWeights();
   file -> Close();
   delete file;
   return nevents;
 }
 
-void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples"){
+void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/"){
 
   // Define the subsamples that belong to a certain proccess
   vector<TString> MuonEG_Run2016  = { "MuonEG_Run2016B" , "MuonEG_Run2016C" , "MuonEG_Run2016D" , "MuonEG_Run2016E" , "MuonEG_Run2016F" , "MuonEG_Run2016G" , "MuonEG_Run2016H" };
@@ -107,7 +111,7 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
   double neventsDY2Jets = getNEventsProcessed(inputDir+"/DY2JetsToLL_M-50.root");
   double neventsDY3Jets = getNEventsProcessed(inputDir+"/DY3JetsToLL_M-50.root");
   double neventsDY4Jets = getNEventsProcessed(inputDir+"/DY4JetsToLL_M-50.root");
-  
+
   // Loop over all samples
   for (auto const& sample : samples_map){
 
