@@ -43,15 +43,15 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
   TString version = "v1";
   TString channel = "em";
   map< TString , vector<TString> > samples_map = {
-    { channel + "_NOMINAL_ntuple_" + "MuonEG_Run2016" , MuonEG_Run2016 },
-    { channel + "_NOMINAL_ntuple_" + "DYJets"         , DYJets },
-    { channel + "_NOMINAL_ntuple_" + "WJets"          , WJets },
-    { channel + "_NOMINAL_ntuple_" + "EWKZ"           , EWKZ },
-    { channel + "_NOMINAL_ntuple_" + "TTbar"          , TTbar },
-    { channel + "_NOMINAL_ntuple_" + "SingleTop"      , SingleTop },
-    { channel + "_NOMINAL_ntuple_" + "Diboson"        , Diboson },
-    { channel + "_NOMINAL_ntuple_" + "ggH"            , GluGluHToTauTau },
-    { channel + "_NOMINAL_ntuple_" + "VBFH"           , VBFHToTauTau }
+    { channel + "-NOMINAL_ntuple_" + "MuonEG_Run2016" , MuonEG_Run2016 },
+    { channel + "-NOMINAL_ntuple_" + "DYJets"         , DYJets },
+    { channel + "-NOMINAL_ntuple_" + "WJets"          , WJets },
+    { channel + "-NOMINAL_ntuple_" + "EWKZ"           , EWKZ },
+    { channel + "-NOMINAL_ntuple_" + "TTbar"          , TTbar },
+    { channel + "-NOMINAL_ntuple_" + "SingleTop"      , SingleTop },
+    { channel + "-NOMINAL_ntuple_" + "Diboson"        , Diboson },
+    { channel + "-NOMINAL_ntuple_" + "ggH"            , GluGluHToTauTau },
+    { channel + "-NOMINAL_ntuple_" + "VBFH"           , VBFHToTauTau }
   };
 
   // Cross-section map (taken from AN2016_355_v10 with minor unrelevant deviations - everything was checked)
