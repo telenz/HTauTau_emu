@@ -147,7 +147,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
   // Define output file
   TString filename   = "htt_em.inputs-sm-13TeV-ML.root";
-  TString output_dir = "output_datacards/2016/";
+  TString output_dir = "output/2016/";
   TFile * file_out   = new TFile( output_dir + "/" + filename , "RECREATE" );
 
   // Add here also a loop over the categories
