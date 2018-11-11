@@ -3,7 +3,7 @@
 #include "Unfold.C"
 #include "HttStylesNew.cc"
 
-void make_datacards( TString variable_1d = "predicted_prob" ,
+void make_datacard( TString variable_1d = "predicted_prob" ,
 		     int nbins = 8 ,
 		     vector<float> range = {0,1} ,
 		     TString directory = "../mlFramework/predictions/") {
