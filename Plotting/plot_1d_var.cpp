@@ -153,7 +153,9 @@ void plot_1d_var(
    canv1     -> Update();
 
    // Draw legend
-   TLegend *leg = new TLegend(0.65,0.45,0.9,0.9);
+   TLegend *leg = 0;
+   if( data.hist->GetMaximumBin() <= data.hist->GetNbinsX()/2.) leg = new TLegend(0.65,0.45,0.9,0.9);
+   else leg = new TLegend(0.2,0.45,0.45,0.9);
    SetLegendStyle(leg);
    vector<TString> already_added_to_legend;
    for (unsigned int i = sample_vec.size(); i-- > 0; ){
