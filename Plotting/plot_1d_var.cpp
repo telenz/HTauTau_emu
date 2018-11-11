@@ -156,15 +156,13 @@ void plot_1d_var(
    TLegend *leg = new TLegend(0.65,0.45,0.9,0.9);
    SetLegendStyle(leg);
    vector<TString> already_added_to_legend;
-   for(auto *smpl : sample_vec){
-     
-     if( find(already_added_to_legend.begin() , already_added_to_legend.end()  , smpl->name) != already_added_to_legend.end() ) continue;
+   for (unsigned int i = sample_vec.size(); i-- > 0; ){
+     if( find(already_added_to_legend.begin() , already_added_to_legend.end()  , sample_vec[i]->name) != already_added_to_legend.end() ) continue;
 
-     if(smpl->isData)        leg->AddEntry( smpl->hist , smpl->legend_entry , "lp");
-     else if(smpl->isSignal) leg->AddEntry( smpl->hist , smpl->legend_entry , "l");
-     else leg->AddEntry( smpl->hist , smpl->legend_entry , "f");
-     already_added_to_legend.push_back( smpl->name );
-
+     if(sample_vec[i]->isData)        leg->AddEntry( sample_vec[i]->hist , sample_vec[i]->legend_entry , "lp");
+     else if(sample_vec[i]->isSignal) leg->AddEntry( sample_vec[i]->hist , sample_vec[i]->legend_entry , "l");
+     else leg->AddEntry( sample_vec[i]->hist , sample_vec[i]->legend_entry , "f");
+     already_added_to_legend.push_back( sample_vec[i]->name );
    }
    leg->Draw();
    writeExtraText = false;
