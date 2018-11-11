@@ -1,0 +1,12 @@
+*~
+*.d
+*.so
+*.pcm
+*.txt
+*.root
+*.in
+*.out
+*.cxx
+*.o
+*maincpp
+*linkdef.h
