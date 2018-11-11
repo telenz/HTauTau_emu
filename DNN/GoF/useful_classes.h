@@ -79,6 +79,7 @@ class Category {
 public :   
   TString name = "";
   TString suffix = "";
+  unsigned int class_nr = 0;
 
   TString variable_1d = "";
   TString variable_2d = "";
