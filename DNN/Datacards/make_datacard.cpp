@@ -1,7 +1,6 @@
-#include "useful_classes.h"
+#include "../GoF/useful_classes.h"
 #include "TROOT.h"
-#include "Unfold.C"
-#include "HttStylesNew.cc"
+#include "../GoF/HttStylesNew.cc"
 
 void make_datacard( TString variable_1d = "predicted_prob" ,
 		     int nbins = 8 ,
