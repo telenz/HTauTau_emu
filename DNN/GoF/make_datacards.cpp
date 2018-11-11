@@ -11,7 +11,7 @@ void make_datacards( TString variable_1d = "predicted_prob" ,
   gROOT->SetBatch(kTRUE);
   SetStyle();
 
-  bool verbose = true;
+  bool verbose = false;
   bool apply_btag_veto = false;
   //************************************************************************************************
   // Define some common weights and cuts
@@ -74,9 +74,9 @@ void make_datacards( TString variable_1d = "predicted_prob" ,
 					     { em_ss.name      , em_ss },
 					     { em_tt.name      , em_tt },
 					     { em_misc.name    , em_misc },
-					     { em_tt.name      , em_st },
-					     { em_tt.name      , em_qqh },
-					     { em_tt.name      , em_ggh }};
+					     { em_st.name      , em_st },
+					     { em_qqh.name     , em_qqh },
+					     { em_ggh.name     , em_ggh }};
 
   //************************************************************************************************
   // Define samples
@@ -113,9 +113,9 @@ void make_datacards( TString variable_1d = "predicted_prob" ,
   for(auto & smpl : sample_map){
     smpl.second.cutString          = "q_1*q_2<0" + em_ztt.cutstring;
     smpl.second.weightString       = weight;
-    smpl.second.cutStringSS        = "q_1*q_2>0.5" + em_ztt.cutstring;
+    smpl.second.cutStringSS        = "q_1*q_2>0" + em_ztt.cutstring;
     smpl.second.weightStringSS     = weight + em_ztt.qcdweight;
-    smpl.second.cutStringSSrelaxed = "q_1*q_2>0.5" + em_ztt.cutstring_ss;
+    smpl.second.cutStringSSrelaxed = "q_1*q_2>0" + em_ztt.cutstring_ss;
     smpl.second.weightStringSSrelaxed = weight + em_ztt.qcdweight;
     smpl.second.variable_1d = em_ztt.variable_1d;
   }
@@ -125,6 +125,7 @@ void make_datacards( TString variable_1d = "predicted_prob" ,
   sample_map["QCD"].weightString  = "1*";
   sample_map["ZTT"].cutString += "&&isZTT";
   sample_map["ZL"].cutString += "&&!isZTT";
+  //sample_map["QCD"].cutString  = "q_1*q_2>0" + em_ztt.cutstring;
 
   sample_map["Data"].weightStringSS = em_ztt.qcdweight;
   sample_map["QCD"].weightStringSS  = em_ztt.qcdweight;
@@ -153,7 +154,7 @@ void make_datacards( TString variable_1d = "predicted_prob" ,
   for(auto & cat : category_map){
 
     cout << "**************************************" << endl;
-    cout << "Category " << cat.second.name << endl;
+    cout << "Category " << cat.second.name << " : " << cat.second.class_nr << endl << endl;
     file_out -> mkdir(cat.second.name);
 
     for(auto & smpl : sample_map){
@@ -185,7 +186,7 @@ void make_datacards( TString variable_1d = "predicted_prob" ,
 
       // Write to file
       file_out -> cd(cat.second.name);
-      smpl.second.hist_1d -> Write( smpl.second.name );
+      if( smpl.second.name != "QCD") smpl.second.hist_1d -> Write( smpl.second.name );
 
       // Loop over systematic uncertainties
       // for(auto &sys : smpl.second.uncertainties){
@@ -211,20 +212,41 @@ void make_datacards( TString variable_1d = "predicted_prob" ,
 
       // 	sys.second.hist_1d -> Write( sys.second.name );  
       // }
-    } 
-  }
+
+    }// end of loop over samples
+    //***********************************************************************************************
+    // Determine QCD background
+
+    // 1.) Take the shape from ss relaxed region
+    for(auto & smpl : sample_map){
+      if( smpl.first == "ggH125"  ||
+    	  smpl.first == "qqH125"  ||
+    	  smpl.first == "Data"    ||
+    	  smpl.first == "QCD"      ) continue;
+      sample_map["QCD"].histSS_1d        -> Add( smpl.second.histSS_1d , -1 );
+      sample_map["QCD"].histSSrelaxed_1d -> Add( smpl.second.histSSrelaxed_1d , -1 );
+    }
+    sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSSrelaxed_1d -> Clone();
+
+    // 2.) Calculate normalization via ss/ss_relaxed
+    double qcd_norm = sample_map["QCD"].histSS_1d->GetSumOfWeights()/sample_map["QCD"].histSSrelaxed_1d->GetSumOfWeights();
+    cout << endl << "qcd_norm = " << qcd_norm << endl << endl;
+    sample_map["QCD"].hist_1d -> Scale(qcd_norm);
+    file_out -> cd(cat.second.name);
+    sample_map["QCD"].hist_1d -> Write( sample_map["QCD"].name );
+    //***********************************************************************************************
+    // Print the final sum of weights of the nominal selection
+    cout << endl << "... Final histogram content : "<< endl;
+    TH1D * allBkg = (TH1D*) sample_map["TT"].hist_1d -> Clone();
+    for(auto & smpl : sample_map) {
+      cout << smpl.second.name << " : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
+      // Add all background
+      if( smpl.first == "Data" || smpl.first == "TT" ) continue;
+      allBkg->Add(smpl.second.hist_1d);
+    }
+    cout << "Bkg together : " << allBkg -> GetSumOfWeights() << endl;
+    cout << endl;
+  } // end of loop over categories
   file_out -> Close();
   //************************************************************************************************
-  // Print the final sum of weights of the nominal selection
-  cout << endl << "... Final histogram content : "<< endl;
-  TH1D * allBkg = (TH1D*) sample_map["QCD"].hist_1d -> Clone();
-  for(auto & smpl : sample_map) {
-    cout << smpl.second.name << " : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
-    // Add all background
-    if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
-    allBkg->Add(smpl.second.hist_1d);
-  }
-  cout << "Bkg together : " << allBkg -> GetSumOfWeights() << endl;
-  cout << endl;
-  cout << "output file : " << filename << endl << endl;
 }
