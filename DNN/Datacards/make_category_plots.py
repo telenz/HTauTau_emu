@@ -1,11 +1,13 @@
 import os
 import ROOT as R
 
-category_list = ["em_tt" , "em_ztt"]
+#category_list = ["em_tt" , "em_ztt" , "em_ss" , "em_st" , "em_misc" , "em_qqh" , "em_ggh" , "em_vv"]
+
+category_list = ["em_tt" , "em_ztt" ]
 
 
-cmd = "root -l -b -q make_datacards.cpp+"
-os.system(cmd)
+cmd = "root -l -b -q make_datacard.cpp+"
+#os.system(cmd)
 
 for category in category_list :
 
