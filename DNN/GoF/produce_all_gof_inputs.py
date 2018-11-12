@@ -46,9 +46,13 @@ variable_list = [ "m_sv",
                   "bpt_1",
                   "beta_1",
                   "metphi",
+                  "d0_1_cal",
+                  "dZ_1_cal",
+                  "d0_2_cal",
+                  "dZ_2_cal"
                   ]
 
-#variable_list = [ "bpt_1" ]
+#variable_list = [ "d0_2_cal" ]
 
 
 #axis_range = { "m_sv"  : [160 , 0  , 4000],
@@ -143,6 +147,10 @@ axis_range = { "m_sv"  : [12 , 0  , 4000],
                "bpt_1"      : [12 , 0, 550],
                "beta_1"     : [12 , -2.5,2.5],
                "metphi"     : [12 , -R.TMath.Pi() , R.TMath.Pi()],
+               "d0_1_cal"   : [12 , -0.05 , +0.05],
+               "dZ_1_cal"   : [12 , -0.20 , +0.20],
+               "d0_2_cal"   : [12 , -0.05 , +0.05],
+               "dZ_2_cal"   : [12 , -0.20 , +0.20],
                }
 
 # Execute produce_gof_inputs.cpp for all variables
