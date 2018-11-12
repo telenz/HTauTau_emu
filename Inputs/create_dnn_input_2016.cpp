@@ -43,15 +43,15 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
   TString version = "v1";
   TString channel = "em";
   map< TString , vector<TString> > samples_map = {
-    { channel + "-NOMINAL_ntuple_" + "MuonEG_Run2016" , MuonEG_Run2016 },
-    { channel + "-NOMINAL_ntuple_" + "DYJets"         , DYJets },
-    { channel + "-NOMINAL_ntuple_" + "WJets"          , WJets },
-    { channel + "-NOMINAL_ntuple_" + "EWKZ"           , EWKZ },
-    { channel + "-NOMINAL_ntuple_" + "TTbar"          , TTbar },
-    { channel + "-NOMINAL_ntuple_" + "SingleTop"      , SingleTop },
-    { channel + "-NOMINAL_ntuple_" + "Diboson"        , Diboson },
-    { channel + "-NOMINAL_ntuple_" + "ggH"            , GluGluHToTauTau },
-    { channel + "-NOMINAL_ntuple_" + "VBFH"           , VBFHToTauTau }
+    { "NOMINAL_ntuple_MuonEG_Run2016_" + channel , MuonEG_Run2016 },
+    { "NOMINAL_ntuple_DYJets_"         + channel , DYJets },
+    { "NOMINAL_ntuple_WJets_"          + channel , WJets },
+    { "NOMINAL_ntuple_EWKZ_"           + channel , EWKZ },
+    { "NOMINAL_ntuple_TTbar_"          + channel , TTbar },
+    { "NOMINAL_ntuple_SingleTop_"      + channel , SingleTop },
+    { "NOMINAL_ntuple_Diboson_"        + channel , Diboson },
+    { "NOMINAL_ntuple_ggH_"            + channel , GluGluHToTauTau },
+    { "NOMINAL_ntuple_VBFH_"           + channel , VBFHToTauTau }
   };
 
   // Cross-section map (taken from AN2016_355_v10 with minor unrelevant deviations - everything was checked)
@@ -117,7 +117,7 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
 
     cout << endl << sample.first << "  :  " << endl ;
 
-    TFile *outFile = new TFile("NTuples_2016/" + sample.first + ".root","RECREATE");
+    TFile *outFile = new TFile("NTuples_2016_NewSysNaming/" + sample.first + ".root","RECREATE");
     TTree *outTree = new TTree("TauCheck", "tree created as DNN input");
     bool firstTree = true;
     TList* treeList = new TList();
