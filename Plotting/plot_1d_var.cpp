@@ -51,6 +51,8 @@ void plot_1d_var(
    SampleForPlotting w("EWK",{"W"});
    SampleForPlotting tt("TT",{"TT"});
    SampleForPlotting qcd("QCD",{"QCD"});
+   SampleForPlotting qqh("qqH",{"qqH125"});
+   SampleForPlotting ggh("ggH",{"ggH125"});
 
    ztt.color = "#FFCC66";
    zl.color  = "#DE5A6A";
@@ -58,6 +60,8 @@ void plot_1d_var(
    w.color   = "#DE5A6A";
    tt.color  = "#9999CC";
    qcd.color = "#FFCCFF";
+   ggh.color = "#05B0BB"; //blue:"#03A8F5";
+   qqh.color = "#BB051E";
 
    ztt.legend_entry  = "Z#rightarrow #tau#tau";
    zl.legend_entry   = "electroweak";
@@ -66,11 +70,14 @@ void plot_1d_var(
    tt.legend_entry   = "t#bar{t}";
    qcd.legend_entry  = "QCD";
    data.legend_entry = "Data";
+   qqh.legend_entry  = "qqH";
+   ggh.legend_entry  = "ggH";
  
    data.isData = true;
+   qqh.isSignal = true;
+   ggh.isSignal = true;
 
-   vector<SampleForPlotting*> sample_vec = { &qcd , &zl , &vv , &w , &tt , &ztt , &data };
-
+   vector<SampleForPlotting*> sample_vec = { &qqh , &ggh , &qcd , &zl , &vv , &w , &tt , &ztt , &data  };
 
    TH1D* hist = 0;
 
@@ -87,11 +94,13 @@ void plot_1d_var(
        else                      smpl->hist -> Add(hist);
      }
      if(smpl->isData) continue;
+     if(smpl->isSignal){
+       smpl->hist->SetLineColor(TColor::GetColor(smpl->color));
+       continue;
+     }
      InitHist(smpl->hist,TColor::GetColor(smpl->color));
      smpl->hist -> SetLineColor(TColor::GetColor(smpl->color));
    }
-   
-   // ModTDRStyle();
 
    // Fill all background to a THStack
    THStack *stack = new THStack("Background","");   
@@ -150,6 +159,8 @@ void plot_1d_var(
    stack     -> Draw("same hist");
    data.hist -> Draw("e1 same");
    bkgdErr   -> Draw("e2same");
+   ggh.hist  -> Draw("hist same");
+   qqh.hist  -> Draw("hist same");
    canv1     -> Update();
 
    // Draw legend
