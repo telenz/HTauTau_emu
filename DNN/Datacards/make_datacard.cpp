@@ -5,7 +5,7 @@
 void make_datacard( TString variable_1d = "predicted_prob" ,
 		     int nbins = 8 ,
 		     vector<float> range = {0,1} ,
-		     TString directory = "../mlFramework/predictions/") {
+		     TString directory = "/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/FreshCheckout/mlFramework/predictions/") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
@@ -141,6 +141,107 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   sample_map["ZTT"].zptmassweight = "zptmassweight*";
   sample_map["ZL"].zptmassweight = "zptmassweight*";
   //************************************************************************************************
+  // Define systematic uncertainties
+
+  // Open one tree to test existence of uncertainty shifts
+  TFile *file_ = new TFile( directory + "/" + Data.filename );
+  TTree *tree_ = (TTree*) file_->Get("TauCheck");
+
+  for(auto & smpl : sample_map){
+
+    if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
+
+    // Uncertainties common for all samples
+    // 1.) Electron scale
+    Sample eScaleUp   = smpl.second;
+    Sample eScaleDown = smpl.second;
+    smpl.second.uncertainties.insert( make_pair("eScaleUp"   , eScaleUp) );
+    smpl.second.uncertainties.insert( make_pair("eScaleDown" , eScaleDown) );
+    smpl.second.uncertainties["eScaleUp"].name += "_CMS_scale_e_13TeVUp";
+    smpl.second.uncertainties["eScaleDown"].name += "_CMS_scale_e_13TeVDown";
+    smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("dzeta","dzeta_escaleUp");
+    smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("dzeta","dzeta_escaleDown");
+    smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("pt_1","pt_1_escaleUp");
+    smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_1_escaleDown");
+    // smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_escaleUp");
+    // smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_escaleDown");
+    smpl.second.uncertainties["eScaleUp"].filename.ReplaceAll("NOMINAL","_escaleUp");
+    smpl.second.uncertainties["eScaleDown"].filename.ReplaceAll("NOMINAL","_escaleDown");
+
+    // 2.) JES
+    Sample jesUp = smpl.second;
+    Sample jesDown = smpl.second;
+    smpl.second.uncertainties.insert( make_pair("jesUp"   , jesUp) );
+    smpl.second.uncertainties.insert( make_pair("jesDown" , jesDown) );
+    smpl.second.uncertainties["jesUp"].name   += "_CMS_scale_j_13TeVUp";
+    smpl.second.uncertainties["jesDown"].name += "_CMS_scale_j_13TeVDown";
+    smpl.second.uncertainties["jesUp"].cutString.ReplaceAll("dzeta","dzeta_jesUp");
+    smpl.second.uncertainties["jesDown"].cutString.ReplaceAll("dzeta","dzeta_jesDown");
+    // smpl.second.uncertainties["jesUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_jesUp");
+    // smpl.second.uncertainties["jesDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_jesDown");
+    smpl.second.uncertainties["jesUp"].filename.ReplaceAll("NOMINAL","_jesUp");
+    smpl.second.uncertainties["jesDown"].filename.ReplaceAll("NOMINAL","_jesDown");
+
+    // 3.) Unclustered MET scale
+    Sample unclMetUp = smpl.second;
+    Sample unclMetDown = smpl.second;
+    smpl.second.uncertainties.insert( make_pair("unclMetUp"   , unclMetUp) );
+    smpl.second.uncertainties.insert( make_pair("unclMetDown" , unclMetDown) );
+    smpl.second.uncertainties["unclMetUp"].name   += "_CMS_scale_met_unclustered_13TeVUp";
+    smpl.second.uncertainties["unclMetDown"].name += "_CMS_scale_met_unclustered_13TeVDown";
+    smpl.second.uncertainties["unclMetUp"].cutString.ReplaceAll("dzeta","dzeta_unclMetUp");
+    smpl.second.uncertainties["unclMetDown"].cutString.ReplaceAll("dzeta","dzeta_unclMetDown");
+    // smpl.second.uncertainties["unclMetUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_unclMetUp");
+    // smpl.second.uncertainties["unclMetDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_unclMetDown");
+    smpl.second.uncertainties["unclMetUp"].filename.ReplaceAll("NOMINAL","_unclMetUp");
+    smpl.second.uncertainties["unclMetDown"].filename.ReplaceAll("NOMINAL","_unclMetDown");
+
+    // Sample-specific uncertainties
+    // 4.) TTbar shape
+    if(smpl.second.name == "TT"){
+      Sample ttbarShapeUp = smpl.second;
+      Sample ttbarShapeDown = smpl.second;
+      smpl.second.uncertainties.insert( make_pair("ttbarShapeUp"   , ttbarShapeUp) );
+      smpl.second.uncertainties.insert( make_pair("ttbarShapeDown" , ttbarShapeDown) );
+      smpl.second.uncertainties["ttbarShapeUp"].name   += "_CMS_htt_ttbarShape_13TeVUp";
+      smpl.second.uncertainties["ttbarShapeDown"].name += "_CMS_htt_ttbarShape_13TeVDown";
+      smpl.second.uncertainties["ttbarShapeUp"].topweight = "topptweight*topptweight*";
+      smpl.second.uncertainties["ttbarShapeDown"].topweight = "";
+    }
+
+    // 5.) DY shape (EWKZ sample should be added here)
+    if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" ){
+      Sample dyShapeUp = smpl.second;
+      Sample dyShapeDown = smpl.second;
+      smpl.second.uncertainties.insert( make_pair("dyShapeUp"   , dyShapeUp) );
+      smpl.second.uncertainties.insert( make_pair("dyShapeDown" , dyShapeDown) );
+      smpl.second.uncertainties["dyShapeUp"].name   += "_CMS_htt_dyShape_13TeVUp";
+      smpl.second.uncertainties["dyShapeDown"].name += "_CMS_htt_dyShape_13TeVDown";
+      smpl.second.uncertainties["dyShapeUp"].zptmassweight="(1.0+1.1*(zptmassweight-1))*";
+      smpl.second.uncertainties["dyShapeDown"].zptmassweight="(1.0+0.9*(zptmassweight-1))*";
+    }
+
+  //   // 6.) ggScale
+  //   if(smpl.second.name == "ggH125"){
+  //     Sample ggScaleUp = smpl.second;
+  //     Sample ggScaleDown = smpl.second;
+  //     smpl.second.uncertainties.insert( make_pair("ggScaleUp"   , ggScaleUp) );
+  //     smpl.second.uncertainties.insert( make_pair("ggScaleDown" , ggScaleDown) );
+  //     smpl.second.uncertainties["ggScaleUp"].name   += "_CMS_scale_gg_13TeVUp";
+  //     smpl.second.uncertainties["ggScaleDown"].name += "_CMS_scale_gg_13TeVDown";
+  //     smpl.second.uncertainties["ggScaleUp"].ggscaleweight=category_in_use.gg_scale_weight_up;
+  //     smpl.second.uncertainties["ggScaleDown"].ggscaleweight=category_in_use.gg_scale_weight_down;
+  //   }
+  }
+
+  if(verbose){
+    cout << endl << endl << "... Uncertainties of samples ... " << endl << endl ;
+    for(auto & smpl : sample_map){
+      cout << smpl.second.name << " : " <<endl;
+      for(auto& unc : smpl.second.uncertainties) cout<<"  - "<<unc.first<<" : "<<unc.second.name<<endl;
+    }
+  }
+  //************************************************************************************************
   // Fill histograms
   cout << endl << endl << "... Drawing ... " << endl;
 
@@ -188,30 +289,34 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
       if( smpl.second.name != "QCD") smpl.second.hist_1d -> Write( smpl.second.name );
 
       // Loop over systematic uncertainties
-      // for(auto &sys : smpl.second.uncertainties){
+      for(auto &sys : smpl.second.uncertainties){
 
-      // 	full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
-      // 	full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
-      // 	full_weight_string_ss_relaxed = sys.second.weightStringSSrelaxed + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
-      // 	if(verbose){
-      // 	  cout << "weight string        " << " : " << full_weight_string << endl;
-      // 	  cout << "weight string ss     " << " : " << full_weight_string_ss << endl;
-      // 	  cout << "weight string ss rel." << " : " << full_weight_string_ss_relaxed << endl;
-      // 	  cout << "cut string           " << " : " << sys.second.cutString << endl;
-      // 	  cout << "cut string ss        " << " : " << sys.second.cutStringSS << endl;
-      // 	  cout << "cut string ss rel.   " << " : " << sys.second.cutStringSSrelaxed << endl << endl;
-      // 	}
-      // 	sys.second.hist_1d          = new TH1D(sys.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
-      // 	sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
-      // 	sys.second.histSSrelaxed_1d = new TH1D(sys.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
+	file = new TFile( directory + "/" + sys.second.filename , "READ");
+	tree = (TTree*) file->Get("TauCheck");
 
-      // 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.hist_1d->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
-      // 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSS_1d->GetName() , full_weight_string_ss + "(" + sys.second.cutStringSS + ")" );
-      // 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSSrelaxed_1d->GetName() , full_weight_string_ss_relaxed + "(" + sys.second.cutStringSSrelaxed + ")" );
+	full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
+	full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
+	full_weight_string_ss_relaxed = sys.second.weightStringSSrelaxed + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
+	if(verbose){
+	  cout << "weight string        " << " : " << full_weight_string << endl;
+	  cout << "weight string ss     " << " : " << full_weight_string_ss << endl;
+	  cout << "weight string ss rel." << " : " << full_weight_string_ss_relaxed << endl;
+	  cout << "cut string           " << " : " << sys.second.cutString << endl;
+	  cout << "cut string ss        " << " : " << sys.second.cutStringSS << endl;
+	  cout << "cut string ss rel.   " << " : " << sys.second.cutStringSSrelaxed << endl << endl;
+	}
+	sys.second.hist_1d          = new TH1D(sys.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
+	sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
+	sys.second.histSSrelaxed_1d = new TH1D(sys.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
-      // 	sys.second.hist_1d -> Write( sys.second.name );  
-      // }
+	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.hist_1d->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
+	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSS_1d->GetName() , full_weight_string_ss + "(" + sys.second.cutStringSS + ")" );
+	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSSrelaxed_1d->GetName() , full_weight_string_ss_relaxed + "(" + sys.second.cutStringSSrelaxed + ")" );
 
+	// Write to file
+	file_out -> cd(cat.second.name);
+	sys.second.hist_1d -> Write( sys.second.name );
+      }
     }// end of loop over samples
     //***********************************************************************************************
     // Determine QCD background
