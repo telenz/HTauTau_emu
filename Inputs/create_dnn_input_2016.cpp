@@ -43,7 +43,7 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
   TString version = "v1";
   TString channel = "em";
   map< TString , vector<TString> > samples_map = {
-    { "NOMINAL_ntuple_MuonEG_Run2016_" + channel , MuonEG_Run2016 },
+    { "NOMINAL_ntuple_MuonEG_"         + channel , MuonEG_Run2016 },
     { "NOMINAL_ntuple_DYJets_"         + channel , DYJets },
     { "NOMINAL_ntuple_WJets_"          + channel , WJets },
     { "NOMINAL_ntuple_EWKZ_"           + channel , EWKZ },
