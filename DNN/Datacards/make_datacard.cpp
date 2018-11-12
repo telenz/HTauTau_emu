@@ -4,7 +4,7 @@
 
 void make_datacard( TString variable_1d = "predicted_prob" ,
 		     int nbins = 8 ,
-		     vector<float> range = {0,1} ,
+		     vector<float> range = {0.2,1} ,
 		     TString directory = "/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/FreshCheckout/mlFramework/predictions/") {
 
   gROOT->SetBatch(kTRUE);
