@@ -9,7 +9,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 			int nbins = 8 ,
 			vector<float> range = {0,400} ,
 			TString variable_2d = "pt_2:m_vis" ,  // convention for TH2D is "var_y : var_x"
-			TString directory = "../../Inputs/NTuples_2016/") {
+			TString directory = "../../Inputs/NTuples_2016_NewSysNaming/") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
@@ -104,17 +104,17 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   //************************************************************************************************
   // Define samples
 
-  Sample Data( "data_obs" , "MuonEG_Run2016_dnn_em_v1.root" );
-  Sample ZTT(  "ZTT"      , "DYJets_dnn_em_v1.root" );
-  Sample ZL(   "ZL"       , "DYJets_dnn_em_v1.root" );
-  Sample EWKZ( "EWKZ"     , "EWKZ_dnn_em_v1.root" );
-  Sample W(    "W"        , "WJets_dnn_em_v1.root" );
-  Sample TT(   "TT"       , "TTbar_dnn_em_v1.root" );
-  Sample VV(   "VV"       , "Diboson_dnn_em_v1.root" );
-  Sample ST(   "ST"       , "SingleTop_dnn_em_v1.root" );
-  Sample QCD(  "QCD"      , "MuonEG_Run2016_dnn_em_v1.root" );
-  Sample ggH(  "ggH125"   , "ggH_dnn_em_v1.root" );
-  Sample qqH(  "qqH125"   , "VBFH_dnn_em_v1.root" );
+  Sample Data( "data_obs" , "NOMINAL_ntuple_MuonEG_em.root" );
+  Sample ZTT(  "ZTT"      , "NOMINAL_ntuple_DYJets_em.root" );
+  Sample ZL(   "ZL"       , "NOMINAL_ntuple_DYJets_em.root" );
+  Sample EWKZ( "EWKZ"     , "NOMINAL_ntuple_EWKZ_em.root" );
+  Sample W(    "W"        , "NOMINAL_ntuple_WJets_em.root" );
+  Sample TT(   "TT"       , "NOMINAL_ntuple_TTbar_em.root" );
+  Sample VV(   "VV"       , "NOMINAL_ntuple_Diboson_em.root" );
+  Sample ST(   "ST"       , "NOMINAL_ntuple_SingleTop_em.root" );
+  Sample QCD(  "QCD"      , "NOMINAL_ntuple_MuonEG_em.root" );
+  Sample ggH(  "ggH125"   , "NOMINAL_ntuple_ggH_em.root" );
+  Sample qqH(  "qqH125"   , "NOMINAL_ntuple_VBFH_em.root" );
 
   // Define pre-defined norms
   // ZTT.norm = "1.02*";
@@ -201,7 +201,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("dzeta","dzeta_escaleUp");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("dzeta","dzeta_escaleDown");
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("pt_1","pt_1_escaleUp");
-    smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_1_scaleDown");
+    smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_1_escaleDown");
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_escaleUp");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_escaleDown");
     if(!plot_2d){
@@ -451,7 +451,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   // Write all histograms to output file
   cout << endl << endl << "... Writing histograms to output file ... " << endl;
 
-  TString filename = "htt_em.inputs-sm-13TeV-";
+  TString filename = "htt_em.inputs-sm-13TeV";
   if(category_in_use.name != "em_inclusive") filename += category_in_use.name;
   variable_1d.ReplaceAll(" ","");
   category_in_use.variable_2d.ReplaceAll(" ","");
