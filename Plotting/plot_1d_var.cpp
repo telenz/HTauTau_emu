@@ -30,7 +30,7 @@ void plot_1d_var(
 
    // Set some options
    bool plotLeg = true;
-   bool logy = false;
+   bool logy = true;
    double scaleSignal = 50;
    bool blindData = false;
 
@@ -151,9 +151,11 @@ void plot_1d_var(
    float yUpper = data.hist->GetMaximum();
    data.hist -> GetXaxis() -> SetTitle(variable);
    data.hist -> GetYaxis() -> SetTitle("Events");
-   if(logy) upper -> SetLogy();
-   else     data.hist -> GetYaxis() -> SetRangeUser(0,1.2*yUpper);
-
+   if(logy){
+     data.hist -> GetYaxis() -> SetRangeUser(0.1*qqh.hist->GetMaximum() , 100*yUpper);
+     upper -> SetLogy();
+   }
+   else  data.hist -> GetYaxis() -> SetRangeUser(0,1.2*yUpper);
 
    data.hist -> Draw("e1");
    stack     -> Draw("same hist");
@@ -203,6 +205,14 @@ void plot_1d_var(
    ratioH->GetYaxis()->SetTitle("obs/exp");
    ratioH->GetXaxis()->SetTitle("");
 
+   TH1D * signal_strength    = (TH1D*) stack->GetStack()->Last()->Clone("ratioH");
+   signal_strength -> Add(qqh.hist);
+   signal_strength -> Add(ggh.hist);
+   signal_strength -> Divide((TH1D*)stack->GetStack()->Last());
+   signal_strength -> SetLineColor(2);
+   signal_strength -> SetLineWidth(3);
+   signal_strength -> SetFillStyle(0);
+
    for (int iB=1; iB<=data.hist->GetNbinsX(); ++iB) {
      ratioErrH -> SetBinContent(iB,1.0);
      ratioErrH -> SetBinError(iB,0.0);
@@ -222,6 +232,7 @@ void plot_1d_var(
    lower->SetGridy();
    ratioH->Draw("e1");
    ratioErrH->Draw("e2same");
+   signal_strength->Draw("hist same");
 
    lower->Modified();
    lower->RedrawAxis();
