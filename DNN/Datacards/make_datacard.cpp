@@ -89,8 +89,8 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   Sample VV(   "VV"       , "em-NOMINAL_ntuple_Diboson.root" );
   Sample ST(   "ST"       , "em-NOMINAL_ntuple_SingleTop.root" );
   Sample QCD(  "QCD"      , "em-NOMINAL_ntuple_Data.root" );
-  //Sample ggH(  "ggH125"   , "em-NOMINAL_ntuple_ggH.root" );
-  //Sample qqH(  "qqH125"   , "em-NOMINAL_ntuple_VBFH.root" );
+  Sample ggH(  "ggH125"   , "em-NOMINAL_ntuple_ggH125.root" );
+  Sample qqH(  "qqH125"   , "em-NOMINAL_ntuple_qqH125.root" );
 
   map<TString,Sample> sample_map = { { "Data" , Data },
 				     { "ZTT"  , ZTT } ,
@@ -101,8 +101,8 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 				     { "VV"   , VV } ,
 				     { "QCD"  , QCD } ,
 				     { "ST"   , ST } ,
-				     // { "ggH125" , ggH },
-				     // { "qqH125" , qqH }
+				     { "ggH125" , ggH },
+				     { "qqH125" , qqH }
   };
 
   cout << endl << endl << "... Sample categories ... "<< endl ;
@@ -149,7 +149,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
   for(auto & smpl : sample_map){
 
-    if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
+    if( smpl.first == "Data" || smpl.first == "QCD" || smpl.first == "ggH125" || smpl.first == "qqH125" ) continue;
 
     // Uncertainties common for all samples
     // 1.) Electron scale
