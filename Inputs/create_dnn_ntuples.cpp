@@ -1,21 +1,19 @@
 #include <iostream>
 #include <map>
-
 #include "TString.h"
 #include "TFile.h"
 #include "TTree.h"
 #include "TH1.h"
 #include "TList.h"
-
 #include "settings_for_eras.h"
 
-double luminosity = 41900;
 bool applyPreselection = true;
 
 void create_dnn_ntuples( TString era = "2017" ,
 			 TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/"){
 
   TString channel = "em";
+  double luminosity = 0;
 
   // Mapping of subsamples to output root-file
   map< TString , vector<TString> > samples_map;
@@ -25,7 +23,7 @@ void create_dnn_ntuples( TString era = "2017" ,
   if(era == "2017"){
     xsec_map      = &xsec_map_2017;
     process_map = &process_map_2017;
-
+    luminosity = 41900;
     samples_map["NOMINAL_ntuple_MuonEG_"    + channel] = MuonEG_Run2017;
     samples_map["NOMINAL_ntuple_DYJets_"    + channel] = DYJets_2017;
     samples_map["NOMINAL_ntuple_WJets_"     + channel] = WJets_2017;
