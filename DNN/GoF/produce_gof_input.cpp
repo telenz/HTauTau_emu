@@ -271,7 +271,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 	smpl.second.uncertainties["unclMetUp"].variable_1d = variable_1d + "_unclMetUp";
 	smpl.second.uncertainties["unclMetDown"].variable_1d = variable_1d + "_unclMetDown";
       }
-      else cout << "No systematic shift for JES uncertainty for variable " << variable_1d << " available in tree." << endl;
+      else cout << "No systematic shift for unclustered MET uncertainty for variable " << variable_1d << " available in tree." << endl;
     }
     else{
       if(tree_ -> GetBranch(var1Up+"_unclMetUp")){
@@ -443,7 +443,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSSrelaxed_1d -> Clone();
 
   // 2.) Calculate normalization via ss/ss_relaxed
-  double qcd_norm = sample_map["QCD"].histSS_1d->GetSumOfWeights()/sample_map["QCD"].histSSrelaxed_1d->GetSumOfWeights();
+  double qcd_norm = sample_map["QCD"].histSS_1d->Integral(0,sample_map["QCD"].histSS_1d->GetNbinsX()+1)/sample_map["QCD"].histSSrelaxed_1d->Integral(0,sample_map["QCD"].histSSrelaxed_1d->GetNbinsX()+1);
   cout << endl << "qcd_norm = " << qcd_norm << endl << endl;
   sample_map["QCD"].hist_1d -> Scale(qcd_norm);
 
