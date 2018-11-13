@@ -149,7 +149,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
   for(auto & smpl : sample_map){
 
-    if( smpl.first == "Data" || smpl.first == "QCD" || smpl.first == "ggH125" || smpl.first == "qqH125" ) continue;
+    if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
 
     // Uncertainties common for all samples
     // 1.) Electron scale
@@ -163,8 +163,8 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("dzeta","dzeta_escaleDown");
     smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("pt_1","pt_1_escaleUp");
     smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_1_escaleDown");
-    // smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_escaleUp");
-    // smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_escaleDown");
+    smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_escaleUp");
+    smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_escaleDown");
     smpl.second.uncertainties["eScaleUp"].filename.ReplaceAll("NOMINAL","_escaleUp");
     smpl.second.uncertainties["eScaleDown"].filename.ReplaceAll("NOMINAL","_escaleDown");
 
@@ -177,8 +177,8 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
     smpl.second.uncertainties["jesDown"].name += "_CMS_scale_j_13TeVDown";
     smpl.second.uncertainties["jesUp"].cutString.ReplaceAll("dzeta","dzeta_jesUp");
     smpl.second.uncertainties["jesDown"].cutString.ReplaceAll("dzeta","dzeta_jesDown");
-    // smpl.second.uncertainties["jesUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_jesUp");
-    // smpl.second.uncertainties["jesDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_jesDown");
+    smpl.second.uncertainties["jesUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_jesUp");
+    smpl.second.uncertainties["jesDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_jesDown");
     smpl.second.uncertainties["jesUp"].filename.ReplaceAll("NOMINAL","_jesUp");
     smpl.second.uncertainties["jesDown"].filename.ReplaceAll("NOMINAL","_jesDown");
 
@@ -191,8 +191,8 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
     smpl.second.uncertainties["unclMetDown"].name += "_CMS_scale_met_unclustered_13TeVDown";
     smpl.second.uncertainties["unclMetUp"].cutString.ReplaceAll("dzeta","dzeta_unclMetUp");
     smpl.second.uncertainties["unclMetDown"].cutString.ReplaceAll("dzeta","dzeta_unclMetDown");
-    // smpl.second.uncertainties["unclMetUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_unclMetUp");
-    // smpl.second.uncertainties["unclMetDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_unclMetDown");
+    smpl.second.uncertainties["unclMetUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_unclMetUp");
+    smpl.second.uncertainties["unclMetDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_unclMetDown");
     smpl.second.uncertainties["unclMetUp"].filename.ReplaceAll("NOMINAL","_unclMetUp");
     smpl.second.uncertainties["unclMetDown"].filename.ReplaceAll("NOMINAL","_unclMetDown");
 
