@@ -14,8 +14,8 @@ void create_dnn_ntuples( TString era = "2017" ,
 
   TString channel = "em";
   double luminosity = 0;
-  float qcd_ss_os_iso_relaxed_ratio = 0.49;
-  float trigger_filter_efficiency = 0.979;
+  float qcd_ss_os_iso_relaxed_ratio = 0;
+  float trigger_filter_efficiency = 1;
 
   // Mapping of subsamples to output root-file
   map< TString , vector<TString> > samples_map;
@@ -26,6 +26,8 @@ void create_dnn_ntuples( TString era = "2017" ,
     xsec_map    = &xsec_map_2017;
     process_map = &process_map_2017;
     luminosity  = 41900;
+    trigger_filter_efficiency = 0.979; // FIXME
+    float qcd_ss_os_iso_relaxed_ratio = 2.38;
     samples_map["NOMINAL_ntuple_MuonEG_"    + channel] = MuonEG_Run2017;
     samples_map["NOMINAL_ntuple_DYJets_"    + channel] = DYJets_2017;
     samples_map["NOMINAL_ntuple_WJets_"     + channel] = WJets_2017;
@@ -36,11 +38,14 @@ void create_dnn_ntuples( TString era = "2017" ,
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2017;
     //samples_map["NOMINAL_ntuple_EWKZ_"      + channel] = EWKZ_2017 ;
     inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/";
+
   }
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
     process_map = &process_map_2016;
     luminosity  = 35866;
+    trigger_filter_efficiency = 0.979;
+    float qcd_ss_os_iso_relaxed_ratio = 2.3;
     samples_map["NOMINAL_ntuple_MuonEG_"    + channel] = MuonEG_Run2016;
     samples_map["NOMINAL_ntuple_DYJets_"    + channel] = DYJets_2016;
     samples_map["NOMINAL_ntuple_WJets_"     + channel] = WJets_2016;
