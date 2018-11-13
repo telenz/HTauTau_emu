@@ -304,6 +304,8 @@ void SetLegendStyle(TLegend* leg)
   leg->SetFillStyle (0);
   leg->SetFillColor (0);
   leg->SetBorderSize(0);
+  leg->SetTextFont(63);
+  leg->SetTextSize(25);
 
   gROOT->ForceStyle();
 }
