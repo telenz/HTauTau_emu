@@ -3,3 +3,9 @@
 *.d
 *.root
 *.pcm
+*.in
+*.out
+*maincpp
+*linkdef.h
+*.o
+*.cxx
