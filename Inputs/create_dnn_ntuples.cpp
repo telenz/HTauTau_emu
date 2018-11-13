@@ -143,7 +143,7 @@ void create_dnn_ntuples( TString era = "2017" ,
 	exit(-1);
       }
       float xsec = 1;
-      if(!sample.first.Contains("MuonEG")) xsec_map->at(subsample);
+      if(!sample.first.Contains("MuonEG")) xsec = xsec_map->at(subsample);
 
       for (int i=0; i<inTree->GetEntries(); i++) {
 	inTree->GetEntry(i);
