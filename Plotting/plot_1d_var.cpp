@@ -257,6 +257,8 @@ void plot_1d_var(
    canv1->Modified();
    canv1->cd();
    canv1->SetSelected(canv1);
-    
-   canv1->Print("figures/"+variable+"_"+category+".png");
+
+   TString out_filename = variable + "_" + category;
+   if(logy) out_filename += "_log";
+   canv1->Print("figures/" + out_filename + ".png");
 }
