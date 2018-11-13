@@ -14,6 +14,8 @@ void create_dnn_ntuples( TString era = "2017" ,
 
   TString channel = "em";
   double luminosity = 0;
+  float qcd_ss_os_iso_relaxed_ratio = 0.49;
+  float trigger_filter_efficiency = 0.979;
 
   // Mapping of subsamples to output root-file
   map< TString , vector<TString> > samples_map;
@@ -21,9 +23,9 @@ void create_dnn_ntuples( TString era = "2017" ,
   const map<TString, TString> *process_map = 0;
 
   if(era == "2017"){
-    xsec_map      = &xsec_map_2017;
+    xsec_map    = &xsec_map_2017;
     process_map = &process_map_2017;
-    luminosity = 41900;
+    luminosity  = 41900;
     samples_map["NOMINAL_ntuple_MuonEG_"    + channel] = MuonEG_Run2017;
     samples_map["NOMINAL_ntuple_DYJets_"    + channel] = DYJets_2017;
     samples_map["NOMINAL_ntuple_WJets_"     + channel] = WJets_2017;
@@ -32,12 +34,24 @@ void create_dnn_ntuples( TString era = "2017" ,
     samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2017;
     // samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2017;
-    //sample_map["NOMINAL_ntuple_EWKZ_"      + channel] = EWKZ_2017 ;
+    //samples_map["NOMINAL_ntuple_EWKZ_"      + channel] = EWKZ_2017 ;
+    inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/";
   }
-  // else if(era == "2016"){
-  //   xsec_map = &xsec_map_2016;
-  //   process_map = &process_map_2016;
-  // }
+  else if(era == "2016"){
+    xsec_map    = &xsec_map_2016;
+    process_map = &process_map_2016;
+    luminosity  = 35866;
+    samples_map["NOMINAL_ntuple_MuonEG_"    + channel] = MuonEG_Run2016;
+    samples_map["NOMINAL_ntuple_DYJets_"    + channel] = DYJets_2016;
+    samples_map["NOMINAL_ntuple_WJets_"     + channel] = WJets_2016;
+    samples_map["NOMINAL_ntuple_TTbar_"     + channel] = TTbar_2016;
+    samples_map["NOMINAL_ntuple_SingleTop_" + channel] = SingleTop_2016;
+    samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2016;
+    samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2016;
+    samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2016;
+    samples_map["NOMINAL_ntuple_EWKZ_"      + channel] = EWKZ_2016 ;
+    inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/";
+  }
 
   // Needed for stitching
   double xsecWIncl      = xsec_map->at(process_map->at("WJets"));
@@ -66,7 +80,7 @@ void create_dnn_ntuples( TString era = "2017" ,
 
     cout << endl << sample.first << "  :  " << endl ;
 
-    TFile *outFile = new TFile("NTuples_2017/" + sample.first + ".root","RECREATE");
+    TFile *outFile = new TFile("NTuples_" + era + "_test_new_script/" + sample.first + ".root","RECREATE");
     TTree *outTree = new TTree("TauCheck", "tree created as DNN input");
     bool firstTree = true;
     TList* treeList = new TList();
@@ -104,13 +118,19 @@ void create_dnn_ntuples( TString era = "2017" ,
 
       // Create a branch for xsec_lumi_weight
       float xsec_lumi_weight;
+      float qcd_correction;
+      float trigger_filter_weight;
       if(firstTree){
 	outTree    = inTree->CloneTree(0);
-	TBranch *w = outTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
+	outTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
+	outTree->Branch("qcd_correction", &qcd_correction, "qcd_correction/F");
+	outTree->Branch("trigger_filter_weight", &trigger_filter_weight, "trigger_filter_weight/F");
 	firstTree  = false;
       }
       currentTree = inTree->CloneTree(0);
-      TBranch *w  = currentTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
+      currentTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
+      currentTree->Branch("qcd_correction", &qcd_correction, "qcd_correction/F");
+      currentTree->Branch("trigger_filter_weight", &trigger_filter_weight, "trigger_filter_weight/F");
 
       // lumi-xsec-weight added
       if( xsec_map->find(subsample) == xsec_map->end() && !sample.first.Contains("MuonEG")){
@@ -134,6 +154,8 @@ void create_dnn_ntuples( TString era = "2017" ,
 	  if( trg_muonelectron < 0.5 )    continue;
 	}
 	xsec_lumi_weight = xsec*luminosity/nevents;
+	qcd_correction = qcd_ss_os_iso_relaxed_ratio;
+	trigger_filter_weight = trigger_filter_efficiency;
 	
 	// Stitching only for wjets MC in n-jet binned samples in npartons
 	if( subsample.Contains("W") && subsample.Contains("JetsToLNu") ){
@@ -151,7 +173,10 @@ void create_dnn_ntuples( TString era = "2017" ,
 	  else                   xsec_lumi_weight = luminosity / ( neventsDYIncl/xsecDYIncl );
 	}
 
-	if( sample.first.Contains("MuonEG")) xsec_lumi_weight = 1.;
+	if( sample.first.Contains("MuonEG")){
+	  xsec_lumi_weight = 1.;
+	  trigger_filter_weight = 1.;
+	}
 
 	currentTree->Fill();
       }
