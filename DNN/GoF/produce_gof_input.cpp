@@ -440,12 +440,12 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     sample_map["QCD"].histSS_1d        -> Add( smpl.second.histSS_1d , -1 );
     sample_map["QCD"].histSSrelaxed_1d -> Add( smpl.second.histSSrelaxed_1d , -1 );
   }
-  sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSSrelaxed_1d -> Clone();
+  sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSS_1d -> Clone();
 
   // 2.) Calculate normalization via ss/ss_relaxed
   double qcd_norm = sample_map["QCD"].histSS_1d->Integral(0,sample_map["QCD"].histSS_1d->GetNbinsX()+1)/sample_map["QCD"].histSSrelaxed_1d->Integral(0,sample_map["QCD"].histSSrelaxed_1d->GetNbinsX()+1);
   cout << endl << "qcd_norm = " << qcd_norm << endl << endl;
-  sample_map["QCD"].hist_1d -> Scale(qcd_norm);
+  //sample_map["QCD"].hist_1d -> Scale(qcd_norm);
 
   //************************************************************************************************
   // Write all histograms to output file
