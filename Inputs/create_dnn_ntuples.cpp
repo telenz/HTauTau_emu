@@ -145,8 +145,8 @@ void create_dnn_ntuples( TString era = "2017" ,
 
 	// Add here preselection if necessary
 	if(applyPreselection){
-	  if( iso_1 > 0.15 )              continue;
-	  if( iso_2 > 0.2)                continue;
+	  if( iso_1 > 0.5 )              continue;
+	  if( iso_2 > 0.5)                continue;
 	  if( extraelec_veto > 0.5)       continue;
 	  if( extramuon_veto > 0.5)       continue;
 	  if( TMath::Max(pt_1,pt_2) < 24) continue;
