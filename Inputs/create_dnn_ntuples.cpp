@@ -7,7 +7,7 @@
 #include "TH1.h"
 #include "TList.h"
 
-#include "cross_section_map.h"
+#include "settings_for_eras.h"
 
 double luminosity = 41900;
 bool applyPreselection = true;

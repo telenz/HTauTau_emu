@@ -1,5 +1,5 @@
-#ifndef CROSS_SECTION_MAP_H
-#define CROSS_SECTION_MAP_H
+#ifndef SETTINGS_FOR_ERAS_H
+#define SETTINGS_FOR_ERAS_H
 
 // Define the subsamples that belong to a certain proccess
 const vector<TString> MuonEG_Run2017       = { "MuonEG_Run2017B" ,
