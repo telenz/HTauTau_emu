@@ -31,7 +31,7 @@ void plot_1d_var(
 
    // Set some options
    bool plotLeg = true;
-   bool logy = true;
+   bool logy = false;
    double scaleSignal = 50;
    bool blindData = false;
 
@@ -152,7 +152,7 @@ void plot_1d_var(
    upper->cd();
 
    float y_upper = data.hist->GetMaximum();
-   float y_lower = qcd.hist->GetMaximum()*0.1;
+   float y_lower = qcd.hist->GetMaximum()*0.01;
    data.hist -> GetXaxis() -> SetTitle(variable);
    data.hist -> GetYaxis() -> SetTitle("Events");
    if(logy){
@@ -261,5 +261,5 @@ void plot_1d_var(
 
    TString out_filename = variable + "_" + category;
    if(logy) out_filename += "_log";
-   canv1->Print("figures/" + out_filename + ".png");
+   canv1->Print(directory + "/figures/" + out_filename + ".png");
 }
