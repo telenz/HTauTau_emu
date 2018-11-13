@@ -26,6 +26,7 @@ const vector<TString> Diboson_2017         = { "WW_TuneCP5_13TeV-pythia8" ,
 					       "ZZ_TuneCP5_13TeV-pythia8" };
 const vector<TString> GluGluHToTauTau_2017 = { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" };
 const vector<TString> VBFHToTauTau_2017    = { "VBFHToTauTau_M125_13TeV_powheg_pythia8" };
+const vector<TString> Embedded             = { "Embeddind_Run2017" };
 
 
 // Cross-section map ( needs to be checked again )
