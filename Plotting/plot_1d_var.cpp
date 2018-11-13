@@ -157,6 +157,7 @@ void plot_1d_var(
    data.hist -> GetYaxis() -> SetTitle("Events");
    if(logy){
      if(draw_signal) y_lower = 0.1*qqh.hist->GetMaximum();
+     if(y_lower == 0) y_lower = 1;
      data.hist -> GetYaxis() -> SetRangeUser(y_lower , 100*y_upper);
      upper -> SetLogy();
    }
