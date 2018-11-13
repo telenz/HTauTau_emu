@@ -10,6 +10,7 @@
 void plot_1d_var(
 		 TString variable    = "m_sv",
 		 TString category    = "em_inclusive",
+		 bool draw_signal    = false,
 		 TString directory   = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/var_1d/"
           ) {
 
@@ -73,11 +74,13 @@ void plot_1d_var(
    qqh.legend_entry  = "qqH";
    ggh.legend_entry  = "ggH";
  
-   data.isData = true;
+   data.isData  = true;
    qqh.isSignal = true;
    ggh.isSignal = true;
 
-   vector<SampleForPlotting*> sample_vec = { &qqh , &ggh , &qcd , &zl , &vv , &w , &tt , &ztt , &data  };
+   vector<SampleForPlotting*> sample_vec;
+   if(draw_signal) sample_vec = { &qqh , &ggh , &qcd , &zl , &vv , &w , &tt , &ztt , &data  };
+   else            sample_vec = { &qcd , &zl , &vv , &w , &tt , &ztt , &data  };
 
    TH1D* hist = 0;
 
@@ -148,21 +151,25 @@ void plot_1d_var(
    upper->Draw();
    upper->cd();
 
-   float yUpper = data.hist->GetMaximum();
+   float y_upper = data.hist->GetMaximum();
+   float y_lower = qcd.hist->GetMaximum()*0.1;
    data.hist -> GetXaxis() -> SetTitle(variable);
    data.hist -> GetYaxis() -> SetTitle("Events");
    if(logy){
-     data.hist -> GetYaxis() -> SetRangeUser(0.1*qqh.hist->GetMaximum() , 100*yUpper);
+     if(draw_signal) y_lower = 0.1*qqh.hist->GetMaximum();
+     data.hist -> GetYaxis() -> SetRangeUser(y_lower , 100*y_upper);
      upper -> SetLogy();
    }
-   else  data.hist -> GetYaxis() -> SetRangeUser(0,1.2*yUpper);
+   else  data.hist -> GetYaxis() -> SetRangeUser(0,1.2*y_upper);
 
    data.hist -> Draw("e1");
    stack     -> Draw("same hist");
    data.hist -> Draw("e1 same");
    bkgdErr   -> Draw("e2same");
-   ggh.hist  -> Draw("hist same");
-   qqh.hist  -> Draw("hist same");
+   if(draw_signal){
+     ggh.hist  -> Draw("hist same");
+     qqh.hist  -> Draw("hist same");
+   }
    canv1     -> Update();
 
    // Draw legend
@@ -176,7 +183,7 @@ void plot_1d_var(
 
      if(sample_vec[i]->isData)        leg->AddEntry( sample_vec[i]->hist , sample_vec[i]->legend_entry , "lp");
      else if(sample_vec[i]->isSignal) leg->AddEntry( sample_vec[i]->hist , sample_vec[i]->legend_entry , "l");
-     else leg->AddEntry( sample_vec[i]->hist , sample_vec[i]->legend_entry , "f");
+     else                             leg->AddEntry( sample_vec[i]->hist , sample_vec[i]->legend_entry , "f");
      already_added_to_legend.push_back( sample_vec[i]->name );
    }
    leg->Draw();
@@ -206,8 +213,9 @@ void plot_1d_var(
    ratioH->GetXaxis()->SetTitle("");
 
    TH1D * signal_strength    = (TH1D*) stack->GetStack()->Last()->Clone("ratioH");
-   signal_strength -> Add(qqh.hist);
-   signal_strength -> Add(ggh.hist);
+   for(auto  *smpl : sample_vec){
+     if(smpl->isSignal) signal_strength -> Add(smpl->hist);
+   }
    signal_strength -> Divide((TH1D*)stack->GetStack()->Last());
    signal_strength -> SetLineColor(2);
    signal_strength -> SetLineWidth(3);
@@ -232,7 +240,7 @@ void plot_1d_var(
    lower->SetGridy();
    ratioH->Draw("e1");
    ratioErrH->Draw("e2same");
-   signal_strength->Draw("hist same");
+   if(draw_signal) signal_strength->Draw("hist same");
 
    lower->Modified();
    lower->RedrawAxis();
