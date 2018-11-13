@@ -32,7 +32,7 @@ void create_dnn_input( TString era = "2017" ,
     samples_map["NOMINAL_ntuple_TTbar_"     + channel] = TTbar_2017;
     samples_map["NOMINAL_ntuple_SingleTop_" + channel] = SingleTop_2017;
     samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2017;
-    samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
+    // samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2017;
     //sample_map["NOMINAL_ntuple_EWKZ_"      + channel] = EWKZ_2017 ;
   }
