@@ -7,113 +7,62 @@
 #include "TH1.h"
 #include "TList.h"
 
-double luminosity = 35866;
+#include "cross_section_map.h"
+
+double luminosity = 41900;
 bool applyPreselection = true;
 
-double getNEventsProcessed(TString filename)
-{
-  TFile * file = new TFile(filename);
-  TH1D * histWeightsH = (TH1D*)file->Get("histWeightsH");
-  double nevents = histWeightsH->GetSumOfWeights();
-  file -> Close();
-  delete file;
-  return nevents;
-}
+void create_dnn_input( TString era = "2017" , 
+		       TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/"){
 
-void create_dnn_input_2017(TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/"){
-
-  // Define the subsamples that belong to a certain proccess
-  vector<TString> MuonEG_Run2017  = { "MuonEG_Run2017B" ,
-				      "MuonEG_Run2017C" ,
-				      "MuonEG_Run2017D" ,
-				      "MuonEG_Run2017E" ,
-				      "MuonEG_Run2017F" };
-  vector<TString> DYJets          = { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-				      "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-				      "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-				      "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-				      "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" };
-  vector<TString> WJets           = { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-				      "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-				      "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-				      "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-				      "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" };
-  vector<TString> TTbar           = { "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8" ,
-				      "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8" ,
-				      "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8" };
-  vector<TString> SingleTop       = { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" ,
-				      "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" ,
-				      "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" ,
-				      "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" };
-  vector<TString> Diboson         = { "WW_TuneCP5_13TeV-pythia8" ,
-				      "WZ_TuneCP5_13TeV-pythia8" ,
-				      "ZZ_TuneCP5_13TeV-pythia8" };
-  // vector<TString> GluGluHToTauTau = { "GluGluHToTauTau_M125" };
-  // vector<TString> VBFHToTauTau    = { "VBFHToTauTau_M125" };
+  TString channel = "em";
 
   // Mapping of subsamples to output root-file
-  TString version = "v1";
-  TString channel = "em";
-  map< TString , vector<TString> > samples_map = {
-    { "MuonEG_Run2017_dnn_" + channel + "_" + version , MuonEG_Run2017 },
-    { "DYJets_dnn_"         + channel + "_" + version , DYJets },
-    { "WJets_dnn_"          + channel + "_" + version , WJets },
-    { "TTbar_dnn_"          + channel + "_" + version , TTbar },
-    { "SingleTop_dnn_"      + channel + "_" + version , SingleTop },
-    { "Diboson_dnn_"        + channel + "_" + version , Diboson },
-    // { "ggH_dnn_"            + channel + "_" + version , GluGluHToTauTau },
-    // { "VBFH_dnn_"           + channel + "_" + version , VBFHToTauTau }
-  };
+  map< TString , vector<TString> > samples_map;
+  const map<TString, double>  *xsec_map    = 0;
+  const map<TString, TString> *process_map = 0;
 
-  // Cross-section map ( needs to be checked again )
-  map<TString, double> xsec_map = {
-    // { "DYJetsToLL_M-10to50"      , 15820*1.079 },
-    { "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"  , 5345*1.079 },
-    { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 875.7*1.079 },
-    { "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 306.9*1.079 },
-    { "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 111.9*1.079 },
-    { "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 43.97*1.079 },
-    { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 52760*1.166 },
-    { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 8104.*1.166 },
-    { "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 2796.*1.166 },
-    { "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 993.5*1.166 },
-    { "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 544.4*1.166 },
-    { "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8"        , 88.29 },
-    { "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8"     , 377.96 },
-    { "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8" , 365.34 },
-    { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" , 26.38 },
-    { "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8"     , 44.33 },
-    { "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                  , 35.85 },
-    { "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                      , 35.85 },
-    { "WW_TuneCP5_13TeV-pythia8" , 49.997 },
-    { "WZ_TuneCP5_13TeV-pythia8" , 5.595 },
-    { "ZZ_TuneCP5_13TeV-pythia8" , 10.71 },
-    // { "GluGluHToTauTau_M125"     , 48.58*0.0627 },
-    // { "VBFHToTauTau_M125"        , 3.782*0.0627 }
-  };
+  if(era == "2017"){
+    xsec_map      = &xsec_map_2017;
+    process_map = &process_map_2017;
+
+    samples_map["NOMINAL_ntuple_MuonEG_"    + channel] = MuonEG_Run2017;
+    samples_map["NOMINAL_ntuple_DYJets_"    + channel] = DYJets_2017;
+    samples_map["NOMINAL_ntuple_WJets_"     + channel] = WJets_2017;
+    samples_map["NOMINAL_ntuple_TTbar_"     + channel] = TTbar_2017;
+    samples_map["NOMINAL_ntuple_SingleTop_" + channel] = SingleTop_2017;
+    samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2017;
+    samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
+    samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2017;
+    //sample_map["NOMINAL_ntuple_EWKZ_"      + channel] = EWKZ_2017 ;
+  }
+  // else if(era == "2016"){
+  //   xsec_map = &xsec_map_2016;
+  //   process_map = &process_map_2016;
+  // }
 
   // Needed for stitching
-  double xsecWIncl      = xsec_map["WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"];
-  double xsecW1Jets     = xsec_map["W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"];
-  double xsecW2Jets     = xsec_map["W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"];
-  double xsecW3Jets     = xsec_map["W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"];
-  double xsecW4Jets     = xsec_map["W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"];
-  double xsecDYIncl     = xsec_map["DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"];
-  double xsecDY1Jets    = xsec_map["DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"];
-  double xsecDY2Jets    = xsec_map["DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"];
-  double xsecDY3Jets    = xsec_map["DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"];
-  double xsecDY4Jets    = xsec_map["DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"];
-  double neventsWIncl   = getNEventsProcessed(inputDir+"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root");
-  double neventsW1Jets  = getNEventsProcessed(inputDir+"/W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root");
-  double neventsW2Jets  = getNEventsProcessed(inputDir+"/W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root");
-  double neventsW3Jets  = getNEventsProcessed(inputDir+"/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root");
-  double neventsW4Jets  = getNEventsProcessed(inputDir+"/W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8.root");
-  double neventsDYIncl  = getNEventsProcessed(inputDir+"/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root");
-  double neventsDY1Jets = getNEventsProcessed(inputDir+"/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root");
-  double neventsDY2Jets = getNEventsProcessed(inputDir+"/DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root");
-  double neventsDY3Jets = getNEventsProcessed(inputDir+"/DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root");
-  double neventsDY4Jets = getNEventsProcessed(inputDir+"/DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8.root");
-  
+  double xsecWIncl      = xsec_map->at(process_map->at("WJets"));
+  double xsecW1Jets     = xsec_map->at(process_map->at("W1Jets"));
+  double xsecW2Jets     = xsec_map->at(process_map->at("W2Jets"));
+  double xsecW3Jets     = xsec_map->at(process_map->at("W3Jets"));
+  double xsecW4Jets     = xsec_map->at(process_map->at("W4Jets"));
+  double xsecDYIncl     = xsec_map->at(process_map->at("DYJets"));
+  double xsecDY1Jets    = xsec_map->at(process_map->at("DY1Jets"));
+  double xsecDY2Jets    = xsec_map->at(process_map->at("DY2Jets"));
+  double xsecDY3Jets    = xsec_map->at(process_map->at("DY3Jets"));
+  double xsecDY4Jets    = xsec_map->at(process_map->at("DY4Jets"));
+  double neventsWIncl   = getNEventsProcessed(inputDir+"/"+process_map->at("WJets")+".root");
+  double neventsW1Jets  = getNEventsProcessed(inputDir+"/"+process_map->at("W1Jets")+".root");
+  double neventsW2Jets  = getNEventsProcessed(inputDir+"/"+process_map->at("W2Jets")+".root");
+  double neventsW3Jets  = getNEventsProcessed(inputDir+"/"+process_map->at("W3Jets")+".root");
+  double neventsW4Jets  = getNEventsProcessed(inputDir+"/"+process_map->at("W4Jets")+".root");
+  double neventsDYIncl  = getNEventsProcessed(inputDir+"/"+process_map->at("DYJets")+".root");
+  double neventsDY1Jets = getNEventsProcessed(inputDir+"/"+process_map->at("DY1Jets")+".root");
+  double neventsDY2Jets = getNEventsProcessed(inputDir+"/"+process_map->at("DY2Jets")+".root");
+  double neventsDY3Jets = getNEventsProcessed(inputDir+"/"+process_map->at("DY3Jets")+".root");
+  double neventsDY4Jets = getNEventsProcessed(inputDir+"/"+process_map->at("DY4Jets")+".root");
+
   // Loop over all samples
   for (auto const& sample : samples_map){
 
@@ -166,11 +115,12 @@ void create_dnn_input_2017(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
       TBranch *w  = currentTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
 
       // lumi-xsec-weight added
-      if( xsec_map.find(subsample) == xsec_map.end() && !sample.first.Contains("MuonEG")){
+      if( xsec_map->find(subsample) == xsec_map->end() && !sample.first.Contains("MuonEG")){
 	cout << endl << endl << "Sample " << subsample << " is missing in xsec_map. Exit code." << endl << endl ;
 	exit(-1);
       }
-      float xsec = xsec_map[subsample];
+      float xsec = 1;
+      if(!sample.first.Contains("MuonEG")) xsec_map->at(subsample);
 
       for (int i=0; i<inTree->GetEntries(); i++) {
 	inTree->GetEntry(i);
