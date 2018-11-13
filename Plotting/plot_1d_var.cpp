@@ -162,6 +162,24 @@ void plot_1d_var(
    }
    else  data.hist -> GetYaxis() -> SetRangeUser(0,1.2*y_upper);
 
+   // Calculate signal strength (s+b/b) - needed for ratio plot and blinding
+   TH1D * signal_strength    = (TH1D*) stack->GetStack()->Last()->Clone("ratioH");
+   for(auto  *smpl : sample_vec){
+     if(smpl->isSignal) signal_strength -> Add(smpl->hist);
+   }
+   signal_strength -> Divide((TH1D*)stack->GetStack()->Last());
+   signal_strength -> SetLineColor(2);
+   signal_strength -> SetLineWidth(3);
+   signal_strength -> SetFillStyle(0);
+
+   // BLINDING
+   for(int i = 1 ; i <= data.hist->GetNbinsX() ; i++){
+     if(signal_strength -> GetBinContent(i) > 1.02 ){
+       data.hist->SetBinContent(i,0);
+       data.hist->SetBinError(i,0);
+     }
+   }
+
    data.hist -> Draw("e1");
    stack     -> Draw("same hist");
    data.hist -> Draw("e1 same");
@@ -211,15 +229,6 @@ void plot_1d_var(
    ratioH->GetYaxis()->SetNdivisions(505);
    ratioH->GetYaxis()->SetTitle("obs/exp");
    ratioH->GetXaxis()->SetTitle("");
-
-   TH1D * signal_strength    = (TH1D*) stack->GetStack()->Last()->Clone("ratioH");
-   for(auto  *smpl : sample_vec){
-     if(smpl->isSignal) signal_strength -> Add(smpl->hist);
-   }
-   signal_strength -> Divide((TH1D*)stack->GetStack()->Last());
-   signal_strength -> SetLineColor(2);
-   signal_strength -> SetLineWidth(3);
-   signal_strength -> SetFillStyle(0);
 
    for (int iB=1; iB<=data.hist->GetNbinsX(); ++iB) {
      ratioErrH -> SetBinContent(iB,1.0);
