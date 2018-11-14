@@ -9,7 +9,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 			int nbins = 8 ,
 			vector<float> range = {0,400} ,
 			TString variable_2d = "pt_2:m_vis" ,  // convention for TH2D is "var_y : var_x"
-			TString directory = "../../Inputs/NTuples_2016_NewSysNaming/") {
+			TString directory = "../../Inputs/NTuples_2016_No_EWKZ/") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
