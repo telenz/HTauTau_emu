@@ -11,6 +11,7 @@ void plot_1d_var(
 		 TString variable    = "m_sv",
 		 TString category    = "em_inclusive",
 		 bool draw_signal    = false,
+		 bool draw_log_scale = false,
 		 TString directory   = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/var_1d/"
           ) {
 
@@ -22,6 +23,7 @@ void plot_1d_var(
 
   // Sample-specific uncertainties
   float err_vv_xsec  = 0.05;
+  float err_st_xsec  = 0.05;
   float err_tt_xsec  = 0.06;
   float err_w_xsec   = 0.04;
   float err_dy_xsec  = 0.04;
@@ -31,7 +33,6 @@ void plot_1d_var(
 
    // Set some options
    bool plotLeg = true;
-   bool logy = false;
    double scaleSignal = 50;
    bool blindData = false;
 
@@ -46,9 +47,10 @@ void plot_1d_var(
 
    // Define sample categorization
    SampleForPlotting data("Data",{"data_obs"});
-   SampleForPlotting ztt("ZTT",{"ZTT"});
-   SampleForPlotting zl("EWK",{"ZL","EWKZ"});
-   SampleForPlotting vv("EWK",{"VV","ST"});
+   SampleForPlotting ztt("ZTT",{"ZTT","EWKZ"});
+   SampleForPlotting zl("EWK",{"ZL"});
+   SampleForPlotting vv("VV",{"VV"});
+   SampleForPlotting st("ST",{"ST"});
    SampleForPlotting w("EWK",{"W"});
    SampleForPlotting tt("TT",{"TT"});
    SampleForPlotting qcd("QCD",{"QCD"});
@@ -57,17 +59,19 @@ void plot_1d_var(
 
    ztt.color = "#FFCC66";
    zl.color  = "#DE5A6A";
-   vv.color  = "#DE5A6A";
    w.color   = "#DE5A6A";
+   vv.color  = "#A8CCA4";
+   st.color  = "#BEE6E7";
    tt.color  = "#9999CC";
    qcd.color = "#FFCCFF";
    ggh.color = "#05B0BB"; //blue:"#03A8F5";
    qqh.color = "#BB051E";
 
    ztt.legend_entry  = "Z#rightarrow #tau#tau";
-   zl.legend_entry   = "electroweak";
-   vv.legend_entry   = "electroweak";
-   w.legend_entry    = "electroweak";
+   zl.legend_entry   = "Z#rightarrow ll + W";
+   w.legend_entry    = "Z#rightarrow ll + W";
+   vv.legend_entry   = "VV";
+   st.legend_entry   = "ST";
    tt.legend_entry   = "t#bar{t}";
    qcd.legend_entry  = "QCD";
    data.legend_entry = "Data";
@@ -79,8 +83,8 @@ void plot_1d_var(
    ggh.isSignal = true;
 
    vector<SampleForPlotting*> sample_vec;
-   if(draw_signal) sample_vec = { &qqh , &ggh , &qcd , &zl , &vv , &w , &tt , &ztt , &data  };
-   else            sample_vec = { &qcd , &zl , &vv , &w , &tt , &ztt , &data  };
+   if(draw_signal) sample_vec = { &qqh , &ggh , &qcd , &vv , &st , &zl ,  &w  , &tt , &ztt , &data  };
+   else            sample_vec = { &qcd , &vv , &st , &zl , &w , &tt , &ztt , &data  };
 
    TH1D* hist = 0;
 
@@ -135,6 +139,7 @@ void plot_1d_var(
      }
      // Add sample-specific uncertainties
      err_norm_abs.push_back( vv.hist->GetBinContent(iB)*err_vv_xsec );
+     err_norm_abs.push_back( st.hist->GetBinContent(iB)*err_st_xsec );
      err_norm_abs.push_back( tt.hist->GetBinContent(iB)*err_tt_xsec );
      err_norm_abs.push_back( w.hist->GetBinContent(iB)*err_w_xsec );
      err_norm_abs.push_back( ztt.hist->GetBinContent(iB)*err_dy_xsec );
@@ -155,7 +160,7 @@ void plot_1d_var(
    float y_lower = qcd.hist->GetMaximum()*0.01;
    data.hist -> GetXaxis() -> SetTitle(variable);
    data.hist -> GetYaxis() -> SetTitle("Events");
-   if(logy){
+   if(draw_log_scale){
      if(draw_signal) y_lower = 0.1*qqh.hist->GetMaximum();
      if(y_lower == 0) y_lower = 1;
      data.hist -> GetYaxis() -> SetRangeUser(y_lower , 100*y_upper);
@@ -260,6 +265,6 @@ void plot_1d_var(
    canv1->SetSelected(canv1);
 
    TString out_filename = variable + "_" + category;
-   if(logy) out_filename += "_log";
+   if(draw_log_scale) out_filename += "_log";
    canv1->Print(directory + "/figures/" + out_filename + ".png");
 }
