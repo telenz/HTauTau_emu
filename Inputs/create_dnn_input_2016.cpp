@@ -30,8 +30,7 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
 
   // Define the subsamples that belong to a certain proccess
   vector<TString> MuonEG_Run2016  = { "MuonEG_Run2016B" , "MuonEG_Run2016C" , "MuonEG_Run2016D" , "MuonEG_Run2016E" , "MuonEG_Run2016F" , "MuonEG_Run2016G" , "MuonEG_Run2016H" };
-  vector<TString> DYJets          = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" };
-  vector<TString> EWKZ            = { "EWKZ2Jets" };
+  vector<TString> DYJets          = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" , "EWKZ2Jets" };
   vector<TString> WJets           = { "W1JetsToLNu" , "W2JetsToLNu" , "W3JetsToLNu" , "W4JetsToLNu" , "WJetsToLNu" , "WGToLNuG" , "WGstarToLNuEE" , "WGstarToLNuMuMu" , "EWKWPlus2Jet" , "EWKWMinus2Jet" };
   vector<TString> TTbar           = { "TTbar" };
   vector<TString> SingleTop       = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
@@ -46,7 +45,6 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
     { "NOMINAL_ntuple_MuonEG_"         + channel , MuonEG_Run2016 },
     { "NOMINAL_ntuple_DYJets_"         + channel , DYJets },
     { "NOMINAL_ntuple_WJets_"          + channel , WJets },
-    { "NOMINAL_ntuple_EWKZ_"           + channel , EWKZ },
     { "NOMINAL_ntuple_TTbar_"          + channel , TTbar },
     { "NOMINAL_ntuple_SingleTop_"      + channel , SingleTop },
     { "NOMINAL_ntuple_Diboson_"        + channel , Diboson },
@@ -117,7 +115,7 @@ void create_dnn_input_2016(TString inputDir="/nfs/dust/cms/user/mameyer/SM_Higgs
 
     cout << endl << sample.first << "  :  " << endl ;
 
-    TFile *outFile = new TFile("NTuples_2016_NewSysNaming/" + sample.first + ".root","RECREATE");
+    TFile *outFile = new TFile("NTuples_2016_No_EWKZ/" + sample.first + ".root","RECREATE");
     TTree *outTree = new TTree("TauCheck", "tree created as DNN input");
     bool firstTree = true;
     TList* treeList = new TList();
