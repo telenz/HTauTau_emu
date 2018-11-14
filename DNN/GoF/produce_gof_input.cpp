@@ -107,7 +107,6 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   Sample Data( "data_obs" , "NOMINAL_ntuple_MuonEG_em.root" );
   Sample ZTT(  "ZTT"      , "NOMINAL_ntuple_DYJets_em.root" );
   Sample ZL(   "ZL"       , "NOMINAL_ntuple_DYJets_em.root" );
-  Sample EWKZ( "EWKZ"     , "NOMINAL_ntuple_EWKZ_em.root" );
   Sample W(    "W"        , "NOMINAL_ntuple_WJets_em.root" );
   Sample TT(   "TT"       , "NOMINAL_ntuple_TTbar_em.root" );
   Sample VV(   "VV"       , "NOMINAL_ntuple_Diboson_em.root" );
@@ -123,7 +122,6 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   map<TString,Sample> sample_map = { { "Data" , Data },
 				     { "ZTT"  , ZTT } ,
 				     { "ZL"   , ZL } ,
-				     { "EWKZ" , EWKZ } ,
 				     { "W"    , W } ,
 				     { "TT"   , TT } ,
 				     { "VV"   , VV } ,
@@ -299,7 +297,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
       smpl.second.uncertainties["ttbarShapeDown"].topweight = "";
     }
 
-    // 6.) DY shape (EWKZ sample should be added here)
+    // 6.) DY shape
     if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" ){
       Sample dyShapeUp = smpl.second;
       Sample dyShapeDown = smpl.second;
