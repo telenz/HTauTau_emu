@@ -48,10 +48,10 @@ void plot_1d_var(
    // Define sample categorization
    SampleForPlotting data("Data",{"data_obs"});
    SampleForPlotting ztt("ZTT",{"ZTT","EWKZ"});
-   SampleForPlotting zl("EWK",{"ZL"});
+   SampleForPlotting zl("ZL",{"ZL"});
    SampleForPlotting vv("VV",{"VV"});
    SampleForPlotting st("ST",{"ST"});
-   SampleForPlotting w("EWK",{"W"});
+   SampleForPlotting w("W",{"W"});
    SampleForPlotting tt("TT",{"TT"});
    SampleForPlotting qcd("QCD",{"QCD"});
    SampleForPlotting qqh("qqH",{"qqH125"});
@@ -59,7 +59,7 @@ void plot_1d_var(
 
    ztt.color = "#FFCC66";
    zl.color  = "#DE5A6A";
-   w.color   = "#DE5A6A";
+   w.color   = "#03A8F5";
    vv.color  = "#A8CCA4";
    st.color  = "#BEE6E7";
    tt.color  = "#9999CC";
@@ -68,8 +68,8 @@ void plot_1d_var(
    qqh.color = "#BB051E";
 
    ztt.legend_entry  = "Z#rightarrow #tau#tau";
-   zl.legend_entry   = "Z#rightarrow ll + W";
-   w.legend_entry    = "Z#rightarrow ll + W";
+   zl.legend_entry   = "Z#rightarrow ll";
+   w.legend_entry    = "W";
    vv.legend_entry   = "VV";
    st.legend_entry   = "ST";
    tt.legend_entry   = "t#bar{t}";
