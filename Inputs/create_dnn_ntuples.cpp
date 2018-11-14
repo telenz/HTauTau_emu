@@ -86,7 +86,10 @@ void create_dnn_ntuples( TString era = "2017" ){
 
     cout << endl << sample.first << "  :  " << endl ;
 
-    TFile *outFile = new TFile("NTuples_" + era + "_test_new_script/" + sample.first + ".root","RECREATE");
+
+    output_dir = "NTuples_" + era + "_test_new_script";
+    gSystem   -> Exec("mkdir " + output_dir);
+    TFile *outFile = new TFile(output_dir + "/" + sample.first + ".root","RECREATE");
     TTree *outTree = new TTree("TauCheck", "tree created as DNN input");
     bool firstTree = true;
     TList* treeList = new TList();
