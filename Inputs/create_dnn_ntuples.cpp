@@ -5,6 +5,7 @@
 #include "TTree.h"
 #include "TH1.h"
 #include "TList.h"
+#include "TSystem.h"
 #include "settings_for_eras.h"
 
 bool applyPreselection = true;
@@ -81,14 +82,14 @@ void create_dnn_ntuples( TString era = "2017" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
+  TString output_dir = "NTuples_" + era + "_test_new_script";
+  gSystem   -> Exec("mkdir " + output_dir);
+
   // Loop over all samples
   for (auto const& sample : samples_map){
 
     cout << endl << sample.first << "  :  " << endl ;
 
-
-    output_dir = "NTuples_" + era + "_test_new_script";
-    gSystem   -> Exec("mkdir " + output_dir);
     TFile *outFile = new TFile(output_dir + "/" + sample.first + ".root","RECREATE");
     TTree *outTree = new TTree("TauCheck", "tree created as DNN input");
     bool firstTree = true;
