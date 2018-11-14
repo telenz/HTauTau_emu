@@ -1,6 +1,8 @@
 import os
 import ROOT as R
 
+directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/2016/var_1d/"
+
 variable_list = [ "m_sv",
                   "m_vis",
                   "pt_1",
@@ -171,5 +173,6 @@ for var in variable_list :
     os.environ["VAR"] = var
     os.system("source ./run_gof.sh")
 
-    cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" +directory + "\\\")\""
+    #cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\")\""
     os.system(cmd)

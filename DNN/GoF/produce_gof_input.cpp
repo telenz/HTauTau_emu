@@ -459,8 +459,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   else if(plot_2d && category_in_use.name == "em_inclusive") filename += "-" + category_in_use.variable_2d( 0 , category_in_use.variable_2d.First(":") ) + "-" + category_in_use.variable_2d( category_in_use.variable_2d.First(":")+1 , category_in_use.variable_2d.Length() ) + ".root";
   else filename += ".root";
   TString output_directory = "output/";
-  if(!plot_2d) output_directory += "var_1d/";
-  else         output_directory += "var_2d/";
+  if(!plot_2d) output_directory += "2016/var_1d/";
+  else         output_directory += "2016/var_2d/";
 
   TFile * fileOut      = new TFile( output_directory + "/" + filename , "RECREATE" );
   fileOut             -> mkdir(category_in_use.name);
