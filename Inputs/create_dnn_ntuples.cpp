@@ -9,13 +9,14 @@
 
 bool applyPreselection = true;
 
-void create_dnn_ntuples( TString era = "2017" ,
-			 TString inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/"){
+void create_dnn_ntuples( TString era = "2017" ){
 
+  // Some definitions
   TString channel = "em";
   double luminosity = 0;
   float qcd_ss_os_iso_relaxed_ratio = 0;
   float trigger_filter_efficiency = 1;
+  TString input_dir;
 
   // Mapping of subsamples to output root-file
   map< TString , vector<TString> > samples_map;
@@ -37,7 +38,7 @@ void create_dnn_ntuples( TString era = "2017" ,
     // samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2017;
     //samples_map["NOMINAL_ntuple_EWKZ_"      + channel] = EWKZ_2017 ;
-    inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/";
 
   }
   else if(era == "2016"){
@@ -55,7 +56,7 @@ void create_dnn_ntuples( TString era = "2017" ,
     samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2016;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2016;
     samples_map["NOMINAL_ntuple_EWKZ_"      + channel] = EWKZ_2016 ;
-    inputDir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/";
   }
 
   // Needed for stitching
@@ -69,16 +70,16 @@ void create_dnn_ntuples( TString era = "2017" ,
   double xsecDY2Jets    = xsec_map->at(process_map->at("DY2Jets"));
   double xsecDY3Jets    = xsec_map->at(process_map->at("DY3Jets"));
   double xsecDY4Jets    = xsec_map->at(process_map->at("DY4Jets"));
-  double neventsWIncl   = getNEventsProcessed(inputDir+"/"+process_map->at("WJets")+".root");
-  double neventsW1Jets  = getNEventsProcessed(inputDir+"/"+process_map->at("W1Jets")+".root");
-  double neventsW2Jets  = getNEventsProcessed(inputDir+"/"+process_map->at("W2Jets")+".root");
-  double neventsW3Jets  = getNEventsProcessed(inputDir+"/"+process_map->at("W3Jets")+".root");
-  double neventsW4Jets  = getNEventsProcessed(inputDir+"/"+process_map->at("W4Jets")+".root");
-  double neventsDYIncl  = getNEventsProcessed(inputDir+"/"+process_map->at("DYJets")+".root");
-  double neventsDY1Jets = getNEventsProcessed(inputDir+"/"+process_map->at("DY1Jets")+".root");
-  double neventsDY2Jets = getNEventsProcessed(inputDir+"/"+process_map->at("DY2Jets")+".root");
-  double neventsDY3Jets = getNEventsProcessed(inputDir+"/"+process_map->at("DY3Jets")+".root");
-  double neventsDY4Jets = getNEventsProcessed(inputDir+"/"+process_map->at("DY4Jets")+".root");
+  double neventsWIncl   = getNEventsProcessed(input_dir+"/"+process_map->at("WJets")+".root");
+  double neventsW1Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W1Jets")+".root");
+  double neventsW2Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W2Jets")+".root");
+  double neventsW3Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W3Jets")+".root");
+  double neventsW4Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W4Jets")+".root");
+  double neventsDYIncl  = getNEventsProcessed(input_dir+"/"+process_map->at("DYJets")+".root");
+  double neventsDY1Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY1Jets")+".root");
+  double neventsDY2Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY2Jets")+".root");
+  double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
+  double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
   // Loop over all samples
   for (auto const& sample : samples_map){
@@ -94,9 +95,9 @@ void create_dnn_ntuples( TString era = "2017" ,
 
       cout << "  - " << subsample << " : ";
 
-      TFile *inFile  = new TFile( inputDir + "/" + subsample + ".root" ,"READ");
+      TFile *inFile  = new TFile( input_dir + "/" + subsample + ".root" ,"READ");
       TTree *inTree  = (TTree*) inFile -> Get("TauCheck");
-      double nevents = getNEventsProcessed( inputDir + "/" + subsample + ".root" );
+      double nevents = getNEventsProcessed( input_dir + "/" + subsample + ".root" );
 
       // SetBranchAddress for variables that need are needed for preselection or stitching
       unsigned int npartons;
