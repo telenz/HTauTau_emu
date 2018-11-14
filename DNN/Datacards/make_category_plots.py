@@ -14,5 +14,7 @@ for category in category_list :
     print "****************************************************************************************"
     print "Execute " + category + " : \n"
     # Now start to make the actual gof test
-    cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + category    + "\\\", true , \\\"output/2016/\\\")\""
+    cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + category    + "\\\", true , true , \\\"output/2016/\\\")\""
+    os.system(cmd)
+    cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + category    + "\\\", true , false , \\\"output/2016/\\\")\""
     os.system(cmd)
