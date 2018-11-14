@@ -1,7 +1,7 @@
 import os
 from glob import glob
 
-input_dir = "output/var_1d_correct_qcd_estimation"
+input_dir = "output/2016/var_1d"
 
 files_list = glob(os.path.join(input_dir, '*.json'))
 print files_list
