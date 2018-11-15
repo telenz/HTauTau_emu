@@ -54,55 +54,7 @@ variable_list = [ "m_sv",
                   "dZ_2_cal"
                   ]
 
-#variable_list = [ "d0_2_cal" ]
-
-
-#axis_range = { "m_sv"  : [160 , 0  , 4000],
-#               "m_vis" : [32 , 0  , 800],
-#               "pt_1"  : [20 , 10 , 500],
-#               "pt_2"  : [16 , 10 , 400],
-#               "eta_1" : [25 , -2.5 , +2.5],
-#               "eta_2" : [25 ,-2.4 , +2.4],
-#               "jpt_1" : [35 , 30 , 900],
-#               "jpt_2" : [20 , 30 , 500],
-#               "njets" : [11 , 0  , 11],
-#               "nbtag" : [3 , 0  , 2],
-#               "mt_1"  : [28 , 0 , 700],
-#               "mt_2"  : [20 , 0 , 500],
-#               "pt_tt" : [28 , 0 , 700],
-#               "mjj"   : [120, 0 , 3000],
-#               "met"   : [24 , 0 , 600],
-#               "dzeta" : [15 , -35 , 300],
-#               "phi_1" : [12 , -R.TMath.Pi() , R.TMath.Pi()],
-#               "phi_2" : [12 , -R.TMath.Pi() , R.TMath.Pi()],
-#               "jphi_1"     : [12 , -R.TMath.Pi() , R.TMath.Pi()],
-#               "jphi_2"     : [12 , -R.TMath.Pi() , R.TMath.Pi()],
-#               "mTemu"      : [24 , 0, 600],
-#               "mt_sv"      : [140 ,0, 3500 ],
-#               "pt_sv"      : [24 ,0, 600 ],
-#               "eta_sv"     : [22 ,-5.5,5.5 ],
-#               "phi_sv"     : [12 , -R.TMath.Pi() , R.TMath.Pi()],
-#               "iso_1"      : [15 , 0, 0.15],
-#               "iso_2"      : [10 , 0, 0.2],
-#               "d0_1"       : [18 , -0.045, 0.045],
-#               "d0_2"       : [18 ,-0.045, 0.045 ],
-#               "dZ_1"       : [16 ,-0.2,0.2 ],
-#               "dZ_2"       : [16 , -0.2,0.2 ],
-#               "mtmax"      : [24 , 0, 600],
-#               "dphi_mumet" : [12 , -R.TMath.Pi() , R.TMath.Pi()],
-#               "dphi_emet"  : [12 , -R.TMath.Pi() , R.TMath.Pi()],
-#               "msvmet"     : [20 ,0,500 ],
-#               "dr_tt"      : [12 ,0,2*R.TMath.Pi() ],
-#               "pzetavis"   : [16 ,0,400 ],
-#               "pzetamiss"  : [24 , -300,300],
-#               "njetspt20"  : [13 , 0, 13],
-#               "jeta_1"     : [18 ,-4.5,4.5 ],
-#               "jeta_2"     : [18 ,-4.5,4.5 ],
-#               "jdeta"      : [18 , 0, 9],
-#               "bpt_1"      : [22 , 0, 550],
-#               "beta_1"     : [25 , -2.5,2.5],
-#               "metphi"     : [12 , -R.TMath.Pi() , R.TMath.Pi()],
-#               }
+#variable_list = [ "m_sv" ]
 
 axis_range = { "m_sv"  : [12 , 0  , 4000],
                "m_vis" : [12 , 0  , 800],
@@ -166,6 +118,7 @@ for var in variable_list :
     # Get axis ranges (if not specified set to default value of {10,400})
     nbins , xmin , xmax = axis_range.get(var,[8, 0,400])
 
+    # Produce the root-files (datacard input)
     cmd = "root -l -b -q produce_gof_input.cpp+\"(\\\"em_inclusive\\\",false,\\\""+var+"\\\" , " + str(nbins) + " , {"+str(xmin)+","+str(xmax)+"})\""
     os.system(cmd)
 
@@ -173,6 +126,8 @@ for var in variable_list :
     os.environ["VAR"] = var
     os.system("source ./run_gof.sh")
 
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" +directory + "\\\")\""
-    #cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\")\""
+    # Plotting
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + directory + "\\\")\""
+    os.system(cmd)
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + directory + "\\\")\""
     os.system(cmd)
