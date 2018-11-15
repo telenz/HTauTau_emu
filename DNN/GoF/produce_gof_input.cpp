@@ -47,7 +47,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   em_incl.cutstring_ss = cuts_kine + cuts_iso_ss_general + "&& iso_1<0.50 && iso_2>0.2 && iso_2<0.5" + cuts_category_specific;
   em_incl.variable_2d  = variable_2d;  // first variable corresponds to y-variable
   em_incl.variable_1d  = variable_1d;
-  em_incl.qcdweight    = "2.30*";
+  em_incl.qcdweight    = "2.3*";
   em_incl.bins_x_2d    = {0,50,55,60,65,70,75,80,85,90,95,100,400};
   em_incl.bins_y_2d    = {15,20,25,30,35,40,300};
   float bound = range[0];
@@ -433,16 +433,16 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   for(auto & smpl : sample_map){
     if( smpl.first == "ggH125"  ||
 	smpl.first == "qqH125"  ||
-	smpl.first == "Data" ||
-	smpl.first == "QCD"    ) continue;
+	smpl.first == "Data"    ||
+	smpl.first == "QCD"      ) continue;
     sample_map["QCD"].histSS_1d        -> Add( smpl.second.histSS_1d , -1 );
-    sample_map["QCD"].histSSrelaxed_1d -> Add( smpl.second.histSSrelaxed_1d , -1 );
+    //sample_map["QCD"].histSSrelaxed_1d -> Add( smpl.second.histSSrelaxed_1d , -1 );
   }
   sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSS_1d -> Clone();
 
   // 2.) Calculate normalization via ss/ss_relaxed
-  double qcd_norm = sample_map["QCD"].histSS_1d->Integral(0,sample_map["QCD"].histSS_1d->GetNbinsX()+1)/sample_map["QCD"].histSSrelaxed_1d->Integral(0,sample_map["QCD"].histSSrelaxed_1d->GetNbinsX()+1);
-  cout << endl << "qcd_norm = " << qcd_norm << endl << endl;
+  //double qcd_norm = sample_map["QCD"].histSS_1d->Integral(0,sample_map["QCD"].histSS_1d->GetNbinsX()+1)/sample_map["QCD"].histSSrelaxed_1d->Integral(0,sample_map["QCD"].histSSrelaxed_1d->GetNbinsX()+1);
+  //cout << endl << "qcd_norm = " << qcd_norm << endl << endl;
   //sample_map["QCD"].hist_1d -> Scale(qcd_norm);
 
   //************************************************************************************************
