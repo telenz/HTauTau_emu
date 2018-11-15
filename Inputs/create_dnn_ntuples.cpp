@@ -111,6 +111,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       bool extramuon_veto;
       float pt_1;
       float pt_2;
+      float dzeta;
       bool metFilters;
       bool trg_muonelectron;
       inTree->SetBranchAddress("npartons",&npartons);
@@ -120,6 +121,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       inTree->SetBranchAddress("extramuon_veto",&extramuon_veto);
       inTree->SetBranchAddress("pt_1",&pt_1);
       inTree->SetBranchAddress("pt_2",&pt_2);
+      inTree->SetBranchAddress("dzeta",&dzeta);
       inTree->SetBranchAddress("metFilters",&metFilters);
       inTree->SetBranchAddress("trg_muonelectron",&trg_muonelectron);
 
@@ -155,13 +157,16 @@ void create_dnn_ntuples( TString era = "2017" ){
 
 	// Add here preselection if necessary
 	if(applyPreselection){
-	  if( iso_1 > 0.5 )              continue;
-	  if( iso_2 > 0.5)                continue;
-	  if( extraelec_veto > 0.5)       continue;
-	  if( extramuon_veto > 0.5)       continue;
-	  if( TMath::Max(pt_1,pt_2) < 24) continue;
-	  if( metFilters < 0.5 )          continue;
-	  if( trg_muonelectron < 0.5 )    continue;
+	  if( iso_1 > 0.5 )                continue;
+	  if( iso_2 > 0.5 )                continue;
+	  if( extraelec_veto > 0.5 )       continue;
+	  if( extramuon_veto > 0.5 )       continue;
+	  if( pt_1 < 13 )                  continue;
+	  if( pt_2 < 10 )                  continue;
+	  if( TMath::Max(pt_1,pt_2) < 24 ) continue;
+	  if(dzeta < -50 )                 continue;
+	  if( metFilters < 0.5 )           continue;
+	  if( trg_muonelectron < 0.5 )     continue;
 	}
 	xsec_lumi_weight = xsec*luminosity/nevents;
 	qcd_correction = qcd_ss_os_iso_relaxed_ratio;
