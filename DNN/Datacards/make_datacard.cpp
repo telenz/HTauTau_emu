@@ -83,7 +83,6 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   Sample Data( "data_obs" , "em-NOMINAL_ntuple_Data.root" );
   Sample ZTT(  "ZTT"      , "em-NOMINAL_ntuple_ZTT.root" );
   Sample ZL(   "ZL"       , "em-NOMINAL_ntuple_ZL.root" );
-  Sample EWKZ( "EWKZ"     , "em-NOMINAL_ntuple_EWKZ.root" );
   Sample W(    "W"        , "em-NOMINAL_ntuple_W.root" );
   Sample TT(   "TT"       , "em-NOMINAL_ntuple_TT.root" );
   Sample VV(   "VV"       , "em-NOMINAL_ntuple_Diboson.root" );
@@ -95,7 +94,6 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   map<TString,Sample> sample_map = { { "Data" , Data },
 				     { "ZTT"  , ZTT } ,
 				     { "ZL"   , ZL } ,
-				     { "EWKZ" , EWKZ } ,
 				     { "W"    , W } ,
 				     { "TT"   , TT } ,
 				     { "VV"   , VV } ,
@@ -209,7 +207,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
       smpl.second.uncertainties["ttbarShapeDown"].topweight = "";
     }
 
-    // 5.) DY shape (EWKZ sample should be added here)
+    // 5.) DY shape
     if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" ){
       Sample dyShapeUp = smpl.second;
       Sample dyShapeDown = smpl.second;
