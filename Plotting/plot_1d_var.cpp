@@ -6,6 +6,7 @@
 #include "THStack.h"
 #include "TROOT.h"
 #include "TMath.h"
+#include "TColor.h"
 
 void plot_1d_var(
 		 TString variable    = "m_sv",
@@ -179,10 +180,16 @@ void plot_1d_var(
    signal_strength -> SetFillStyle(0);
 
    // BLINDING
-   for(int i = 1 ; i <= data.hist->GetNbinsX() ; i++){
-     if(signal_strength -> GetBinContent(i) > 1.02 ){
-       data.hist->SetBinContent(i,0);
-       data.hist->SetBinError(i,0);
+   // for(int i = 1 ; i <= data.hist->GetNbinsX() ; i++){
+   //   if(signal_strength -> GetBinContent(i) > 1.02 ){
+   //     data.hist->SetBinContent(i,0);
+   //     data.hist->SetBinError(i,0);
+   //   }
+   // }
+   if(category.Contains("ggh") || category.Contains("qqh")){
+     for(int i = 1 ; i <= data.hist->GetNbinsX() ; i++){
+	 data.hist->SetBinContent(i,0);
+	 data.hist->SetBinError(i,0);
      }
    }
 
