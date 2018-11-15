@@ -47,7 +47,7 @@ void plot_1d_var(
 
    // Define sample categorization
    SampleForPlotting data("Data",{"data_obs"});
-   SampleForPlotting ztt("ZTT",{"ZTT","EWKZ"});
+   SampleForPlotting ztt("ZTT",{"ZTT"});
    SampleForPlotting zl("ZL",{"ZL"});
    SampleForPlotting vv("VV",{"VV"});
    SampleForPlotting st("ST",{"ST"});
