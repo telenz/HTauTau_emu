@@ -41,32 +41,32 @@ const vector<TString> GluGluHToTauTau_2016 = { "GluGluHToTauTau_M125" };
 const vector<TString> VBFHToTauTau_2016    = { "VBFHToTauTau_M125" };
 // **************************************************************************************************
 // **************************************************************************************************
-// Cross-section map ( needs to be checked again )
-// 2017 (needs to be checked again)
+// Cross-section map
+// 2017 (checked ! - reference is https://twiki.cern.ch/twiki/bin/view/CMS/HiggsToTauTauWorking2017 )
 const map<TString, double> xsec_map_2017 = {
    // { "DYJetsToLL_M-10to50"      , 15820*1.079 },
-  { "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"  , 5345*1.079 },//ML AN: 5767.255, Twiki: new NNLO: 6225.42
-  { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 875.7*1.079 },//ML AN: 1012.5 ( k factor 1.164), Twiki: 877.8
-  { "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 306.9*1.079 },//ML AN: 332.8 ( k factor 1.164), Twiki: 304.4
-  { "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 111.9*1.079 },//ML AN: 101.8 ( k factor 1.164), Twiki: 111.5
-  { "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 43.97*1.079 },//ML AN: 54.8 ( k factor 1.164), Twiki: 44.03
-  { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 52760*1.166 },// = 61518.16, ML AN: 61526.7, Twiki: 44.03
-  { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 8104.*1.166 },//ML AN: 9644.5 ( k factor 1.221), Twiki: 8104.0
-  { "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 2796.*1.166 },//ML AN: 3144.5 ( k factor  1.221), Twiki: 2793.0 
-  { "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 993.5*1.166 },//ML AN: 954.8 ( k factor  1.221), Twiki: 992.5
-  { "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 544.4*1.166 },//ML AN: 485.6 ( k factor  1.221), Twiki: 544.3
-  { "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8"        , 88.29 },//checked
-  { "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8"     , 377.96 },//checked
-  { "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8" , 365.35 },//checked
-  { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" , 26.38 }, //ML AN: 80.95, Twiki: 80.95
-  { "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8"     , 44.33 }, //ML AN: 136.02, Twiki: 136.02
-  { "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                  , 35.85 },//checked
-  { "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                      , 35.85 },//checked
-  { "WW_TuneCP5_13TeV-pythia8" , 49.997 },//ML AN, Twiki: 75.88, tau Id: 118.7 
-  { "WZ_TuneCP5_13TeV-pythia8" , 5.595 },//ML AN, Twiki: 27.57, tau Id: 27.68
-  { "ZZ_TuneCP5_13TeV-pythia8" , 10.71 },//ML AN, Twiki: 12.14, , tau Id: 12.19
-  { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" , 48.58*0.0627 },//checked
-  { "VBFHToTauTau_M125_13TeV_powheg_pythia8"    , 3.782*0.0627 }//checked
+  { "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"  , 5765.4*1.079 }, // 5765.4 is the old NNLO xsec - it has been updated to 6225.42 - has been decided to keep the old value for consistency
+  { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 877.8*1.079 },
+  { "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 304.4*1.079 },
+  { "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 111.5*1.079 },
+  { "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 44.03*1.079 },
+  { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 52940.0*1.162 },
+  { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 8104.0*1.162 },
+  { "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 2793.0*1.162 },
+  { "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 992.5*1.162 },
+  { "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 544.3*1.162 },
+  { "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8"        , 88.29 },
+  { "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8"     , 377.96 },
+  { "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8" , 365.35 },
+  { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" , 80.95 },
+  { "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8"     , 136.02 },
+  { "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                  , 35.85 },
+  { "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                      , 35.85 },
+  { "WW_TuneCP5_13TeV-pythia8" , 75.88 },
+  { "WZ_TuneCP5_13TeV-pythia8" , 27.57 },
+  { "ZZ_TuneCP5_13TeV-pythia8" , 12.14 },
+  { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" , 48.58*0.0627 },
+  { "VBFHToTauTau_M125_13TeV_powheg_pythia8"    , 3.782*0.0627 }
 };
 
 // 2016 (taken from AN2016_355_v10 with minor unrelevant deviations - everything was checked)
