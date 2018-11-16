@@ -15,7 +15,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   SetStyle();
 
   bool verbose = false;
-  bool apply_btag_veto = false;
+  bool apply_btag_veto = true;
   //************************************************************************************************
   // Define some common weights and cuts
 
