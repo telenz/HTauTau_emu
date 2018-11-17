@@ -54,7 +54,7 @@ variable_list = [ "m_sv",
                   "dZ_2_cal"
                   ]
 
-#variable_list = [ "m_sv" ]
+variable_list = [ "pt_tt" ]
 
 axis_range = { "m_sv"  : [12 , 0  , 4000],
                "m_vis" : [12 , 0  , 800],
@@ -65,10 +65,10 @@ axis_range = { "m_sv"  : [12 , 0  , 4000],
                "jpt_1" : [12 , 30 , 900],
                "jpt_2" : [12 , 30 , 500],
                "njets" : [12 , 0  , 11],
-               "nbtag" : [10 , 0  , 10],
-               "mt_1"  : [12 , 0 , 700],
+               "nbtag" : [5 , 0  , 5],
+               "mt_1"  : [12 , 0 , 300],
                "mt_2"  : [12 , 0 , 500],
-               "pt_tt" : [12 , 0 , 700],
+               "pt_tt" : [12 , 0 , 600],
                "mjj"   : [12, 0 , 3000],
                "met"   : [12 , 0 , 600],
                "dzeta" : [12 , -35 , 300],
@@ -127,7 +127,7 @@ for var in variable_list :
     os.system("source ./run_gof.sh")
 
     # Plotting
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + directory + "\\\")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",true,false,\\\"" + directory + "\\\")\""
     os.system(cmd)
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + directory + "\\\")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",true,true,\\\"" + directory + "\\\")\""
     os.system(cmd)
