@@ -14,12 +14,7 @@ def main():
     channel = args.channel
     model = args.model
 
-    if not os.path.exists("plots"):
-        os.mkdir("plots")
-    if not os.path.exists("plots/confusion"):
-        os.mkdir("plots/confusion")
-
-    filepath = "/".join(["../DNN/Datacards/output/2016/htt_{0}.inputs-sm-13TeV-ML.root".format(channel)])
+    filepath = "/".join(["output/2016/htt_{0}.inputs-sm-13TeV-ML.root".format(channel)])
     print filepath
     if not os.path.exists(filepath):
         print "file not found!"
@@ -46,16 +41,16 @@ def main():
         confusion[TDirs.index(TDir)] = compressDict(tempdict,classes,channel)
 
     # plotting confusion matrices
-    print "Writing confusion matrices to plots/confusion"
-    plot_confusion(confusion,classes,"plots/confusion/{0}_{1}_confusion.png".format(model,channel), "std")
+    print "Writing confusion matrices to output/2016/figures/"
+    plot_confusion(confusion,classes,"output/2016/figures/{0}_{1}_confusion.png".format(model,channel), "std")
 
     conf_pur1, conf_pur2 = get_purity_representations(confusion)
-    plot_confusion(conf_pur1, classes, "plots/confusion/{0}_{1}_confusion_pur1.png".format(model,channel))
-    plot_confusion(conf_pur2, classes, "plots/confusion/{0}_{1}_confusion_pur2.png".format(model,channel), "pur")
+    plot_confusion(conf_pur1, classes, "output/2016/figures/{0}_{1}_confusion_pur1.png".format(model,channel))
+    plot_confusion(conf_pur2, classes, "output/2016/figures/{0}_{1}_confusion_pur2.png".format(model,channel), "pur")
 
     conf_eff1, conf_eff2 = get_efficiency_representations(confusion)
-    plot_confusion(conf_eff1, classes, "plots/confusion/{0}_{1}_confusion_eff1.png".format(model,channel))
-    plot_confusion(conf_eff2, classes, "plots/confusion/{0}_{1}_confusion_eff2.png".format(model,channel), "eff")
+    plot_confusion(conf_eff1, classes, "output/2016/figures/{0}_{1}_confusion_eff1.png".format(model,channel))
+    plot_confusion(conf_eff2, classes, "output/2016/figures/{0}_{1}_confusion_eff2.png".format(model,channel), "eff")
 
     rootfile.Close()
 
