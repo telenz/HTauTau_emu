@@ -18,3 +18,6 @@ for category in category_list :
     os.system(cmd)
     cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + category    + "\\\", true , false , \\\"output/2016/\\\")\""
     os.system(cmd)
+
+# Print confusione matrices
+os.system("python ../../Plotting/Confusion.py -c \"em\" ")
