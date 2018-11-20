@@ -28,7 +28,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     xsec_map    = &xsec_map_2017;
     process_map = &process_map_2017;
     luminosity  = 41900;
-    trigger_filter_efficiency = 0.979; // FIXME
+    trigger_filter_efficiency = 1.0;
     qcd_ss_os_iso_relaxed_ratio = 2.38;
     samples_map["NOMINAL_ntuple_MuonEG_"    + channel] = MuonEG_Run2017;
     samples_map["NOMINAL_ntuple_DYJets_"    + channel] = DYJets_2017;
@@ -38,7 +38,6 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2017;
     // samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2017;
-    //samples_map["NOMINAL_ntuple_EWKZ_"      + channel] = EWKZ_2017 ;
     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/";
 
   }
@@ -56,7 +55,6 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2016;
     samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2016;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2016;
-    samples_map["NOMINAL_ntuple_EWKZ_"      + channel] = EWKZ_2016 ;
     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/";
   }
 
