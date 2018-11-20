@@ -49,11 +49,14 @@ variable_list = [ "m_sv",
                   "bpt_1",
                   "beta_1",
                   "metphi",
-                  "d0_1_cal",
-                  "dZ_1_cal",
-                  "d0_2_cal",
-                  "dZ_2_cal",
+                  #"d0_1_cal",
+                  #"dZ_1_cal",
+                  #"d0_2_cal",
+                  #"dZ_2_cal",
                   "mTdileptonMET",
+                  "pt_ttjj",
+                  "dijetphi",
+                  "dijetpt"
                   ]
 
 #variable_list = [ "m_vis" ]
@@ -109,6 +112,9 @@ axis_range = { "m_sv"  : [8 , 0  , 300],
                "d0_2_cal"   : [8 , -0.05 , +0.05],
                "dZ_2_cal"   : [8 , -0.20 , +0.20],
                "mTdileptonMET" : [8 , 0 , 200],
+               "pt_ttjj" : [8,0,1000],
+               "dijetphi" : [8,0,1000] ,
+               "dijetpt" : [8,0,1000]
                }
 
 # Execute produce_gof_inputs.cpp for all variables
