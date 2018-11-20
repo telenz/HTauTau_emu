@@ -13,8 +13,9 @@ void plot_1d_var(
 		 TString category    = "em_inclusive",
 		 bool draw_signal    = false,
 		 bool draw_log_scale = false,
-		 TString directory   = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/var_1d/"
-          ) {
+		 TString directory   = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/var_1d/",
+		 TString era         = "2016"
+		 ) {
 
   // General uncertainties
   float err_lumi     = 0.025;
@@ -220,7 +221,8 @@ void plot_1d_var(
    leg->Draw();
    writeExtraText = false;
    extraText = "Preliminary";
-   CMS_lumi(upper,4,33);
+   if(era=="2016") CMS_lumi(upper,4,33);
+   else if(era=="2017") CMS_lumi(upper,5,33);
    plotchannel("e#mu",0.25,0.84);
     
    char KT[100];
