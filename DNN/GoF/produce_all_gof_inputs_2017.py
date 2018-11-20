@@ -26,6 +26,7 @@ variable_list = [ "m_sv",
                   "mTemu",
                   "mt_sv",
                   "pt_sv",
+                  "pt_vis",
                   "eta_sv",
                   "phi_sv",
                   "iso_1",
@@ -55,7 +56,7 @@ variable_list = [ "m_sv",
                   "mTdileptonMET",
                   ]
 
-variable_list = [ "m_sv" ]
+#variable_list = [ "m_vis" ]
 
 axis_range = { "m_sv"  : [8 , 0  , 300],
                "m_vis" : [8 , 0  , 300],
@@ -80,6 +81,7 @@ axis_range = { "m_sv"  : [8 , 0  , 300],
                "mTemu"      : [8 , 0, 600],
                "mt_sv"      : [8 ,0, 3500 ],
                "pt_sv"      : [8 ,0, 400 ],
+               "pt_vis"      : [8 ,0, 400 ],
                "eta_sv"     : [8 ,-5.5,5.5 ],
                "phi_sv"     : [8 , -R.TMath.Pi() , R.TMath.Pi()],
                "iso_1"      : [8 , 0, 0.15],
@@ -130,7 +132,7 @@ for var in variable_list :
     os.system("source ./run_gof.sh")
 
     # Plotting
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + directory + "\\\")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + directory + "\\\",\\\"2017\\\")\""
     os.system(cmd)
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + directory + "\\\")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + directory + "\\\",\\\"2017\\\")\""
     os.system(cmd)
