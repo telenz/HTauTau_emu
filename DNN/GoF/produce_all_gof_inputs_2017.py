@@ -59,7 +59,7 @@ variable_list = [ "m_sv",
                   "dijetpt"
                   ]
 
-#variable_list = [ "m_vis" ]
+#variable_list = [ "mjj" ]
 
 axis_range = { "m_sv"  : [8 , 0  , 300],
                "m_vis" : [8 , 0  , 300],
@@ -76,7 +76,7 @@ axis_range = { "m_sv"  : [8 , 0  , 300],
                "pt_tt" : [8 , 0 , 600],
                "mjj"   : [8 , 0 , 1000],
                "met"   : [8 , 0 , 400],
-               "dzeta" : [5 , -50 , 0],
+               "dzeta" : [8 , -50 , 200],
                "phi_1" : [8 , -R.TMath.Pi() , R.TMath.Pi()],
                "phi_2" : [8 , -R.TMath.Pi() , R.TMath.Pi()],
                "jphi_1"     : [8 , -R.TMath.Pi() , R.TMath.Pi()],
