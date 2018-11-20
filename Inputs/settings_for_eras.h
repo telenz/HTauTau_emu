@@ -28,7 +28,7 @@ const vector<TString> Diboson_2017         = { "WW_TuneCP5_13TeV-pythia8" ,
 					       "ZZ_TuneCP5_13TeV-pythia8" };
 const vector<TString> GluGluHToTauTau_2017 = { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" };
 const vector<TString> VBFHToTauTau_2017    = { "VBFHToTauTau_M125_13TeV_powheg_pythia8" };
-const vector<TString> Embedded             = { "Embeddind_Run2017" };
+const vector<TString> Embedded             = { "Embedding_Run2017" };
 
 // 2016
 const vector<TString> MuonEG_Run2016  = { "MuonEG_Run2016B" , "MuonEG_Run2016C" , "MuonEG_Run2016D" , "MuonEG_Run2016E" , "MuonEG_Run2016F" , "MuonEG_Run2016G" , "MuonEG_Run2016H" };
