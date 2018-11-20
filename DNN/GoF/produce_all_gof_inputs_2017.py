@@ -55,7 +55,7 @@ variable_list = [ "m_sv",
                   "mTdileptonMET",
                   ]
 
-variable_list = [ "mTdileptonMET" ]
+variable_list = [ "m_sv" ]
 
 axis_range = { "m_sv"  : [12 , 0  , 300],
                "m_vis" : [12 , 0  , 300],
@@ -126,7 +126,8 @@ for var in variable_list :
 
     # Now start to make the actual gof test
     os.environ["VAR"] = var
-    #os.system("source ./run_gof.sh")
+    os.environ["ERA"] = "2017"
+    os.system("source ./run_gof.sh")
 
     # Plotting
     cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + directory + "\\\")\""

@@ -5,6 +5,7 @@ directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/
 
 variable_list = [ "m_sv",
                   "m_vis",
+                  #"pt_vis",
                   "pt_1",
                   "pt_2",
                   "eta_1",
@@ -80,6 +81,7 @@ axis_range = { "m_sv"  : [12 , 0  , 300],
                "mTemu"      : [12 , 0, 600],
                "mt_sv"      : [12 ,0, 3500 ],
                "pt_sv"      : [12 ,0, 400 ],
+               "pt_vis"     : [12 ,0, 400 ],
                "eta_sv"     : [12 ,-5.5,5.5 ],
                "phi_sv"     : [12 , -R.TMath.Pi() , R.TMath.Pi()],
                "iso_1"      : [12 , 0, 0.15],
@@ -126,6 +128,7 @@ for var in variable_list :
 
     # Now start to make the actual gof test
     os.environ["VAR"] = var
+    os.environ["ERA"] = "2016"
     os.system("source ./run_gof.sh")
 
     # Plotting
