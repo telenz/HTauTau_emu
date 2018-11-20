@@ -113,8 +113,6 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
     smpl.second.weightString       = weight;
     smpl.second.cutStringSS        = "q_1*q_2>0" + em_ztt.cutstring;
     smpl.second.weightStringSS     = weight;
-    smpl.second.cutStringSSrelaxed = "q_1*q_2>0" + em_ztt.cutstring_ss;
-    smpl.second.weightStringSSrelaxed = weight;
     smpl.second.variable_1d = em_ztt.variable_1d;
   }
 
@@ -129,11 +127,6 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   sample_map["QCD"].weightStringSS  = "1*";
   sample_map["ZTT"].cutStringSS += "&&isZTT";
   sample_map["ZL"].cutStringSS += "&&!isZTT";
-
-  sample_map["Data"].weightStringSSrelaxed = "1*";
-  sample_map["QCD"].weightStringSSrelaxed  = "1*";
-  sample_map["ZTT"].cutStringSSrelaxed += "&&isZTT";
-  sample_map["ZL"].cutStringSSrelaxed += "&&!isZTT";
 
   // Define sample specific weights
   sample_map["TT"].topweight = "topptweight*";
@@ -276,24 +269,19 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
       smpl.second.hist_1d          = new TH1D(smpl.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
       smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
-      smpl.second.histSSrelaxed_1d = new TH1D(smpl.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
       TString full_weight_string            = smpl.second.weightString + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
       TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm + smpl.second.qcdweight;
-      TString full_weight_string_ss_relaxed = smpl.second.weightStringSSrelaxed + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm + smpl.second.qcdweight;
 
       if(verbose){
 	cout << "weight string        " << " : " << full_weight_string << endl;
 	cout << "weight string ss     " << " : " << full_weight_string_ss << endl;
-	cout << "weight string ss rel." << " : " << full_weight_string_ss_relaxed << endl;
 	cout << "cut string           " << " : " << smpl.second.cutString << endl;
 	cout << "cut string ss        " << " : " << smpl.second.cutStringSS << endl;
-	cout << "cut string ss rel.   " << " : " << smpl.second.cutStringSSrelaxed << endl << endl;
       }
 
       tree -> Draw(smpl.second.variable_1d+">>"+smpl.second.hist_1d->GetName()   , full_weight_string    +"("+smpl.second.cutString   + " && predicted_class ==" + Form("%d",cat.second.class_nr) + ")" );
       tree -> Draw(smpl.second.variable_1d+">>"+smpl.second.histSS_1d->GetName() , full_weight_string_ss +"("+smpl.second.cutStringSS + " && predicted_class ==" + Form("%d",cat.second.class_nr) + ")" );
-      tree -> Draw(smpl.second.variable_1d+">>"+smpl.second.histSSrelaxed_1d->GetName(),full_weight_string_ss_relaxed+"("+smpl.second.cutStringSSrelaxed+"&&predicted_class =="+Form("%d",cat.second.class_nr)+")");
 
       // Make QCD estimation
       if( smpl.second.name == "QCD" ) sample_map["QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
@@ -311,22 +299,17 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
 	full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
 	full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm + sys.second.qcdweight;
-	full_weight_string_ss_relaxed = sys.second.weightStringSSrelaxed + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm + sys.second.qcdweight;
 	if(verbose){
 	  cout << "weight string        " << " : " << full_weight_string << endl;
 	  cout << "weight string ss     " << " : " << full_weight_string_ss << endl;
-	  cout << "weight string ss rel." << " : " << full_weight_string_ss_relaxed << endl;
 	  cout << "cut string           " << " : " << sys.second.cutString << endl;
 	  cout << "cut string ss        " << " : " << sys.second.cutStringSS << endl;
-	  cout << "cut string ss rel.   " << " : " << sys.second.cutStringSSrelaxed << endl << endl;
 	}
 	sys.second.hist_1d          = new TH1D(sys.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
 	sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
-	sys.second.histSSrelaxed_1d = new TH1D(sys.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.hist_1d->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSS_1d->GetName() , full_weight_string_ss + "(" + sys.second.cutStringSS + ")" );
-	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSSrelaxed_1d->GetName() , full_weight_string_ss_relaxed + "(" + sys.second.cutStringSSrelaxed + ")" );
 
 	// Make QCD estimation for up-downward variation for qcdweight
 	if( !sys.first.Contains("qcd") ) continue;

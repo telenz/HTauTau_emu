@@ -142,8 +142,6 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.weightString       = weight;
     smpl.second.cutStringSS        = "os<0.5" + category_in_use.cutstring;
     smpl.second.weightStringSS     = weight;
-    smpl.second.cutStringSSrelaxed = "os<0.5" + category_in_use.cutstring_ss;
-    smpl.second.weightStringSSrelaxed = weight;
     smpl.second.variable_1d = category_in_use.variable_1d;
     smpl.second.variable_2d = category_in_use.variable_2d;
   }
@@ -159,11 +157,6 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   sample_map["QCD"].weightStringSS  = "1*";
   sample_map["ZTT"].cutStringSS += "&&isZTT";
   sample_map["ZL"].cutStringSS += "&&!isZTT";
-
-  sample_map["Data"].weightStringSSrelaxed = "1*";
-  sample_map["QCD"].weightStringSSrelaxed  = "1*";
-  sample_map["ZTT"].cutStringSSrelaxed += "&&isZTT";
-  sample_map["ZL"].cutStringSSrelaxed += "&&!isZTT";
 
   // Define sample specific weights
   sample_map["TT"].topweight = "topptweight*";
@@ -364,42 +357,34 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
     smpl.second.hist_1d          = new TH1D(smpl.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
     smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
-    smpl.second.histSSrelaxed_1d = new TH1D(smpl.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
     const int nbins_x_2d = category_in_use.bins_x_2d.size() - 1;
     const int nbins_y_2d = category_in_use.bins_y_2d.size() - 1;
 
     smpl.second.hist_2d          = new TH2D(smpl.second.name + "_os_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
     smpl.second.histSS_2d        = new TH2D(smpl.second.name + "_ss_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
-    smpl.second.histSSrelaxed_2d = new TH2D(smpl.second.name + "_ss_relaxed_2d" , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
 
     TString full_weight_string            = smpl.second.weightString + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
     TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm + smpl.second.qcdweight;
-    TString full_weight_string_ss_relaxed = smpl.second.weightStringSSrelaxed + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm + smpl.second.qcdweight;
 
     if(verbose){
       cout << "Variable_2d          " << " : " << smpl.second.variable_2d << endl;
       cout << "weight string        " << " : " << full_weight_string << endl;
       cout << "weight string ss     " << " : " << full_weight_string_ss << endl;
-      cout << "weight string ss rel." << " : " << full_weight_string_ss_relaxed << endl;
       cout << "cut string           " << " : " << smpl.second.cutString << endl;
       cout << "cut string ss        " << " : " << smpl.second.cutStringSS << endl;
-      cout << "cut string ss rel.   " << " : " << smpl.second.cutStringSSrelaxed << endl << endl;
     }
 
     if(!plot_2d){
       tree -> Draw( smpl.second.variable_1d + ">>" + smpl.second.hist_1d->GetName() , full_weight_string + "(" + smpl.second.cutString + ")" );
       tree -> Draw( smpl.second.variable_1d + ">>" + smpl.second.histSS_1d->GetName() , full_weight_string_ss + "(" + smpl.second.cutStringSS + ")" );
-      tree -> Draw( smpl.second.variable_1d + ">>" + smpl.second.histSSrelaxed_1d->GetName() , full_weight_string_ss_relaxed + "(" + smpl.second.cutStringSSrelaxed + ")" );
     }
     else{
       tree -> Draw( smpl.second.variable_2d + ">>" + smpl.second.hist_2d->GetName() , full_weight_string + "(" + smpl.second.cutString + ")" );
       tree -> Draw( smpl.second.variable_2d + ">>" + smpl.second.histSS_2d->GetName() , full_weight_string_ss + "(" + smpl.second.cutStringSS + ")" );
-      tree -> Draw( smpl.second.variable_2d + ">>" + smpl.second.histSSrelaxed_2d->GetName() , full_weight_string_ss_relaxed + "(" + smpl.second.cutStringSSrelaxed + ")" );
 
       smpl.second.hist_1d          = (TH1D*) Unfold(smpl.second.hist_2d);
       smpl.second.histSS_1d        = (TH1D*) Unfold(smpl.second.histSS_2d);
-      smpl.second.histSSrelaxed_1d = (TH1D*) Unfold(smpl.second.histSSrelaxed_2d);
     }
 
     // Make QCD estimation
@@ -411,37 +396,29 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
       full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
       full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm + sys.second.qcdweight;
-      full_weight_string_ss_relaxed = sys.second.weightStringSSrelaxed + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm + sys.second.qcdweight;
       if(verbose){
 	cout << "Variable_2d          " << " : " << sys.second.variable_2d << endl;
 	cout << "weight string        " << " : " << full_weight_string << endl;
 	cout << "weight string ss     " << " : " << full_weight_string_ss << endl;
-	cout << "weight string ss rel." << " : " << full_weight_string_ss_relaxed << endl;
 	cout << "cut string           " << " : " << sys.second.cutString << endl;
 	cout << "cut string ss        " << " : " << sys.second.cutStringSS << endl;
-	cout << "cut string ss rel.   " << " : " << sys.second.cutStringSSrelaxed << endl << endl;
       }
       sys.second.hist_1d          = new TH1D(sys.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
       sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
-      sys.second.histSSrelaxed_1d = new TH1D(sys.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
       sys.second.hist_2d          = new TH2D(sys.second.name + "_os_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
       sys.second.histSS_2d        = new TH2D(sys.second.name + "_ss_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
-      sys.second.histSSrelaxed_2d = new TH2D(sys.second.name + "_ss_relaxed_2d" , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
 
       if(!plot_2d){
 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.hist_1d->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSS_1d->GetName() , full_weight_string_ss + "(" + sys.second.cutStringSS + ")" );
-	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSSrelaxed_1d->GetName() , full_weight_string_ss_relaxed + "(" + sys.second.cutStringSSrelaxed + ")" );
       }
       else{
 	tree -> Draw( sys.second.variable_2d + ">>" + sys.second.hist_2d->GetName() , full_weight_string + "(" + sys.second.cutString + ")" );
 	tree -> Draw( sys.second.variable_2d + ">>" + sys.second.histSS_2d->GetName() , full_weight_string_ss + "(" + sys.second.cutStringSS + ")" );
-	tree -> Draw( sys.second.variable_2d + ">>" + sys.second.histSSrelaxed_2d->GetName() , full_weight_string_ss_relaxed + "(" + sys.second.cutStringSSrelaxed + ")" );
 
 	sys.second.hist_1d          = (TH1D*) Unfold(sys.second.hist_2d);
 	sys.second.histSS_1d        = (TH1D*) Unfold(sys.second.histSS_2d);
-	sys.second.histSSrelaxed_1d = (TH1D*) Unfold(sys.second.histSSrelaxed_2d);
       }
 
       // Make QCD estimation for up-downward variation for qcdweight

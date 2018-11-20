@@ -21,8 +21,6 @@ public :
   TString weightString = "1*";
   TString cutStringSS    = "";
   TString weightStringSS = "1*";
-  TString cutStringSSrelaxed    = "";
-  TString weightStringSSrelaxed = "1*";
 
   TString topweight     = "1*";
   TString zptmassweight = "1*";
@@ -35,11 +33,9 @@ public :
 
   TH1D *hist_1d;
   TH1D *histSS_1d;
-  TH1D *histSSrelaxed_1d;
 
   TH2D *hist_2d;
   TH2D *histSS_2d;
-  TH2D *histSSrelaxed_2d;
 
   map< TString , Sample > uncertainties;
 
@@ -86,7 +82,6 @@ public :
   TString variable_2d = "";
   TString cutstring   = "";
   TString cutstring_ss = "";
-  TString cutstring_ss_relaxed = "";
   TString weight = "";
   TString qcdweight = "1*";
   TString gg_scale_weight_up   = "";
