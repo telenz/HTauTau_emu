@@ -36,7 +36,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map["NOMINAL_ntuple_TTbar_"     + channel] = TTbar_2017;
     samples_map["NOMINAL_ntuple_SingleTop_" + channel] = SingleTop_2017;
     samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2017;
-    // samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
+    samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2017;
     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/";
 
@@ -80,7 +80,7 @@ void create_dnn_ntuples( TString era = "2017" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
-  TString output_dir = "NTuples_" + era + "_test_new_script";
+  TString output_dir = "NTuples_" + era + "";
   gSystem   -> Exec("mkdir " + output_dir);
 
   // Loop over all samples
