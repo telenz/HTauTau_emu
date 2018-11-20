@@ -27,7 +27,8 @@ public :
   TString topweight     = "1*";
   TString zptmassweight = "1*";
   TString ggscaleweight = "1*";
-  TString norm = "1*";
+  TString qcdweight     = "1*";
+  TString norm          = "1*";
 
   TString variable_1d = "m_vis";
   TString variable_2d = "m_vis : pt_2";

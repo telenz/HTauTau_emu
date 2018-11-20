@@ -9,7 +9,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 			int nbins = 8 ,
 			vector<float> range = {0,400} ,
 			TString variable_2d = "pt_2:m_vis" ,  // convention for TH2D is "var_y : var_x"
-			TString directory = "../../Inputs/NTuples_2016_No_EWKZ/") {
+			TString directory = "../../Inputs/NTuples_2016_No_EWKZ/",
+			TString era = "2016") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
@@ -136,12 +137,13 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   // Define common cut strings  
   for(auto & smpl : sample_map){
+    smpl.second.qcdweight          = "qcdweight*";
     smpl.second.cutString          = "os>0.5" + category_in_use.cutstring;
     smpl.second.weightString       = weight;
     smpl.second.cutStringSS        = "os<0.5" + category_in_use.cutstring;
-    smpl.second.weightStringSS     = weight + category_in_use.qcdweight;
+    smpl.second.weightStringSS     = weight;
     smpl.second.cutStringSSrelaxed = "os<0.5" + category_in_use.cutstring_ss;
-    smpl.second.weightStringSSrelaxed = weight + category_in_use.qcdweight;
+    smpl.second.weightStringSSrelaxed = weight;
     smpl.second.variable_1d = category_in_use.variable_1d;
     smpl.second.variable_2d = category_in_use.variable_2d;
   }
@@ -149,16 +151,17 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   // Define sample specific cutStrings and weightStrings
   sample_map["Data"].weightString = "1*";
   sample_map["QCD"].weightString  = "1*";
+  sample_map["QCD"].cutString  = "1==2";  // don't fill anything in this histogram should remain empty
   sample_map["ZTT"].cutString += "&&isZTT";
   sample_map["ZL"].cutString += "&&!isZTT";
 
-  sample_map["Data"].weightStringSS = category_in_use.qcdweight;
-  sample_map["QCD"].weightStringSS  = category_in_use.qcdweight;
+  sample_map["Data"].weightStringSS = "1*";
+  sample_map["QCD"].weightStringSS  = "1*";
   sample_map["ZTT"].cutStringSS += "&&isZTT";
   sample_map["ZL"].cutStringSS += "&&!isZTT";
 
-  sample_map["Data"].weightStringSSrelaxed = category_in_use.qcdweight;
-  sample_map["QCD"].weightStringSSrelaxed  = category_in_use.qcdweight;
+  sample_map["Data"].weightStringSSrelaxed = "1*";
+  sample_map["QCD"].weightStringSSrelaxed  = "1*";
   sample_map["ZTT"].cutStringSSrelaxed += "&&isZTT";
   sample_map["ZL"].cutStringSSrelaxed += "&&!isZTT";
 
@@ -176,7 +179,19 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   for(auto & smpl : sample_map){
 
-    if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
+    if( smpl.first == "Data" ) continue;
+
+    // 1.) QCD uncertainty
+    Sample qcdUp = smpl.second;
+    Sample qcdDown = smpl.second;
+    smpl.second.uncertainties.insert( make_pair("qcdUp"   , qcdUp) );
+    smpl.second.uncertainties.insert( make_pair("qcdDown" , qcdDown) );
+    smpl.second.uncertainties["qcdUp"].name   += "_CMS_scale_qcd_13TeVUp";
+    smpl.second.uncertainties["qcdDown"].name += "_CMS_scale_qcd_13TeVDown";
+    smpl.second.uncertainties["qcdUp"].qcdweight = "qcdweightup*";
+    smpl.second.uncertainties["qcdDown"].qcdweight = "qcdweightdown*";
+
+    if(smpl.first == "QCD" ) continue;
 
     TString var1 , var1Up , var1Down , var2 , var2Up , var2Down;
     if(plot_2d){
@@ -189,7 +204,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     }
 
     // Uncertainties common for all samples
-    // 1.) Electron scale
+    // 2.) Electron scale
     Sample eScaleUp   = smpl.second;
     Sample eScaleDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("eScaleUp"   , eScaleUp) );
@@ -222,7 +237,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
       smpl.second.uncertainties["eScaleDown"].variable_2d = var1Down + ":" + var2Down;
     }
 
-    // 2.) JES
+    // 3.) JES
     Sample jesUp = smpl.second;
     Sample jesDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("jesUp"   , jesUp) );
@@ -359,8 +374,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.histSSrelaxed_2d = new TH2D(smpl.second.name + "_ss_relaxed_2d" , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
 
     TString full_weight_string            = smpl.second.weightString + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
-    TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
-    TString full_weight_string_ss_relaxed = smpl.second.weightStringSSrelaxed + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
+    TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm + smpl.second.qcdweight;
+    TString full_weight_string_ss_relaxed = smpl.second.weightStringSSrelaxed + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm + smpl.second.qcdweight;
 
     if(verbose){
       cout << "Variable_2d          " << " : " << smpl.second.variable_2d << endl;
@@ -387,12 +402,16 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
       smpl.second.histSSrelaxed_1d = (TH1D*) Unfold(smpl.second.histSSrelaxed_2d);
     }
 
+    // Make QCD estimation
+    if( smpl.second.name == "QCD" ) sample_map["QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
+    else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" ) sample_map["QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
+
     // Loop over systematic uncertainties
     for(auto &sys : smpl.second.uncertainties){
 
       full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
-      full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
-      full_weight_string_ss_relaxed = sys.second.weightStringSSrelaxed + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
+      full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm + sys.second.qcdweight;
+      full_weight_string_ss_relaxed = sys.second.weightStringSSrelaxed + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm + sys.second.qcdweight;
       if(verbose){
 	cout << "Variable_2d          " << " : " << sys.second.variable_2d << endl;
 	cout << "weight string        " << " : " << full_weight_string << endl;
@@ -424,27 +443,20 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 	sys.second.histSS_1d        = (TH1D*) Unfold(sys.second.histSS_2d);
 	sys.second.histSSrelaxed_1d = (TH1D*) Unfold(sys.second.histSSrelaxed_2d);
       }
-    }
-  }
-  //************************************************************************************************
-  // Determine QCD background
 
-  // 1.) Take the shape from ss relaxed region
-  for(auto & smpl : sample_map){
-    if( smpl.first == "ggH125"  ||
-	smpl.first == "qqH125"  ||
-	smpl.first == "Data"    ||
-	smpl.first == "QCD"      ) continue;
-    sample_map["QCD"].histSS_1d        -> Add( smpl.second.histSS_1d , -1 );
-    //sample_map["QCD"].histSSrelaxed_1d -> Add( smpl.second.histSSrelaxed_1d , -1 );
-  }
-  sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSS_1d -> Clone();
+      // Make QCD estimation for up-downward variation for qcdweight
+      if( !sys.first.Contains("qcd") ) continue;
+      if( sys.first == "qcdUp" ){
+	if( smpl.second.name == "QCD" )                                                     sample_map["QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , +1);
+	else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" ) sample_map["QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , -1);
+      }
+      else{
+	if( smpl.second.name == "QCD" )                                                      sample_map["QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , +1);
+	else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" )  sample_map["QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , -1);
+      }
 
-  // 2.) Calculate normalization via ss/ss_relaxed
-  //double qcd_norm = sample_map["QCD"].histSS_1d->Integral(0,sample_map["QCD"].histSS_1d->GetNbinsX()+1)/sample_map["QCD"].histSSrelaxed_1d->Integral(0,sample_map["QCD"].histSSrelaxed_1d->GetNbinsX()+1);
-  //cout << endl << "qcd_norm = " << qcd_norm << endl << endl;
-  //sample_map["QCD"].hist_1d -> Scale(qcd_norm);
-
+    } // end of loop over sys uncertainties
+  } // end of loop over samples
   //************************************************************************************************
   // Write all histograms to output file
   cout << endl << endl << "... Writing histograms to output file ... " << endl;
@@ -457,8 +469,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   else if(plot_2d && category_in_use.name == "em_inclusive") filename += "-" + category_in_use.variable_2d( 0 , category_in_use.variable_2d.First(":") ) + "-" + category_in_use.variable_2d( category_in_use.variable_2d.First(":")+1 , category_in_use.variable_2d.Length() ) + ".root";
   else filename += ".root";
   TString output_directory = "output/";
-  if(!plot_2d) output_directory += "2016/var_1d/";
-  else         output_directory += "2016/var_2d/";
+  if(!plot_2d) output_directory += era + "/var_1d/";
+  else         output_directory += era + "/var_2d/";
 
   TFile * fileOut      = new TFile( output_directory + "/" + filename , "RECREATE" );
   fileOut             -> mkdir(category_in_use.name);
@@ -466,7 +478,10 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   for(auto & smpl : sample_map){
     smpl.second.hist_1d -> Write( smpl.second.name );
-    for(auto & sys : smpl.second.uncertainties)  sys.second.hist_1d -> Write( sys.second.name );
+    for(auto & sys : smpl.second.uncertainties){
+      if(sys.second.name.Contains("qcd") && smpl.second.name != "QCD") continue;
+      sys.second.hist_1d -> Write( sys.second.name );
+    }
   }
   fileOut -> Close();
 
@@ -481,5 +496,5 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   }
   cout << "Bkg together : " << allBkg -> GetSumOfWeights() << endl;
   cout << endl;
-  cout << "output file : " << filename << endl << endl;
+  cout << "output file : " << output_directory + "/" + filename << endl << endl;
 }

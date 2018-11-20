@@ -5,7 +5,7 @@
 void make_datacard( TString variable_1d = "predicted_prob" ,
 		     int nbins = 40 ,
 		     vector<float> range = {0.2,1} ,
-		     TString directory = "/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/FreshCheckout/mlFramework/predictions/") {
+		     TString directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/mlFramework/predictions/") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
@@ -108,12 +108,13 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
   // Define common cut strings  
   for(auto & smpl : sample_map){
+    smpl.second.qcdweight          = "qcdweight*";
     smpl.second.cutString          = "q_1*q_2<0" + em_ztt.cutstring;
     smpl.second.weightString       = weight;
     smpl.second.cutStringSS        = "q_1*q_2>0" + em_ztt.cutstring;
-    smpl.second.weightStringSS     = weight + em_ztt.qcdweight;
+    smpl.second.weightStringSS     = weight;
     smpl.second.cutStringSSrelaxed = "q_1*q_2>0" + em_ztt.cutstring_ss;
-    smpl.second.weightStringSSrelaxed = weight + em_ztt.qcdweight;
+    smpl.second.weightStringSSrelaxed = weight;
     smpl.second.variable_1d = em_ztt.variable_1d;
   }
 
@@ -124,13 +125,13 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   sample_map["ZL"].cutString += "&&!isZTT";
   //sample_map["QCD"].cutString  = "q_1*q_2>0" + em_ztt.cutstring;
 
-  sample_map["Data"].weightStringSS = em_ztt.qcdweight;
-  sample_map["QCD"].weightStringSS  = em_ztt.qcdweight;
+  sample_map["Data"].weightStringSS = "1*";
+  sample_map["QCD"].weightStringSS  = "1*";
   sample_map["ZTT"].cutStringSS += "&&isZTT";
   sample_map["ZL"].cutStringSS += "&&!isZTT";
 
-  sample_map["Data"].weightStringSSrelaxed = em_ztt.qcdweight;
-  sample_map["QCD"].weightStringSSrelaxed  = em_ztt.qcdweight;
+  sample_map["Data"].weightStringSSrelaxed = "1*";
+  sample_map["QCD"].weightStringSSrelaxed  = "1*";
   sample_map["ZTT"].cutStringSSrelaxed += "&&isZTT";
   sample_map["ZL"].cutStringSSrelaxed += "&&!isZTT";
 
@@ -147,10 +148,22 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
   for(auto & smpl : sample_map){
 
-    if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
+    if( smpl.first == "Data" ) continue;
+
+    // 1.) QCD uncertainty
+    Sample qcdUp = smpl.second;
+    Sample qcdDown = smpl.second;
+    smpl.second.uncertainties.insert( make_pair("qcdUp"   , qcdUp) );
+    smpl.second.uncertainties.insert( make_pair("qcdDown" , qcdDown) );
+    smpl.second.uncertainties["qcdUp"].name   += "_CMS_scale_qcd_13TeVUp";
+    smpl.second.uncertainties["qcdDown"].name += "_CMS_scale_qcd_13TeVDown";
+    smpl.second.uncertainties["qcdUp"].qcdweight = "qcdweightup*";
+    smpl.second.uncertainties["qcdDown"].qcdweight = "qcdweightdown*";
+
+    if(smpl.first == "QCD" ) continue;
 
     // Uncertainties common for all samples
-    // 1.) Electron scale
+    // 2.) Electron scale
     Sample eScaleUp   = smpl.second;
     Sample eScaleDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("eScaleUp"   , eScaleUp) );
@@ -166,7 +179,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
     smpl.second.uncertainties["eScaleUp"].filename.ReplaceAll("NOMINAL","_escaleUp");
     smpl.second.uncertainties["eScaleDown"].filename.ReplaceAll("NOMINAL","_escaleDown");
 
-    // 2.) JES
+    // 3.) JES
     Sample jesUp = smpl.second;
     Sample jesDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("jesUp"   , jesUp) );
@@ -180,7 +193,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
     smpl.second.uncertainties["jesUp"].filename.ReplaceAll("NOMINAL","_jesUp");
     smpl.second.uncertainties["jesDown"].filename.ReplaceAll("NOMINAL","_jesDown");
 
-    // 3.) Unclustered MET scale
+    // 4.) Unclustered MET scale
     Sample unclMetUp = smpl.second;
     Sample unclMetDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("unclMetUp"   , unclMetUp) );
@@ -195,7 +208,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
     smpl.second.uncertainties["unclMetDown"].filename.ReplaceAll("NOMINAL","_unclMetDown");
 
     // Sample-specific uncertainties
-    // 4.) TTbar shape
+    // 5.) TTbar shape
     if(smpl.second.name == "TT"){
       Sample ttbarShapeUp = smpl.second;
       Sample ttbarShapeDown = smpl.second;
@@ -207,7 +220,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
       smpl.second.uncertainties["ttbarShapeDown"].topweight = "";
     }
 
-    // 5.) DY shape
+    // 6.) DY shape
     if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" ){
       Sample dyShapeUp = smpl.second;
       Sample dyShapeDown = smpl.second;
@@ -266,8 +279,8 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
       smpl.second.histSSrelaxed_1d = new TH1D(smpl.second.name + "_ss_relaxed_1d" , "" , nbins , range[0] , range [1] );
 
       TString full_weight_string            = smpl.second.weightString + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
-      TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
-      TString full_weight_string_ss_relaxed = smpl.second.weightStringSSrelaxed + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm;
+      TString full_weight_string_ss         = smpl.second.weightStringSS + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm + smpl.second.qcdweight;
+      TString full_weight_string_ss_relaxed = smpl.second.weightStringSSrelaxed + smpl.second.topweight + smpl.second.zptmassweight + smpl.second.ggscaleweight + smpl.second.norm + smpl.second.qcdweight;
 
       if(verbose){
 	cout << "weight string        " << " : " << full_weight_string << endl;
@@ -282,6 +295,10 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
       tree -> Draw(smpl.second.variable_1d+">>"+smpl.second.histSS_1d->GetName() , full_weight_string_ss +"("+smpl.second.cutStringSS + " && predicted_class ==" + Form("%d",cat.second.class_nr) + ")" );
       tree -> Draw(smpl.second.variable_1d+">>"+smpl.second.histSSrelaxed_1d->GetName(),full_weight_string_ss_relaxed+"("+smpl.second.cutStringSSrelaxed+"&&predicted_class =="+Form("%d",cat.second.class_nr)+")");
 
+      // Make QCD estimation
+      if( smpl.second.name == "QCD" ) sample_map["QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
+      else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" ) sample_map["QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
+
       // Write to file
       file_out -> cd(cat.second.name);
       if( smpl.second.name != "QCD") smpl.second.hist_1d -> Write( smpl.second.name );
@@ -293,8 +310,8 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 	tree = (TTree*) file->Get("TauCheck");
 
 	full_weight_string = sys.second.weightString + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
-	full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
-	full_weight_string_ss_relaxed = sys.second.weightStringSSrelaxed + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm;
+	full_weight_string_ss = sys.second.weightStringSS + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm + sys.second.qcdweight;
+	full_weight_string_ss_relaxed = sys.second.weightStringSSrelaxed + sys.second.topweight + sys.second.zptmassweight + sys.second.ggscaleweight + smpl.second.norm + sys.second.qcdweight;
 	if(verbose){
 	  cout << "weight string        " << " : " << full_weight_string << endl;
 	  cout << "weight string ss     " << " : " << full_weight_string_ss << endl;
@@ -311,32 +328,24 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSS_1d->GetName() , full_weight_string_ss + "(" + sys.second.cutStringSS + ")" );
 	tree -> Draw( sys.second.variable_1d + ">>" + sys.second.histSSrelaxed_1d->GetName() , full_weight_string_ss_relaxed + "(" + sys.second.cutStringSSrelaxed + ")" );
 
+	// Make QCD estimation for up-downward variation for qcdweight
+	if( !sys.first.Contains("qcd") ) continue;
+	if( sys.first == "qcdUp" ){
+	  if( smpl.second.name == "QCD" )                                                     sample_map["QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , +1);
+	  else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" ) sample_map["QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , -1);
+	}
+	else{
+	  if( smpl.second.name == "QCD" )                                                      sample_map["QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , +1);
+	  else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" )  sample_map["QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , -1);
+	}
+
 	// Write to file
 	file_out -> cd(cat.second.name);
-	sys.second.hist_1d -> Write( sys.second.name );
+	if( smpl.second.name != "QCD") sys.second.hist_1d -> Write( sys.second.name );
       }
     }// end of loop over samples
-    //***********************************************************************************************
-    // Determine QCD background
 
-    // 1.) Take the shape from ss relaxed region
-    for(auto & smpl : sample_map){
-      if( smpl.first == "ggH125"  ||
-    	  smpl.first == "qqH125"  ||
-    	  smpl.first == "Data"    ||
-    	  smpl.first == "QCD"      ) continue;
-      sample_map["QCD"].histSS_1d        -> Add( smpl.second.histSS_1d , -1 );
-      sample_map["QCD"].histSSrelaxed_1d -> Add( smpl.second.histSSrelaxed_1d , -1 );
-    }
-    sample_map["QCD"].hist_1d = (TH1D*) sample_map["QCD"].histSS_1d -> Clone();
-
-    // 2.) Calculate normalization via ss/ss_relaxed
-    double qcd_norm = sample_map["QCD"].histSS_1d->GetSumOfWeights()/sample_map["QCD"].histSSrelaxed_1d->GetSumOfWeights();
-    cout << endl << "qcd_norm = " << qcd_norm << endl << endl;
-    //sample_map["QCD"].hist_1d -> Scale(qcd_norm);
-    file_out -> cd(cat.second.name);
-    sample_map["QCD"].hist_1d -> Write( sample_map["QCD"].name );
-    //***********************************************************************************************
+    //************************************************************************************************
     // Print the final sum of weights of the nominal selection
     cout << endl << "... Final histogram content : "<< endl;
     TH1D * allBkg = (TH1D*) sample_map["TT"].hist_1d -> Clone();
