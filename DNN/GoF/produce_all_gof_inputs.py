@@ -5,7 +5,6 @@ directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/
 
 variable_list = [ "m_sv",
                   "m_vis",
-                  #"pt_vis",
                   "pt_1",
                   "pt_2",
                   "eta_1",
@@ -46,8 +45,8 @@ variable_list = [ "m_sv",
                   "jeta_1",
                   "jeta_2",
                   "jdeta",
-                  "bpt_1",
-                  "beta_1",
+                  #"bpt_1",
+                  #"beta_1",
                   "metphi",
                   "d0_1_cal",
                   "dZ_1_cal",
@@ -56,7 +55,7 @@ variable_list = [ "m_sv",
                   "mTdileptonMET",
                   ]
 
-#variable_list = [ "njets" ]
+#variable_list = [ "pt_sv" ]
 
 axis_range = { "m_sv"  : [8 , 0  , 300],
                "m_vis" : [8 , 0  , 300],
