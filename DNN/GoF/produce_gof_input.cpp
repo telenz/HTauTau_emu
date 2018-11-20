@@ -2,6 +2,8 @@
 #include "TROOT.h"
 #include "Unfold.C"
 #include "HttStylesNew.cc"
+#include <algorithm>
+#include <typeinfo>
 
 void produce_gof_input( TString category_name = "em_inclusive" ,
 			bool plot_2d = false,
@@ -17,6 +19,11 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   bool verbose = false;
   bool apply_btag_veto = true;
+
+  double min_percentile = 0.01;
+  double max_percentile = 0.99;
+  bool take_percentile_subrange = true;
+
   //************************************************************************************************
   // Define some common weights and cuts
 
@@ -345,15 +352,36 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   cout << endl << endl << "... Drawing ... " << endl;
   for(auto & smpl : sample_map){
 
-    if( smpl.first == "Data" ){
-      if( !plot_2d ) cout << endl << "Variable 1d = " << smpl.second.variable_1d << endl;
-      else           cout << endl << "Variable 2d = " << smpl.second.variable_2d << endl;
-    }
-
     cout << "**************************************" << endl;
     cout << smpl.second.name << " : " << smpl.second.filename << endl;
     TFile *file = new TFile( directory + "/" + smpl.second.filename );
     TTree *tree = (TTree*) file->Get("TauCheck");
+
+    if( smpl.first == "Data" ){
+      if( !plot_2d ) cout << endl << "Variable 1d = " << smpl.second.variable_1d << endl;
+      else           cout << endl << "Variable 2d = " << smpl.second.variable_2d << endl;
+      //************************************************************************************************
+      // Get the 1st and 99th percentiles
+      if( take_percentile_subrange ){
+	float var;
+	tree->SetBranchAddress(smpl.second.variable_1d,&var);
+	vector<float> values;
+	for(int evt=0; evt<tree->GetEntries(); evt++){
+	  tree->GetEntry(evt);
+	  values.push_back(var);
+	}
+	int min_element = (int) (min_percentile*values.size());
+	int max_element = (int) (max_percentile*values.size());
+	std::nth_element(values.begin(), values.begin() + (min_percentile*values.size()), values.end());
+	std::nth_element(values.begin(), values.begin() + (max_percentile*values.size()), values.end());
+	cout<<"range start = "<<values[min_element]<<endl;
+	cout<<"range ends  = "<<values[max_element]<<endl;
+	if(values[min_element] > range[0] && values[max_element] < range[1] ){
+	  range[0] = values[min_element];
+	  range[1] = values[max_element];
+	}
+      }
+    }
 
     smpl.second.hist_1d          = new TH1D(smpl.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
     smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
