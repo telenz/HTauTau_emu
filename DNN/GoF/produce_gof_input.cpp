@@ -368,6 +368,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 	vector<float> values;
 	for(int evt=0; evt<tree->GetEntries(); evt++){
 	  tree->GetEntry(evt);
+	  if(var <= -10 ) continue;
 	  values.push_back(var);
 	}
 	int min_element = (int) (min_percentile*values.size());
@@ -375,7 +376,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 	std::nth_element(values.begin(), values.begin() + (min_percentile*values.size()), values.end());
 	std::nth_element(values.begin(), values.begin() + (max_percentile*values.size()), values.end());
 	cout<<"range start = "<<values[min_element]<<endl;
-	cout<<"range ends  = "<<values[max_element]<<endl;
+	cout<<"range ends  = "<<values[max_element]<<endl<<endl;
 	if(values[min_element] > range[0] && values[max_element] < range[1] ){
 	  range[0] = values[min_element];
 	  range[1] = values[max_element];
