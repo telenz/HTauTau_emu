@@ -14,7 +14,8 @@ void plot_1d_var(
 		 bool draw_signal    = false,
 		 bool draw_log_scale = false,
 		 TString directory   = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/var_1d/",
-		 TString era         = "2016"
+		 TString era         = "2016",
+		 bool use_embedded   = false
 		 ) {
 
   // General uncertainties
@@ -50,6 +51,7 @@ void plot_1d_var(
    // Define sample categorization
    SampleForPlotting data("Data",{"data_obs"});
    SampleForPlotting ztt("ZTT",{"ZTT"});
+   SampleForPlotting emb("EMB",{"EMB"});
    SampleForPlotting zl("ZL",{"ZL"});
    SampleForPlotting vv("VV",{"VV"});
    SampleForPlotting st("ST",{"ST"});
@@ -60,6 +62,7 @@ void plot_1d_var(
    SampleForPlotting ggh("ggH",{"ggH125"});
 
    ztt.color = "#FFCC66";
+   emb.color = "#FFCC66";
    zl.color  = "#DE5A6A";
    w.color   = "#03A8F5";
    vv.color  = "#A8CCA4";
@@ -69,7 +72,8 @@ void plot_1d_var(
    ggh.color = "#05B0BB"; //blue:"#03A8F5";
    qqh.color = "#BB051E";
 
-   ztt.legend_entry  = "Z#rightarrow #tau#tau";
+   ztt.legend_entry  = "Z#rightarrow #tau#tau (MC)";
+   emb.legend_entry  = "Z#rightarrow #tau#tau (emb.)";
    zl.legend_entry   = "Z#rightarrow ll";
    w.legend_entry    = "W";
    vv.legend_entry   = "VV";
@@ -85,8 +89,14 @@ void plot_1d_var(
    ggh.isSignal = true;
 
    vector<SampleForPlotting*> sample_vec;
-   if(draw_signal) sample_vec = { &qqh , &ggh , &qcd , &vv , &st , &zl ,  &w  , &tt , &ztt , &data  };
-   else            sample_vec = { &qcd , &vv , &st , &zl , &w , &tt , &ztt , &data  };
+   if(draw_signal){
+     if(!use_embedded) sample_vec = { &qqh , &ggh , &qcd , &vv , &st , &zl ,  &w  , &tt , &ztt , &data  };
+     else              sample_vec = { &qqh , &ggh , &qcd , &vv , &st , &zl ,  &w  , &tt , &emb , &data  };
+   }
+   else{
+     if(!use_embedded) sample_vec = { &qcd , &vv , &st , &zl , &w , &tt , &ztt , &data  };
+     else              sample_vec = { &qcd , &vv , &st , &zl , &w , &tt , &emb , &data  };
+   }
 
    TH1D* hist = 0;
 
@@ -144,7 +154,7 @@ void plot_1d_var(
      err_norm_abs.push_back( st.hist->GetBinContent(iB)*err_st_xsec );
      err_norm_abs.push_back( tt.hist->GetBinContent(iB)*err_tt_xsec );
      err_norm_abs.push_back( w.hist->GetBinContent(iB)*err_w_xsec );
-     err_norm_abs.push_back( ztt.hist->GetBinContent(iB)*err_dy_xsec );
+     if(!use_embedded) err_norm_abs.push_back( ztt.hist->GetBinContent(iB)*err_dy_xsec );
      err_norm_abs.push_back( qcd.hist->GetBinContent(iB)*err_qcd_norm );
      float err_total = err_stat*err_stat;
      for(float err_bin : err_norm_abs) err_total += err_bin*err_bin;

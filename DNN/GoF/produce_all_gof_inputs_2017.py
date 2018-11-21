@@ -129,7 +129,7 @@ for var in variable_list :
     nbins , xmin , xmax = axis_range.get(var,[8, 0,400])
 
     # Produce the root-files (datacard input)
-    cmd = "root -l -b -q produce_gof_input.cpp+\"(\\\"em_inclusive\\\",false,\\\""+var+"\\\" , " + str(nbins) + " , {"+str(xmin)+","+str(xmax)+"} , \\\"pt_2:m_vis\\\" , \\\"../../Inputs/NTuples_2017\\\",\\\"2017\\\")\""
+    cmd = "root -l -b -q produce_gof_input.cpp+\"(\\\"em_inclusive\\\",false,\\\""+var+"\\\" , " + str(nbins) + " , {"+str(xmin)+","+str(xmax)+"} , \\\"pt_2:m_vis\\\" , \\\"../../Inputs/NTuples_2017_tighter_cuts\\\",\\\"2017\\\",true)\""
     os.system(cmd)
 
     # Now start to make the actual gof test
@@ -138,7 +138,7 @@ for var in variable_list :
     os.system("source ./run_gof.sh")
 
     # Plotting
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + directory + "\\\",\\\"2017\\\")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + directory + "\\\",\\\"2017\\\",true)\""
     os.system(cmd)
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + directory + "\\\",\\\"2017\\\")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + directory + "\\\",\\\"2017\\\",true)\""
     os.system(cmd)

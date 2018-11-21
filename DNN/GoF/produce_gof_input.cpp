@@ -11,18 +11,19 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 			int nbins = 8 ,
 			vector<float> range = {0,400} ,
 			TString variable_2d = "pt_2:m_vis" ,  // convention for TH2D is "var_y : var_x"
-			TString directory = "../../Inputs/NTuples_2016_No_EWKZ/",
-			TString era = "2016") {
+			TString directory = "../../Inputs/NTuples_2016_tighter_cuts/",
+			TString era = "2016",
+			bool use_embedded = false) {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
 
   bool verbose = false;
-  bool apply_btag_veto = true;
+  bool apply_btag_veto = false;
 
   double min_percentile = 0.01;
   double max_percentile = 0.99;
-  bool take_percentile_subrange = true;
+  bool take_percentile_subrange = false;
 
   //************************************************************************************************
   // Define some common weights and cuts
@@ -120,6 +121,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   Sample VV(   "VV"       , "NOMINAL_ntuple_Diboson_em.root" );
   Sample ST(   "ST"       , "NOMINAL_ntuple_SingleTop_em.root" );
   Sample QCD(  "QCD"      , "NOMINAL_ntuple_MuonEG_em.root" );
+  Sample EMB(  "EMB"      , "NOMINAL_ntuple_Embedded_em.root" );
   Sample ggH(  "ggH125"   , "NOMINAL_ntuple_ggH_em.root" );
   Sample qqH(  "qqH125"   , "NOMINAL_ntuple_VBFH_em.root" );
 
@@ -127,20 +129,26 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   // ZTT.norm = "1.02*";
   // ZL.norm  = "1.02*";
 
-  map<TString,Sample> sample_map = { { "Data" , Data },
-				     { "ZTT"  , ZTT } ,
-				     { "ZL"   , ZL } ,
-				     { "W"    , W } ,
-				     { "TT"   , TT } ,
-				     { "VV"   , VV } ,
-				     { "QCD"  , QCD } ,
-				     { "ST"   , ST } ,
-				     { "ggH125" , ggH },
-				     { "qqH125" , qqH }
+  map<TString,Sample> sample_map = { { "0_Data" , Data },
+				     { "1_QCD"  , QCD } ,
+				     { "2_ZTT"  , ZTT } ,
+				     { "3_ZL"   , ZL } ,
+				     { "4_W"    , W } ,
+				     { "5_TT"   , TT } ,
+				     { "6_VV"   , VV } ,
+				     { "7_ST"   , ST } ,
+				     { "8_ggH125" , ggH },
+				     { "9_qqH125" , qqH }
   };
+
+  if(use_embedded){
+    sample_map.erase("2_ZTT");
+    sample_map["2_EMB"] = EMB;
+  }
 
   cout << endl << endl << "... Sample categories ... "<< endl ;
   for(auto & smpl : sample_map ) cout << " - " << smpl.second.name << endl;
+  cout << endl;
 
   // Define common cut strings  
   for(auto & smpl : sample_map){
@@ -154,21 +162,25 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   }
 
   // Define sample specific cutStrings and weightStrings
-  sample_map["Data"].weightString = "1*";
-  sample_map["QCD"].weightString  = "1*";
-  sample_map["QCD"].cutString  = "1==2";  // don't fill anything in this histogram should remain empty
-  sample_map["ZTT"].cutString += "&&isZTT";
-  sample_map["ZL"].cutString += "&&!isZTT";
+  sample_map["0_Data"].weightString = "1*";
+  sample_map["0_Data"].weightStringSS = "1*";
+  sample_map["1_QCD"].weightString  = "1*";
+  sample_map["1_QCD"].weightStringSS  = "1*";
+  sample_map["1_QCD"].cutString  = "1==2";  // don't fill anything in this histogram should remain empty
+  sample_map["3_ZL"].cutString += "&&!isZTT";
+  sample_map["3_ZL"].cutStringSS += "&&!isZTT";
+  sample_map["3_ZL"].zptmassweight = "zptmassweight*";
+  sample_map["5_TT"].topweight = "topptweight*";
 
-  sample_map["Data"].weightStringSS = "1*";
-  sample_map["QCD"].weightStringSS  = "1*";
-  sample_map["ZTT"].cutStringSS += "&&isZTT";
-  sample_map["ZL"].cutStringSS += "&&!isZTT";
-
-  // Define sample specific weights
-  sample_map["TT"].topweight = "topptweight*";
-  sample_map["ZTT"].zptmassweight = "zptmassweight*";
-  sample_map["ZL"].zptmassweight = "zptmassweight*";
+  if(use_embedded){
+    sample_map["2_EMB"].weightString  = "0.99*embeddedWeight*mcweight*effweight*";
+    sample_map["2_EMB"].weightStringSS  = "0.99*embeddedWeight*mcweight*effweight*";
+  }
+  else{
+    sample_map["2_ZTT"].cutString += "&&isZTT";
+    sample_map["2_ZTT"].cutStringSS += "&&isZTT";
+    sample_map["2_ZTT"].zptmassweight = "zptmassweight*";
+  }
 
   //************************************************************************************************
   // Define systematic uncertainties
@@ -179,7 +191,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   for(auto & smpl : sample_map){
 
-    if( smpl.first == "Data" ) continue;
+    if( smpl.second.name == "data_obs" ) continue;
 
     // 1.) QCD uncertainty
     Sample qcdUp = smpl.second;
@@ -191,7 +203,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.uncertainties["qcdUp"].qcdweight = "qcdweightup*";
     smpl.second.uncertainties["qcdDown"].qcdweight = "qcdweightdown*";
 
-    if(smpl.first == "QCD" ) continue;
+    if( smpl.second.name == "QCD" || smpl.second.name == "EMB" ) continue;
 
     TString var1 , var1Up , var1Down , var2 , var2Up , var2Down;
     if(plot_2d){
@@ -357,7 +369,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     TFile *file = new TFile( directory + "/" + smpl.second.filename );
     TTree *tree = (TTree*) file->Get("TauCheck");
 
-    if( smpl.first == "Data" ){
+    if( smpl.second.name == "data_obs" ){
       if( !plot_2d ) cout << endl << "Variable 1d = " << smpl.second.variable_1d << endl;
       else           cout << endl << "Variable 2d = " << smpl.second.variable_2d << endl;
       //************************************************************************************************
@@ -417,8 +429,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     }
 
     // Make QCD estimation
-    if( smpl.second.name == "QCD" ) sample_map["QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
-    else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" ) sample_map["QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
+    if( smpl.second.name == "QCD" ) sample_map["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
+    else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" ) sample_map["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
 
     // Loop over systematic uncertainties
     for(auto &sys : smpl.second.uncertainties){
@@ -453,12 +465,12 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
       // Make QCD estimation for up-downward variation for qcdweight
       if( !sys.first.Contains("qcd") ) continue;
       if( sys.first == "qcdUp" ){
-	if( smpl.second.name == "QCD" )                                                     sample_map["QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , +1);
-	else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" ) sample_map["QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , -1);
+	if( smpl.second.name == "QCD" )                                                     sample_map["1_QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , +1);
+	else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" ) sample_map["1_QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , -1);
       }
       else{
-	if( smpl.second.name == "QCD" )                                                      sample_map["QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , +1);
-	else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" )  sample_map["QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , -1);
+	if( smpl.second.name == "QCD" )                                                      sample_map["1_QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , +1);
+	else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" )  sample_map["1_QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , -1);
       }
 
     } // end of loop over sys uncertainties
@@ -493,11 +505,11 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   // Write the final sum of weights of the nominal selection
   cout << endl << "... Final histogram content : "<< endl;
-  TH1D * allBkg = (TH1D*) sample_map["QCD"].hist_1d -> Clone();
+  TH1D * allBkg = (TH1D*) sample_map["1_QCD"].hist_1d -> Clone();
   for(auto & smpl : sample_map) {
     cout << smpl.second.name << " : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
     // Add all background
-    if( smpl.first == "Data" || smpl.first == "QCD" ) continue;
+    if( smpl.second.name == "data_obs" || smpl.second.name == "QCD" ) continue;
     allBkg->Add(smpl.second.hist_1d);
   }
   cout << "Bkg together : " << allBkg -> GetSumOfWeights() << endl;
