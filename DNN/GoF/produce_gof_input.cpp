@@ -23,7 +23,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   double min_percentile = 0.01;
   double max_percentile = 0.99;
-  bool take_percentile_subrange = false;
+  bool take_percentile_subrange = true;
 
   //************************************************************************************************
   // Define some common weights and cuts
@@ -203,7 +203,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     smpl.second.uncertainties["qcdUp"].qcdweight = "qcdweightup*";
     smpl.second.uncertainties["qcdDown"].qcdweight = "qcdweightdown*";
 
-    if( smpl.second.name == "QCD" || smpl.second.name == "EMB" ) continue;
+    if( smpl.second.name == "QCD"  ) continue;
 
     TString var1 , var1Up , var1Down , var2 , var2Up , var2Down;
     if(plot_2d){
@@ -248,6 +248,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
       smpl.second.uncertainties["eScaleUp"].variable_2d   = var1Up   + ":" + var2Up;
       smpl.second.uncertainties["eScaleDown"].variable_2d = var1Down + ":" + var2Down;
     }
+
+    if( smpl.second.name == "EMB" ) continue;
 
     // 3.) JES
     Sample jesUp = smpl.second;
