@@ -38,6 +38,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2017;
     samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2017;
+    samples_map["NOMINAL_ntuple_Embedded_"  + channel] = Embedded;
     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/";
 
   }
@@ -80,8 +81,8 @@ void create_dnn_ntuples( TString era = "2017" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
-  TString output_dir = "NTuples_" + era + "";
-  gSystem   -> Exec("mkdir " + output_dir);
+  TString output_dir = "NTuples_" + era + "_tighter_cuts";
+  gSystem -> Exec("mkdir " + output_dir);
 
   // Loop over all samples
   for (auto const& sample : samples_map){
@@ -110,6 +111,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       float pt_1;
       float pt_2;
       float dzeta;
+      float mTdielptonMET;
       bool metFilters;
       bool trg_muonelectron;
       inTree->SetBranchAddress("npartons",&npartons);
@@ -120,6 +122,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       inTree->SetBranchAddress("pt_1",&pt_1);
       inTree->SetBranchAddress("pt_2",&pt_2);
       inTree->SetBranchAddress("dzeta",&dzeta);
+      inTree->SetBranchAddress("mTdileptonMET",&mTdileptonMET);
       inTree->SetBranchAddress("metFilters",&metFilters);
       inTree->SetBranchAddress("trg_muonelectron",&trg_muonelectron);
 
@@ -143,26 +146,27 @@ void create_dnn_ntuples( TString era = "2017" ){
       currentTree->Branch("trigger_filter_weight", &trigger_filter_weight, "trigger_filter_weight/F");
 
       // lumi-xsec-weight added
-      if( xsec_map->find(subsample) == xsec_map->end() && !sample.first.Contains("MuonEG")){
+      if( xsec_map->find(subsample) == xsec_map->end() && !sample.first.Contains("MuonEG")  && !sample.first.Contains("Embedded")){
 	cout << endl << endl << "Sample " << subsample << " is missing in xsec_map. Exit code." << endl << endl ;
 	exit(-1);
       }
       float xsec = 1;
-      if(!sample.first.Contains("MuonEG")) xsec = xsec_map->at(subsample);
+      if(!sample.first.Contains("MuonEG") && !sample.first.Contains("Embedded")) xsec = xsec_map->at(subsample);
 
       for (int i=0; i<inTree->GetEntries(); i++) {
 	inTree->GetEntry(i);
 
 	// Add here preselection if necessary
 	if(applyPreselection){
-	  if( iso_1 > 0.5 )                continue;
-	  if( iso_2 > 0.5 )                continue;
+	  if( iso_1 > 0.15 )               continue;
+	  if( iso_2 > 0.2 )                continue;
 	  if( extraelec_veto > 0.5 )       continue;
 	  if( extramuon_veto > 0.5 )       continue;
 	  if( pt_1 < 13 )                  continue;
 	  if( pt_2 < 10 )                  continue;
 	  if( TMath::Max(pt_1,pt_2) < 24 ) continue;
-	  if(dzeta < -50 )                 continue;
+	  if( dzeta < -35 )                continue;
+	  if( mTdileptonMET > 60 )         continue;
 	  if( metFilters < 0.5 )           continue;
 	  if( trg_muonelectron < 0.5 )     continue;
 	}
@@ -186,7 +190,7 @@ void create_dnn_ntuples( TString era = "2017" ){
 	  else                   xsec_lumi_weight = luminosity / ( neventsDYIncl/xsecDYIncl );
 	}
 
-	if( sample.first.Contains("MuonEG")){
+	if( sample.first.Contains("MuonEG") || sample.first.Contains("Embedded")){
 	  xsec_lumi_weight = 1.;
 	  trigger_filter_weight = 1.;
 	}
