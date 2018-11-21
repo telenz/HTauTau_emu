@@ -111,7 +111,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       float pt_1;
       float pt_2;
       float dzeta;
-      float mTdielptonMET;
+      float mTdileptonMET;
       bool metFilters;
       bool trg_muonelectron;
       inTree->SetBranchAddress("npartons",&npartons);
