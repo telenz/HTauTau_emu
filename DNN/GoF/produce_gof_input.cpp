@@ -19,7 +19,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   SetStyle();
 
   bool verbose = false;
-  bool apply_btag_veto = false;
+  bool apply_btag_veto = true;
 
   double min_percentile = 0.01;
   double max_percentile = 0.99;
@@ -30,7 +30,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   TString btag_weight = "btag0weight*";
   TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*";
-  if(apply_btag_veto) weight += btag_weight;
+  // if(apply_btag_veto) weight += btag_weight;
 
   TString mt_cut    = "&& mTdileptonMET<60 ";
   TString cuts_kine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron";
