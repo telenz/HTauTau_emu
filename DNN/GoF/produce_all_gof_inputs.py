@@ -1,7 +1,31 @@
 import os
 import ROOT as R
+import argparse
+import sys
 
-directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/2016/var_1d/"
+parser = argparse.ArgumentParser()
+parser.add_argument('-e', dest='era', help='ERA' ,choices = ['2016','2017'], default = '2016')
+parser.add_argument('-emb', dest='embedded',   help='embedded samples used' , action='store_true')
+args = parser.parse_args()
+
+era=args.era
+if args.embedded == True:
+    embedded=1
+else :
+    embedded=0
+
+if era is "2016" and embedded :
+    print "no embedded samples available for this era yet. Exit."
+    print ""
+    sys.exit()
+
+# some settings
+output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
+
+dnn_ntuples_directory = "../../Inputs/NTuples_2016_tighter_cuts"
+if era == "2017" :
+    print "era is 2017"
+    dnn_ntuples_directory = "../../Inputs/NTuples_2017_tighter_cuts"
 
 variable_list = [ "m_sv",
                   "m_vis",
@@ -53,9 +77,12 @@ variable_list = [ "m_sv",
                   "d0_2_cal",
                   "dZ_2_cal",
                   "mTdileptonMET",
+                  "pt_ttjj",
+                  "dijetphi",
+                  "dijetpt",
                   ]
 
-#variable_list = [ "pt_sv" ]
+#variable_list = [ "met" ]
 
 axis_range = { "m_sv"  : [8 , 0  , 300],
                "m_vis" : [8 , 0  , 300],
@@ -108,6 +135,9 @@ axis_range = { "m_sv"  : [8 , 0  , 300],
                "d0_2_cal"   : [8 , -0.05 , +0.05],
                "dZ_2_cal"   : [8 , -0.20 , +0.20],
                "mTdileptonMET" : [8 , 0 , 200],
+               "pt_ttjj" : [8,0,1000],
+               "dijetphi" : [8,0,1000] ,
+               "dijetpt" : [8,0,1000],
                }
 
 # Execute produce_gof_inputs.cpp for all variables
@@ -122,18 +152,17 @@ for var in variable_list :
     nbins , xmin , xmax = axis_range.get(var,[8, 0,400])
 
     # Produce the root-files (datacard input)
-    cmd = "root -l -b -q produce_gof_input.cpp+\"(\\\"em_inclusive\\\",false,\\\""+var+"\\\" , " + str(nbins) + " , {"+str(xmin)+","+str(xmax)+"})\""
+    cmd = "root -l -b -q produce_gof_input.cpp+\"(\\\"em_inclusive\\\",false,\\\""+var+"\\\" , " + str(nbins) + " , {"+str(xmin)+","+str(xmax)+"} , \\\"pt_2:m_vis\\\" , \\\"" + dnn_ntuples_directory + "\\\",\\\""+ era + "\\\"," + str(embedded) + ")\""
     os.system(cmd)
 
     # Now start to make the actual gof test
     os.environ["VAR"] = var
-    os.environ["ERA"] = "2016"
+    os.environ["ERA"] = era
+    os.environ["EMB"] = str(embedded)
     os.system("source ./run_gof.sh")
 
     # Plotting
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",true,false,\\\"" + directory + "\\\")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + output_directory + "\\\",\\\"" + era + "\\\"," + str(embedded) + ")\""
     os.system(cmd)
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",true,true,\\\"" + directory + "\\\")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + output_directory + "\\\",\\\"" + era + "\\\"," + str(embedded)+ ")\""
     os.system(cmd)
-
-#  LocalWords:  njets
