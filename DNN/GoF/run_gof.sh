@@ -4,6 +4,7 @@
 
 # Pleas specify the following input variables
 #ERA=2017
+#EMB=0
 DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
@@ -27,7 +28,7 @@ echo "ERA is " $ERA
 
 
 # Produce the datacard for the em channel (please add the em channel in category gof in the morphing script)
-MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=$INPUT_FOLDER --real_data=true --jetfakes=0 --embedding=0 --postfix="-$VAR" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="gof" --gof_category_name="em_inclusive" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=false --ggh_wg1=false
+MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=$INPUT_FOLDER --real_data=true --jetfakes=0 --embedding=${EMB} --postfix="-$VAR" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="gof" --gof_category_name="em_inclusive" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=false --ggh_wg1=false
 
 # Create workspace
 combineTool.py -M T2W -o workspace.root -m $MASS -i ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/${ERA}_smhtt/cmb/125/

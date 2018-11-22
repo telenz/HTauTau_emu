@@ -3,6 +3,8 @@ import ROOT as R
 
 directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/2017/var_1d/"
 
+embedded = 1
+
 variable_list = [ "m_sv",
                   "m_vis",
                   "pt_1",
@@ -59,7 +61,7 @@ variable_list = [ "m_sv",
                   "dijetpt"
                   ]
 
-#variable_list = [ "mjj" ]
+#variable_list = [ "m_vis" ]
 
 axis_range = { "m_sv"  : [8 , 0  , 300],
                "m_vis" : [8 , 0  , 300],
@@ -129,16 +131,17 @@ for var in variable_list :
     nbins , xmin , xmax = axis_range.get(var,[8, 0,400])
 
     # Produce the root-files (datacard input)
-    cmd = "root -l -b -q produce_gof_input.cpp+\"(\\\"em_inclusive\\\",false,\\\""+var+"\\\" , " + str(nbins) + " , {"+str(xmin)+","+str(xmax)+"} , \\\"pt_2:m_vis\\\" , \\\"../../Inputs/NTuples_2017_tighter_cuts\\\",\\\"2017\\\",true)\""
+    cmd = "root -l -b -q produce_gof_input.cpp+\"(\\\"em_inclusive\\\",false,\\\""+var+"\\\" , " + str(nbins) + " , {"+str(xmin)+","+str(xmax)+"} , \\\"pt_2:m_vis\\\" , \\\"../../Inputs/NTuples_2017_tighter_cuts\\\",\\\"2017\\\"," + str(embedded) + ")\""
     os.system(cmd)
 
     # Now start to make the actual gof test
     os.environ["VAR"] = var
     os.environ["ERA"] = "2017"
+    os.environ["EMB"] = str(embedded)
     os.system("source ./run_gof.sh")
 
     # Plotting
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + directory + "\\\",\\\"2017\\\",true)\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp+\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + directory + "\\\",\\\"2017\\\"," + str(embedded) + ")\""
     os.system(cmd)
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + directory + "\\\",\\\"2017\\\",true)\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp+\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + directory + "\\\",\\\"2017\\\"," + str(embedded) + "\""
     os.system(cmd)
