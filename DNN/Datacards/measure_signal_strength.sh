@@ -26,7 +26,7 @@ rm -rf *
 cd -
 
 # Produce the datacard for the em channel (please add the em channel in category gof in the morphing script)
-MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=$INPUT_FOLDER --real_data=true --jetfakes=0 --embedding=0 --postfix="-$CAT" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="stxs_stage0" --gof_category_name=$CAT --era=2016 --output=$OUTPUT_FOLDER --regional_jec=false --ggh_wg1=false
+MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=$INPUT_FOLDER --real_data=false --jetfakes=0 --embedding=0 --postfix="-$CAT" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="stxs_stage0" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=false --ggh_wg1=false
 
 # Create workspace
 combineTool.py -M T2W -o workspace.root -i ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/2016_smhtt/cmb/125/ --parallel 10 -m 125 \
