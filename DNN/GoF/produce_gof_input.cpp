@@ -251,6 +251,26 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
     if( smpl.second.name == "EMB" ) continue;
 
+    // // 3.) (b-)mistag uncertainty
+    // Sample mistagUp   = smpl.second;
+    // Sample mistagDown = smpl.second;
+    // smpl.second.uncertainties.insert( make_pair("mistagUp"   , mistagUp) );
+    // smpl.second.uncertainties.insert( make_pair("mistagDown" , mistagDown) );
+    // smpl.second.uncertainties["mistagUp"].name += "_CMS_htt_mistag_b_2017Up";
+    // smpl.second.uncertainties["mistagDown"].name += "_CMS_htt_mistag_b_2017Down";
+    // smpl.second.uncertainties["mistagUp"].cutString.ReplaceAll("nbtag","nbtag_mistagUp");
+    // smpl.second.uncertainties["mistagDown"].cutString.ReplaceAll("nbtag","nbtag_mistagDown");
+
+    // // 4.) b-tag uncertainty
+    // Sample btagUp   = smpl.second;
+    // Sample btagDown = smpl.second;
+    // smpl.second.uncertainties.insert( make_pair("btagUp"   , btagUp) );
+    // smpl.second.uncertainties.insert( make_pair("btagDown" , btagDown) );
+    // smpl.second.uncertainties["btagUp"].name += "_CMS_htt_eff_b_2017Up";
+    // smpl.second.uncertainties["btagDown"].name += "_CMS_htt_eff_b_2017Down";
+    // smpl.second.uncertainties["btagUp"].cutString.ReplaceAll("nbtag","nbtag_btagUp");
+    // smpl.second.uncertainties["btagDown"].cutString.ReplaceAll("nbtag","nbtag_btagDown");
+
     // 3.) JES
     Sample jesUp = smpl.second;
     Sample jesDown = smpl.second;
@@ -311,6 +331,36 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
       }
       smpl.second.uncertainties["unclMetUp"].variable_2d   = var1Up   + ":" + var2Up;
       smpl.second.uncertainties["unclMetDown"].variable_2d = var1Down + ":" + var2Down;
+    }
+
+    // 6.) Recoil scale uncertainty
+    Sample recoilscaleUp = smpl.second;
+    Sample recoilscaleDown = smpl.second;
+    smpl.second.uncertainties.insert( make_pair("recoilscaleUp"   , recoilscaleUp) );
+    smpl.second.uncertainties.insert( make_pair("recoilscaleDown" , recoilscaleDown) );
+    smpl.second.uncertainties["recoilscaleUp"].name   += "_CMS_htt_boson_scale_met_13TeVUp";
+    smpl.second.uncertainties["recoilscaleDown"].name += "_CMS_htt_boson_scale_met_13TeVDown";
+    if(!plot_2d){
+      if(tree_ -> GetBranch(variable_1d+"_recoilscaleUp")){
+	smpl.second.uncertainties["recoilscaleUp"].variable_1d   = variable_1d + "_recoilscaleUp";
+	smpl.second.uncertainties["recoilscaleDown"].variable_1d = variable_1d + "_recoilscaleDown";
+      }
+      else cout << "No systematic shift for recoil scale uncertainty for variable " << variable_1d << " available in tree." << endl;
+    }
+
+    // 7.) Recoil resolution uncertainty
+    Sample recoilresoUp = smpl.second;
+    Sample recoilresoDown = smpl.second;
+    smpl.second.uncertainties.insert( make_pair("recoilresoUp"   , recoilresoUp) );
+    smpl.second.uncertainties.insert( make_pair("recoilresoDown" , recoilresoDown) );
+    smpl.second.uncertainties["recoilresoUp"].name   += "_CMS_htt_boson_reso_met_13TeVUp";
+    smpl.second.uncertainties["recoilresoDown"].name += "_CMS_htt_boson_reso_met_13TeVDown";
+    if(!plot_2d){
+      if(tree_ -> GetBranch(variable_1d+"_recoilresoUp")){
+	smpl.second.uncertainties["recoilresoUp"].variable_1d   = variable_1d + "_recoilresoUp";
+	smpl.second.uncertainties["recoilresoDown"].variable_1d = variable_1d + "_recoilresoDown";
+      }
+      else cout << "No systematic shift for recoil resolution uncertainty for variable " << variable_1d << " available in tree." << endl;
     }
 
     // Sample-specific uncertainties
