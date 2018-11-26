@@ -209,7 +209,7 @@ void create_dnn_ntuples( TString era = "2017" ){
 	  xsec_lumi_weight = 1.;
 	  trigger_filter_weight = 1.;
 	}
-	if( sample.first.Contains("Embedded") && era == "2017"){
+	if( sample.first.Contains("Embedded") && era == "2016"){
 	  embedded_stitching_weight = 
 	    ((run >= 272007) && (run < 275657))*(1.0/0.891)
 	    +((run >= 275657) && (run < 276315))*(1.0/0.910)
