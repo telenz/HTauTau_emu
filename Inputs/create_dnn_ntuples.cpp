@@ -17,6 +17,8 @@ void create_dnn_ntuples( TString era = "2017" ){
   double luminosity = 0;
   float qcd_ss_os_iso_relaxed_ratio = 0;
   float trigger_filter_efficiency = 1;
+  float embedded_trigger_weight = 1.0;
+  float embedded_tracking_weight = 1.0;
   TString input_dir;
 
   // Mapping of subsamples to output root-file
@@ -30,6 +32,8 @@ void create_dnn_ntuples( TString era = "2017" ){
     luminosity  = 41900;
     trigger_filter_efficiency = 1.0;
     qcd_ss_os_iso_relaxed_ratio = 2.38;
+    embedded_trigger_weight  = 1.00;
+    embedded_tracking_weight = 0.99;
     samples_map["NOMINAL_ntuple_MuonEG_"    + channel] = MuonEG_Run2017;
     samples_map["NOMINAL_ntuple_DYJets_"    + channel] = DYJets_2017;
     samples_map["NOMINAL_ntuple_WJets_"     + channel] = WJets_2017;
@@ -38,7 +42,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2017;
     samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2017;
-    samples_map["NOMINAL_ntuple_Embedded_"  + channel] = Embedded;
+    samples_map["NOMINAL_ntuple_Embedded_"  + channel] = Embedded_2017;
     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017/Ntuples/";
 
   }
@@ -48,6 +52,8 @@ void create_dnn_ntuples( TString era = "2017" ){
     luminosity  = 35866;
     trigger_filter_efficiency = 0.979;
     qcd_ss_os_iso_relaxed_ratio = 2.3;
+    embedded_trigger_weight  = 1.03;
+    embedded_tracking_weight = 0.98;
     samples_map["NOMINAL_ntuple_MuonEG_"    + channel] = MuonEG_Run2016;
     samples_map["NOMINAL_ntuple_DYJets_"    + channel] = DYJets_2016;
     samples_map["NOMINAL_ntuple_WJets_"     + channel] = WJets_2016;
@@ -56,6 +62,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2016;
     samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2016;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2016;
+    samples_map["NOMINAL_ntuple_Embedded_"  + channel] = Embedded_2016;
     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/";
   }
 
@@ -81,7 +88,7 @@ void create_dnn_ntuples( TString era = "2017" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
-  TString output_dir = "NTuples_" + era + "_tighter_cuts";
+  TString output_dir = "NTuples_" + era + "_tighter_cuts_v2";
   gSystem -> Exec("mkdir " + output_dir);
 
   // Loop over all samples
@@ -114,6 +121,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       float mTdileptonMET;
       bool metFilters;
       bool trg_muonelectron;
+      int run;
       inTree->SetBranchAddress("npartons",&npartons);
       inTree->SetBranchAddress("iso_1",&iso_1);
       inTree->SetBranchAddress("iso_2",&iso_2);
@@ -125,6 +133,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       inTree->SetBranchAddress("mTdileptonMET",&mTdileptonMET);
       inTree->SetBranchAddress("metFilters",&metFilters);
       inTree->SetBranchAddress("trg_muonelectron",&trg_muonelectron);
+      inTree->SetBranchAddress("run",&run);
 
       outFile->cd();
       TTree *currentTree = new TTree(subsample,"temporary tree");
@@ -133,17 +142,23 @@ void create_dnn_ntuples( TString era = "2017" ){
       float xsec_lumi_weight;
       float qcd_correction;
       float trigger_filter_weight;
+      float embedded_stitching_weight;
+      float embedded_rate_weight;
       if(firstTree){
 	outTree    = inTree->CloneTree(0);
 	outTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
 	outTree->Branch("qcd_correction", &qcd_correction, "qcd_correction/F");
 	outTree->Branch("trigger_filter_weight", &trigger_filter_weight, "trigger_filter_weight/F");
+	outTree->Branch("embedded_stitching_weight", &embedded_stitching_weight, "embedded_stitching_weight/F");
+	outTree->Branch("embedded_rate_weight", &embedded_rate_weight, "embedded_rate_weight/F");
 	firstTree  = false;
       }
       currentTree = inTree->CloneTree(0);
       currentTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
       currentTree->Branch("qcd_correction", &qcd_correction, "qcd_correction/F");
       currentTree->Branch("trigger_filter_weight", &trigger_filter_weight, "trigger_filter_weight/F");
+      currentTree->Branch("embedded_stitching_weight", &embedded_stitching_weight, "embedded_stitching_weight/F");
+      currentTree->Branch("embedded_rate_weight", &embedded_rate_weight, "embedded_rate_weight/F");
 
       // lumi-xsec-weight added
       if( xsec_map->find(subsample) == xsec_map->end() && !sample.first.Contains("MuonEG")  && !sample.first.Contains("Embedded")){
@@ -194,6 +209,19 @@ void create_dnn_ntuples( TString era = "2017" ){
 	  xsec_lumi_weight = 1.;
 	  trigger_filter_weight = 1.;
 	}
+	if( sample.first.Contains("Embedded") && era == "2017"){
+	  embedded_stitching_weight = 
+	    ((run >= 272007) && (run < 275657))*(1.0/0.891)
+	    +((run >= 275657) && (run < 276315))*(1.0/0.910)
+	    +((run >= 276315) && (run < 276831))*(1.0/0.953)
+	    +((run >= 276831) && (run < 277772))*(1.0/0.947)
+	    +((run >= 277772) && (run < 278820))*(1.0/0.942)
+	    +((run >= 278820) && (run < 280919))*(1.0/0.906)
+	    +((run >= 280919) && (run < 284045))*(1.0/0.950);
+	}
+	else embedded_stitching_weight = 1.;
+
+	embedded_rate_weight = embedded_trigger_weight * embedded_tracking_weight;
 
 	currentTree->Fill();
       }

@@ -28,7 +28,7 @@ const vector<TString> Diboson_2017         = { "WW_TuneCP5_13TeV-pythia8" ,
 					       "ZZ_TuneCP5_13TeV-pythia8" };
 const vector<TString> GluGluHToTauTau_2017 = { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" };
 const vector<TString> VBFHToTauTau_2017    = { "VBFHToTauTau_M125_13TeV_powheg_pythia8" };
-const vector<TString> Embedded             = { "Embedding_Run2017" };
+const vector<TString> Embedded_2017        = { "Embedding_Run2017" };
 
 // 2016
 const vector<TString> MuonEG_Run2016  = { "MuonEG_Run2016B" , "MuonEG_Run2016C" , "MuonEG_Run2016D" , "MuonEG_Run2016E" , "MuonEG_Run2016F" , "MuonEG_Run2016G" , "MuonEG_Run2016H" };
@@ -39,6 +39,7 @@ const vector<TString> SingleTop_2016  = { "ST_t-channel_antitop" , "ST_t-channel
 const vector<TString> Diboson_2016    = { "VVTo2L2Nu" , "WZJToLLLNu" , "WZTo1L1Nu2Q" , "WZTo1L3Nu" , "WZTo2L2Q" , "ZZTo2L2Q" , "ZZTo4L" , "WWToLNuQQ" };
 const vector<TString> GluGluHToTauTau_2016 = { "GluGluHToTauTau_M125" };
 const vector<TString> VBFHToTauTau_2016    = { "VBFHToTauTau_M125" };
+const vector<TString> Embedded_2016        = { "Embedding_Run2016" };
 // **************************************************************************************************
 // **************************************************************************************************
 // Cross-section map
