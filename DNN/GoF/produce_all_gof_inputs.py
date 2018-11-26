@@ -14,15 +14,10 @@ if args.embedded == True:
 else :
     embedded=0
 
-if era is "2016" and embedded :
-    print "no embedded samples available for this era yet. Exit."
-    print ""
-    sys.exit()
-
 # some settings
 output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
 
-dnn_ntuples_directory = "../../Inputs/NTuples_2016_tighter_cuts"
+dnn_ntuples_directory = "../../Inputs/NTuples_2016_tighter_cuts_v2"
 if era == "2017" :
     print "era is 2017"
     dnn_ntuples_directory = "../../Inputs/NTuples_2017_tighter_cuts"
