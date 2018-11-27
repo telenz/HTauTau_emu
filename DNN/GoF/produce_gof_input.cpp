@@ -173,8 +173,15 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   sample_map["5_TT"].topweight = "topptweight*";
 
   if(use_embedded){
-    sample_map["2_EMB"].weightString  = "0.99*embeddedWeight*mcweight*effweight*";
-    sample_map["2_EMB"].weightStringSS  = "0.99*embeddedWeight*mcweight*effweight*";
+    sample_map["2_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
+    sample_map["2_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
+    sample_map["2_EMB"].cutString   += "&& mcweight<1";
+    sample_map["2_EMB"].cutStringSS += "&& mcweight<1";
+    sample_map["5_TT"].cutString   += "&& veto_embedded<0.5";
+    sample_map["5_TT"].cutStringSS += "&& veto_embedded<0.5";
+    sample_map["6_VV"].cutString   += "&& veto_embedded<0.5";
+    sample_map["6_VV"].cutStringSS += "&& veto_embedded<0.5";
+
   }
   else{
     sample_map["2_ZTT"].cutString += "&&isZTT";
