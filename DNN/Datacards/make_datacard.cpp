@@ -5,19 +5,18 @@
 void make_datacard( TString variable_1d = "predicted_prob" ,
 		     int nbins = 40 ,
 		     vector<float> range = {0.2,1} ,
-		     TString directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/mlFramework/predictions/") {
+		     TString directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/mareikesdnnsetup/mlFramework/predictions/") {
 
   gROOT->SetBatch(kTRUE);
   SetStyle();
 
   bool verbose = false;
-  bool apply_btag_veto = false;
+  bool apply_btag_veto = true;
   //************************************************************************************************
   // Define some common weights and cuts
 
   TString btag_weight = "btag0weight*";
   TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*";
-  if(apply_btag_veto) weight += btag_weight;
 
   TString mt_cut    = "&& mTdileptonMET<60 ";
   TString cuts_kine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && trg_muonelectron";
@@ -127,6 +126,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   sample_map["QCD"].weightStringSS  = "1*";
   sample_map["ZTT"].cutStringSS += "&&isZTT";
   sample_map["ZL"].cutStringSS += "&&!isZTT";
+  sample_map["QCD"].cutString  = "1==2";  // don't fill anything in this histogram should remain empty
 
   // Define sample specific weights
   sample_map["TT"].topweight = "topptweight*";
@@ -285,11 +285,11 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
       // Make QCD estimation
       if( smpl.second.name == "QCD" ) sample_map["QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
-      else if( smpl.first != "ggH125" && smpl.first != "qqH125" && smpl.first != "Data" ) sample_map["QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
+      else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" ) sample_map["QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
 
       // Write to file
       file_out -> cd(cat.second.name);
-      if( smpl.second.name != "QCD") smpl.second.hist_1d -> Write( smpl.second.name );
+      //      if( smpl.second.name != "QCD") smpl.second.hist_1d -> Write( smpl.second.name );
 
       // Loop over systematic uncertainties
       for(auto &sys : smpl.second.uncertainties){
@@ -324,12 +324,23 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
 	// Write to file
 	file_out -> cd(cat.second.name);
-	if( smpl.second.name != "QCD") sys.second.hist_1d -> Write( sys.second.name );
+	//if( smpl.second.name != "QCD") sys.second.hist_1d -> Write( sys.second.name );
       }
     }// end of loop over samples
 
     //************************************************************************************************
     // Print the final sum of weights of the nominal selection
+    file_out -> cd(cat.second.name);
+    for(auto & smpl : sample_map){
+      smpl.second.hist_1d -> Write( smpl.second.name );
+      for(auto & sys : smpl.second.uncertainties){
+	if(sys.second.name.Contains("qcd") && smpl.second.name != "QCD") continue;
+	sys.second.hist_1d -> Write( sys.second.name );
+      }
+    }
+
+
+
     cout << endl << "... Final histogram content : "<< endl;
     TH1D * allBkg = (TH1D*) sample_map["TT"].hist_1d -> Clone();
     for(auto & smpl : sample_map) {
