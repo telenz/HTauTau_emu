@@ -23,6 +23,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   double min_percentile = 0.01;
   double max_percentile = 0.99;
+  vector<double> percentile_ranges = { 0.01 , 0.10 , 0.20 , 0.30 , 0.40 , 0.50 , 0.60 , 0.70 , 0.80 , 0.90 , 0.99 };
   bool take_percentile_subrange = true;
 
   //************************************************************************************************
@@ -421,6 +422,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   // 1.) Fill nominal histograms
   cout << endl << endl << "... Drawing ... " << endl;
+  vector<double> binning_1d;
   for(auto & smpl : sample_map){
 
     cout << "**************************************" << endl;
@@ -451,6 +453,12 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 	  cout<<"range ends  = "<<values[max_element]<<endl<<endl;
 	  range[0] = values[min_element];
 	  range[1] = values[max_element];
+	  // for( auto bound : percentile_ranges){
+	  //   int element = (int) (bound*values.size());
+	  //   std::nth_element(values.begin(), values.begin() + (bound*values.size()), values.end());
+	  //   cout<<"range start = "<<values[element]<<endl;
+	  //   binning_1d.push_back(values[element]);
+	  // }
 	}
       }
     }
