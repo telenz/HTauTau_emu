@@ -1,4 +1,5 @@
 #include "useful_classes.h"
+#include "systematic_uncertainties.h"
 #include "TROOT.h"
 #include "Unfold.C"
 #include "HttStylesNew.cc"
@@ -31,7 +32,6 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   TString btag_weight = "btag0weight*";
   TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*";
-  // if(apply_btag_veto) weight += btag_weight;
 
   TString mt_cut    = "&& mTdileptonMET<60 ";
   TString cuts_kine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron";
@@ -46,9 +46,6 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   // For now the used attributes of the category class are only the binning and the name definitions
 
   class Category em_incl("em_inclusive");
-  class Category em_0jet("em_0jet");
-  class Category em_boosted("em_boosted");
-  class Category em_vbf("em_vbf");
 
   // Inclusive category
   TString cuts_category_specific = "&& dzeta>-35";
@@ -68,44 +65,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   em_incl.gg_scale_weight_up   = "(0.9421 - 0.00001699*pt_2)*";
   em_incl.gg_scale_weight_down = "(1.0579 + 0.00001699*pt_2)*";
 
-  // 0jet category
-  cuts_category_specific = "&& jets==0 && dzeta>-35";
-  em_0jet.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
-  em_0jet.cutstring_ss = cuts_kine + cuts_iso_ss_general + "&& iso_1<0.3 && iso_2>0.1 && iso_2<0.3" + cuts_category_specific;
-  em_0jet.variable_2d = "pt_2:m_vis";  // first variable corresponds to y-variable
-  em_0jet.qcdweight   = "2.26*";
-  em_0jet.gg_scale_weight_up   = "(0.9421 - 0.00001699*pt_2)*";
-  em_0jet.gg_scale_weight_down = "(1.0579 + 0.00001699*pt_2)*";
-  em_0jet.bins_x_2d = {0,50,55,60,65,70,75,80,85,90,95,100,400};
-  em_0jet.bins_y_2d = {15,20,25,30,35,40,300};
-
-  // Boosted category
-  cuts_category_specific = "&&(njets==1 || (njets==2 && mjj<300) || njets>2)&&dzeta>-35";
-  em_boosted.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
-  em_boosted.cutstring_ss = cuts_kine + cuts_iso_ss_general + "&& iso_1<0.3 && iso_2>0.1 && iso_2<0.3" + cuts_category_specific;
-  em_boosted.variable_2d = "pt_sv:m_sv";
-  em_boosted.qcdweight   = "2.25*";
-  em_boosted.gg_scale_weight_up   = "(0.9358 + 0.00088712 * pt_sv)*";
-  em_boosted.gg_scale_weight_down = "(1.0642 - 0.00088712 * pt_sv)*";
-  em_boosted.bins_x_2d = {0,80,90,100,110,120,130,140,150,160,300};
-  em_boosted.bins_y_2d = {0,100,150,200,250,300,5000};
-
-  // VBF category
-  cuts_category_specific = "&& njets==2 && mjj>=300 && dzeta>-10 ";
-  em_vbf.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
-  em_vbf.cutstring_ss = cuts_kine + cuts_iso_ss_general + "&& iso_1<0.5 && iso_2>0.2 && iso_2<0.5" + cuts_category_specific;
-  em_vbf.variable_2d = "mjj:m_sv";
-  em_vbf.qcdweight   = "2.84*";
-  em_vbf.gg_scale_weight_up   = "(1.032 + 0.00010196 * mjj)*";
-  em_vbf.gg_scale_weight_down = "(0.968 - 0.00010196 * mjj)*";
-  em_vbf.bins_x_2d = {0,95,115,135,155,400};
-  em_vbf.bins_y_2d = {300,700,1100,1500,10000};
-
   // Make a map from these categories
-  map< TString , Category > category_map = { { em_incl.name    , em_incl },
-					     { em_0jet.name    , em_0jet },
-					     { em_boosted.name , em_boosted },
-					     { em_vbf.name     , em_vbf }};
+  map< TString , Category > category_map = {{ em_incl.name    , em_incl }};
 
   Category category_in_use = category_map[category_name];
   if(apply_btag_veto) category_in_use.cutstring    += btag_veto;
@@ -125,10 +86,6 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   Sample EMB(  "EMB"      , "NOMINAL_ntuple_Embedded_em.root" );
   Sample ggH(  "ggH125"   , "NOMINAL_ntuple_ggH_em.root" );
   Sample qqH(  "qqH125"   , "NOMINAL_ntuple_VBFH_em.root" );
-
-  // Define pre-defined norms
-  // ZTT.norm = "1.02*";
-  // ZL.norm  = "1.02*";
 
   map<TString,Sample> sample_map = { { "0_Data" , Data },
 				     { "1_QCD"  , QCD } ,
@@ -163,26 +120,25 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   }
 
   // Define sample specific cutStrings and weightStrings
-  sample_map["0_Data"].weightString = "1*";
+  sample_map["0_Data"].weightString   = "1*";
   sample_map["0_Data"].weightStringSS = "1*";
-  sample_map["1_QCD"].weightString  = "1*";
+  sample_map["1_QCD"].weightString    = "1*";
   sample_map["1_QCD"].weightStringSS  = "1*";
-  sample_map["1_QCD"].cutString  = "1==2";  // don't fill anything in this histogram should remain empty
-  sample_map["3_ZL"].cutString += "&&!isZTT";
-  sample_map["3_ZL"].cutStringSS += "&&!isZTT";
-  sample_map["3_ZL"].zptmassweight = "zptmassweight*";
-  sample_map["5_TT"].topweight = "topptweight*";
+  sample_map["1_QCD"].cutString       = "1==2";  // don't fill anything in this histogram should remain empty
+  sample_map["3_ZL"].cutString       += "&&!isZTT";
+  sample_map["3_ZL"].cutStringSS     += "&&!isZTT";
+  sample_map["3_ZL"].zptmassweight    = "zptmassweight*";
+  sample_map["5_TT"].topweight        = "topptweight*";
 
   if(use_embedded){
     sample_map["2_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
     sample_map["2_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
     sample_map["2_EMB"].cutString   += "&& mcweight<1";
     sample_map["2_EMB"].cutStringSS += "&& mcweight<1";
-    sample_map["5_TT"].cutString   += "&& veto_embedded<0.5";
-    sample_map["5_TT"].cutStringSS += "&& veto_embedded<0.5";
-    sample_map["6_VV"].cutString   += "&& veto_embedded<0.5";
-    sample_map["6_VV"].cutStringSS += "&& veto_embedded<0.5";
-
+    sample_map["5_TT"].cutString    += "&& veto_embedded<0.5";
+    sample_map["5_TT"].cutStringSS  += "&& veto_embedded<0.5";
+    sample_map["6_VV"].cutString    += "&& veto_embedded<0.5";
+    sample_map["6_VV"].cutStringSS  += "&& veto_embedded<0.5";
   }
   else{
     sample_map["2_ZTT"].cutString += "&&isZTT";
@@ -201,6 +157,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
     if( smpl.second.name == "data_obs" ) continue;
 
+    //***********************************************
     // 1.) QCD uncertainty
     Sample qcdUp = smpl.second;
     Sample qcdDown = smpl.second;
@@ -222,9 +179,9 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
       var2Up   = var2;
       var2Down = var2;
     }
-
+    //***********************************************
     // Uncertainties common for all samples
-    // 2.) Electron scale
+    // 2.) Electron scale (applied on both embedded and mc)
     Sample eScaleUp   = smpl.second;
     Sample eScaleDown = smpl.second;
     smpl.second.uncertainties.insert( make_pair("eScaleUp"   , eScaleUp) );
@@ -256,9 +213,10 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
       smpl.second.uncertainties["eScaleUp"].variable_2d   = var1Up   + ":" + var2Up;
       smpl.second.uncertainties["eScaleDown"].variable_2d = var1Down + ":" + var2Down;
     }
-
+    //smpl.second = create_systematic_uncertainty("escaleUp", "_check_CMS_scale_e_13TeVUp", plot_2d, smpl.second, tree_);
+    //***********************************************
     if( smpl.second.name == "EMB" ) continue;
-
+    //***********************************************
     // // 3.) (b-)mistag uncertainty
     // Sample mistagUp   = smpl.second;
     // Sample mistagDown = smpl.second;
