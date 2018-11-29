@@ -369,8 +369,10 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   } // end of loop over samples
 
   // Calculate embedded uncertainty
-  sample_map["8_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(sample_map["5_TTcont"].hist_1d , 0.1);
-  sample_map["8_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(sample_map["5_TTcont"].hist_1d , -0.1);
+  if(use_embedded){
+    sample_map["8_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(sample_map["5_TTcont"].hist_1d , 0.1);
+    sample_map["8_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(sample_map["5_TTcont"].hist_1d , -0.1);
+  }
 
   //************************************************************************************************
   // Write all histograms to output file
