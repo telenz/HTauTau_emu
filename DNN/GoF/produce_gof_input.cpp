@@ -20,7 +20,6 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   SetStyle();
 
   bool verbose = false;
-  bool apply_btag_veto = true;
 
   double min_percentile = 0.01;
   double max_percentile = 0.99;
@@ -30,17 +29,15 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   //************************************************************************************************
   // Define some common weights and cuts
 
-  TString btag_weight = "btag0weight*";
   TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*";
 
   TString mt_cut    = "&& mTdileptonMET<60 ";
-  TString cuts_kine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron";
+  TString cuts_kine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron && nbtag == 0";
   cuts_kine += mt_cut;
 
   TString cuts_iso_general    = "&& iso_1<0.15 && iso_2<0.2 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
   TString cuts_iso_ss_general = "&& extraelec_veto<0.5 && extramuon_veto<0.5 ";
 
-  TString btag_veto    = "&& nbtag==0 ";
   //************************************************************************************************
   // Define different categories (use of category "em_cat_in_use" which is set below the definition)
   // For now the used attributes of the category class are only the binning and the name definitions
@@ -49,28 +46,17 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   // Inclusive category
   TString cuts_category_specific = "&& dzeta>-35";
-  em_incl.suffix       = "inclusive";
   em_incl.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
-  em_incl.cutstring_ss = cuts_kine + cuts_iso_ss_general + "&& iso_1<0.50 && iso_2>0.2 && iso_2<0.5" + cuts_category_specific;
   em_incl.variable_2d  = variable_2d;  // first variable corresponds to y-variable
   em_incl.variable_1d  = variable_1d;
   em_incl.qcdweight    = "qcdweight*";
   em_incl.bins_x_2d    = {0,50,55,60,65,70,75,80,85,90,95,100,400};
   em_incl.bins_y_2d    = {15,20,25,30,35,40,300};
-  float bound = range[0];
-  while(bound <= range[1]){
-    em_incl.bins_1d.push_back(bound);
-    bound += (range[1]-range[0])/nbins;
-  }
-  em_incl.gg_scale_weight_up   = "(0.9421 - 0.00001699*pt_2)*";
-  em_incl.gg_scale_weight_down = "(1.0579 + 0.00001699*pt_2)*";
 
   // Make a map from these categories
   map< TString , Category > category_map = {{ em_incl.name    , em_incl }};
 
   Category category_in_use = category_map[category_name];
-  if(apply_btag_veto) category_in_use.cutstring    += btag_veto;
-  if(apply_btag_veto) category_in_use.cutstring_ss += btag_veto;
 
   //************************************************************************************************
   // Define samples
@@ -290,18 +276,20 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 	  cout<<"range ends  = "<<values[max_element]<<endl<<endl;
 	  range[0] = values[min_element];
 	  range[1] = values[max_element];
-	  // for( auto bound : percentile_ranges){
-	  //   int element = (int) (bound*values.size());
-	  //   std::nth_element(values.begin(), values.begin() + (bound*values.size()), values.end());
-	  //   cout<<"range start = "<<values[element]<<endl;
-	  //   binning_1d.push_back(values[element]);
-	  // }
+	  for( auto bound : percentile_ranges){
+	    int element = (int) (bound*values.size());
+	    std::nth_element(values.begin(), values.begin() + (bound*values.size()), values.end());
+	    cout<<"range start = "<<values[element]<<endl;
+	    binning_1d.push_back(values[element]);
+	  }
+	  nbins = binning_1d.size() -1;
+	  cout<<endl;
 	}
       }
     }
 
-    smpl.second.hist_1d          = new TH1D(smpl.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
-    smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
+    smpl.second.hist_1d          = new TH1D(smpl.second.name + "_os_1d"         , "" , nbins , &binning_1d[0] );
+    smpl.second.histSS_1d        = new TH1D(smpl.second.name + "_ss_1d"         , "" , nbins , &binning_1d[0] );
 
     const int nbins_x_2d = category_in_use.bins_x_2d.size() - 1;
     const int nbins_y_2d = category_in_use.bins_y_2d.size() - 1;
@@ -348,8 +336,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 	cout << "cut string           " << " : " << sys.second.cutString << endl;
 	cout << "cut string ss        " << " : " << sys.second.cutStringSS << endl;
       }
-      sys.second.hist_1d          = new TH1D(sys.second.name + "_os_1d"         , "" , nbins , range[0] , range [1] );
-      sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , nbins , range[0] , range [1] );
+      sys.second.hist_1d          = new TH1D(sys.second.name + "_os_1d"         , "" , nbins , &binning_1d[0] );
+      sys.second.histSS_1d        = new TH1D(sys.second.name + "_ss_1d"         , "" , nbins , &binning_1d[0] );
 
       sys.second.hist_2d          = new TH2D(sys.second.name + "_os_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
       sys.second.histSS_2d        = new TH2D(sys.second.name + "_ss_2d"         , "" , nbins_x_2d , &category_in_use.bins_x_2d[0] , nbins_y_2d , &category_in_use.bins_y_2d[0] );
