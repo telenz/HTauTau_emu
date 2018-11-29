@@ -127,8 +127,10 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   sample_map["1_QCD"].cutString       = "1==2";  // don't fill anything in this histogram should remain empty
   sample_map["3_ZL"].cutString       += "&&!isZTT";
   sample_map["3_ZL"].cutStringSS     += "&&!isZTT";
-  sample_map["3_ZL"].zptmassweight    = "zptmassweight*";
-  sample_map["5_TT"].topweight        = "topptweight*";
+  sample_map["3_ZL"].weightString    += "zptmassweight*";
+  sample_map["3_ZL"].weightStringSS  += "zptmassweight*";
+  sample_map["5_TT"].weightString    += "topptweight*";
+  sample_map["5_TT"].weightStringSS  += "topptweight*";
 
   if(use_embedded){
     sample_map["2_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
@@ -141,9 +143,10 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     sample_map["6_VV"].cutStringSS  += "&& veto_embedded<0.5";
   }
   else{
-    sample_map["2_ZTT"].cutString += "&&isZTT";
-    sample_map["2_ZTT"].cutStringSS += "&&isZTT";
-    sample_map["2_ZTT"].zptmassweight = "zptmassweight*";
+    sample_map["2_ZTT"].cutString      += "&&isZTT";
+    sample_map["2_ZTT"].cutStringSS    += "&&isZTT";
+    sample_map["2_ZTT"].weightString   += "zptmassweight*";
+    sample_map["2_ZTT"].weightStringSS += "zptmassweight*";
   }
 
   //************************************************************************************************
@@ -157,213 +160,87 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
     if( smpl.second.name == "data_obs" ) continue;
 
-    //***********************************************
-    // 1.) QCD uncertainty
-    Sample qcdUp = smpl.second;
-    Sample qcdDown = smpl.second;
-    smpl.second.uncertainties.insert( make_pair("qcdUp"   , qcdUp) );
-    smpl.second.uncertainties.insert( make_pair("qcdDown" , qcdDown) );
-    smpl.second.uncertainties["qcdUp"].name   += "_CMS_scale_qcd_13TeVUp";
-    smpl.second.uncertainties["qcdDown"].name += "_CMS_scale_qcd_13TeVDown";
-    smpl.second.uncertainties["qcdUp"].qcdweight = "qcdweightup*";
-    smpl.second.uncertainties["qcdDown"].qcdweight = "qcdweightdown*";
+    // 1.) QCD uncertainties (10 nuisances)
+    // smpl.second = create_systematic_uncertainty("qcd0jetRateUp"  , "_CMS_htt_qcd_0jet_rate_13TeVUp"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_up*");
+    // smpl.second = create_systematic_uncertainty("qcd0jetRateDown", "_CMS_htt_qcd_0jet_rate_13TeVDown", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_down*");
+    // smpl.second = create_systematic_uncertainty("qcd1jetRateUp"  , "_CMS_htt_qcd_1jet_rate_13TeVUp"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_up*");
+    // smpl.second = create_systematic_uncertainty("qcd1jetRateDown", "_CMS_htt_qcd_1jet_rate_13TeVDown", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_down*");
+    // smpl.second = create_systematic_uncertainty("qcd0jetShapeUp"  , "_CMS_htt_qcd_0jet_shape_13TeVUp"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_up*");
+    // smpl.second = create_systematic_uncertainty("qcd0jetShapeDown", "_CMS_htt_qcd_0jet_shape_13TeVDown", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_down*");
+    // smpl.second = create_systematic_uncertainty("qcd1jetShapeUp"  , "_CMS_htt_qcd_1jet_shape_13TeVUp"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_up*");
+    // smpl.second = create_systematic_uncertainty("qcd1jetShapeDown", "_CMS_htt_qcd_1jet_shape_13TeVDown", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_down*");
+    // smpl.second = create_systematic_uncertainty("qcdIsoUp"  , "_CMS_htt_qcd_iso_13TeVUp"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_up*");
+    // smpl.second = create_systematic_uncertainty("qcdIsoDown", "_CMS_htt_qcd_iso_13TeVDown"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_down*");
 
     if( smpl.second.name == "QCD"  ) continue;
 
-    TString var1 , var1Up , var1Down , var2 , var2Up , var2Down;
-    if(plot_2d){
-      var1     = smpl.second.variable_2d( 0 , smpl.second.variable_2d.First(":") );
-      var2     = smpl.second.variable_2d( smpl.second.variable_2d.First(":")+1 , smpl.second.variable_2d.Length() );
-      var1Up   = var1;
-      var1Down = var1;
-      var2Up   = var2;
-      var2Down = var2;
-    }
-    //***********************************************
-    // Uncertainties common for all samples
     // 2.) Electron scale (applied on both embedded and mc)
-    Sample eScaleUp   = smpl.second;
-    Sample eScaleDown = smpl.second;
-    smpl.second.uncertainties.insert( make_pair("eScaleUp"   , eScaleUp) );
-    smpl.second.uncertainties.insert( make_pair("eScaleDown" , eScaleDown) );
-    smpl.second.uncertainties["eScaleUp"].name += "_CMS_scale_e_13TeVUp";
-    smpl.second.uncertainties["eScaleDown"].name += "_CMS_scale_e_13TeVDown";
-    smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("dzeta","dzeta_escaleUp");
-    smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("dzeta","dzeta_escaleDown");
-    smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("pt_1","pt_1_escaleUp");
-    smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("pt_1","pt_1_escaleDown");
-    smpl.second.uncertainties["eScaleUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_escaleUp");
-    smpl.second.uncertainties["eScaleDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_escaleDown");
-    if(!plot_2d){
-      if(tree_ -> GetBranch(variable_1d+"_escaleUp")){
-	smpl.second.uncertainties["eScaleUp"].variable_1d = variable_1d + "_escaleUp";
-	smpl.second.uncertainties["eScaleDown"].variable_1d = variable_1d + "_escaleDown";
-      }
-      else cout << "No systematic shift for electron scale uncertainty for variable " << variable_1d << " available in tree." << endl;
+    smpl.second = create_systematic_uncertainty("escale_all_Up"  , "_CMS_scale_e_13TeVUp"  , plot_2d, smpl.second, tree_, true, "escaleUp");
+    smpl.second = create_systematic_uncertainty("escale_all_Down", "_CMS_scale_e_13TeVDown", plot_2d, smpl.second, tree_, true, "escaleDown");
+    // 3.) Electron scale (applied only on embedded)
+    if(smpl.second.name == "EMB"){
+      smpl.second = create_systematic_uncertainty("escale_emb_Up"  , "_CMS_scale_emb_e_13TeVUp"  , plot_2d, smpl.second, tree_, true, "escaleUp");
+      smpl.second = create_systematic_uncertainty("escale_emb_Down", "_CMS_scale_emb_e_13TeVDown", plot_2d, smpl.second, tree_, true, "escaleDown");
     }
-    else{
-      if(tree_ -> GetBranch(var1Up+"_escaleUp")){
-	var1Up   = var1 + "_escaleUp";
-	var1Down = var1 + "_escaleDown";
-      }
-      if(tree_ -> GetBranch(var2Up+"_escaleUp")){
-	var2Up   = var2 + "_escaleUp";
-	var2Down = var2 + "_escaleDown";
-      }
-      smpl.second.uncertainties["eScaleUp"].variable_2d   = var1Up   + ":" + var2Up;
-      smpl.second.uncertainties["eScaleDown"].variable_2d = var1Down + ":" + var2Down;
-    }
-    //smpl.second = create_systematic_uncertainty("escaleUp", "_check_CMS_scale_e_13TeVUp", plot_2d, smpl.second, tree_);
-    //***********************************************
-    if( smpl.second.name == "EMB" ) continue;
-    //***********************************************
-    // // 3.) (b-)mistag uncertainty
-    // Sample mistagUp   = smpl.second;
-    // Sample mistagDown = smpl.second;
-    // smpl.second.uncertainties.insert( make_pair("mistagUp"   , mistagUp) );
-    // smpl.second.uncertainties.insert( make_pair("mistagDown" , mistagDown) );
-    // smpl.second.uncertainties["mistagUp"].name += "_CMS_htt_mistag_b_2017Up";
-    // smpl.second.uncertainties["mistagDown"].name += "_CMS_htt_mistag_b_2017Down";
-    // smpl.second.uncertainties["mistagUp"].cutString.ReplaceAll("nbtag","nbtag_mistagUp");
-    // smpl.second.uncertainties["mistagDown"].cutString.ReplaceAll("nbtag","nbtag_mistagDown");
-
-    // // 4.) b-tag uncertainty
-    // Sample btagUp   = smpl.second;
-    // Sample btagDown = smpl.second;
-    // smpl.second.uncertainties.insert( make_pair("btagUp"   , btagUp) );
-    // smpl.second.uncertainties.insert( make_pair("btagDown" , btagDown) );
-    // smpl.second.uncertainties["btagUp"].name += "_CMS_htt_eff_b_2017Up";
-    // smpl.second.uncertainties["btagDown"].name += "_CMS_htt_eff_b_2017Down";
-    // smpl.second.uncertainties["btagUp"].cutString.ReplaceAll("nbtag","nbtag_btagUp");
-    // smpl.second.uncertainties["btagDown"].cutString.ReplaceAll("nbtag","nbtag_btagDown");
-
-    // 3.) JES
-    Sample jesUp = smpl.second;
-    Sample jesDown = smpl.second;
-    smpl.second.uncertainties.insert( make_pair("jesUp"   , jesUp) );
-    smpl.second.uncertainties.insert( make_pair("jesDown" , jesDown) );
-    smpl.second.uncertainties["jesUp"].name   += "_CMS_scale_j_13TeVUp";
-    smpl.second.uncertainties["jesDown"].name += "_CMS_scale_j_13TeVDown";
-    smpl.second.uncertainties["jesUp"].cutString.ReplaceAll("dzeta","dzeta_jesUp");
-    smpl.second.uncertainties["jesDown"].cutString.ReplaceAll("dzeta","dzeta_jesDown");
-    smpl.second.uncertainties["jesUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_jesUp");
-    smpl.second.uncertainties["jesDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_jesDown");
-    if(!plot_2d){
-      if(tree_ -> GetBranch(variable_1d+"_jesUp")){
-	smpl.second.uncertainties["jesUp"].variable_1d = variable_1d + "_jesUp";
-	smpl.second.uncertainties["jesDown"].variable_1d = variable_1d + "_jesDown";
-      }
-      else cout << "No systematic shift for JES uncertainty for variable " << variable_1d << " available in tree." << endl;
-    }
-    else{
-      if(tree_ -> GetBranch(var1Up+"_jesUp")){
-	var1Up   = var1 + "_jesUp";
-	var1Down = var1 + "_jesDown";
-      }
-      if(tree_ -> GetBranch(var2Up+"_jesUp")){
-	var2Up   = var2 + "_jesUp";
-	var2Down = var2 + "_jesDown";
-      }
-      smpl.second.uncertainties["jesUp"].variable_2d   = var1Up   + ":" + var2Up;
-      smpl.second.uncertainties["jesDown"].variable_2d = var1Down + ":" + var2Down;
+    // 4.) Electron scale (applied only on MC)
+    if(smpl.second.name != "EMB"){
+      smpl.second = create_systematic_uncertainty("escale_mc_Up"  , "_CMS_scale_mc_e_13TeVUp"  , plot_2d, smpl.second, tree_, true, "escaleUp");
+      smpl.second = create_systematic_uncertainty("escale_mc_Down", "_CMS_scale_mc_e_13TeVDown", plot_2d, smpl.second, tree_, true, "escaleDown");
     }
 
-    // 4.) Unclustered MET scale
-    Sample unclMetUp = smpl.second;
-    Sample unclMetDown = smpl.second;
-    smpl.second.uncertainties.insert( make_pair("unclMetUp"   , unclMetUp) );
-    smpl.second.uncertainties.insert( make_pair("unclMetDown" , unclMetDown) );
-    smpl.second.uncertainties["unclMetUp"].name   += "_CMS_scale_met_unclustered_13TeVUp";
-    smpl.second.uncertainties["unclMetDown"].name += "_CMS_scale_met_unclustered_13TeVDown";
-    smpl.second.uncertainties["unclMetUp"].cutString.ReplaceAll("dzeta","dzeta_unclMetUp");
-    smpl.second.uncertainties["unclMetDown"].cutString.ReplaceAll("dzeta","dzeta_unclMetDown");
-    smpl.second.uncertainties["unclMetUp"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_unclMetUp");
-    smpl.second.uncertainties["unclMetDown"].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_unclMetDown");
-    if(!plot_2d){
-      if(tree_ -> GetBranch(variable_1d+"_unclMetUp")){
-	smpl.second.uncertainties["unclMetUp"].variable_1d = variable_1d + "_unclMetUp";
-	smpl.second.uncertainties["unclMetDown"].variable_1d = variable_1d + "_unclMetDown";
-      }
-      else cout << "No systematic shift for unclustered MET uncertainty for variable " << variable_1d << " available in tree." << endl;
-    }
-    else{
-      if(tree_ -> GetBranch(var1Up+"_unclMetUp")){
-	var1Up   = var1 + "_unclMetUp";
-	var1Down = var1 + "_unclMetDown";
-      }
-      if(tree_ -> GetBranch(var2Up+"_unclMetUp")){
-	var2Up   = var2 + "_unclMetUp";
-	var2Down = var2 + "_unclMetDown";
-      }
-      smpl.second.uncertainties["unclMetUp"].variable_2d   = var1Up   + ":" + var2Up;
-      smpl.second.uncertainties["unclMetDown"].variable_2d = var1Down + ":" + var2Down;
-    }
+    if(smpl.second.name == "EMB") continue;
 
-    // 6.) Recoil scale uncertainty
-    Sample recoilscaleUp = smpl.second;
-    Sample recoilscaleDown = smpl.second;
-    smpl.second.uncertainties.insert( make_pair("recoilscaleUp"   , recoilscaleUp) );
-    smpl.second.uncertainties.insert( make_pair("recoilscaleDown" , recoilscaleDown) );
-    smpl.second.uncertainties["recoilscaleUp"].name   += "_CMS_htt_boson_scale_met_13TeVUp";
-    smpl.second.uncertainties["recoilscaleDown"].name += "_CMS_htt_boson_scale_met_13TeVDown";
-    if(!plot_2d){
-      if(tree_ -> GetBranch(variable_1d+"_recoilscaleUp")){
-	smpl.second.uncertainties["recoilscaleUp"].variable_1d   = variable_1d + "_recoilscaleUp";
-	smpl.second.uncertainties["recoilscaleDown"].variable_1d = variable_1d + "_recoilscaleDown";
-      }
-      else cout << "No systematic shift for recoil scale uncertainty for variable " << variable_1d << " available in tree." << endl;
-    }
+    // 5.) (b-)mistag uncertainty
+    // smpl.second = create_systematic_uncertainty("mistagUp"  , "_CMS_htt_mistag_b_13TeVUp"  , plot_2d, smpl.second, tree_, true, "mistagUp");
+    // smpl.second = create_systematic_uncertainty("mistagDown", "_CMS_htt_mistag_b_13TeVDown", plot_2d, smpl.second, tree_, true, "mistagDown");
+    // smpl.second = create_systematic_uncertainty("btagUp"  , "_CMS_htt_eff_b_13TeVUp"  , plot_2d, smpl.second, tree_, true, "btagUp");
+    // smpl.second = create_systematic_uncertainty("btagDown", "_CMS_htt_eff_b_13TeVDown", plot_2d, smpl.second, tree_, true, "btagDown");
 
-    // 7.) Recoil resolution uncertainty
-    Sample recoilresoUp = smpl.second;
-    Sample recoilresoDown = smpl.second;
-    smpl.second.uncertainties.insert( make_pair("recoilresoUp"   , recoilresoUp) );
-    smpl.second.uncertainties.insert( make_pair("recoilresoDown" , recoilresoDown) );
-    smpl.second.uncertainties["recoilresoUp"].name   += "_CMS_htt_boson_reso_met_13TeVUp";
-    smpl.second.uncertainties["recoilresoDown"].name += "_CMS_htt_boson_reso_met_13TeVDown";
-    if(!plot_2d){
-      if(tree_ -> GetBranch(variable_1d+"_recoilresoUp")){
-	smpl.second.uncertainties["recoilresoUp"].variable_1d   = variable_1d + "_recoilresoUp";
-	smpl.second.uncertainties["recoilresoDown"].variable_1d = variable_1d + "_recoilresoDown";
-      }
-      else cout << "No systematic shift for recoil resolution uncertainty for variable " << variable_1d << " available in tree." << endl;
-    }
+    // 6.) JES
+    //old
+    smpl.second = create_systematic_uncertainty("jesUp"  , "_CMS_scale_j_13TeVUp"  , plot_2d, smpl.second, tree_, true, "jesUp");
+    smpl.second = create_systematic_uncertainty("jesDown", "_CMS_scale_j_13TeVDown", plot_2d, smpl.second, tree_, true, "jesDown");
+    //new (to come)
+    // smpl.second = create_systematic_uncertainty("jecUncEta0To5Up"  , "_CMS_scale_j_eta0to5_13TeVUp"  , plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
+    // smpl.second = create_systematic_uncertainty("jecUncEta0To5Down", "_CMS_scale_j_eta0to5_13TeVDown", plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
+    // smpl.second = create_systematic_uncertainty("jecUncEta0To3Up"  , "_CMS_scale_j_eta0to3_13TeVUp"  , plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
+    // smpl.second = create_systematic_uncertainty("jecUncEta0To3Down", "_CMS_scale_j_eta0to3_13TeVDown", plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
+    // smpl.second = create_systematic_uncertainty("jecUncEta3To5Up"  , "_CMS_scale_j_eta3to5_13TeVUp"  , plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
+    // smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_eta3to5_13TeVDown", plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
+    // smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBal_13TeVUp"  , plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
+    // smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_13TeVDown", plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
 
-    // Sample-specific uncertainties
-    // 5.) TTbar shape
+    // 7.) Unclustered MET scale
+    smpl.second = create_systematic_uncertainty("unclMetUp"  , "_CMS_scale_met_unclustered_13TeVUp"  , plot_2d, smpl.second, tree_, true, "unclMetUp");
+    smpl.second = create_systematic_uncertainty("unclMetDown", "_CMS_scale_met_unclustered_13TeVDown", plot_2d, smpl.second, tree_, true, "unclMetDown");
+
+    // 8.) Recoil scale/resolution uncertainties
+    smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_met_13TeVUp"  , plot_2d, smpl.second, tree_, true, "recoilscaleUp");
+    smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_met_13TeVDown", plot_2d, smpl.second, tree_, true, "recoilscaleDown");
+    smpl.second = create_systematic_uncertainty("recoilresoUp"  , "_CMS_htt_boson_reso_met_13TeVUp"  , plot_2d, smpl.second, tree_, true, "recoilresoUp");
+    smpl.second = create_systematic_uncertainty("recoilresoDown", "_CMS_htt_boson_reso_met_13TeVDown", plot_2d, smpl.second, tree_, true, "recoilresoDown");
+
+    // 9.) TTbar shape
     if(smpl.second.name == "TT"){
-      Sample ttbarShapeUp = smpl.second;
-      Sample ttbarShapeDown = smpl.second;
-      smpl.second.uncertainties.insert( make_pair("ttbarShapeUp"   , ttbarShapeUp) );
-      smpl.second.uncertainties.insert( make_pair("ttbarShapeDown" , ttbarShapeDown) );
-      smpl.second.uncertainties["ttbarShapeUp"].name   += "_CMS_htt_ttbarShape_13TeVUp";
-      smpl.second.uncertainties["ttbarShapeDown"].name += "_CMS_htt_ttbarShape_13TeVDown";
-      smpl.second.uncertainties["ttbarShapeUp"].topweight = "topptweight*topptweight*";
-      smpl.second.uncertainties["ttbarShapeDown"].topweight = "";
+      smpl.second = create_systematic_uncertainty("ttbarShapeUp"  , "_CMS_htt_ttbarShape_13TeVUp"  , plot_2d, smpl.second, tree_, false, "", true, "topptweight*","topptweight*topptweight*");
+      smpl.second = create_systematic_uncertainty("ttbarShapeDown", "_CMS_htt_ttbarShape_13TeVDown", plot_2d, smpl.second, tree_, false, "", true, "topptweight*","");
     }
 
-    // 6.) DY shape
+    // 10.) DY shape
     if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" ){
-      Sample dyShapeUp = smpl.second;
-      Sample dyShapeDown = smpl.second;
-      smpl.second.uncertainties.insert( make_pair("dyShapeUp"   , dyShapeUp) );
-      smpl.second.uncertainties.insert( make_pair("dyShapeDown" , dyShapeDown) );
-      smpl.second.uncertainties["dyShapeUp"].name   += "_CMS_htt_dyShape_13TeVUp";
-      smpl.second.uncertainties["dyShapeDown"].name += "_CMS_htt_dyShape_13TeVDown";
-      smpl.second.uncertainties["dyShapeUp"].zptmassweight="(1.0+1.1*(zptmassweight-1))*";
-      smpl.second.uncertainties["dyShapeDown"].zptmassweight="(1.0+0.9*(zptmassweight-1))*";
+      smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShape_13TeVUp"  , plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
+      smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape_13TeVDown", plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
     }
 
-    // 7.) ggScale
-    if(smpl.second.name == "ggH125"){
-      Sample ggScaleUp = smpl.second;
-      Sample ggScaleDown = smpl.second;
-      smpl.second.uncertainties.insert( make_pair("ggScaleUp"   , ggScaleUp) );
-      smpl.second.uncertainties.insert( make_pair("ggScaleDown" , ggScaleDown) );
-      smpl.second.uncertainties["ggScaleUp"].name   += "_CMS_scale_gg_13TeVUp";
-      smpl.second.uncertainties["ggScaleDown"].name += "_CMS_scale_gg_13TeVDown";
-      smpl.second.uncertainties["ggScaleUp"].ggscaleweight=category_in_use.gg_scale_weight_up;
-      smpl.second.uncertainties["ggScaleDown"].ggscaleweight=category_in_use.gg_scale_weight_down;
+    if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" ){
+      smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShape_13TeVUp"  , plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
+      smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape_13TeVDown", plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
+    }
+
+    // 11.) TT contamination in embedded sample
+    if(use_embedded && smpl.second.name == "TT"){
+      smpl.second = create_systematic_uncertainty("ttEmbContUp"  , "_CMS_htt_emb_ttbar_13TeVUp"  , plot_2d, smpl.second, tree_, false, "", true, "topptweight*","1.1*topptweight*");
+      smpl.second = create_systematic_uncertainty("ttEmbContDown", "_CMS_htt_emb_ttbar_13TeVDown", plot_2d, smpl.second, tree_, false, "", true, "topptweight*","0.9*topptweight*");
     }
   }
 
