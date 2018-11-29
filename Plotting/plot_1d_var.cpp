@@ -45,7 +45,7 @@ void plot_1d_var(
    
 
    // Read file
-   TString filename = directory + "/htt_em.inputs-sm-13TeV-" + variable + ".root";
+   TString filename = directory + "/htt_em.inputs-sm-Run" + era + "-" + variable + ".root";
    TFile *file      = new TFile( filename , "READ");
 
    // Define sample categorization
@@ -127,6 +127,12 @@ void plot_1d_var(
      if( smpl->isData   == true ) continue;
      if( smpl->isSignal == true ) continue;
      stack -> Add(smpl->hist);
+   }
+
+   // Give warning if there are empty bins
+   TH1 *last = (TH1*)stack->GetStack()->Last();
+   for (int iB=1; iB<=last->GetNbinsX(); ++iB) {
+     if(last->GetBinContent(iB) <=0) cout<<endl<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WARNNING : empty bins !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl<<endl;
    }
 
    // Initialize a background error histogram
@@ -214,9 +220,9 @@ void plot_1d_var(
    }
    canv1     -> Update();
 
-   // Draw legend
+   // Draw legend + other things
    TLegend *leg = 0;
-   if( data.hist->GetMaximumBin() <= data.hist->GetNbinsX()/2.) leg = new TLegend(0.65,0.45,0.9,0.9);
+   if( data.hist->GetMaximumBin() <= data.hist->GetNbinsX()/2.) leg = new TLegend(0.62,0.45,0.9,0.9);
    else leg = new TLegend(0.2,0.45,0.45,0.9);
    SetLegendStyle(leg);
    vector<TString> already_added_to_legend;
@@ -233,7 +239,29 @@ void plot_1d_var(
    extraText = "Preliminary";
    if(era=="2016") CMS_lumi(upper,4,33);
    else if(era=="2017") CMS_lumi(upper,5,33);
-   plotchannel("e#mu",0.25,0.84);
+   TString category_name = category;
+   ztt.legend_entry  = "Z#rightarrow #tau#tau (MC)";
+   emb.legend_entry  = "Z#rightarrow #tau#tau (emb.)";
+   zl.legend_entry   = "Z#rightarrow ll";
+   w.legend_entry    = "W";
+   vv.legend_entry   = "VV";
+   st.legend_entry   = "ST";
+   tt.legend_entry   = "t#bar{t}";
+   qcd.legend_entry  = "QCD";
+   data.legend_entry = "Data";
+   qqh.legend_entry  = "qqH";
+   ggh.legend_entry  = "ggH";
+
+   if(category == "em_inclusive" ) category_name = "incl.";
+   else if(category == "em_ztt")   category_name = "Z#rightarrow #tau#tau";
+   else if(category == "em_tt")    category_name = "t#bar{t}";
+   else if(category == "em_st")    category_name = "single top";
+   else if(category == "em_misc")  category_name = "misc";
+   else if(category == "em_vv")    category_name = "diboson";
+   else if(category == "em_ss")    category_name = "same sign";
+   else if(category == "em_qqh")   category_name = "qqH";
+   else if(category == "em_ggh")   category_name = "ggH";
+   plotchannel("e#mu " + category_name + " category",0.25,0.84);
     
    char KT[100];
    TLatex * cms = new TLatex(0.25,0.85,KT);
