@@ -339,7 +339,7 @@ void plotchannel(const char * channel, double lowX, double lowY) {
   chan->SetBorderSize(   0 );
   chan->SetFillStyle(    0 );
   chan->SetTextAlign(   12 );
-  chan->SetTextSize ( 0.07 );
+  chan->SetTextSize ( 0.05 );
   chan->SetTextColor(    1 );
   chan->SetTextFont (   62 );
   chan->AddText(channel);
