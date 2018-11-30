@@ -23,7 +23,7 @@ Sample create_systematic_uncertainty( TString unc_name, TString combine_harveste
     if(input_tree -> GetBranch("nbtag_" +shift_name)) mother_sample.uncertainties[unc_name].cutString.ReplaceAll("nbtag","nbtag_"+shift_name);
     if(!gof_2d){
       if(input_tree -> GetBranch( variable + "_" + shift_name )) mother_sample.uncertainties[unc_name].variable_1d = variable + "_" + shift_name;
-      else cout<<"No systematic shift for "<<shift_name<<" for variable "<<variable<<" available in tree."<<endl;
+      //      else cout<<"No systematic shift for "<<shift_name<<" for variable "<<variable<<" available in tree."<<endl;
     }
     else{
       // split the two variables into two seperate strings
