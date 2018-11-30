@@ -157,7 +157,8 @@ void create_dnn_ntuples( TString era = "2017" ){
       float embedded_stitching_weight;
       float embedded_rate_weight;
       float prefiring_weight;
-      int htxs_correspondance_flag;
+      int htxs_reco_flag_ggh;
+      int htxs_reco_flag_qqh;
       if(firstTree){
 	outTree    = inTree->CloneTree(0);
 	outTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
@@ -166,7 +167,8 @@ void create_dnn_ntuples( TString era = "2017" ){
 	outTree->Branch("embedded_stitching_weight", &embedded_stitching_weight, "embedded_stitching_weight/F");
 	outTree->Branch("embedded_rate_weight", &embedded_rate_weight, "embedded_rate_weight/F");
 	outTree->Branch("prefiring_weight", &prefiring_weight, "prefiring_weight/F");
-	outTree->Branch("htxs_correspondance_flag", &htxs_correspondance_flag, "htxs_correspondance_flag/I");
+	outTree->Branch("htxs_reco_flag_ggh", &htxs_reco_flag_ggh, "htxs_reco_flag_ggh/I");
+	outTree->Branch("htxs_reco_flag_qqh", &htxs_reco_flag_qqh, "htxs_reco_flag_qqh/I");
 	firstTree  = false;
       }
       currentTree = inTree->CloneTree(0);
@@ -176,7 +178,8 @@ void create_dnn_ntuples( TString era = "2017" ){
       currentTree->Branch("embedded_stitching_weight", &embedded_stitching_weight, "embedded_stitching_weight/F");
       currentTree->Branch("embedded_rate_weight", &embedded_rate_weight, "embedded_rate_weight/F");
       currentTree->Branch("prefiring_weight", &prefiring_weight, "prefiring_weight/F");
-      currentTree->Branch("htxs_correspondance_flag", &htxs_correspondance_flag, "htxs_correspondance_flag/I");
+      currentTree->Branch("htxs_reco_flag_ggh", &htxs_reco_flag_ggh, "htxs_reco_flag_ggh/I");
+      currentTree->Branch("htxs_reco_flag_qqh", &htxs_reco_flag_qqh, "htxs_reco_flag_qqh/I");
 
       // lumi-xsec-weight added
       if( xsec_map->find(subsample) == xsec_map->end() && !sample.first.Contains("MuonEG")  && !sample.first.Contains("Embedded")){
@@ -242,38 +245,40 @@ void create_dnn_ntuples( TString era = "2017" ){
 	embedded_rate_weight = embedded_trigger_weight * embedded_tracking_weight;
 
 	// add flags for cut categories which correspond to htxs_stage1cats
-	htxs_correspondance_flag = 0;
-	if((njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_tt>0)&&(pt_tt<200)&&(pt_ttjj>0)&&(pt_ttjj<25)) htxs_correspondance_flag = 101;
-	else if((njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_tt>0)&&(pt_tt<200)&&(pt_ttjj>25)) htxs_correspondance_flag = 102;
-	else if(njets==0) htxs_correspondance_flag = 103;
-	else if((njets==1)&&(pt_tt>0)&&(pt_tt<60)) htxs_correspondance_flag = 104;
-	else if((njets==1)&&(pt_tt>60)&&(pt_tt<120)) htxs_correspondance_flag = 105;
-	else if((njets==1)&&(pt_tt>120)&&(pt_tt<200)) htxs_correspondance_flag = 106;
-	else if((njets==1)&&(pt_tt>200)) htxs_correspondance_flag = 107;
-	else if((njets>=2)&&( (mjj>0&&mjj<400) || (mjj>400&&jdeta<2.8) )&&(pt_tt>0)&&(pt_tt<60)) htxs_correspondance_flag = 108;
-	else if((njets>=2)&&( (mjj>0&&mjj<400) || (mjj>400&&jdeta<2.8) )&&(pt_tt>60)&&(pt_tt<120)) htxs_correspondance_flag = 109;
-	else if((njets>=2)&&( (mjj>0&&mjj<400) || (mjj>400&&jdeta<2.8) )&&(pt_tt>120)&&(pt_tt<200)) htxs_correspondance_flag = 110;
-	else if((njets>=2)&&(pt_tt>200)) htxs_correspondance_flag = 111;
-	else if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_ttjj>0)&&(pt_ttjj<25)) htxs_correspondance_flag = 201;
-	else if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_ttjj>25)) htxs_correspondance_flag = 202;
-	else if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>60)&&(mjj<120)) htxs_correspondance_flag = 203;
-	else if(( (jpt_1>0&&jpt_1<200&&njets<2) || (jpt_1>0&&jpt_1<200&&njets>=2&&mjj>400&&jdeta<2.8) || (jpt_1>0&&jpt_1<200&&njets>=2&&mjj>0&&mjj<60) || (jpt_1>0&&jpt_1<200&&njets>=2&&mjj>120&&mjj<400))) htxs_correspondance_flag = 204;
-	else if(jpt_1>200) htxs_correspondance_flag = 205;
+	htxs_reco_flag_ggh = 0;
+	htxs_reco_flag_qqh = 0;
+	if((njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_tt>0)&&(pt_tt<200)&&(pt_ttjj>0)&&(pt_ttjj<25)) htxs_reco_flag_ggh = 101;
+	else if((njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_tt>0)&&(pt_tt<200)&&(pt_ttjj>25)) htxs_reco_flag_ggh = 102;
+	else if(njets==0) htxs_reco_flag_ggh = 103;
+	else if((njets==1)&&(pt_tt>0)&&(pt_tt<60)) htxs_reco_flag_ggh = 104;
+	else if((njets==1)&&(pt_tt>60)&&(pt_tt<120)) htxs_reco_flag_ggh = 105;
+	else if((njets==1)&&(pt_tt>120)&&(pt_tt<200)) htxs_reco_flag_ggh = 106;
+	else if((njets==1)&&(pt_tt>200)) htxs_reco_flag_ggh = 107;
+	else if((njets>=2)&&( (mjj>0&&mjj<400) || (mjj>400&&jdeta<2.8) )&&(pt_tt>0)&&(pt_tt<60)) htxs_reco_flag_ggh = 108;
+	else if((njets>=2)&&( (mjj>0&&mjj<400) || (mjj>400&&jdeta<2.8) )&&(pt_tt>60)&&(pt_tt<120)) htxs_reco_flag_ggh = 109;
+	else if((njets>=2)&&( (mjj>0&&mjj<400) || (mjj>400&&jdeta<2.8) )&&(pt_tt>120)&&(pt_tt<200)) htxs_reco_flag_ggh = 110;
+	else if((njets>=2)&&(pt_tt>200)) htxs_reco_flag_ggh = 111;
+
+	if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_ttjj>0)&&(pt_ttjj<25)) htxs_reco_flag_qqh = 201;
+	else if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_ttjj>25)) htxs_reco_flag_qqh = 202;
+	else if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>60)&&(mjj<120)) htxs_reco_flag_qqh = 203;
+	else if(( (jpt_1>0&&jpt_1<200&&njets<2) || (jpt_1>0&&jpt_1<200&&njets>=2&&mjj>400&&jdeta<2.8) || (jpt_1>0&&jpt_1<200&&njets>=2&&mjj>0&&mjj<60) || (jpt_1>0&&jpt_1<200&&njets>=2&&mjj>120&&mjj<400))) htxs_reco_flag_qqh = 204;
+	else if(jpt_1>200) htxs_reco_flag_qqh = 205;
 
 	// prefiring weights (from AN-18-255)
 	prefiring_weight=1;
 	if( sample.first.Contains("TTBar") && era == "2016")      prefiring_weight = 0.989;
 	else if( sample.first.Contains("TTBar") && era == "2017") prefiring_weight = 0.984;
-	else if( sample.first.Contains("VBFH") && htxs_correspondance_flag == 201 && era == "2016") prefiring_weight = 0.972;
-	else if( sample.first.Contains("VBFH") && htxs_correspondance_flag == 201 && era == "2017") prefiring_weight = 0.950;
-	else if( sample.first.Contains("VBFH") && htxs_correspondance_flag == 202 && era == "2016") prefiring_weight = 0.972;
-	else if( sample.first.Contains("VBFH") && htxs_correspondance_flag == 202 && era == "2017") prefiring_weight = 0.950;
-	else if( sample.first.Contains("VBFH") && htxs_correspondance_flag == 203 && era == "2016") prefiring_weight = 0.972;
-	else if( sample.first.Contains("VBFH") && htxs_correspondance_flag == 203 && era == "2017") prefiring_weight = 0.950;
-	else if( sample.first.Contains("VBFH") && htxs_correspondance_flag == 204 && era == "2016") prefiring_weight = 0.983;
-	else if( sample.first.Contains("VBFH") && htxs_correspondance_flag == 204 && era == "2017") prefiring_weight = 0.970;
-	else if( sample.first.Contains("VBFH") && htxs_correspondance_flag == 205 && era == "2016") prefiring_weight = 0.920;
-	else if( sample.first.Contains("VBFH") && htxs_correspondance_flag == 205 && era == "2017") prefiring_weight = 0.850;
+	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 201 && era == "2016") prefiring_weight = 0.972;
+	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 201 && era == "2017") prefiring_weight = 0.950;
+	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 202 && era == "2016") prefiring_weight = 0.972;
+	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 202 && era == "2017") prefiring_weight = 0.950;
+	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 203 && era == "2016") prefiring_weight = 0.972;
+	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 203 && era == "2017") prefiring_weight = 0.950;
+	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 204 && era == "2016") prefiring_weight = 0.983;
+	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 204 && era == "2017") prefiring_weight = 0.970;
+	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 205 && era == "2016") prefiring_weight = 0.920;
+	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 205 && era == "2017") prefiring_weight = 0.850;
 
 	currentTree->Fill();
       }
