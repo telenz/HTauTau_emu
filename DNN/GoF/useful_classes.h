@@ -30,6 +30,7 @@ public :
 
   TString variable_1d = "m_vis";
   TString variable_2d = "m_vis : pt_2";
+  TString variable = "m_vis";
 
   TH1D *hist_1d;
   TH1D *histSS_1d;
@@ -80,6 +81,8 @@ public :
 
   TString variable_1d = "";
   TString variable_2d = "";
+  TString variable    = "";
+  bool plot_2d = false;
   TString cutstring   = "";
   TString cutstring_ss = "";
   TString weight = "";
@@ -88,10 +91,13 @@ public :
   TString gg_scale_weight_down = "";
 
   vector<float> bins_1d;
+  vector<float> binning_1d;
+  vector<float> binning_2d_x;
+  vector<float> binning_2d_y;
   vector<float> bins_x_2d;
   vector<float> bins_y_2d;
 
-  vector<Sample> *sampleList;
+  map<TString,Sample> sample_list;
 
   Category(TString catName = ""){
     name = catName;
