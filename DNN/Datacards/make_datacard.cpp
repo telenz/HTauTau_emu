@@ -76,6 +76,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   Sample TT(   "TT"       , "em-NOMINAL_ntuple_TT.root" );
   Sample TTcont( "TTcont"  , "em-NOMINAL_ntuple_TT.root" );
   Sample VV(   "VV"       , "em-NOMINAL_ntuple_Diboson.root" );
+  Sample VVcont( "VVcont"  , "NOMINAL_ntuple_Diboson_em.root" );
   Sample ST(   "ST"       , "em-NOMINAL_ntuple_SingleTop.root" );
   Sample QCD(  "QCD"      , "em-NOMINAL_ntuple_Data.root" );
   Sample EMB(  "EMB"      , "em-NOMINAL_ntuple_ZTT.root" );
@@ -89,15 +90,16 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 				     { "4_TT"   , TT } ,
 				     { "5_TTcont", TTcont } ,
 				     { "6_VV"   , VV } ,
-				     { "7_ST"   , ST } ,
-				     { "8_ZTT"  , ZTT } ,
-				     { "9_ggH125" , ggH },
-				     { "10_qqH125" , qqH }
+				     { "7_VVcont"   , VVcont } ,
+				     { "8_ST"   , ST } ,
+				     { "9_ZTT"  , ZTT } ,
+				     { "10_ggH125" , ggH },
+				     { "11_qqH125" , qqH }
   };
 
   if(use_embedded){
-    sample_map.erase("8_ZTT");
-    sample_map["8_EMB"] = EMB;
+    sample_map.erase("9_ZTT");
+    sample_map["9_EMB"] = EMB;
   }
 
   cout << endl << endl << "... Sample categories ... "<< endl ;
@@ -131,23 +133,25 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   sample_map["5_TTcont"].weightStringSS  += "topptweight*";
 
   if(use_embedded){
-    sample_map["8_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
-    sample_map["8_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
-    sample_map["8_EMB"].cutString   += "&& mcweight<1";
-    sample_map["8_EMB"].cutStringSS += "&& mcweight<1";
+    sample_map["9_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
+    sample_map["9_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
+    sample_map["9_EMB"].cutString   += "&& mcweight<1";
+    sample_map["9_EMB"].cutStringSS += "&& mcweight<1";
     sample_map["4_TT"].cutString    += "&& veto_embedded<0.5";
     sample_map["4_TT"].cutStringSS  += "&& veto_embedded<0.5";
     sample_map["6_VV"].cutString    += "&& veto_embedded<0.5";
     sample_map["6_VV"].cutStringSS  += "&& veto_embedded<0.5";
     sample_map["5_TTcont"].cutString    += "&& veto_embedded>0.5";
     sample_map["5_TTcont"].cutStringSS  += "&& veto_embedded>0.5";
+    sample_map["7_VVcont"].cutString    += "&& veto_embedded>0.5";
+    sample_map["7_VVcont"].cutStringSS  += "&& veto_embedded>0.5";
 
   }
   else{
-    sample_map["8_ZTT"].cutString      += "&&isZTT";
-    sample_map["8_ZTT"].cutStringSS    += "&&isZTT";
-    sample_map["8_ZTT"].weightString   += "zptmassweight*";
-    sample_map["8_ZTT"].weightStringSS += "zptmassweight*";
+    sample_map["9_ZTT"].cutString      += "&&isZTT";
+    sample_map["9_ZTT"].cutStringSS    += "&&isZTT";
+    sample_map["9_ZTT"].weightString   += "zptmassweight*";
+    sample_map["9_ZTT"].weightStringSS += "zptmassweight*";
   }
 
   //************************************************************************************************
@@ -302,7 +306,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
       // Make QCD estimation
       if( smpl.second.name == "QCD" ) sample_map["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
-      else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" ) sample_map["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
+      else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont" ) sample_map["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
 
       // Loop over systematic uncertainties
       for(auto &sys : smpl.second.uncertainties){
@@ -329,8 +333,10 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
     // Calculate embedded uncertainty
     if(use_embedded){
-      sample_map["8_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(sample_map["5_TTcont"].hist_1d , 0.1);
-      sample_map["8_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(sample_map["5_TTcont"].hist_1d , -0.1);
+      sample_map["9_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(sample_map["5_TTcont"].hist_1d , 0.1);
+      sample_map["9_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(sample_map["5_TTcont"].hist_1d , -0.1);
+      sample_map["9_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(sample_map["5_VVcont"].hist_1d , 0.1);
+      sample_map["9_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(sample_map["5_VVcont"].hist_1d , -0.1);
     }
 
     //***********************************************************************************************
