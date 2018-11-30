@@ -135,6 +135,8 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
     sample_map["6_VV"].cutStringSS  += "&& veto_embedded<0.5";
     sample_map["5_TTcont"].cutString    += "&& veto_embedded>0.5";
     sample_map["5_TTcont"].cutStringSS  += "&& veto_embedded>0.5";
+    sample_map["7_VVcont"].cutString    += "&& veto_embedded>0.5";
+    sample_map["7_VVcont"].cutStringSS  += "&& veto_embedded>0.5";
 
   }
   else{
@@ -324,7 +326,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
     // Make QCD estimation
     if( smpl.second.name == "QCD" ) sample_map["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
-    else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" ) sample_map["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
+    else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont" ) sample_map["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
 
     // Loop over systematic uncertainties
     for(auto &sys : smpl.second.uncertainties){
@@ -360,11 +362,11 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
       if( !sys.first.Contains("qcd") ) continue;
       if( sys.first == "qcdUp" ){
 	if( smpl.second.name == "QCD" )                                                     sample_map["1_QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , +1);
-	else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" ) sample_map["1_QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , -1);
+	else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont" ) sample_map["1_QCD"].uncertainties["qcdUp"].hist_1d -> Add(sys.second.histSS_1d , -1);
       }
       else{
 	if( smpl.second.name == "QCD" )                                                      sample_map["1_QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , +1);
-	else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" )  sample_map["1_QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , -1);
+	else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont")  sample_map["1_QCD"].uncertainties["qcdDown"].hist_1d -> Add(sys.second.histSS_1d , -1);
       }
 
     } // end of loop over sys uncertainties
