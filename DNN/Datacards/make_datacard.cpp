@@ -74,9 +74,9 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   Sample ZL(   "ZL"       , "em-NOMINAL_ntuple_ZL.root" );
   Sample W(    "W"        , "em-NOMINAL_ntuple_W.root" );
   Sample TT(   "TT"       , "em-NOMINAL_ntuple_TT.root" );
-  Sample TTcont( "TTcont"  , "em-NOMINAL_ntuple_TT.root" );
+  Sample TTcont( "TTcont" , "em-NOMINAL_ntuple_TT.root" );
   Sample VV(   "VV"       , "em-NOMINAL_ntuple_Diboson.root" );
-  Sample VVcont( "VVcont"  , "NOMINAL_ntuple_Diboson_em.root" );
+  Sample VVcont( "VVcont" , "em-NOMINAL_ntuple_Diboson_em.root" );
   Sample ST(   "ST"       , "em-NOMINAL_ntuple_SingleTop.root" );
   Sample QCD(  "QCD"      , "em-NOMINAL_ntuple_Data.root" );
   Sample EMB(  "EMB"      , "em-NOMINAL_ntuple_ZTT.root" );
@@ -163,7 +163,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
 
   for(auto & smpl : sample_map){
 
-    if( smpl.second.name == "data_obs" ) continue;
+    if( smpl.second.name == "data_obs" || smpl.first.Contains("cont")) continue;
 
     // 1.) QCD uncertainties (10 nuisances)
     // smpl.second = create_systematic_uncertainty("qcd0jetRateUp"  , "_CMS_htt_qcd_0jet_rate_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_up*");
@@ -343,6 +343,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
     // Print the final sum of weights of the nominal selection
     file_out -> cd(cat.second.name);
     for(auto & smpl : sample_map){
+      if(smpl.first.Contains("cont")) continue;
       smpl.second.hist_1d -> Write( smpl.second.name );
       for(auto & sys : smpl.second.uncertainties){
 	if(sys.second.name.Contains("qcd") && smpl.second.name != "QCD") continue;
