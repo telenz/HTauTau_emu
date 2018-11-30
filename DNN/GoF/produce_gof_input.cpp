@@ -68,6 +68,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   Sample TT(   "TT"       , "NOMINAL_ntuple_TTbar_em.root" );
   Sample TTcont( "TTcont"  , "NOMINAL_ntuple_TTbar_em.root" );
   Sample VV(   "VV"       , "NOMINAL_ntuple_Diboson_em.root" );
+  Sample VVcont( "VVcont"  , "NOMINAL_ntuple_Diboson_em.root" );
   Sample ST(   "ST"       , "NOMINAL_ntuple_SingleTop_em.root" );
   Sample QCD(  "QCD"      , "NOMINAL_ntuple_MuonEG_em.root" );
   Sample EMB(  "EMB"      , "NOMINAL_ntuple_Embedded_em.root" );
@@ -81,15 +82,16 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 				     { "4_TT"   , TT } ,
 				     { "5_TTcont", TTcont } ,
 				     { "6_VV"   , VV } ,
-				     { "7_ST"   , ST } ,
-				     { "8_ZTT"  , ZTT } ,
-				     { "9_ggH125" , ggH },
-				     { "10_qqH125" , qqH }
+				     { "7_VVcont", VVcont } ,
+				     { "8_ST"   , ST } ,
+				     { "9_ZTT"  , ZTT } ,
+				     { "10_ggH125" , ggH },
+				     { "11_qqH125" , qqH }
   };
 
   if(use_embedded){
-    sample_map.erase("8_ZTT");
-    sample_map["8_EMB"] = EMB;
+    sample_map.erase("9_ZTT");
+    sample_map["9_EMB"] = EMB;
   }
 
   cout << endl << endl << "... Sample categories ... "<< endl ;
@@ -123,10 +125,10 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   sample_map["5_TTcont"].weightStringSS  += "topptweight*";
 
   if(use_embedded){
-    sample_map["8_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
-    sample_map["8_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
-    sample_map["8_EMB"].cutString   += "&& mcweight<1";
-    sample_map["8_EMB"].cutStringSS += "&& mcweight<1";
+    sample_map["9_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
+    sample_map["9_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
+    sample_map["9_EMB"].cutString   += "&& mcweight<1";
+    sample_map["9_EMB"].cutStringSS += "&& mcweight<1";
     sample_map["4_TT"].cutString    += "&& veto_embedded<0.5";
     sample_map["4_TT"].cutStringSS  += "&& veto_embedded<0.5";
     sample_map["6_VV"].cutString    += "&& veto_embedded<0.5";
@@ -136,10 +138,10 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   }
   else{
-    sample_map["8_ZTT"].cutString      += "&&isZTT";
-    sample_map["8_ZTT"].cutStringSS    += "&&isZTT";
-    sample_map["8_ZTT"].weightString   += "zptmassweight*";
-    sample_map["8_ZTT"].weightStringSS += "zptmassweight*";
+    sample_map["9_ZTT"].cutString      += "&&isZTT";
+    sample_map["9_ZTT"].cutStringSS    += "&&isZTT";
+    sample_map["9_ZTT"].weightString   += "zptmassweight*";
+    sample_map["9_ZTT"].weightStringSS += "zptmassweight*";
   }
 
   //************************************************************************************************
@@ -370,8 +372,10 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
 
   // Calculate embedded uncertainty
   if(use_embedded){
-    sample_map["8_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(sample_map["5_TTcont"].hist_1d , 0.1);
-    sample_map["8_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(sample_map["5_TTcont"].hist_1d , -0.1);
+    sample_map["9_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(sample_map["5_TTcont"].hist_1d , 0.1);
+    sample_map["9_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(sample_map["5_TTcont"].hist_1d , -0.1);
+    sample_map["9_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(sample_map["7_VVcont"].hist_1d , 0.1);
+    sample_map["9_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(sample_map["7_VVcont"].hist_1d , -0.1);
   }
 
   //************************************************************************************************
