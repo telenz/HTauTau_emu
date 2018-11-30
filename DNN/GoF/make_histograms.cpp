@@ -9,18 +9,18 @@
 
 using namespace std;
 
-void make_histograms(const char* config_file = "config.cfg") {
+void make_histograms(TString era_for_config="2016") {
 
-  Config cfg("config.cfg");
+  Config cfg("config_"+era_for_config+".cfg");
 
   const TString directory = cfg.get<string>("directory");
   const string era        = cfg.get<string>("era");
   const bool use_embedded = cfg.get<bool>("use_embedded");
   const bool plot_2d      = cfg.get<bool>("plot_2d");
   const bool verbose      = cfg.get<bool>("verbose");
-  const bool take_percentile_subrange      = cfg.get<bool>("take_percentile_subrange");
+  const bool take_percentile_subrange = cfg.get<bool>("take_percentile_subrange");
 
-  vector<string> category_names_vector  = cfg.get<vector<string>>("categories");
+  vector<string> category_names_vector = cfg.get<vector<string>>("categories");
 
   map< TString , Category > category_map;
 
@@ -162,7 +162,7 @@ void make_histograms(const char* config_file = "config.cfg") {
 
   for(auto & smpl : sample_map){
 
-    if( smpl.second.name == "data_obs" ) continue;
+    if( smpl.second.name == "data_obs" || smpl.first.Contains("cont") ) continue;
 
     // 1.) QCD uncertainties (10 nuisances)
     // smpl.second = create_systematic_uncertainty("qcd0jetRateUp"  , "_CMS_htt_qcd_0jet_rate_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_up*");
@@ -395,6 +395,7 @@ void make_histograms(const char* config_file = "config.cfg") {
     file_out -> mkdir(cat.second.name);
     file_out -> cd(cat.second.name);
     for(auto & smpl : sample_map){
+      if( smpl.first.Contains("cont") ) continue;
       smpl.second.hist_1d -> Write( smpl.second.name );
       for(auto & sys : smpl.second.uncertainties){
 	if(sys.second.name.Contains("qcd") && smpl.second.name != "QCD") continue;
