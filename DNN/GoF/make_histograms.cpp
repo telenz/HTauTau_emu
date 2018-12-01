@@ -131,12 +131,14 @@ void make_histograms(TString era_for_config="2016") {
     cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTT";
     cat.second.sample_list["2_ZL"].weightString    += "zptmassweight*";
     cat.second.sample_list["2_ZL"].weightStringSS  += "zptmassweight*";
-    cat.second.sample_list["4_TT"].weightString    += "topptweight*";
-    cat.second.sample_list["4_TT"].weightStringSS  += "topptweight*";
-    cat.second.sample_list["5_TTcont"].weightString    += "topptweight*";
-    cat.second.sample_list["5_TTcont"].weightStringSS  += "topptweight*";
+    cat.second.sample_list["4_TT"].weightString    += "topptweight*prefiring_weight*";
+    cat.second.sample_list["4_TT"].weightStringSS  += "topptweight*prefiring_weight*";
+    cat.second.sample_list["5_TTcont"].weightString    += "topptweight*prefiring_weight*";
+    cat.second.sample_list["5_TTcont"].weightStringSS  += "topptweight*prefiring_weight*";
     cat.second.sample_list["10_ggH125"].weightString    += "weight_ggh_NNLOPS*";
     cat.second.sample_list["10_ggH125"].weightStringSS  += "weight_ggh_NNLOPS*";
+    cat.second.sample_list["11_qqH125"].weightString    += "prefiring_weight*";
+    cat.second.sample_list["11_qqH125"].weightStringSS  += "prefiring_weight*";
 
     if(use_embedded){
       cat.second.sample_list["9_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
