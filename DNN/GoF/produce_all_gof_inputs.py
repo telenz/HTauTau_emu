@@ -11,16 +11,24 @@ args = parser.parse_args()
 era=args.era
 if args.embedded == True:
     embedded=1
+    embedded_c='true'
 else :
     embedded=0
+    embedded_c='false'
 
 # some settings
 output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
 
+#dnn_ntuples_directory = "../../Inputs/NTuples_2016_with_htxs"
 dnn_ntuples_directory = "../../Inputs/NTuples_2016_tighter_cuts_v2"
+
+config_filename_in = "config_for_gof_2016_with_placeholders.cfg"
+config_filename_out = "config_for_gof_2016.cfg"
 if era == "2017" :
     print "era is 2017"
     dnn_ntuples_directory = "../../Inputs/NTuples_2017_tighter_cuts"
+    config_filename_in = "config_for_gof_2017_with_placeholders.cfg"
+    config_filename_out = "config_for_gof_2017.cfg"
 
 variable_list = [ "m_sv",
                   "m_vis",
@@ -53,7 +61,7 @@ variable_list = [ "m_sv",
                   "pt_vis",
                   ]
 
-#variable_list = [ "pt_vis" ]
+variable_list = [ "m_sv" ]
 
 axis_range = { "m_sv"  : [8 , 0  , 300],
                "m_vis" : [8 , 0  , 300],
@@ -123,7 +131,14 @@ for var in variable_list :
     nbins , xmin , xmax = axis_range.get(var,[8, 0,400])
 
     # Produce the root-files (datacard input)
-    cmd = "root -l -b -q produce_gof_input.cpp+\"(\\\"em_inclusive\\\",false,\\\""+var+"\\\" , " + str(nbins) + " , {"+str(xmin)+","+str(xmax)+"} , \\\"pt_2:m_vis\\\" , \\\"" + dnn_ntuples_directory + "\\\",\\\""+ era + "\\\"," + str(embedded) + ")\""
+    # change config file
+    with open(config_filename_in) as f:
+        newText=f.read().replace('output_file_suffix =', 'output_file_suffix = ' + var)
+        newText=newText.replace('em_inclusive_variable = ', 'em_inclusive_variable = ' + var)
+        newText=newText.replace('use_embedded = ', 'use_embedded = ' + embedded_c)
+    with open(config_filename_out, "w") as f:
+        f.write(newText)
+    cmd = "root -l -b -q make_histograms.cpp+\"(\\\""+config_filename_out+"\\\")\""
     os.system(cmd)
 
     # Now start to make the actual gof test
