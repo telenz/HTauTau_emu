@@ -137,6 +137,8 @@ void make_histograms(TString era_for_config="2016") {
     cat.second.sample_list["4_TT"].weightStringSS  += "topptweight*";
     cat.second.sample_list["5_TTcont"].weightString    += "topptweight*";
     cat.second.sample_list["5_TTcont"].weightStringSS  += "topptweight*";
+    //    cat.second.sample_list["10_ggH125"].weightString    += "weight_ggh_NNLOPS*";
+    //    cat.second.sample_list["10_ggH125"].weightStringSS  += "weight_ggh_NNLOPS*";
 
     if(use_embedded){
       cat.second.sample_list["9_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
@@ -248,6 +250,29 @@ void make_histograms(TString era_for_config="2016") {
 	smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShape_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
 	smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
       }
+      // 12.) ggh reweighting
+      // if(smpl.second.name == "ggH125" ){
+      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Res_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_Res*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Res_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_Res*");
+
+      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Mig01_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_Mig01*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Mig01_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_Mig01*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Mig12_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_Mig12*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Mig12_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_Mig12*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_VBF2j_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_VBF2j*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_VBF2j_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_VBF2j*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_VBF3j_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_VBF3j*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_VBF3j_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_VBF3j*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_PT60_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_PT60*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_PT60_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_PT60*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_PT120_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_PT120*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_PT120_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_PT120*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_qmtop_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_qmtop*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_qmtop_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_qmtop*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Mu_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_Mu*");
+      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Mu_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_Mu*");
+      // }
+
     }
     
     if(verbose){
