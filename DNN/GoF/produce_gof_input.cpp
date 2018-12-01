@@ -413,6 +413,7 @@ void produce_gof_input( TString category_name = "em_inclusive" ,
   cout << endl << "... Final histogram content : "<< endl;
   TH1D * allBkg = (TH1D*) sample_map["1_QCD"].hist_1d -> Clone();
   for(auto & smpl : sample_map) {
+    if( smpl.first.Contains("cont") ) continue;
     cout << smpl.second.name << " : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
     // Add all background
     if( smpl.second.name == "data_obs" || smpl.second.name == "QCD" ) continue;
