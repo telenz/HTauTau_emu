@@ -20,9 +20,10 @@ void plot_1d_var(
 
   // General uncertainties
   float err_lumi     = 0.025;
+  if(era=="2017")  err_lumi=0.023;
   float err_trigger  = 0.020;
-  float err_muon_eff = 0.02;
-  float err_elec_eff = 0.02;
+  float err_muon_eff = 0.014;
+  float err_elec_eff = 0.014;
 
   // Sample-specific uncertainties
   float err_vv_xsec  = 0.05;
@@ -31,6 +32,7 @@ void plot_1d_var(
   float err_w_xsec   = 0.04;
   float err_dy_xsec  = 0.04;
   float err_qcd_norm = 0.10;
+  float err_emb_norm = 0.04;
 
   vector<float> err_norm_general = { err_lumi , err_trigger , err_muon_eff , err_elec_eff };
 
@@ -160,7 +162,11 @@ void plot_1d_var(
      err_norm_abs.push_back( st.hist->GetBinContent(iB)*err_st_xsec );
      err_norm_abs.push_back( tt.hist->GetBinContent(iB)*err_tt_xsec );
      err_norm_abs.push_back( w.hist->GetBinContent(iB)*err_w_xsec );
-     if(!use_embedded) err_norm_abs.push_back( ztt.hist->GetBinContent(iB)*err_dy_xsec );
+     if(use_embedded) err_norm_abs.push_back( emb.hist->GetBinContent(iB)*err_emb_norm );
+     else{
+       err_norm_abs.push_back( ztt.hist->GetBinContent(iB)*err_dy_xsec );
+       err_norm_abs.push_back( zl.hist->GetBinContent(iB)*err_dy_xsec );
+     }
      err_norm_abs.push_back( qcd.hist->GetBinContent(iB)*err_qcd_norm );
      float err_total = err_stat*err_stat;
      for(float err_bin : err_norm_abs) err_total += err_bin*err_bin;
