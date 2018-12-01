@@ -63,7 +63,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2016;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2016;
     samples_map["NOMINAL_ntuple_Embedded_"  + channel] = Embedded_2016;
-    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/";
+    input_dir="/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/2016_legacy/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/ntuples_v1/";
   }
 
   // Needed for stitching
@@ -198,11 +198,11 @@ void create_dnn_ntuples( TString era = "2017" ){
 	  if( iso_2 > 0.2 )                continue;
 	  if( extraelec_veto > 0.5 )       continue;
 	  if( extramuon_veto > 0.5 )       continue;
-	  if( pt_1 < 13 )                  continue;
+	  if( pt_1 < 10 )                  continue;
 	  if( pt_2 < 10 )                  continue;
-	  if( TMath::Max(pt_1,pt_2) < 24 ) continue;
-	  if( dzeta < -35 )                continue;
-	  if( mTdileptonMET > 60 )         continue;
+	  if( TMath::Max(pt_1,pt_2) < 20 ) continue;
+	  if( dzeta < -50 )                continue;
+	  if( mTdileptonMET > 90 )         continue;
 	  if( metFilters < 0.5 )           continue;
 	  if( trg_muonelectron < 0.5 )     continue;
 	}
