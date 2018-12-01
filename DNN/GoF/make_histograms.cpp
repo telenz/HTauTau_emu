@@ -45,8 +45,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
   double min_percentile = 0.01;
   double max_percentile = 0.99;
-  vector<double> percentile_ranges = { 0.01 , 0.10 , 0.20 , 0.30 , 0.40 , 0.50 , 0.60 , 0.70 , 0.80 , 0.90 , 0.99 };
-
+  vector<double> percentile_ranges; // = { 0.01 , 0.10 , 0.20 , 0.30 , 0.40 , 0.50 , 0.60 , 0.70 , 0.80 , 0.90 , 0.99 };
+  for(int i=0; i<=10; i++) percentile_ranges.push_back(0.01+i*0.098);
   //************************************************************************************************
   // Define some common weights and cuts
 
@@ -216,16 +216,18 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       smpl.second = create_systematic_uncertainty("btagDown", "_CMS_htt_eff_b_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "btagDown");
 
       // 7.) JES
-      if(!(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name == "ggH125" || smpl.second.name == "qqH125")){
-	smpl.second = create_systematic_uncertainty("jecUncEta0To5Up"  , "_CMS_scale_j_eta0to5_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
-	smpl.second = create_systematic_uncertainty("jecUncEta0To5Down", "_CMS_scale_j_eta0to5_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
-	smpl.second = create_systematic_uncertainty("jecUncEta0To3Up"  , "_CMS_scale_j_eta0to3_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
-	smpl.second = create_systematic_uncertainty("jecUncEta0To3Down", "_CMS_scale_j_eta0to3_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
-	smpl.second = create_systematic_uncertainty("jecUncEta3To5Up"  , "_CMS_scale_j_eta3to5_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
-	smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_eta3to5_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
-	smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBal_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
-	smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
-      }
+      smpl.second = create_systematic_uncertainty("jesUp"  , "_CMS_scale_j_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jesUp");
+      smpl.second = create_systematic_uncertainty("jesDown", "_CMS_scale_j_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jesDown");
+      // if(!(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name == "ggH125" || smpl.second.name == "qqH125")){
+      // 	smpl.second = create_systematic_uncertainty("jecUncEta0To5Up"  , "_CMS_scale_j_eta0to5_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
+      // 	smpl.second = create_systematic_uncertainty("jecUncEta0To5Down", "_CMS_scale_j_eta0to5_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
+      // 	smpl.second = create_systematic_uncertainty("jecUncEta0To3Up"  , "_CMS_scale_j_eta0to3_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
+      // 	smpl.second = create_systematic_uncertainty("jecUncEta0To3Down", "_CMS_scale_j_eta0to3_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
+      // 	smpl.second = create_systematic_uncertainty("jecUncEta3To5Up"  , "_CMS_scale_j_eta3to5_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
+      // 	smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_eta3to5_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
+      // 	smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBal_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
+      // 	smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
+      // }
 
       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name == "ggH125" || smpl.second.name == "qqH125"){
       // 9.) Recoil scale/resolution uncertainties
@@ -310,32 +312,28 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	//*******************************************************************************************
 	// Get the 1st and 99th percentiles
 	if( take_percentile_subrange ){
-	  float var;
+
 	  cat.second.binning_1d.clear();
-	  int valid_type = tree->SetBranchAddress(cat.second.variable_1d,&var);
-	  vector<float> values;
-	  if(valid_type==0){
-	    for(int evt=0; evt<tree->GetEntries(); evt++){
-	      tree->GetEntry(evt);
-	      if(var <= -10 ) continue;
-	      values.push_back(var);
+	  cout<<endl;
+	  float min_val = tree->GetMinimum(cat.second.variable_1d);
+	  float max_val = tree->GetMaximum(cat.second.variable_1d);
+	  cout<<endl<<"Minimum value in tree = "<<min_val<<endl;
+	  cout<<"Maximum value in tree = "<<max_val<<endl<<endl;
+
+	  TH1D* hist_aux = new TH1D("hist_aux", "", 1000000, min_val, max_val);
+	  tree -> Draw( cat.second.variable_1d + ">> hist_aux" , "1*(1==1"+ cat.second.cutstring + ")" );
+	  unsigned int i_aux=0;
+	  int entries = hist_aux->GetEntries();
+	  int nbins_aux = hist_aux->GetNbinsX()+1;
+	  int count =0;
+	  for(int ibin=1; ibin<nbins_aux+1; ibin++){
+	    count += hist_aux->GetBinContent(ibin);
+	    if(count>=percentile_ranges[i_aux]*entries){
+	      cat.second.binning_1d.push_back(hist_aux->GetBinCenter(ibin));
+	      cout<<"bin range starts at = "<<hist_aux->GetBinCenter(ibin)<<endl;
+	      if(i_aux+1 == percentile_ranges.size()) break;
+	      i_aux +=1;
 	    }
-	    int min_element = (int) (min_percentile*values.size());
-	    int max_element = (int) (max_percentile*values.size());
-	    std::nth_element(values.begin(), values.begin() + (min_percentile*values.size()), values.end());
-	    std::nth_element(values.begin(), values.begin() + (max_percentile*values.size()), values.end());
-	    cout<<"range starts = "<<values[min_element]<<endl;
-	    cout<<"range ends   = "<<values[max_element]<<endl<<endl;
-	    float range[2];
-	    range[0] = values[min_element];
-	    range[1] = values[max_element];
-	    for( auto bound : percentile_ranges){
-	      int element = (int) (bound*values.size());
-	      std::nth_element(values.begin(), values.begin() + (bound*values.size()), values.end());
-	      cout<<"range starts = "<<values[element]<<endl;
-	      cat.second.binning_1d.push_back(values[element]);
-	    }
-	    cout<<endl;
 	  }
 	}
       }
