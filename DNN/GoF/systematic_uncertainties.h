@@ -8,6 +8,7 @@ Sample create_systematic_uncertainty( TString unc_name, TString combine_harveste
 				      TString remove_this_string="", TString add_this_string=""){
 
   Sample uncertainty_sample = mother_sample;
+  uncertainty_sample.uncertainties.clear();
   TString variable = "";
   if(!gof_2d) variable = mother_sample.variable_1d;
   else        variable = mother_sample.variable_2d;
