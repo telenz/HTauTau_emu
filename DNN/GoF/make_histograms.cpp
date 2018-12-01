@@ -64,7 +64,6 @@ void make_histograms(TString era_for_config="2016") {
   TString cuts_category_specific = "&& dzeta>-35";
   for(auto &cat : category_map){
     cat.second.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
-    cat.second.qcdweight    = "qcdweight*";
     cat.second.bins_x_2d    = {0,50,55,60,65,70,75,80,85,90,95,100,400};
     cat.second.bins_y_2d    = {15,20,25,30,35,40,300};
   }
@@ -113,11 +112,10 @@ void make_histograms(TString era_for_config="2016") {
   for(auto &cat : category_map){
     for(auto smpl : sample_map){
       cat.second.sample_list[smpl.first] = smpl.second;
-      cat.second.sample_list[smpl.first].qcdweight      = "qcdweight*";
       cat.second.sample_list[smpl.first].cutString      = "os>0.5" + cat.second.cutstring;
       cat.second.sample_list[smpl.first].weightString   = weight;
       cat.second.sample_list[smpl.first].cutStringSS    = "os<0.5" + cat.second.cutstring;
-      cat.second.sample_list[smpl.first].weightStringSS = weight;
+      cat.second.sample_list[smpl.first].weightStringSS = weight + "qcdweight*";
       cat.second.sample_list[smpl.first].variable_1d = cat.second.variable_1d;
     }
   }
@@ -127,7 +125,7 @@ void make_histograms(TString era_for_config="2016") {
     cat.second.sample_list["0_Data"].weightString   = "1*";
     cat.second.sample_list["0_Data"].weightStringSS = "1*";
     cat.second.sample_list["1_QCD"].weightString    = "1*";
-    cat.second.sample_list["1_QCD"].weightStringSS  = "1*";
+    cat.second.sample_list["1_QCD"].weightStringSS  = "qcdweight*";
     cat.second.sample_list["1_QCD"].cutString       = "1==2";  // don't fill anything in this histogram should remain empty
     cat.second.sample_list["2_ZL"].cutString       += "&&!isZTT";
     cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTT";
@@ -137,12 +135,12 @@ void make_histograms(TString era_for_config="2016") {
     cat.second.sample_list["4_TT"].weightStringSS  += "topptweight*";
     cat.second.sample_list["5_TTcont"].weightString    += "topptweight*";
     cat.second.sample_list["5_TTcont"].weightStringSS  += "topptweight*";
-    //    cat.second.sample_list["10_ggH125"].weightString    += "weight_ggh_NNLOPS*";
-    //    cat.second.sample_list["10_ggH125"].weightStringSS  += "weight_ggh_NNLOPS*";
+    cat.second.sample_list["10_ggH125"].weightString    += "weight_ggh_NNLOPS*";
+    cat.second.sample_list["10_ggH125"].weightStringSS  += "weight_ggh_NNLOPS*";
 
     if(use_embedded){
       cat.second.sample_list["9_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
-      cat.second.sample_list["9_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
+      cat.second.sample_list["9_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*qcdweight*";
       cat.second.sample_list["9_EMB"].cutString   += "&& mcweight<1";
       cat.second.sample_list["9_EMB"].cutStringSS += "&& mcweight<1";
       cat.second.sample_list["4_TT"].cutString    += "&& veto_embedded<0.5";
@@ -174,16 +172,16 @@ void make_histograms(TString era_for_config="2016") {
       if( smpl.second.name == "data_obs" || smpl.first.Contains("cont") ) continue;
 
       // 1.) QCD uncertainties (10 nuisances)
-      // smpl.second = create_systematic_uncertainty("qcd0jetRateUp"  , "_CMS_htt_qcd_0jet_rate_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_up*");
-      // smpl.second = create_systematic_uncertainty("qcd0jetRateDown", "_CMS_htt_qcd_0jet_rate_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_down*");
-      // smpl.second = create_systematic_uncertainty("qcd1jetRateUp"  , "_CMS_htt_qcd_1jet_rate_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_up*");
-      // smpl.second = create_systematic_uncertainty("qcd1jetRateDown", "_CMS_htt_qcd_1jet_rate_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_down*");
-      // smpl.second = create_systematic_uncertainty("qcd0jetShapeUp"  , "_CMS_htt_qcd_0jet_shape_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_up*");
-      // smpl.second = create_systematic_uncertainty("qcd0jetShapeDown", "_CMS_htt_qcd_0jet_shape_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_down*");
-      // smpl.second = create_systematic_uncertainty("qcd1jetShapeUp"  , "_CMS_htt_qcd_1jet_shape_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_up*");
-      // smpl.second = create_systematic_uncertainty("qcd1jetShapeDown", "_CMS_htt_qcd_1jet_shape_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_down*");
-      // smpl.second = create_systematic_uncertainty("qcdIsoUp"  , "_CMS_htt_qcd_iso_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_up*");
-      // smpl.second = create_systematic_uncertainty("qcdIsoDown", "_CMS_htt_qcd_iso_Run" +era+ "Down"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_down*");
+      smpl.second = create_systematic_uncertainty("qcd0jetRateUp"  , "_CMS_htt_qcd_0jet_rate_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_up*");
+      smpl.second = create_systematic_uncertainty("qcd0jetRateDown", "_CMS_htt_qcd_0jet_rate_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_down*");
+      smpl.second = create_systematic_uncertainty("qcd1jetRateUp"  , "_CMS_htt_qcd_1jet_rate_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_up*");
+      smpl.second = create_systematic_uncertainty("qcd1jetRateDown", "_CMS_htt_qcd_1jet_rate_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_down*");
+      smpl.second = create_systematic_uncertainty("qcd0jetShapeUp"  , "_CMS_htt_qcd_0jet_shape_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_up*");
+      smpl.second = create_systematic_uncertainty("qcd0jetShapeDown", "_CMS_htt_qcd_0jet_shape_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_down*");
+      smpl.second = create_systematic_uncertainty("qcd1jetShapeUp"  , "_CMS_htt_qcd_1jet_shape_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_up*");
+      smpl.second = create_systematic_uncertainty("qcd1jetShapeDown", "_CMS_htt_qcd_1jet_shape_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_down*");
+      smpl.second = create_systematic_uncertainty("qcdIsoUp"  , "_CMS_htt_qcd_iso_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_up*");
+      smpl.second = create_systematic_uncertainty("qcdIsoDown", "_CMS_htt_qcd_iso_Run" +era+ "Down"  , plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_down*");
 
       if( smpl.second.name == "QCD"  ) continue;
 
@@ -210,24 +208,20 @@ void make_histograms(TString era_for_config="2016") {
       if(smpl.second.name == "EMB") continue;
 
       // 6.) (b-)mistag uncertainty
-      // smpl.second = create_systematic_uncertainty("mistagUp"  , "_CMS_htt_mistag_b_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "mistagUp");
-      // smpl.second = create_systematic_uncertainty("mistagDown", "_CMS_htt_mistag_b_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "mistagDown");
-      // smpl.second = create_systematic_uncertainty("btagUp"  , "_CMS_htt_eff_b_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "btagUp");
-      // smpl.second = create_systematic_uncertainty("btagDown", "_CMS_htt_eff_b_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "btagDown");
+      smpl.second = create_systematic_uncertainty("mistagUp"  , "_CMS_htt_mistag_b_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "mistagUp");
+      smpl.second = create_systematic_uncertainty("mistagDown", "_CMS_htt_mistag_b_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "mistagDown");
+      smpl.second = create_systematic_uncertainty("btagUp"  , "_CMS_htt_eff_b_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "btagUp");
+      smpl.second = create_systematic_uncertainty("btagDown", "_CMS_htt_eff_b_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "btagDown");
 
       // 7.) JES
-      //old
-      smpl.second = create_systematic_uncertainty("jesUp"  , "_CMS_scale_j_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jesUp");
-      smpl.second = create_systematic_uncertainty("jesDown", "_CMS_scale_j_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jesDown");
-      //new (to come)
-      // smpl.second = create_systematic_uncertainty("jecUncEta0To5Up"  , "_CMS_scale_j_eta0to5_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
-      // smpl.second = create_systematic_uncertainty("jecUncEta0To5Down", "_CMS_scale_j_eta0to5_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
-      // smpl.second = create_systematic_uncertainty("jecUncEta0To3Up"  , "_CMS_scale_j_eta0to3_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
-      // smpl.second = create_systematic_uncertainty("jecUncEta0To3Down", "_CMS_scale_j_eta0to3_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
-      // smpl.second = create_systematic_uncertainty("jecUncEta3To5Up"  , "_CMS_scale_j_eta3to5_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
-      // smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_eta3to5_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
-      // smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBal_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
-      // smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
+      smpl.second = create_systematic_uncertainty("jecUncEta0To5Up"  , "_CMS_scale_j_eta0to5_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
+      smpl.second = create_systematic_uncertainty("jecUncEta0To5Down", "_CMS_scale_j_eta0to5_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
+      smpl.second = create_systematic_uncertainty("jecUncEta0To3Up"  , "_CMS_scale_j_eta0to3_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
+      smpl.second = create_systematic_uncertainty("jecUncEta0To3Down", "_CMS_scale_j_eta0to3_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
+      smpl.second = create_systematic_uncertainty("jecUncEta3To5Up"  , "_CMS_scale_j_eta3to5_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
+      smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_eta3to5_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
+      smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBal_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
+      smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_Run" +era+ "Down", plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
 
       // 8.) Unclustered MET scale
       smpl.second = create_systematic_uncertainty("unclMetUp"  , "_CMS_scale_met_unclustered_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, true, "unclMetUp");
@@ -250,31 +244,29 @@ void make_histograms(TString era_for_config="2016") {
 	smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShape_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
 	smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
       }
+
       // 12.) ggh reweighting
-      // if(smpl.second.name == "ggH125" ){
-      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Res_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_Res*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Res_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_Res*");
-
-      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Mig01_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_Mig01*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Mig01_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_Mig01*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Mig12_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_Mig12*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Mig12_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_Mig12*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_VBF2j_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_VBF2j*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_VBF2j_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_VBF2j*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_VBF3j_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_VBF3j*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_VBF3j_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_VBF3j*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_PT60_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_PT60*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_PT60_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_PT60*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_PT120_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_PT120*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_PT120_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_PT120*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_qmtop_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_qmtop*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_qmtop_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_qmtop*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Mu_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*TU_ggH_Mu*");
-      // 	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Mu_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/TU_ggH_Mu*");
-      // }
-
-    }
-    
+      if(smpl.second.name == "ggH125" ){
+	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Res_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Res*");
+	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Res_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Res*");
+	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Mig01_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Mig01*");
+	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Mig01_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Mig01*");
+	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Mig12_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Mig12*");
+	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Mig12_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Mig12*");
+	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_VBF2j_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_VBF2j*");
+	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_VBF2j_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_VBF2j*");
+	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_VBF3j_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_VBF3j*");
+	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_VBF3j_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_VBF3j*");
+	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_PT60_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_PT60*");
+	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_PT60_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_PT60*");
+	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_PT120_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_PT120*");
+	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_PT120_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_PT120*");
+	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_qmtop_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_qmtop*");
+	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_qmtop_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_qmtop*");
+	smpl.second = create_systematic_uncertainty("gghShapeUp"  , "_THU_ggH_Mu_Run" +era+ "Up"  , plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Mu*");
+	smpl.second = create_systematic_uncertainty("gghShapeDown", "_THU_ggH_Mu_Run" +era+ "Down", plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Mu*");
+      }
+    } // end of loop over samples
     if(verbose){
       cout << endl << endl << "... Uncertainties of samples ... " << endl << endl ;
       for(auto & smpl : cat.second.sample_list){
@@ -282,7 +274,7 @@ void make_histograms(TString era_for_config="2016") {
 	for(auto& unc : smpl.second.uncertainties) cout<<"  - "<<unc.first<<" : "<<unc.second.name<<endl;
       }
     }
-  }
+  } // end of loop over categories
   //************************************************************************************************
   // Fill histograms for each of the categories and each of the samples
   cout << endl << endl << "... Drawing ... " << endl;
@@ -326,15 +318,15 @@ void make_histograms(TString era_for_config="2016") {
 	    int max_element = (int) (max_percentile*values.size());
 	    std::nth_element(values.begin(), values.begin() + (min_percentile*values.size()), values.end());
 	    std::nth_element(values.begin(), values.begin() + (max_percentile*values.size()), values.end());
-	    cout<<"range start = "<<values[min_element]<<endl;
-	    cout<<"range ends  = "<<values[max_element]<<endl<<endl;
+	    cout<<"range starts = "<<values[min_element]<<endl;
+	    cout<<"range ends   = "<<values[max_element]<<endl<<endl;
 	    float range[2];
 	    range[0] = values[min_element];
 	    range[1] = values[max_element];
 	    for( auto bound : percentile_ranges){
 	      int element = (int) (bound*values.size());
 	      std::nth_element(values.begin(), values.begin() + (bound*values.size()), values.end());
-	      cout<<"range start = "<<values[element]<<endl;
+	      cout<<"range starts = "<<values[element]<<endl;
 	      cat.second.binning_1d.push_back(values[element]);
 	    }
 	    cout<<endl;
@@ -352,7 +344,7 @@ void make_histograms(TString era_for_config="2016") {
       smpl.second.histSS_2d = new TH2D(smpl.second.name + "_ss_2d", "", nbins_2d_x,  &cat.second.binning_2d_x[0], nbins_2d_y,  &cat.second.binning_2d_y[0] );
 
       TString full_weight_string    = smpl.second.weightString;
-      TString full_weight_string_ss = smpl.second.weightStringSS + smpl.second.qcdweight;
+      TString full_weight_string_ss = smpl.second.weightStringSS;
 
       if(verbose){
 	cout << "variable          " << " : " << smpl.second.variable_1d << endl;
@@ -382,7 +374,7 @@ void make_histograms(TString era_for_config="2016") {
       for(auto &sys : smpl.second.uncertainties){
 
 	full_weight_string    = sys.second.weightString;
-	full_weight_string_ss = sys.second.weightStringSS + sys.second.qcdweight;
+	full_weight_string_ss = sys.second.weightStringSS;
 	if(verbose){
 	  cout << "variable          " << " : " << sys.second.variable_1d << endl;
 	  cout << "weight string        " << " : " << full_weight_string << endl;
@@ -407,6 +399,12 @@ void make_histograms(TString era_for_config="2016") {
 	  sys.second.hist_1d          = (TH1D*) Unfold(sys.second.hist_2d);
 	  sys.second.histSS_1d        = (TH1D*) Unfold(sys.second.histSS_2d);
 	}
+
+	// Make QCD estimation for up-downward variation for qcdweight
+	if( !sys.first.Contains("qcd") ) continue;
+	if( sys.second.name == "QCD" ) smpl.second.uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , +1);
+	else if( sys.second.name != "ggH125" && sys.second.name != "qqH125" && sys.second.name != "data_obs" && sys.second.name != "TTcont" && sys.second.name != "VVcont" ) smpl.second.uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , +1);;
+
       } // end of loop over sys uncertainties
     } // end of loop over samples
 
