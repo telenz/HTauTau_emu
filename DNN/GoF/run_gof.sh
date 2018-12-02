@@ -28,7 +28,7 @@ echo "ERA is " $ERA
 
 
 # Produce the datacard for the em channel (please add the em channel in category gof in the morphing script)
-MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=$INPUT_FOLDER --real_data=true --jetfakes=0 --embedding=${EMB} --postfix="-$VAR" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="gof" --gof_category_name="em_inclusive" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=false --ggh_wg1=false
+MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=$INPUT_FOLDER --real_data=true --jetfakes=0 --embedding=${EMB} --postfix="-$VAR" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="gof" --gof_category_name="em_inclusive" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=true --ggh_wg1=false
 
 # Create workspace
 combineTool.py -M T2W -o ${ERA}_workspace.root -m $MASS -i ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/${OUTPUT_FOLDER}/cmb/125/
