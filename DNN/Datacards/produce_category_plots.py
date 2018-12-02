@@ -18,4 +18,13 @@ for category in category_list :
     os.system(cmd)
 
 # Print confusione matrices
-#os.system("python ../../Plotting/Confusion.py -c \"em\" ")
+os.system("python ../../Plotting/Confusion.py -c \"em\" ")
+
+# Measure stage0 signal strength constraint
+os.environ["ERA"] = '2016'
+os.system("source ./measure_signal_strength.sh")
+os.system("source ./measure_inclusive_signal_strength.sh")
+
+# Make popst-fit plots
+cmd = "root -l -b -q ../../Plotting/make_postfit_plots.cpp\"(true,true)\""
+os.system(cmd)
