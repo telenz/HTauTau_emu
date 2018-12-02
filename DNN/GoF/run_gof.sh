@@ -8,11 +8,11 @@
 DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
-NUM_TOYS=300
+NUM_TOYS=100
 # VAR="pt_2"
 BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/${ERA}
 INPUT_FOLDER=var_1d
-OUTPUT_FOLDER=${ERA}_smhtt
+OUTPUT_FOLDER=${ERA}_${VAR}_smhtt
 CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/CombineHarvester/2017/CMSSW_7_4_7/src
 
 cd ${CMSSW_LOCATION}
@@ -21,7 +21,7 @@ cmsenv
 
 cd ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017
 cd output
-rm -rf *
+#rm -rf *
 cd -
 
 echo "ERA is " $ERA
@@ -31,12 +31,9 @@ echo "ERA is " $ERA
 MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=$INPUT_FOLDER --real_data=true --jetfakes=0 --embedding=${EMB} --postfix="-$VAR" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="gof" --gof_category_name="em_inclusive" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=false --ggh_wg1=false
 
 # Create workspace
-combineTool.py -M T2W -o workspace.root -m $MASS -i ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/${ERA}_smhtt/cmb/125/
+combineTool.py -M T2W -o ${ERA}_workspace.root -m $MASS -i ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/${OUTPUT_FOLDER}/cmb/125/
 
-# Rename workspace
 workspace_location=${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/${OUTPUT_FOLDER}/cmb/125/
-cp ${workspace_location}/workspace.root ${workspace_location}/${ERA}_workspace.root
-
 cd ${workspace_location}
 
 # Get test statistic value
