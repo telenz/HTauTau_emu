@@ -71,19 +71,33 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   //************************************************************************************************
   // Define the set of samples (used in each of the categories)
 
-  Sample Data( "data_obs" , "NOMINAL_ntuple_MuonEG_em.root" );
-  Sample ZTT(  "ZTT"      , "NOMINAL_ntuple_DYJets_em.root" );
-  Sample ZL(   "ZL"       , "NOMINAL_ntuple_DYJets_em.root" );
-  Sample W(    "W"        , "NOMINAL_ntuple_WJets_em.root" );
-  Sample TT(   "TT"       , "NOMINAL_ntuple_TTbar_em.root" );
-  Sample TTcont( "TTcont" , "NOMINAL_ntuple_TTbar_em.root" );
-  Sample VV(   "VV"       , "NOMINAL_ntuple_Diboson_em.root" );
-  Sample VVcont( "VVcont" , "NOMINAL_ntuple_Diboson_em.root" );
-  Sample ST(   "ST"       , "NOMINAL_ntuple_SingleTop_em.root" );
-  Sample QCD(  "QCD"      , "NOMINAL_ntuple_MuonEG_em.root" );
-  Sample EMB(  "EMB"      , "NOMINAL_ntuple_Embedded_em.root" );
-  Sample ggH(  "ggH125"   , "NOMINAL_ntuple_ggH_em.root" );
-  Sample qqH(  "qqH125"   , "NOMINAL_ntuple_VBFH_em.root" );
+  Sample Data("data_obs");
+  Sample ZTT("ZTT");
+  Sample ZL("ZL");
+  Sample W("W");
+  Sample TT("TT");
+  Sample TTcont("TTcont");
+  Sample VV("VV");
+  Sample VVcont("VVcont");
+  Sample ST("ST");
+  Sample QCD("QCD");
+  Sample EMB("EMB");
+  Sample ggH("ggH125");
+  Sample qqH("qqH125");
+
+  Data.filename   = "NOMINAL_ntuple_MuonEG_em.root";
+  ZTT.filename    = "NOMINAL_ntuple_DYJets_em.root" ;
+  ZL.filename     = "NOMINAL_ntuple_DYJets_em.root" ;
+  W.filename      = "NOMINAL_ntuple_WJets_em.root" ;
+  TT.filename     = "NOMINAL_ntuple_TTbar_em.root" ;
+  TTcont.filename = "NOMINAL_ntuple_TTbar_em.root" ;
+  VV.filename     = "NOMINAL_ntuple_Diboson_em.root" ;
+  VVcont.filename = "NOMINAL_ntuple_Diboson_em.root" ;
+  ST.filename     = "NOMINAL_ntuple_SingleTop_em.root" ;
+  QCD.filename    = "NOMINAL_ntuple_MuonEG_em.root" ;
+  EMB.filename    = "NOMINAL_ntuple_Embedded_em.root" ;
+  ggH.filename    = "NOMINAL_ntuple_ggH_em.root" ;
+  qqH.filename    = "NOMINAL_ntuple_VBFH_em.root" ;
 
   map<TString,Sample> sample_map = { { "0_Data" , Data },
 				     { "1_QCD"  , QCD } ,
@@ -319,13 +333,14 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	  cout<<endl;
 	  float min_val = tree->GetMinimum(cat.second.variable);
 	  float max_val = tree->GetMaximum(cat.second.variable);
+	  if(min_val == -10) min_val=0;
 	  cout<<endl<<"Minimum value in tree = "<<min_val<<endl;
 	  cout<<"Maximum value in tree = "<<max_val<<endl<<endl;
 
 	  TH1D* hist_aux = new TH1D("hist_aux", "", 1000000, min_val, max_val);
-	  tree -> Draw( cat.second.variable + ">> hist_aux" , "1*(1==1"+ cat.second.cutstring + ")" );
+	  tree -> Draw( cat.second.variable + ">> hist_aux" , "1*("+cat.second.variable+Form(">%f",min_val)+ cat.second.cutstring + ")" );
 	  unsigned int i_aux=0;
-	  int entries = hist_aux->GetEntries();
+	  int entries   = hist_aux->GetSumOfWeights();
 	  int nbins_aux = hist_aux->GetNbinsX()+1;
 	  int count =0;
 	  for(int ibin=1; ibin<nbins_aux+1; ibin++){
@@ -347,6 +362,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	  float max_val_x = tree->GetMaximum(var_x);
 	  float min_val_y = tree->GetMinimum(var_y);
 	  float max_val_y = tree->GetMaximum(var_y);
+	  if(min_val_x == -10) min_val_x=0;
+	  if(min_val_y == -10) min_val_y=0;
 	  cout<<endl<<"Minimum value of "<<var_x<<" in tree = "<<min_val_x<<endl;
 	  cout<<"Maximum value of "<<var_x<<" in tree = "<<max_val_x<<endl;
 	  cout<<"Minimum value of "<<var_y<<" in tree = "<<min_val_y<<endl;
@@ -354,8 +371,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
 	  TH1D* hist_aux_x = new TH1D("hist_aux_x", "", 1000000, min_val_x, max_val_x);
 	  TH1D* hist_aux_y = new TH1D("hist_aux_y", "", 1000000, min_val_y, max_val_y);
-	  tree -> Draw( var_x + ">> hist_aux_x" , "1*(1==1"+ cat.second.cutstring + ")" );
-	  tree -> Draw( var_y + ">> hist_aux_y" , "1*(1==1"+ cat.second.cutstring + ")" );
+	  tree -> Draw( var_x + ">> hist_aux_x" , "1*("+cat.second.variable+Form(">%f",min_val_x)+ cat.second.cutstring + ")" );
+	  tree -> Draw( var_y + ">> hist_aux_y" , "1*("+cat.second.variable+Form(">%f",min_val_y)+ cat.second.cutstring + ")" );
 
 	  unsigned int idx_bins = 0;
 	  int count_events =0;
@@ -403,7 +420,6 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	cout << "cut string           " << " : " << smpl.second.cutString << endl;
 	cout << "cut string ss        " << " : " << smpl.second.cutStringSS << endl;
       }
-
       if(!cat.second.plot_2d){
 	tree -> Draw( smpl.second.variable + ">>" + smpl.second.hist_1d->GetName() , full_weight_string + "(" + smpl.second.cutString + ")" );
 	tree -> Draw( smpl.second.variable + ">>" + smpl.second.histSS_1d->GetName() , full_weight_string_ss + "(" + smpl.second.cutStringSS + ")" );
@@ -432,6 +448,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	  cout << "cut string           " << " : " << sys.second.cutString << endl;
 	  cout << "cut string ss        " << " : " << sys.second.cutStringSS << endl;
 	}
+
 	sys.second.hist_1d   = new TH1D(sys.second.name + "_os_1d", "", nbins, &cat.second.binning_1d[0]);
 	sys.second.histSS_1d = new TH1D(sys.second.name + "_ss_1d", "", nbins, &cat.second.binning_1d[0]);
 
