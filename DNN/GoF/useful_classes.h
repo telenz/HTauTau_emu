@@ -40,10 +40,15 @@ public :
 
   map< TString , Sample > uncertainties;
 
-  Sample(TString sampleName = "", TString filepath = ""){
+  /* Sample(TString sampleName = "", TString filepath){ */
+  /*   name     = sampleName; */
+  /*   filename = filepath; */
+  /* } */
+
+  Sample(TString sampleName = ""){
     name     = sampleName;
-    filename = filepath;
   }
+
 };
 // ********************************************************************************************
 
