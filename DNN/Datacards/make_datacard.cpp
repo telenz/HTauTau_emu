@@ -76,7 +76,7 @@ void make_datacard( TString variable_1d = "predicted_prob" ,
   Sample TT(   "TT"       , "em-NOMINAL_ntuple_TT.root" );
   Sample TTcont( "TTcont" , "em-NOMINAL_ntuple_TT.root" );
   Sample VV(   "VV"       , "em-NOMINAL_ntuple_Diboson.root" );
-  Sample VVcont( "VVcont" , "em-NOMINAL_ntuple_Diboson_em.root" );
+  Sample VVcont( "VVcont" , "em-NOMINAL_ntuple_Diboson.root" );
   Sample ST(   "ST"       , "em-NOMINAL_ntuple_SingleTop.root" );
   Sample QCD(  "QCD"      , "em-NOMINAL_ntuple_Data.root" );
   Sample EMB(  "EMB"      , "em-NOMINAL_ntuple_ZTT.root" );
