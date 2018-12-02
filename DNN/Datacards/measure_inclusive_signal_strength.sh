@@ -3,7 +3,7 @@
 # Script which executes a gof test for a given variable $var
 
 # Pleas specify the following input variables
-ERA=2016
+#ERA=2016
 DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
@@ -26,7 +26,7 @@ rm -rf *
 cd -
 
 # Produce the datacard for the em channel (please add the em channel in category gof in the morphing script)
-MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=$INPUT_FOLDER --real_data=false --jetfakes=0 --embedding=0 --postfix="-$CAT" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="stxs_stage0" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=false --ggh_wg1=false
+MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=${INPUT_FOLDER} --real_data=false --jetfakes=0 --embedding=0 --postfix="-$CAT" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="stxs_stage0" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=true --ggh_wg1=true
 
 
 # Creating workspace
@@ -52,3 +52,5 @@ PostFitShapesFromWorkspace -m 125 -w ${DATACARD_PATH}/${ERA}_workspace.root \
     -f mlfit${ERA}.root:fit_s --postfit
 
 cd ${CURRENT_PATH}
+
+cp ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/${ERA}_datacard_shapes_postfit_sb.root output/${ERA}
