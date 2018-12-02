@@ -42,6 +42,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     category_map.at(cat_name).binning_1d = cfg.get<vector<float>>(cat_name+"_binning_1d");
     category_map.at(cat_name).binning_2d_x = cfg.get<vector<float>>(cat_name+"_binning_2d_x");
     category_map.at(cat_name).binning_2d_y = cfg.get<vector<float>>(cat_name+"_binning_2d_y");
+    if(is_dnn_prediction) category_map.at(cat_name).class_nr = cfg.get<int>(cat_name+"_class_nr");
   }
 
   double min_percentile = 0.01;
@@ -65,6 +66,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   TString cuts_category_specific = "&& dzeta>-35";
   for(auto &cat : category_map){
     cat.second.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
+    if(is_dnn_prediction)   cat.second.cutstring += Form("&& predicted_class == %d",cat.second.class_nr);
     cat.second.bins_x_2d    = {0,50,55,60,65,70,75,80,85,90,95,100,400};
     cat.second.bins_y_2d    = {15,20,25,30,35,40,300};
   }
