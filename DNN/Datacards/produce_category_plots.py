@@ -4,7 +4,7 @@ import ROOT as R
 cmd = "root -l -b -q make_histograms.cpp+\"(\\\"config.cfg\\\")\""
 os.system(cmd)
 
-category_list = ["em_vv" , "em_ztt" ]
+category_list = ["em_vv" , "em_ztt" , "em_ss" , "em_tt" , "em_misc" , "em_st" , "em_qqh" , "em_ggh" ]
 
 for category in category_list :
 
@@ -13,9 +13,9 @@ for category in category_list :
     print "Execute " + category + " : \n"
     # Now start to make the actual gof test
     cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + category    + "\\\", true , true , \\\"output/2016/\\\")\""
-    #os.system(cmd)
+    os.system(cmd)
     cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + category    + "\\\", true , false , \\\"output/2016/\\\")\""
-    #os.system(cmd)
+    os.system(cmd)
 
 # Print confusione matrices
 #os.system("python ../../Plotting/Confusion.py -c \"em\" ")
