@@ -33,7 +33,7 @@ const vector<TString> Embedded_2017        = { "Embedding_Run2017" };
 // 2016
 const vector<TString> MuonEG_Run2016  = { "MuonEG_Run2016B" , "MuonEG_Run2016C" , "MuonEG_Run2016D" , "MuonEG_Run2016E" , "MuonEG_Run2016F" , "MuonEG_Run2016G" , "MuonEG_Run2016H" };
 const vector<TString> DYJets_2016     = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" , "EWKZ2Jets" };
-const vector<TString> WJets_2016      = { "W1JetsToLNu" , "W2JetsToLNu" , "W3JetsToLNu" , "W4JetsToLNu" , "WJetsToLNu" , "WGToLNuG" , "WGstarToLNuEE" , "WGstarToLNuMuMu" , "EWKWPlus2Jet" , "EWKWMinus2Jet" };
+const vector<TString> WJets_2016      = { "W1JetsToLNu" , "W2JetsToLNu" , "W3JetsToLNu" , "W4JetsToLNu" , "WJetsToLNu" , "WGToLNuG" , "WGstarToLNuEE" , "WGstarToLNuMuMu" , "EWKWPlus2Jets" , "EWKWMinus2Jet" };
 const vector<TString> TTbar_2016      = { "TTbar" };
 const vector<TString> SingleTop_2016  = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
 const vector<TString> Diboson_2016    = { "VVTo2L2Nu" , "WZJToLLLNu" , "WZTo1L1Nu2Q" , "WZTo1L3Nu" , "WZTo2L2Q" , "ZZTo2L2Q" , "ZZTo4L" , "WWToLNuQQ" };
@@ -99,7 +99,7 @@ const map<TString, double> xsec_map_2016 = {
     { "WGToLNuG"                 , 489.0 },
     { "WGstarToLNuMuMu"          , 2.793 },
     { "WGstarToLNuEE"            , 3.526 },
-    { "EWKWPlus2Jet"             , 25.62 },
+    { "EWKWPlus2Jets"            , 25.62 },
     { "EWKWMinus2Jet"            , 20.20 },
     { "EWKZ2Jets"                , 3.987 },
     { "GluGluHToTauTau_M125"     , 48.58*0.0627 },

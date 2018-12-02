@@ -63,7 +63,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2016;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2016;
     samples_map["NOMINAL_ntuple_Embedded_"  + channel] = Embedded_2016;
-    input_dir="/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/2016_legacy/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/ntuples_v1/";
+    input_dir="/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/2016_legacy/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/ntuples_v2/";
   }
 
   // Needed for stitching
@@ -88,7 +88,7 @@ void create_dnn_ntuples( TString era = "2017" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
-  TString output_dir = "NTuples_" + era + "_with_htxs";
+  TString output_dir = "NTuples_" + era + "_with_htxs_v2";
   gSystem -> Exec("mkdir " + output_dir);
 
   // Loop over all samples
