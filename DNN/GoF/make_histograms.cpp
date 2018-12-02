@@ -1,11 +1,11 @@
 #include "useful_classes.h"
 #include "systematic_uncertainties.h"
-#include "TROOT.h"
 #include "Unfold.C"
 #include "HttStylesNew.cc"
+#include "Config.cc"
+#include "TROOT.h"
 #include <algorithm>
 #include <typeinfo>
-#include "Config.cc"
 
 using namespace std;
 
@@ -26,6 +26,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   const bool verbose      = cfg.get<bool>("verbose");
   const bool take_percentile_subrange = cfg.get<bool>("take_percentile_subrange");
   const TString output_file_suffix = cfg.get<string>("output_file_suffix");
+  const bool is_dnn_prediction = cfg.get<bool>("is_dnn_prediction");
 
   vector<string> category_names_vector = cfg.get<vector<string>>("categories");
 
@@ -85,19 +86,36 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   Sample ggH("ggH125");
   Sample qqH("qqH125");
 
-  Data.filename   = "NOMINAL_ntuple_MuonEG_em.root";
-  ZTT.filename    = "NOMINAL_ntuple_DYJets_em.root" ;
-  ZL.filename     = "NOMINAL_ntuple_DYJets_em.root" ;
-  W.filename      = "NOMINAL_ntuple_WJets_em.root" ;
-  TT.filename     = "NOMINAL_ntuple_TTbar_em.root" ;
-  TTcont.filename = "NOMINAL_ntuple_TTbar_em.root" ;
-  VV.filename     = "NOMINAL_ntuple_Diboson_em.root" ;
-  VVcont.filename = "NOMINAL_ntuple_Diboson_em.root" ;
-  ST.filename     = "NOMINAL_ntuple_SingleTop_em.root" ;
-  QCD.filename    = "NOMINAL_ntuple_MuonEG_em.root" ;
-  EMB.filename    = "NOMINAL_ntuple_Embedded_em.root" ;
-  ggH.filename    = "NOMINAL_ntuple_ggH_em.root" ;
-  qqH.filename    = "NOMINAL_ntuple_VBFH_em.root" ;
+  if(!is_dnn_prediction){
+    Data.filename   = "NOMINAL_ntuple_MuonEG_em.root";
+    ZTT.filename    = "NOMINAL_ntuple_DYJets_em.root" ;
+    ZL.filename     = "NOMINAL_ntuple_DYJets_em.root" ;
+    W.filename      = "NOMINAL_ntuple_WJets_em.root" ;
+    TT.filename     = "NOMINAL_ntuple_TTbar_em.root" ;
+    TTcont.filename = "NOMINAL_ntuple_TTbar_em.root" ;
+    VV.filename     = "NOMINAL_ntuple_Diboson_em.root" ;
+    VVcont.filename = "NOMINAL_ntuple_Diboson_em.root" ;
+    ST.filename     = "NOMINAL_ntuple_SingleTop_em.root" ;
+    QCD.filename    = "NOMINAL_ntuple_MuonEG_em.root" ;
+    EMB.filename    = "NOMINAL_ntuple_Embedded_em.root" ;
+    ggH.filename    = "NOMINAL_ntuple_ggH_em.root" ;
+    qqH.filename    = "NOMINAL_ntuple_VBFH_em.root" ;
+  }
+  else{
+    Data.filename   = "em-NOMINAL_ntuple_Data.root" ;
+    ZTT.filename    = "em-NOMINAL_ntuple_ZTT.root" ;
+    ZL.filename     = "em-NOMINAL_ntuple_ZL.root" ;
+    W.filename      = "em-NOMINAL_ntuple_W.root" ;
+    TT.filename     = "em-NOMINAL_ntuple_TT.root" ;
+    TTcont.filename = "em-NOMINAL_ntuple_TT.root" ;
+    VV.filename     = "em-NOMINAL_ntuple_Diboson.root" ;
+    VVcont.filename = "em-NOMINAL_ntuple_Diboson.root" ;
+    ST.filename     = "em-NOMINAL_ntuple_SingleTop.root" ;
+    QCD.filename    = "em-NOMINAL_ntuple_Data.root" ;
+    EMB.filename    = "em-NOMINAL_ntuple_ZTT.root" ;
+    ggH.filename    = "em-NOMINAL_ntuple_ggH125.root" ;
+    qqH.filename    = "em-NOMINAL_ntuple_qqH125.root" ;
+  }
 
   map<TString,Sample> sample_map = { { "0_Data" , Data },
 				     { "1_QCD"  , QCD } ,
@@ -126,9 +144,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   for(auto &cat : category_map){
     for(auto smpl : sample_map){
       cat.second.sample_list[smpl.first] = smpl.second;
-      cat.second.sample_list[smpl.first].cutString      = "os>0.5" + cat.second.cutstring;
+      cat.second.sample_list[smpl.first].cutString      = "q_1*q_2<0" + cat.second.cutstring;
       cat.second.sample_list[smpl.first].weightString   = weight;
-      cat.second.sample_list[smpl.first].cutStringSS    = "os<0.5" + cat.second.cutstring;
+      cat.second.sample_list[smpl.first].cutStringSS    = "q_1*q_2>0" + cat.second.cutstring;
       cat.second.sample_list[smpl.first].weightStringSS = weight + "qcdweight*";
       cat.second.sample_list[smpl.first].variable       = cat.second.variable;
     }
@@ -306,8 +324,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   // Define output file
   TString filename = "htt_em.inputs-sm-Run"+era+"-"+output_file_suffix+".root";
   TString output_dir = "output/"+era+"/";
-  if(!plot_2d) output_dir += "/var_1d/";
-  else         output_dir += "/var_2d/";
+  if(is_dnn_prediction){
+    if(!plot_2d) output_dir += "/var_1d/";
+    else         output_dir += "/var_2d/";
+  }
   TFile * file_out   = new TFile( output_dir + "/" + filename , "RECREATE" );
 
   // Add here also a loop over the categories
