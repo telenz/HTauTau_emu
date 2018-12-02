@@ -14,7 +14,7 @@ def main():
     channel = args.channel
     model = args.model
 
-    filepath = "/".join(["output/2016/htt_{0}.inputs-sm-13TeV-ML.root".format(channel)])
+    filepath = "/".join(["output/2016/htt_{0}.inputs-sm-Run2016-ML.root".format(channel)])
     print filepath
     if not os.path.exists(filepath):
         print "file not found!"
