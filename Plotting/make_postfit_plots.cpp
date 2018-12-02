@@ -10,7 +10,7 @@
 
 void make_postfit_plots(bool draw_signal    = false,
 			bool draw_log_scale = false,
-			TString directory   = ".",
+			TString directory   = "output",
 			TString era         = "2016",
 			bool use_embedded   = false
 		 ) {
@@ -24,7 +24,7 @@ void make_postfit_plots(bool draw_signal    = false,
    SetPixelStyle();
 
    // Read file
-   TString filename = directory + "/" + era + "_datacard_shapes_postfit_sb.root";
+   TString filename = directory + "/" + era + "/" + era + "_datacard_shapes_postfit_sb.root";
    TFile *file      = new TFile( filename , "READ");
 
    
@@ -49,8 +49,8 @@ void make_postfit_plots(bool draw_signal    = false,
    SampleForPlotting w("W",{"W"});
    SampleForPlotting tt("TT",{"TT"});
    SampleForPlotting qcd("QCD",{"QCD"});
-   SampleForPlotting qqh("qqH",{"qqH125"});
-   SampleForPlotting ggh("ggH",{"ggH125"});
+   SampleForPlotting qqh("qqH",{"qqH"});
+   SampleForPlotting ggh("ggH",{"ggH"});
 
    ztt.color = "#FFCC66";
    emb.color = "#FFCC66";
@@ -89,16 +89,15 @@ void make_postfit_plots(bool draw_signal    = false,
      else              sample_vec = { &qcd , &vv , &st , &zl , &w , &tt , &emb , &data  };
    }
 
-   TH1D* hist = 0;
    TCanvas * canv1 = MakeCanvas("canv1", "", 700, 800);
-
+   TH1D* hist = 0;
    // Loop over all categories
    for(auto cat : category_map){
      cout<<endl<<"Category : "<<cat.second<<" : "<<cat.first<<endl;
      for(SampleForPlotting *smpl : sample_vec){
        for(TString & subsmpl : smpl->subsamples){
 
-	 TString histogram_path = Form ("htt_em_%d_13TeV_postfit/",cat.first) + subsmpl;
+	 TString histogram_path = Form ("htt_em_%d_Run",cat.first) + era + "_postfit/" + subsmpl;
 	 hist = (TH1D*)file -> Get(histogram_path);
 	 if(hist == nullptr){
 	   cout << "Histogram " << histogram_path << " doesn't exists in the root file " << filename << ". Exit Code." << endl;
@@ -132,7 +131,7 @@ void make_postfit_plots(bool draw_signal    = false,
 
      // Initialize a background error histogram
      TH1D * bkgdErr;
-     TString histogram_path = Form ("htt_em_%d_13TeV_postfit/TotalBkg",cat.first);
+     TString histogram_path = Form ("htt_em_%d_Run",cat.first)+era+"_postfit/TotalBkg";
      bkgdErr = (TH1D*)file -> Get(histogram_path);
      if(bkgdErr == nullptr){
        cout << "Histogram " << histogram_path << " doesn't exists in the root file " << filename << ". Exit Code." << endl;
@@ -288,6 +287,8 @@ void make_postfit_plots(bool draw_signal    = false,
 
      TString out_filename = "MLscore_postfit_" + cat.second;
      if(draw_log_scale) out_filename += "_log";
-     canv1->Print(directory + "/figures/" + out_filename + ".png");
+     canv1->Print(directory + "/" + era + "/figures/" + out_filename + ".png");
+
+     for(auto & smpl : sample_vec) smpl->hist = 0;
    }
 }
