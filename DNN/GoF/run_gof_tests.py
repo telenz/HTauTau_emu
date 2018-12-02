@@ -61,7 +61,7 @@ variable_list = [ "m_sv",
                   "pt_vis",
                   ]
 
-variable_list = [ "m_vis"]
+#variable_list = [ "mjj"]
 
 axis_range = { "m_sv"  : [8 , 0  , 300],
                "m_vis" : [8 , 0  , 300],
@@ -139,7 +139,7 @@ def process_vars(var):
         newText=newText.replace('use_embedded = ', 'use_embedded = ' + embedded_c)
     with open("config_for_gof_"+era+"_"+var+".cfg", "w") as f:
         f.write(newText)
-    cmd = "root -l -b -q make_histograms.cpp+\"(\\\""+"config_for_gof_"+era+"_"+var+".cfg"+"\\\")\""
+    cmd = "root -l -b -q make_histograms.cpp\"(\\\""+"config_for_gof_"+era+"_"+var+".cfg"+"\\\")\""
     os.system(cmd)
 
     # Now start to make the actual gof test
@@ -158,6 +158,6 @@ def process_vars(var):
 num_cores = multiprocessing.cpu_count()
 print "available number of cores = " + str(num_cores)
 
-num_cores = 4
+num_cores = 12
 
 results = Parallel(n_jobs=num_cores)(delayed(process_vars)(i) for i in variable_list)
