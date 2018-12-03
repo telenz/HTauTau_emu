@@ -115,7 +115,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     VVcont.filename = "em-NOMINAL_ntuple_Diboson.root" ;
     ST.filename     = "em-NOMINAL_ntuple_SingleTop.root" ;
     QCD.filename    = "em-NOMINAL_ntuple_Data.root" ;
-    EMB.filename    = "em-NOMINAL_ntuple_ZTT.root" ;
+    EMB.filename    = "em-NOMINAL_ntuple_EMB.root" ;
     ggH.filename    = "em-NOMINAL_ntuple_ggH125.root" ;
     qqH.filename    = "em-NOMINAL_ntuple_qqH125.root" ;
   }
@@ -223,26 +223,26 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       if( smpl.second.name == "QCD"  ) continue;
 
-      // 2.) Electron scale (applied on both embedded and mc)
-      smpl.second = create_systematic_uncertainty("escale_all_Up"  , "_CMS_scale_e_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "escaleUp");
-      smpl.second = create_systematic_uncertainty("escale_all_Down", "_CMS_scale_e_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
-      smpl.second.uncertainties["escale_all_Up"].filename.ReplaceAll("NOMINAL","_escaleUp");
-      smpl.second.uncertainties["escale_all_Down"].filename.ReplaceAll("NOMINAL","_escaleDown");
+      // // 2.) Electron scale (applied on both embedded and mc)
+      // smpl.second = create_systematic_uncertainty("escale_all_Up"  , "_CMS_scale_e_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "escaleUp");
+      // smpl.second = create_systematic_uncertainty("escale_all_Down", "_CMS_scale_e_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
+      // smpl.second.uncertainties["escale_all_Up"].filename.ReplaceAll("NOMINAL","_escaleUp");
+      // smpl.second.uncertainties["escale_all_Down"].filename.ReplaceAll("NOMINAL","_escaleDown");
 
-      // 3.) Electron scale (applied only on embedded)
-      if(smpl.second.name == "EMB"){
-	smpl.second = create_systematic_uncertainty("escale_emb_Up"  , "_CMS_scale_emb_e_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "escaleUp");
-	smpl.second = create_systematic_uncertainty("escale_emb_Down", "_CMS_scale_emb_e_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
-	smpl.second.uncertainties["escale_emb_Up"].filename.ReplaceAll("NOMINAL","_escaleUp");
-	smpl.second.uncertainties["escale_emb_Down"].filename.ReplaceAll("NOMINAL","_escaleDown");
-      }
-      // 4.) Electron scale (applied only on MC)
-      if(smpl.second.name != "EMB"){
-	smpl.second = create_systematic_uncertainty("escale_mc_Up"  , "_CMS_scale_mc_e_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "escaleUp");
-	smpl.second = create_systematic_uncertainty("escale_mc_Down", "_CMS_scale_mc_e_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
-	smpl.second.uncertainties["escale_mc_Up"].filename.ReplaceAll("NOMINAL","_escaleUp");
-	smpl.second.uncertainties["escale_mc_Down"].filename.ReplaceAll("NOMINAL","_escaleDown");
-      }
+      // // 3.) Electron scale (applied only on embedded)
+      // if(smpl.second.name == "EMB"){
+      // 	smpl.second = create_systematic_uncertainty("escale_emb_Up"  , "_CMS_scale_emb_e_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "escaleUp");
+      // 	smpl.second = create_systematic_uncertainty("escale_emb_Down", "_CMS_scale_emb_e_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
+      // 	smpl.second.uncertainties["escale_emb_Up"].filename.ReplaceAll("NOMINAL","_escaleUp");
+      // 	smpl.second.uncertainties["escale_emb_Down"].filename.ReplaceAll("NOMINAL","_escaleDown");
+      // }
+      // // 4.) Electron scale (applied only on MC)
+      // if(smpl.second.name != "EMB"){
+      // 	smpl.second = create_systematic_uncertainty("escale_mc_Up"  , "_CMS_scale_mc_e_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "escaleUp");
+      // 	smpl.second = create_systematic_uncertainty("escale_mc_Down", "_CMS_scale_mc_e_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
+      // 	smpl.second.uncertainties["escale_mc_Up"].filename.ReplaceAll("NOMINAL","_escaleUp");
+      // 	smpl.second.uncertainties["escale_mc_Down"].filename.ReplaceAll("NOMINAL","_escaleDown");
+      // }
 
       // 5.) TT contamination in embedded sample  (only initialize this uncertainty -> calculate it later)
       if(smpl.second.name == "EMB"){
@@ -255,55 +255,51 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       // 6.) (b-)mistag uncertainty
       smpl.second = create_systematic_uncertainty("mistagUp"  , "_CMS_htt_mistag_b_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "mistagUp");
       smpl.second = create_systematic_uncertainty("mistagDown", "_CMS_htt_mistag_b_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "mistagDown");
-      smpl.second.uncertainties["mistagUp"].filename.ReplaceAll("NOMINAL","_mistagUp");
-      smpl.second.uncertainties["mistagDown"].filename.ReplaceAll("NOMINAL","_mistagDown");
 
       smpl.second = create_systematic_uncertainty("btagUp"  , "_CMS_htt_eff_b_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "btagUp");
       smpl.second = create_systematic_uncertainty("btagDown", "_CMS_htt_eff_b_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "btagDown");
-      smpl.second.uncertainties["btagUp"].filename.ReplaceAll("NOMINAL","_btagUp");
-      smpl.second.uncertainties["btagDown"].filename.ReplaceAll("NOMINAL","_btagDown");
 
-      // 7.) JES
-      // smpl.second = create_systematic_uncertainty("jesUp"  , "_CMS_scale_j_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jesUp");
-      // smpl.second = create_systematic_uncertainty("jesDown", "_CMS_scale_j_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jesDown");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To5Up"  , "_CMS_scale_j_eta0to5_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To5Down", "_CMS_scale_j_eta0to5_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
-      smpl.second.uncertainties["jecUncEta0To5Up"].filename.ReplaceAll("NOMINAL","_jecUncEta0To5Up");
-      smpl.second.uncertainties["jecUncEta0To5Down"].filename.ReplaceAll("NOMINAL","_jecUncEta0To5Down");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To3Up"  , "_CMS_scale_j_eta0to3_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To3Down", "_CMS_scale_j_eta0to3_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
-      smpl.second.uncertainties["jecUncEta0To3Up"].filename.ReplaceAll("NOMINAL","_jecUncEta0To3Up");
-      smpl.second.uncertainties["jecUncEta0To3Down"].filename.ReplaceAll("NOMINAL","_jecUncEta0To3Down");
-      smpl.second = create_systematic_uncertainty("jecUncEta3To5Up"  , "_CMS_scale_j_eta3to5_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
-      smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_eta3to5_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
-      smpl.second.uncertainties["jecUncEta3To5Up"].filename.ReplaceAll("NOMINAL","_jecUncEta3To5Up");
-      smpl.second.uncertainties["jecUncEta3To5Down"].filename.ReplaceAll("NOMINAL","_jecUncEta3To5Down");
-      smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBal_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
-      smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
-      smpl.second.uncertainties["jecUncRelativeBalUp"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalUp");
-      smpl.second.uncertainties["jecUncRelativeBalDown"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalDown");
+      // // 7.) JES
+      // // smpl.second = create_systematic_uncertainty("jesUp"  , "_CMS_scale_j_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jesUp");
+      // // smpl.second = create_systematic_uncertainty("jesDown", "_CMS_scale_j_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jesDown");
+      // smpl.second = create_systematic_uncertainty("jecUncEta0To5Up"  , "_CMS_scale_j_eta0to5_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
+      // smpl.second = create_systematic_uncertainty("jecUncEta0To5Down", "_CMS_scale_j_eta0to5_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
+      // smpl.second.uncertainties["jecUncEta0To5Up"].filename.ReplaceAll("NOMINAL","_jecUncEta0To5Up");
+      // smpl.second.uncertainties["jecUncEta0To5Down"].filename.ReplaceAll("NOMINAL","_jecUncEta0To5Down");
+      // smpl.second = create_systematic_uncertainty("jecUncEta0To3Up"  , "_CMS_scale_j_eta0to3_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
+      // smpl.second = create_systematic_uncertainty("jecUncEta0To3Down", "_CMS_scale_j_eta0to3_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
+      // smpl.second.uncertainties["jecUncEta0To3Up"].filename.ReplaceAll("NOMINAL","_jecUncEta0To3Up");
+      // smpl.second.uncertainties["jecUncEta0To3Down"].filename.ReplaceAll("NOMINAL","_jecUncEta0To3Down");
+      // smpl.second = create_systematic_uncertainty("jecUncEta3To5Up"  , "_CMS_scale_j_eta3to5_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
+      // smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_eta3to5_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
+      // smpl.second.uncertainties["jecUncEta3To5Up"].filename.ReplaceAll("NOMINAL","_jecUncEta3To5Up");
+      // smpl.second.uncertainties["jecUncEta3To5Down"].filename.ReplaceAll("NOMINAL","_jecUncEta3To5Down");
+      // smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBal_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
+      // smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
+      // smpl.second.uncertainties["jecUncRelativeBalUp"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalUp");
+      // smpl.second.uncertainties["jecUncRelativeBalDown"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalDown");
 
-      if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name == "ggH125" || smpl.second.name == "qqH125"){
-      // 9.) Recoil scale/resolution uncertainties
-	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_met_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
-	smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_met_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleDown");
-	smpl.second.uncertainties["recoilscaleUp"].filename.ReplaceAll("NOMINAL","_recoilscaleUp");
-	smpl.second.uncertainties["recoilscaleDown"].filename.ReplaceAll("NOMINAL","_recoilscaleDown");
-	smpl.second = create_systematic_uncertainty("recoilresoUp"  , "_CMS_htt_boson_reso_met_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilresoUp");
-	smpl.second = create_systematic_uncertainty("recoilresoDown", "_CMS_htt_boson_reso_met_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "recoilresoDown");
-	smpl.second.uncertainties["recoilresoUp"].filename.ReplaceAll("NOMINAL","_recoilresoUp");
-	smpl.second.uncertainties["recoilresoDown"].filename.ReplaceAll("NOMINAL","_recoilresoDown");
-	// 8.) Unclustered MET scale
-	smpl.second = create_systematic_uncertainty("unclMetUp"  , "_CMS_scale_met_unclustered_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "");
-	smpl.second = create_systematic_uncertainty("unclMetDown", "_CMS_scale_met_unclustered_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "");
-      }
-      else{
-      // 8.) Unclustered MET scale
-	smpl.second = create_systematic_uncertainty("unclMetUp"  , "_CMS_scale_met_unclustered_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "unclMetUp");
-	smpl.second = create_systematic_uncertainty("unclMetDown", "_CMS_scale_met_unclustered_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "unclMetDown");
-	smpl.second.uncertainties["unclMetUp"].filename.ReplaceAll("NOMINAL","_unclMetUp");
-	smpl.second.uncertainties["unclMetDown"].filename.ReplaceAll("NOMINAL","_unclMetDown");
-      }
+      // if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name == "ggH125" || smpl.second.name == "qqH125"){
+      // // 9.) Recoil scale/resolution uncertainties
+      // 	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_met_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
+      // 	smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_met_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleDown");
+      // 	smpl.second.uncertainties["recoilscaleUp"].filename.ReplaceAll("NOMINAL","_recoilscaleUp");
+      // 	smpl.second.uncertainties["recoilscaleDown"].filename.ReplaceAll("NOMINAL","_recoilscaleDown");
+      // 	smpl.second = create_systematic_uncertainty("recoilresoUp"  , "_CMS_htt_boson_reso_met_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilresoUp");
+      // 	smpl.second = create_systematic_uncertainty("recoilresoDown", "_CMS_htt_boson_reso_met_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "recoilresoDown");
+      // 	smpl.second.uncertainties["recoilresoUp"].filename.ReplaceAll("NOMINAL","_recoilresoUp");
+      // 	smpl.second.uncertainties["recoilresoDown"].filename.ReplaceAll("NOMINAL","_recoilresoDown");
+      // 	// 8.) Unclustered MET scale
+      // 	smpl.second = create_systematic_uncertainty("unclMetUp"  , "_CMS_scale_met_unclustered_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "");
+      // 	smpl.second = create_systematic_uncertainty("unclMetDown", "_CMS_scale_met_unclustered_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "");
+      // }
+      // else{
+      // // 8.) Unclustered MET scale
+      // 	smpl.second = create_systematic_uncertainty("unclMetUp"  , "_CMS_scale_met_unclustered_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "unclMetUp");
+      // 	smpl.second = create_systematic_uncertainty("unclMetDown", "_CMS_scale_met_unclustered_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "unclMetDown");
+      // 	smpl.second.uncertainties["unclMetUp"].filename.ReplaceAll("NOMINAL","_unclMetUp");
+      // 	smpl.second.uncertainties["unclMetDown"].filename.ReplaceAll("NOMINAL","_unclMetDown");
+      // }
 
       // 10.) TTbar shape
       if(smpl.second.name == "TT"){
