@@ -21,8 +21,7 @@ else :
 # some settings
 output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
 
-#dnn_ntuples_directory = "../../Inputs/NTuples_2016_with_htxs"
-dnn_ntuples_directory = "../../Inputs/NTuples_2016_tighter_cuts_v2"
+dnn_ntuples_directory = "../../Inputs/NTuples_2016_with_htxs_v3"
 
 config_filename_in = "config_for_gof_2016_with_placeholders.cfg"
 if era == "2017" :
@@ -31,6 +30,8 @@ if era == "2017" :
     config_filename_in = "config_for_gof_2017_with_placeholders.cfg"
 
 variable_list = [ "m_sv",
+                  "pt_sv",
+                  "mt_sv",
                   "m_vis",
                   "pt_1",
                   "pt_2",
@@ -61,7 +62,7 @@ variable_list = [ "m_sv",
                   "pt_vis",
                   ]
 
-#variable_list = [ "mjj"]
+#variable_list = [ "m_sv"]
 
 axis_range = { "m_sv"  : [8 , 0  , 300],
                "m_vis" : [8 , 0  , 300],
@@ -158,6 +159,6 @@ def process_vars(var):
 num_cores = multiprocessing.cpu_count()
 print "available number of cores = " + str(num_cores)
 
-num_cores = 12
+num_cores = 16
 
 results = Parallel(n_jobs=num_cores)(delayed(process_vars)(i) for i in variable_list)
