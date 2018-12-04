@@ -73,6 +73,7 @@ os.environ["ERA"] = str(era)
 os.environ["EMB"] = str(embedded)
 os.system("source ./measure_signal_strength.sh")
 os.system("source ./measure_inclusive_signal_strength.sh")
+os.system("source ./plot_impacts_fit.sh")
 
 # Make post-fit plots
 print '-----------------------------------------------------------------------'
