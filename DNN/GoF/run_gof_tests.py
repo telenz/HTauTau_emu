@@ -21,12 +21,9 @@ else :
 # some settings
 output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
 
-dnn_ntuples_directory = "../../Inputs/NTuples_2016_correct_unc_v1"
-
 config_filename_in = "config_for_gof_2016_with_placeholders.cfg"
 if era == "2017" :
     print "era is 2017"
-    dnn_ntuples_directory = "../../Inputs/NTuples_2017_correct_unc_v1"
     config_filename_in = "config_for_gof_2017_with_placeholders.cfg"
 
 variable_list = [ "m_sv",
