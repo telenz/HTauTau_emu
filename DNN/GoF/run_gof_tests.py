@@ -62,7 +62,7 @@ variable_list = [ "m_sv",
                   "pt_vis",
                   ]
 
-#variable_list = [ "m_sv"]
+variable_list = [ "pt_ttjj" , "met"]
 
 axis_range = { "m_sv"  : [8 , 0  , 300],
                "m_vis" : [8 , 0  , 300],
@@ -147,6 +147,7 @@ def process_vars(var):
     os.environ["VAR"] = var
     os.environ["ERA"] = era
     os.environ["EMB"] = str(embedded)
+    os.environ["INPUT_FOLDER"] = 'var_1d'
     os.system("source ./run_gof.sh")
 
     # Plotting
