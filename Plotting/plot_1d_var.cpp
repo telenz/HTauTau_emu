@@ -319,5 +319,9 @@ void plot_1d_var(
 
    TString out_filename = variable + "_" + category;
    if(draw_log_scale) out_filename += "_log";
-   canv1->Print(directory + "/figures/" + out_filename + ".png");
+
+   TString output_dir = directory + "/figures/";
+   gSystem -> Exec("mkdir " + output_dir);
+
+   canv1->Print( output_dir + out_filename + ".png");
 }
