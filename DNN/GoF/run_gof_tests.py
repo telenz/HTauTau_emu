@@ -156,6 +156,8 @@ def process_vars(var):
     cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + output_directory + "\\\",\\\"" + era + "\\\"," + str(embedded)+ ")\""
     os.system(cmd)
 
+    os.system("rm config_for_gof_"+era+"_"+var+".cfg")
+
 
 num_cores = multiprocessing.cpu_count()
 print "available number of cores = " + str(num_cores)
