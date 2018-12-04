@@ -21,12 +21,9 @@ else :
 # some settings
 output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
 
-dnn_ntuples_directory = "../../Inputs/NTuples_2016_correct_unc_v1"
-
 config_filename_in = "config_for_gof_2016_with_placeholders.cfg"
 if era == "2017" :
     print "era is 2017"
-    dnn_ntuples_directory = "../../Inputs/NTuples_2017_tighter_cuts"
     config_filename_in = "config_for_gof_2017_with_placeholders.cfg"
 
 variable_list = [ "m_sv",
@@ -155,6 +152,8 @@ def process_vars(var):
     os.system(cmd)
     cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + output_directory + "\\\",\\\"" + era + "\\\"," + str(embedded)+ ")\""
     os.system(cmd)
+
+    os.system("rm config_for_gof_"+era+"_"+var+".cfg")
 
 
 num_cores = multiprocessing.cpu_count()

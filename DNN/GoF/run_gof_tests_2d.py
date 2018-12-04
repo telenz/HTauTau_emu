@@ -19,33 +19,26 @@ else :
     embedded_c='false'
 
 # some settings
-output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
-
-dnn_ntuples_directory = "../../Inputs/NTuples_2016_with_htxs_v3"
+output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_2d/"
 
 config_filename_in = "config_for_gof_2016_with_placeholders_2d.cfg"
 if era == "2017" :
     print "era is 2017"
-    dnn_ntuples_directory = "../../Inputs/NTuples_2017_tighter_cuts"
     config_filename_in = "config_for_gof_2017_with_placeholders_2d.cfg"
 
 variable_list = [ "m_sv",
                   "pt_sv",
                   "mt_sv",
                   "m_vis",
-                  "pt_1",
                   "pt_2",
                   "jpt_1",
                   "jpt_2",
                   "njets",
-                  "mt_1",
                   "mt_2",
                   "pt_tt",
                   "mjj",
-                  "met",
                   "dzeta",
                   "mTemu",
-                  "iso_1",
                   "iso_2",
                   "mtmax",
                   "dphi_mumet",
@@ -57,12 +50,11 @@ variable_list = [ "m_sv",
                   "jeta_2",
                   "jdeta",
                   "mTdileptonMET",
-                  "pt_ttjj",
                   "dijetpt",
                   "pt_vis",
                   ]
 
-variable_list = [ "m_vis" , "m_sv"]
+#variable_list = [ "m_vis", "m_sv" ]
 
 
 # Execute produce_gof_inputs.cpp for all variables
@@ -103,6 +95,8 @@ def process_vars(var):
     cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var12+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + output_directory + "\\\",\\\"" + era + "\\\"," + str(embedded)+ ")\""
     os.system(cmd)
 
+    os.system("rm config_for_gof_"+era+"_"+var12+".cfg")
+
 
 num_cores = multiprocessing.cpu_count()
 print "available number of cores = " + str(num_cores)
@@ -128,5 +122,5 @@ for i in range(0, len(variable_list)):
 for var in variable_list_2d:
     print var
 
-num_cores = 3
+num_cores = 20
 results = Parallel(n_jobs=num_cores)(delayed(process_vars)(i) for i in variable_list_2d)
