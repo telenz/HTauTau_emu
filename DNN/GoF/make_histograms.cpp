@@ -391,8 +391,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
 	  TH1D* hist_aux_x = new TH1D("hist_aux_x", "", 1000000, min_val_x, max_val_x);
 	  TH1D* hist_aux_y = new TH1D("hist_aux_y", "", 1000000, min_val_y, max_val_y);
-	  tree -> Draw( var_x + ">> hist_aux_x" , "1*("+cat.second.variable+Form(">%f",min_val_x)+ cat.second.cutstring + ")" );
-	  tree -> Draw( var_y + ">> hist_aux_y" , "1*("+cat.second.variable+Form(">%f",min_val_y)+ cat.second.cutstring + ")" );
+	  tree -> Draw( var_x + ">> hist_aux_x" , "1*("+var_x+Form(">%f",min_val_x)+ cat.second.cutstring + ")" );
+	  tree -> Draw( var_y + ">> hist_aux_y" , "1*("+var_y+Form(">%f",min_val_y)+ cat.second.cutstring + ")" );
 
 	  unsigned int idx_bins = 0;
 	  int count_events =0;
