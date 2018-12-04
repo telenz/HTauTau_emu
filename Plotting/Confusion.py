@@ -7,21 +7,20 @@ import argparse
 def main(): 
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-m', '--model',   help='ML model to use' ,choices = ['keras','xgb'],  default = 'keras')
-    parser.add_argument('-c', '--channel', help='Decay channel' ,choices = ['mt','et','tt', 'em'], default = 'mt')
+    parser.add_argument('-e', dest='era', help='ERA' ,choices = ['2016','2017'], default = '2016')
+    parser.add_argument('-emb', dest='embedded', help='embedded samples used' , action='store_true')
     args = parser.parse_args()
 
-    channel = args.channel
-    model = args.model
+    era = args.era
+    embedded = args.embedded
 
-    filepath = "/".join(["output/2016/htt_{0}.inputs-sm-Run2016-ML.root".format(channel)])
+    filepath = "/".join(["output/{0}/htt_em.inputs-sm-Run{0}-ML.root".format(era)])
     print filepath
     if not os.path.exists(filepath):
         print "file not found!"
         return 
     print "Loading datacard: " + filepath
     rootfile=R.TFile(filepath, "READ")
-
 
     classes=[]
     for key in rootfile.GetListOfKeys():
@@ -38,24 +37,24 @@ def main():
         for hist in hists: 
             tempdict.update({hist:folder.Get(hist).Integral()})
 
-        confusion[TDirs.index(TDir)] = compressDict(tempdict,classes,channel)
+        confusion[TDirs.index(TDir)] = compressDict(tempdict,classes,'em',embedded)
 
     # plotting confusion matrices
     print "Writing confusion matrices to output/2016/figures/"
-    plot_confusion(confusion,classes,"output/2016/figures/{0}_{1}_confusion.png".format(model,channel), "std")
+    plot_confusion(confusion,classes,"output/2016/figures/em_confusion.png", "std")
 
     conf_pur1, conf_pur2 = get_purity_representations(confusion)
-    plot_confusion(conf_pur1, classes, "output/2016/figures/{0}_{1}_confusion_pur1.png".format(model,channel))
-    plot_confusion(conf_pur2, classes, "output/2016/figures/{0}_{1}_confusion_pur2.png".format(model,channel), "pur")
+    plot_confusion(conf_pur1, classes, "output/2016/figures/em_confusion_pur1.png")
+    plot_confusion(conf_pur2, classes, "output/2016/figures/em_confusion_pur2.png", "pur")
 
     conf_eff1, conf_eff2 = get_efficiency_representations(confusion)
-    plot_confusion(conf_eff1, classes, "output/2016/figures/{0}_{1}_confusion_eff1.png".format(model,channel))
-    plot_confusion(conf_eff2, classes, "output/2016/figures/{0}_{1}_confusion_eff2.png".format(model,channel), "eff")
+    plot_confusion(conf_eff1, classes, "output/2016/figures/em_confusion_eff1.png")
+    plot_confusion(conf_eff2, classes, "output/2016/figures/em_confusion_eff2.png", "eff")
 
     rootfile.Close()
 
 
-def compressDict(tempdict,classes,channel):
+def compressDict(tempdict,classes,channel,embedded):
 
     tmp = np.zeros(len(classes))
     tmp[classes.index('{0}_tt'.format(channel))]=tempdict['TT']
@@ -63,7 +62,10 @@ def compressDict(tempdict,classes,channel):
     tmp[classes.index('{0}_misc'.format(channel))]=tempdict['W']+tempdict['ZL']
     tmp[classes.index('{0}_qqh'.format(channel))]=tempdict['qqH125']
     tmp[classes.index('{0}_ss'.format(channel))]=tempdict['QCD']
-    tmp[classes.index('{0}_ztt'.format(channel))]=tempdict['ZTT']
+    if embedded == True :
+        tmp[classes.index('{0}_emb'.format(channel))]=tempdict['EMB']
+    else :
+        tmp[classes.index('{0}_ztt'.format(channel))]=tempdict['ZTT']
     tmp[classes.index('{0}_ggh'.format(channel))]=tempdict['ggH125']
     tmp[classes.index('{0}_vv'.format(channel))]=tempdict['VV']
 
