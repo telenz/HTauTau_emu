@@ -26,7 +26,7 @@ rm -rf *
 cd -
 
 # Produce the datacard for the em channel (please add the em channel in category gof in the morphing script)
-MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=${INPUT_FOLDER} --real_data=false --jetfakes=0 --embedding=0 --postfix="-$CAT" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="stxs_stage0" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=true --ggh_wg1=true
+MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=${INPUT_FOLDER} --real_data=true --jetfakes=0 --embedding=${EMB} --postfix="-$CAT" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage0" --categories="stxs_stage0" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=true --ggh_wg1=true
 
 
 # Creating workspace
