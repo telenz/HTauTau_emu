@@ -7,6 +7,7 @@
 #include "TROOT.h"
 #include "TMath.h"
 #include "TColor.h"
+#include "TSystem.h"
 
 void plot_1d_var(
 		 TString variable    = "m_sv",

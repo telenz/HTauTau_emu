@@ -6,6 +6,7 @@
 #include "TROOT.h"
 #include <algorithm>
 #include <typeinfo>
+#include "TSystem.h"
 
 using namespace std;
 
@@ -328,6 +329,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     if(!plot_2d) output_dir += "/var_1d/";
     else         output_dir += "/var_2d/";
   }
+
+  TString output_dir = directory + "/figures/";
+  gSystem -> Exec("mkdir " + output_dir);
   TFile * file_out   = new TFile( output_dir + "/" + filename , "RECREATE" );
 
   // Add here also a loop over the categories
