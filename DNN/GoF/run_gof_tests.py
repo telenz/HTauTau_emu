@@ -21,7 +21,7 @@ else :
 # some settings
 output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
 
-dnn_ntuples_directory = "../../Inputs/NTuples_2016_with_htxs_v3"
+dnn_ntuples_directory = "../../Inputs/NTuples_2016_correct_unc_v1"
 
 config_filename_in = "config_for_gof_2016_with_placeholders.cfg"
 if era == "2017" :
@@ -62,7 +62,7 @@ variable_list = [ "m_sv",
                   "pt_vis",
                   ]
 
-variable_list = [ "pt_ttjj" , "met"]
+#variable_list = [ "pt_ttjj" , "met"]
 
 axis_range = { "m_sv"  : [8 , 0  , 300],
                "m_vis" : [8 , 0  , 300],
