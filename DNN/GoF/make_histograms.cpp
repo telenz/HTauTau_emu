@@ -263,6 +263,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_eta3to5_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
       smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBal_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
       smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
+      if(era=="2017"){
+	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleUp"  , "_CMS_scale_j_RelativeSample_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleUp");
+	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleDown", "_CMS_scale_j_RelativeSample_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleDown");
+      }
 
       // 8.) Recoil scale/resolution uncertainties
       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name == "ggH125" || smpl.second.name == "qqH125"){
