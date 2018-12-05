@@ -40,7 +40,25 @@ labeldict = {
     'jdeta' : '$\Delta\eta_{jj}$',
     'm_vis' : 'visible di-$\\tau$ mass',
     'dijetpt' : '$p_T(jj)$',
-    'met' : 'MET'
+    'met' : 'MET',
+    'dphi_emet' : 'dphi_emet',
+    'dphi_mumet' : 'dphi_mumet',
+    'dr_tt' : 'dr_tt',
+    'dzeta' : 'dzeta',
+    'jpt_1' : 'jpt_1',
+    'jpt_2' : 'jpt_2',
+    'jeta_1' : 'jeta_1',
+    'jeta_2' : 'jeta_2',
+    'mTdileptonMET' : 'mTdileptonMET',
+    'mTemu' : 'mTemu',
+    'm_sv' : 'm_sv',
+    'pt_sv' : 'pt_sv',
+    'mt_sv' : 'mt_sv',
+    'mtmax' : 'mtmax',
+    'pt_ttjj' : 'pt_ttjj',
+    'pt_vis' : 'pt_vis',
+    'pzetamiss' : 'pzetamiss',
+    'pzetavis' : 'pzetavis'
 }
 
 def parse_arguments():
@@ -126,8 +144,7 @@ def search_results_1d(path, channel, era, variables):
     results = []
     missing = []
     for variable in variables:
-        filename = os.path.join(path, "{}_{}_{}".format(era, channel, variable),
-                                "gof.json")
+        filename = os.path.join("output/{}/var_1d/gof-{}.json".format(era, variable))
         if not os.path.exists(filename):
             missing.append(variable)
             results.append(-1.0)
@@ -149,8 +166,7 @@ def search_results_2d(path, channel, era, variables):
         for i2, v2 in enumerate(variables):
             if i2 <= i1:
                 continue
-            filename = os.path.join(path, "{}_{}_{}_{}".format(era, channel, v1, v2),
-                                    "gof.json")
+            filename = os.path.join("output/{}/var_2d/gof-{}-{}.json".format(era, v1,v2))
             if not os.path.exists(filename):
                 missing.append("{}_{}".format(v1, v2))
                 continue
@@ -165,6 +181,7 @@ def search_results_2d(path, channel, era, variables):
 
 
 def main(args):
+    print args.variables
     if not os.path.exists(args.variables):
         logger.fatal("File %s does not exist.")
         raise Exception
