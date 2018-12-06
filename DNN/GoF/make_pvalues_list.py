@@ -1,7 +1,14 @@
 import os
 from glob import glob
+import argparse
 
-input_dir = "output/2016/var_1d"
+parser = argparse.ArgumentParser()
+parser.add_argument('-e', dest='era', help='ERA' ,choices = ['2016','2017'], default = '2016')
+args = parser.parse_args()
+
+era= args.era
+
+input_dir = "output/"+era+"/var_1d"
 
 files_list = glob(os.path.join(input_dir, '*.json'))
 print files_list
