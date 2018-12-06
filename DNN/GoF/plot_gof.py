@@ -168,8 +168,10 @@ def search_results_2d(path, channel, era, variables):
                 continue
             filename = os.path.join("output/{}/var_2d/gof-{}-{}.json".format(era, v1,v2))
             if not os.path.exists(filename):
-                missing.append("{}_{}".format(v1, v2))
-                continue
+                filename = os.path.join("output/{}/var_2d/gof-{}-{}.json".format(era, v2,v1))
+                if not os.path.exists(filename):
+                    missing.append("{}_{}".format(v1, v2))
+                    continue
             logger.debug(
                 "Found goodness of fit result for variable pair (%s, %s) in channel %s.",
                 v1, v2, channel)
