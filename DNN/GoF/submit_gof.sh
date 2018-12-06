@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #$1 filelist
+#$2 era
 
 let "n = 0"
 rm -rf $1_files
@@ -20,7 +21,7 @@ cd ${CMSSW_BASE}/src
 cmsenv
 cd -
 cd /nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/
-python run_gof_tests_2d_for_htc.py -emb -e '2016' -var '$var'
+python run_gof_tests_2d_for_htc.py -emb -e '$2' -var '$var'
 
 EOF
     chmod u+x $1_$n.sh
