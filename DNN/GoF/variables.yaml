@@ -1,14 +1,14 @@
 variables:
-  - pt_1
-  - pt_2
+#  - pt_1
+#  - pt_2
 # - eta_1
 # - eta_2
 # - phi_1
 # - phi_2
-  - iso_1
-  - iso_2
-  - jpt_1
-  - jpt_2
+#  - iso_1
+#  - iso_2
+#  - jpt_1
+#  - jpt_2
 # - jeta_1
 # - jeta_2
 # - jphi_1
@@ -19,35 +19,35 @@ variables:
 # - jm_2
 # - jmva_1
 # - jmva_2
-  - bpt_1
-  - bpt_2
+#  - bpt_1
+#  - bpt_2
 # - beta_1
 # - beta_2
 # - bphi_1
 # - bphi_2
 # - bcsv_1
 # - bcsv_2
-  - njets
+#  - njets
 # - npv
-  - nbtag
-  - m_sv
-  - mt_1
-  - mt_2
-  - ptvis
-  - pt_tt
+#  - nbtag
+#  - m_sv
+#  - mt_1
+#  - mt_2
+#  - ptvis
+#  - pt_tt
 # - pt_ttjj
-  - mjj
-  - jdeta
+#  - mjj
+#  - jdeta
 # - H_pt
 # - H_mass
 # - pzetavis
 # - pzetamiss
 # - pZetaMissVis
-  - m_vis
+#  - m_vis
 # - dijetphi
-  - dijetpt
+#  - dijetpt
 # - m_2
-  - met
+#  - met
 # - metcov00
 # - metcov11
 # - metphi
@@ -56,6 +56,38 @@ variables:
 # - d0_2
 # - dZ_1
 # - dZ_2
+- dijetpt    
+- dphi_emet  
+- dphi_mumet 
+- dr_tt      
+- dzeta      
+- iso_1      
+- iso_2      
+- jdeta      
+- jeta_1     
+- jeta_2     
+- jpt_1      
+- jpt_2      
+- mTdileptonMET    
+- mTemu           
+- m_sv            
+- m_vis           
+- met             
+- mjj             
+- mt_1            
+- mt_2            
+- mt_sv           
+- mtmax           
+- njets           
+- pt_1            
+- pt_2            
+- pt_sv           
+- pt_tt           
+- pt_ttjj         
+- pt_vis          
+- pzetamiss       
+- pzetavis    
+
 
 selected_variables:
     2016:

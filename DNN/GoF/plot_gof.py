@@ -21,44 +21,37 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 labeldict = {
-    'pt_1' : '$p_{T}(\\tau_1$)',
+    'pt_1' : '$p_{T}(\\$)',
     'pt_2' : '$p_{T}(\\tau_2)$',
     'iso_1' : 'iso($\\tau_1$)',
     'iso_2' : 'iso($\\tau_2$)',
     'jpt_1' : 'Leading jet $p_T$',
     'jpt_2' : 'Sub-leading jet $p_T$',
-    'bpt_1' : 'Leading b-jet $p_T$',
-    'bpt_2' : 'Sub-leading b-jet $p_T$',
     'njets' : 'number of jets',
-    'nbtag' : 'number of b-jets',
     'm_sv' : 'di-$\\tau$ mass',
     'mt_1' : '$m_{T}(\\tau_1,MET)$',
     'mt_2' : '$m_{T}(\\tau_2,MET)$',
-    'ptvis' : 'visible $p_T(\\tau\\tau)$',
+    'pt_vis' : 'visible $p_T(\\tau\\tau)$',
     'pt_tt' : '$p_T(\\tau\\tau)$',
     'mjj' : 'di-jet mass',
     'jdeta' : '$\Delta\eta_{jj}$',
     'm_vis' : 'visible di-$\\tau$ mass',
-    'dijetpt' : '$p_T(jj)$',
+    'dijetpt' : 'di-jet $p_T$',
     'met' : 'MET',
-    'dphi_emet' : 'dphi_emet',
-    'dphi_mumet' : 'dphi_mumet',
-    'dr_tt' : 'dr_tt',
-    'dzeta' : 'dzeta',
-    'jpt_1' : 'jpt_1',
-    'jpt_2' : 'jpt_2',
-    'jeta_1' : 'jeta_1',
-    'jeta_2' : 'jeta_2',
-    'mTdileptonMET' : 'mTdileptonMET',
-    'mTemu' : 'mTemu',
-    'm_sv' : 'm_sv',
-    'pt_sv' : 'pt_sv',
-    'mt_sv' : 'mt_sv',
-    'mtmax' : 'mtmax',
-    'pt_ttjj' : 'pt_ttjj',
-    'pt_vis' : 'pt_vis',
-    'pzetamiss' : 'pzetamiss',
-    'pzetavis' : 'pzetavis'
+    'dphi_emet' : '$\Delta\phi(\\tau_1,MET)$',
+    'dphi_mumet' : '$\Delta\phi(\\tau_2,MET)$',
+    'dr_tt' : '$\Delta\eta_{\tau_1\tau_2}$',
+    'dzeta' : '$D_{\zeta}$',
+    'jeta_1' : '$\eta$(leading jet)',
+    'jeta_2' : '$\eta$(sub-leading jet)',
+    'mTdileptonMET' : '$m_{T}(\\tau_1\tau_2,MET)$',
+    'mTemu' : '$m_{T}(\\tau_1,\tau_2)$',
+    'pt_sv' : 'di-$\\tau$ $p_T$',
+    'mt_sv' : 'di-$\\tau$ transverse mass',
+    'mtmax' : 'max. ($m_{T}(\\tau_1,MET)$, $m_{T}(\\tau_2,MET)$)',
+    'pt_ttjj' : '$p_T(\\tau\\tau jj)$',
+    'pzetamiss' : '$P_{\zeta}$',
+    'pzetavis' : '$P_{\zeta}^{vis}$'
 }
 
 def parse_arguments():
@@ -199,7 +192,7 @@ def main(args):
     for variable in missing_1d:
         print("{} {} {}".format(args.era, args.channel, variable))
 
-    plot_1d(variables, results_1d, "{}_{}_gof_1d.png".format(args.era, args.channel))
+    plot_1d(variables, results_1d, "{}_{}_gof_1d.pdf".format(args.era, args.channel))
 
     # Plot 2D gof results
     """
@@ -209,7 +202,7 @@ def main(args):
     for variable in missing_2d:
         print("{} {} {}".format(args.era, args.channel, variable))
 
-    plot_2d(variables, results_2d, "{}_{}_gof_2d.png".format(args.era, args.channel))
+    plot_2d(variables, results_2d, "{}_{}_gof_2d.pdf".format(args.era, args.channel))
     """
 
     # Plot results for selected variables
@@ -225,13 +218,13 @@ def main(args):
     ]
 
     plot_1d(variables_selected, results_1d_selected,
-            "{}_{}_gof_1d_selected.png".format(args.era, args.channel))
+            "{}_{}_gof_1d_selected.pdf".format(args.era, args.channel))
 
     # Plot 2D gof results for reduced variable set
     missing_2d_selected, results_2d_selected = search_results_2d(
         args.path, args.channel, args.era, variables_selected)
     plot_2d(variables_selected, results_2d_selected,
-            "{}_{}_gof_2d_selected.png".format(args.era, args.channel))
+            "{}_{}_gof_2d_selected.pdf".format(args.era, args.channel))
 
     logger.debug("Missing variables for 2D plot in channel %s:", args.channel)
     for variable in missing_2d_selected:
