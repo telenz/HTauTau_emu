@@ -20,9 +20,6 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 cmsenv
 
 cd ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017
-cd output
-#rm -rf *
-cd -
 
 echo "ERA is " $ERA
 
