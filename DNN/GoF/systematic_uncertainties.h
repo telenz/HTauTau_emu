@@ -19,7 +19,7 @@ Sample create_systematic_uncertainty( TString unc_name, TString combine_harveste
   if(is_variable_shift){
     if(input_tree -> GetBranch("dzeta_" +shift_name)) mother_sample.uncertainties[unc_name].cutString.ReplaceAll("dzeta","dzeta_"+shift_name);
     if(input_tree -> GetBranch("pt_1_" +shift_name)) mother_sample.uncertainties[unc_name].cutString.ReplaceAll("pt_1","pt_1_"+shift_name);
-    if(input_tree -> GetBranch("pt_2_" +shift_name)) mother_sample.uncertainties[unc_name].cutString.ReplaceAll("pt_2","pt_2_"+shift_name);
+    //if(input_tree -> GetBranch("pt_2_" +shift_name)) mother_sample.uncertainties[unc_name].cutString.ReplaceAll("pt_2","pt_2_"+shift_name);
     if(input_tree -> GetBranch("mTdileptonMET_" +shift_name)) mother_sample.uncertainties[unc_name].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_"+shift_name);
     if(input_tree -> GetBranch("nbtag_" +shift_name)) mother_sample.uncertainties[unc_name].cutString.ReplaceAll("nbtag","nbtag_"+shift_name);
     if(!gof_2d){
