@@ -30,15 +30,19 @@ variable_list = [ "m_sv",
                   "pt_sv",
                   "mt_sv",
                   "m_vis",
+                  "pt_1",
                   "pt_2",
                   "jpt_1",
                   "jpt_2",
                   "njets",
+                  "mt_1",
                   "mt_2",
                   "pt_tt",
                   "mjj",
+                  "met",
                   "dzeta",
                   "mTemu",
+                  "iso_1",
                   "iso_2",
                   "mtmax",
                   "dphi_mumet",
@@ -50,6 +54,7 @@ variable_list = [ "m_sv",
                   "jeta_2",
                   "jdeta",
                   "mTdileptonMET",
+                  "pt_ttjj",
                   "dijetpt",
                   "pt_vis",
                   ]
@@ -70,7 +75,7 @@ def process_vars(var):
     var2 = var.split(":")[1]
     
     var12 = var1+'-'+var2
-
+    print var
     # Produce the root-files (datacard input)
     # change config file
     with open(config_filename_in) as f:
