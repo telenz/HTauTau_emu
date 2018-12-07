@@ -1,4 +1,4 @@
-#include "DesyTauAnalyses/NTupleMaker/interface/Config.h"
+#include "Config.h"
 
 #include <fstream>
 #include <cstring>
