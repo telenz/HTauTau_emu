@@ -38,9 +38,9 @@ print ''
 def make_category_plots(category):
     # Plot log and non-log
     cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + str(category) + "\\\",true,true,\\\"output/" + era + "/\\\",\\\"" + era + "\\\"," + str(embedded)+")\""
-    os.system(cmd)
-    cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + category + "\\\", true , false , \\\"output/" + era + "/\\\",\\\"" + era + "\\\"," + str(embedded)+")\""
     #os.system(cmd)
+    cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + category + "\\\", true , false , \\\"output/" + era + "/\\\",\\\"" + era + "\\\"," + str(embedded)+")\""
+    os.system(cmd)
 
 
 # Make datacard (root-files)
@@ -60,11 +60,11 @@ for category in category_list:
 # Print confusione matrices
 print '-----------------------------------------------------------------------'
 print "\nPlot confusion matrices \n"
-if embedded_c == 'true':
-    cmd = "python ../../Plotting/Confusion.py -e \""+era+"\" -emb "
-else:
-    cmd = "python ../../Plotting/Confusion.py -e \""+era+"\""
-os.system(cmd)
+#if embedded_c == 'true':
+#    cmd = "python ../../Plotting/Confusion.py -e \""+era+"\" -emb "
+#else:
+#    cmd = "python ../../Plotting/Confusion.py -e \""+era+"\""
+#os.system(cmd)
 
 # Measure stage0/inclusive signal strength constraint
 print '-----------------------------------------------------------------------'
@@ -73,7 +73,7 @@ os.environ["ERA"] = str(era)
 os.environ["EMB"] = str(embedded)
 os.system("source ./measure_signal_strength.sh")
 os.system("source ./measure_inclusive_signal_strength.sh")
-os.system("source ./plot_impacts_fit.sh")
+#os.system("source ./plot_impacts_fit.sh")
 
 # Make post-fit plots
 print '-----------------------------------------------------------------------'

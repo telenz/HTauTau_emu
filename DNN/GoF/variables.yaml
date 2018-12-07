@@ -269,3 +269,30 @@ selected_variables:
             - m_vis
             - dijetpt
             - met
+        em:
+            - dijetpt          
+            - dphi_emet        
+            - dphi_mumet       
+            - dr_tt            
+            - dzeta            
+            - iso_2            
+            - jdeta            
+            - jeta_1           
+            - jeta_2           
+            - jpt_1            
+            - jpt_2            
+            - mTdileptonMET       
+            - mTemu            
+            - m_sv             
+            - m_vis            
+            - mjj              
+            - mt_2             
+            - mt_sv            
+            - mtmax            
+            - njets            
+            - pt_2             
+            - pt_sv            
+            - pt_tt            
+            - pt_vis           
+            - pzetamiss        
+            - pzetavis        

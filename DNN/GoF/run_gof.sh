@@ -10,10 +10,10 @@ SEED=1234
 MASS=125
 NUM_TOYS=300
 # VAR="pt_2"
-BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/${ERA}
+BASE_PATH=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/GoF/output/${ERA}
 #INPUT_FOLDER=var_1d
 OUTPUT_FOLDER=${ERA}_${VAR}_smhtt
-CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/CombineHarvester/2017/CMSSW_7_4_7/src
+CMSSW_LOCATION=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CombineHarvester/2017/CMSSW_7_4_7/src
 
 cd ${CMSSW_LOCATION}
 source /cvmfs/cms.cern.ch/cmsset_default.sh

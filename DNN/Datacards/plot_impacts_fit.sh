@@ -1,5 +1,5 @@
 #!bin/bash
-
+ERA=2016
 OUTPUT_FOLDER=2016_smhtt
 CMSSW_LOCATION=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CombineHarvester/2017/CMSSW_7_4_7/src/
 workspace_location=${CMSSW_LOCATION}/CombineHarvester/HTTSM2017/output/${OUTPUT_FOLDER}/cmb/125/

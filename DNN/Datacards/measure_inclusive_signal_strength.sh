@@ -3,16 +3,18 @@
 # Script which executes a gof test for a given variable $var
 
 # Pleas specify the following input variables
-#ERA=2016
+
 DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
 NUM_TOYS=300
 CAT="ML"
-BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/Datacards/output/
+BASE_PATH=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/Datacards/output/
+#BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/Datacards/output/
 INPUT_FOLDER=${ERA}
-OUTPUT_FOLDER=2016_smhtt
-CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/CombineHarvester/2017/CMSSW_7_4_7/src
+OUTPUT_FOLDER=${ERA}_smhtt
+CMSSW_LOCATION=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CombineHarvester/2017/CMSSW_7_4_7/src
+#CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/CombineHarvester/2017/CMSSW_7_4_7/src
 CURRENT_PATH=$(pwd)
 
 

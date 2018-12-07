@@ -38,6 +38,8 @@ public :
   TH2D *hist_2d;
   TH2D *histSS_2d;
 
+  TString htxs_stage1_flag = "-1";
+
   map< TString , Sample > uncertainties;
 
   /* Sample(TString sampleName = "", TString filepath){ */
