@@ -325,4 +325,5 @@ void plot_1d_var(
    gSystem -> Exec("mkdir " + output_dir);
 
    canv1->Print( output_dir + out_filename + ".png");
+   canv1->Print( output_dir + out_filename + ".pdf");
 }
