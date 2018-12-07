@@ -182,6 +182,30 @@ selected_variables:
             - pzetamiss        
             - pzetavis        
     2017:
+        em:
+            - dijetpt     
+            - dphi_emet       
+            - dphi_mumet      
+            - dr_tt           
+            - dzeta           
+            - iso_1           
+            - iso_2           
+            - jdeta           
+            - jeta_2          
+            - jpt_1           
+            - jpt_2           
+            - mTdileptonMET     
+            - mTemu           
+            - met             
+            - mjj             
+            - mt_2            
+            - mtmax           
+            - njets                
+            - pt_tt           
+            - pt_ttjj         
+            - pt_vis          
+            - pzetamiss       
+            - pzetavis   
         mt:
             # pt_1
             - pt_2
