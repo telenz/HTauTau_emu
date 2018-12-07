@@ -288,6 +288,7 @@ void make_postfit_plots(bool draw_signal    = false,
      TString out_filename = "MLscore_postfit_" + cat.second;
      if(draw_log_scale) out_filename += "_log";
      canv1->Print(directory + "/" + era + "/figures/" + out_filename + ".png");
+     canv1->Print(directory + "/" + era + "/figures/" + out_filename + ".pdf");
 
      for(auto & smpl : sample_vec) smpl->hist = 0;
    }
