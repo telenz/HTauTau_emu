@@ -29,7 +29,7 @@ cd -
 MorphingSM2017 --base_path=$BASE_PATH  --input_folder_em=$INPUT_FOLDER --real_data=false --jetfakes=0 --embedding=${EMB} --postfix="-$CAT" --channel="em" --auto_rebin=true --stxs_signals="stxs_stage1" --categories="stxs_stage1" --era=${ERA} --output=$OUTPUT_FOLDER --regional_jec=true --ggh_wg1=true
 
 # Create workspace
-combineTool.py -M T2W -o ${ERA}_workspace.root -i ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/2016_smhtt/cmb/125/ --parallel 12 \
+combineTool.py -M T2W -o ${ERA}_workspace.root -i ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/2016_smhtt/cmb/125/ --parallel 12 -m 125\
     -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel \
     --PO '"map=^.*/ggH_0J.?$:r_ggH_0J[1,-30,30]"' \
     --PO '"map=^.*/ggH_1J_PTH_0_60.?$:r_ggH_1J_PTH_0_60[1,-30,30]"' \
