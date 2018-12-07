@@ -27,6 +27,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   const bool take_percentile_subrange = cfg.get<bool>("take_percentile_subrange");
   const TString output_file_suffix = cfg.get<string>("output_file_suffix");
   const bool is_dnn_prediction = cfg.get<bool>("is_dnn_prediction");
+  const bool stage1 = cfg.get<bool>("stage1");
 
   vector<string> category_names_vector = cfg.get<vector<string>>("categories");
 
@@ -87,6 +88,39 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   Sample EMB("EMB");
   Sample ggH("ggH125");
   Sample qqH("qqH125");
+  Sample ggH_0J("ggH_0J125");
+  Sample ggH_1J_PTH_0_60("ggH_1J_PTH_0_60125");
+  Sample ggH_1J_PTH_60_120("ggH_1J_PTH_60_120125");
+  Sample ggH_1J_PTH_120_200("ggH_1J_PTH_120_200125");
+  Sample ggH_1J_PTH_GT200("ggH_1J_PTH_GT200125");
+  Sample ggH_GE2J_PTH_0_60("ggH_GE2J_PTH_0_60125");
+  Sample ggH_GE2J_PTH_60_120("ggH_GE2J_PTH_60_120125");
+  Sample ggH_GE2J_PTH_120_200("ggH_GE2J_PTH_120_200125");
+  Sample ggH_GE2J_PTH_GT200("ggH_GE2J_PTH_GT200125");
+  Sample ggH_VBFTOPO_JET3VETO("ggH_VBFTOPO_JET3VETO125");
+  Sample ggH_VBFTOPO_JET3("ggH_VBFTOPO_JET3125");
+  Sample qqH_VBFTOPO_JET3VETO("qqH_VBFTOPO_JET3VETO125");
+  Sample qqH_VBFTOPO_JET3("qqH_VBFTOPO_JET3125");
+  Sample qqH_REST("qqH_REST125");
+  Sample qqH_PTJET1_GT200("qqH_PTJET1_GT200125");
+  Sample qqH_VH2JET("qqH_VH2JET125");
+
+  ggH_0J.htxs_stage1_flag = "103";
+  ggH_1J_PTH_0_60.htxs_stage1_flag = "104";
+  ggH_1J_PTH_60_120.htxs_stage1_flag = "105";
+  ggH_1J_PTH_120_200.htxs_stage1_flag = "106";
+  ggH_1J_PTH_GT200.htxs_stage1_flag = "107";
+  ggH_GE2J_PTH_0_60.htxs_stage1_flag = "108";
+  ggH_GE2J_PTH_60_120.htxs_stage1_flag = "109";
+  ggH_GE2J_PTH_120_200.htxs_stage1_flag = "110";
+  ggH_GE2J_PTH_GT200.htxs_stage1_flag = "111";
+  ggH_VBFTOPO_JET3VETO.htxs_stage1_flag = "101";
+  ggH_VBFTOPO_JET3.htxs_stage1_flag = "102";
+  qqH_VBFTOPO_JET3VETO.htxs_stage1_flag = "201";
+  qqH_VBFTOPO_JET3.htxs_stage1_flag = "202";
+  qqH_REST.htxs_stage1_flag = "204";
+  qqH_PTJET1_GT200.htxs_stage1_flag = "205";
+  qqH_VH2JET.htxs_stage1_flag = "203";
 
   if(!is_dnn_prediction){
     
@@ -118,21 +152,72 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     EMB.filename    = "em-NOMINAL_ntuple_EMB.root" ;
     ggH.filename    = "em-NOMINAL_ntuple_ggH125.root" ;
     qqH.filename    = "em-NOMINAL_ntuple_qqH125.root" ;
+    ggH_0J.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_1J_PTH_0_60.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_1J_PTH_60_120.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_1J_PTH_120_200.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_1J_PTH_GT200.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_GE2J_PTH_0_60.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_GE2J_PTH_60_120.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_GE2J_PTH_120_200.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_GE2J_PTH_GT200.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_VBFTOPO_JET3VETO.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_VBFTOPO_JET3.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    qqH_VBFTOPO_JET3VETO.filename = "em-NOMINAL_ntuple_qqH125.root" ;
+    qqH_VBFTOPO_JET3.filename = "em-NOMINAL_ntuple_qqH125.root" ;
+    qqH_REST.filename = "em-NOMINAL_ntuple_qqH125.root" ;
+    qqH_PTJET1_GT200.filename = "em-NOMINAL_ntuple_qqH125.root" ;
+    qqH_VH2JET.filename = "em-NOMINAL_ntuple_qqH125.root" ;
+
   }
 
-  map<TString,Sample> sample_map = { { "0_Data" , Data },
-				     { "1_QCD"  , QCD } ,
-				     { "2_ZL"   , ZL } ,
-				     { "3_W"    , W } ,
-				     { "4_TT"   , TT } ,
-				     { "5_TTcont", TTcont } ,
-				     { "6_VV"   , VV } ,
-				     { "7_VVcont", VVcont } ,
-				     { "8_ST"   , ST } ,
-				     { "9_ZTT"  , ZTT } ,
-				     { "10_ggH125" , ggH },
-				     { "11_qqH125" , qqH }
-  };
+  map<TString,Sample> sample_map;
+  if(!stage1){
+    sample_map= { { "0_Data"  , Data },
+		  { "1_QCD"   , QCD },
+		  { "2_ZL"    , ZL },
+		  { "3_W"     , W },
+		  { "4_TT"    , TT },
+		  { "5_TTcont", TTcont },
+		  { "6_VV"    , VV },
+		  { "7_VVcont", VVcont },
+		  { "8_ST"    , ST },
+		  { "9_ZTT"   , ZTT } ,
+		  { "10_ggH125" , ggH },
+		  { "11_qqH125" , qqH }
+    };
+  }
+  else{
+    sample_map= { { "0_Data"  , Data },
+		  { "1_QCD"   , QCD },
+		  { "2_ZL"    , ZL },
+		  { "3_W"     , W },
+		  { "4_TT"    , TT },
+		  { "5_TTcont", TTcont },
+		  { "6_VV"    , VV },
+		  { "7_VVcont", VVcont },
+		  { "8_ST"    , ST },
+		  { "9_ZTT"   , ZTT },
+		  { "10_ggH125" , ggH },
+		  { "11_qqH125" , qqH },
+		  { "12_ggH_0J" , ggH_0J },
+		  { "13_ggH_1J_PTH_0_60", ggH_1J_PTH_0_60 },
+		  { "14_ggH_1J_PTH_60_120", ggH_1J_PTH_60_120 },
+		  { "15_ggH_1J_PTH_120_200", ggH_1J_PTH_120_200 },
+		  { "16_ggH_1J_PTH_GT200", ggH_1J_PTH_GT200 },
+		  { "17_ggH_GE2J_PTH_0_60", ggH_GE2J_PTH_0_60 },
+		  { "18_ggH_GE2J_PTH_60_120", ggH_GE2J_PTH_60_120 },
+		  { "19_ggH_GE2J_PTH_120_200", ggH_GE2J_PTH_120_200 },
+		  { "20_ggH_GE2J_PTH_GT200", ggH_GE2J_PTH_GT200 },
+		  { "21_ggH_VBFTOPO_JET3VETO", ggH_VBFTOPO_JET3VETO },
+		  { "22_ggH_VBFTOPO_JET3", ggH_VBFTOPO_JET3 },
+		  { "23_qqH_VBFTOPO_JET3VETO", qqH_VBFTOPO_JET3VETO },
+		  { "24_qqH_VBFTOPO_JET3", qqH_VBFTOPO_JET3 },
+		  { "25_qqH_REST", qqH_REST },
+		  { "26_qqH_PTJET1_GT200", qqH_PTJET1_GT200 },
+		  { "27_qqH_VH2JET", qqH_VH2JET }
+    };
+  }
 
   if(use_embedded){
     sample_map.erase("9_ZTT");
@@ -171,11 +256,20 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["4_TT"].weightStringSS  += "topptweight*prefiring_weight*";
     cat.second.sample_list["5_TTcont"].weightString    += "topptweight*prefiring_weight*";
     cat.second.sample_list["5_TTcont"].weightStringSS  += "topptweight*prefiring_weight*";
-    cat.second.sample_list["10_ggH125"].weightString    += "weight_ggh_NNLOPS*";
-    cat.second.sample_list["10_ggH125"].weightStringSS  += "weight_ggh_NNLOPS*";
-    cat.second.sample_list["11_qqH125"].weightString    += "prefiring_weight*";
-    cat.second.sample_list["11_qqH125"].weightStringSS  += "prefiring_weight*";
-
+    for(auto& smpl : cat.second.sample_list){
+      if( smpl.second.name.Contains("ggH") ){
+	cat.second.sample_list[smpl.first].weightString    += "weight_ggh_NNLOPS*";
+	cat.second.sample_list[smpl.first].weightStringSS  += "weight_ggh_NNLOPS*";
+      }
+      if( smpl.second.name.Contains("qqH") ){
+	cat.second.sample_list[smpl.first].weightString    += "prefiring_weight*";
+	cat.second.sample_list[smpl.first].weightStringSS  += "prefiring_weight*";
+      }
+      if( smpl.second.name.Contains("ggH_") || smpl.second.name.Contains("qqH_") ){
+	cat.second.sample_list[smpl.first].cutString   += "&& htxs_stage1cat == " + smpl.second.htxs_stage1_flag ;
+	cat.second.sample_list[smpl.first].cutStringSS += "&& htxs_stage1cat == " + smpl.second.htxs_stage1_flag ;
+      }
+    }
     if(use_embedded){
       cat.second.sample_list["9_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
       cat.second.sample_list["9_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*qcdweight*";
@@ -278,6 +372,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
        smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
        smpl.second.uncertainties["jecUncRelativeBalUp"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalUp");
        smpl.second.uncertainties["jecUncRelativeBalDown"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalDown");
+      if(era=="2017"){
+	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleUp"  , "_CMS_scale_j_RelativeSample_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleUp");
+	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleDown", "_CMS_scale_j_RelativeSample_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleDown");
+      }
 
         // // 8.) JES correlated
        smpl.second = create_systematic_uncertainty("jecUncEta0To5Up_corr"  , "_CMS_scale_j_eta0to5Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
@@ -296,10 +394,14 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
        smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown_corr", "_CMS_scale_j_RelativeBalDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
        smpl.second.uncertainties["jecUncRelativeBalUp"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalUp");
        smpl.second.uncertainties["jecUncRelativeBalDown"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalDown");
+      if(era=="2017"){
+	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleUp_corr"  , "_CMS_scale_j_RelativeSampleUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleUp");
+	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleDown_corr", "_CMS_scale_j_RelativeSampleDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleDown");
+      }
 
 
-       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name == "ggH125" || smpl.second.name == "qqH125"){
-       // 9.) Recoil scale/resolution uncertainties
+      if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name.Contains("ggH") || smpl.second.name.Contains("qqH")){
+	// 9.) Recoil scale/resolution uncertainties
        	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_metUp"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
        	smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_metDown", cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleDown");
        	smpl.second.uncertainties["recoilscaleUp"].filename.ReplaceAll("NOMINAL","_recoilscaleUp");
@@ -333,7 +435,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       }
 
       // 12.) ggh reweighting
-      if(smpl.second.name == "ggH125" ){
+      if( smpl.second.name.Contains("ggH") ){
 	smpl.second = create_systematic_uncertainty("gghShapeResUp"  , "_THU_ggH_ResUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Res*");
 	smpl.second = create_systematic_uncertainty("gghShapeResDown", "_THU_ggH_ResDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Res*");
 	smpl.second = create_systematic_uncertainty("gghShapeMig01Up"  , "_THU_ggH_Mig01Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Mig01*");
@@ -381,11 +483,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cout << "**************************************" << endl;
     cout << "**************************************" << endl;
     cout << endl << "Category : " << cat.second.name << endl;
-    cout << endl << "Variable 1d = " << cat.second.variable << endl;
-
+    cout << endl << "Variable : " << cat.second.variable << endl;
     for(auto & smpl : cat.second.sample_list){
       cout << "**************************************" << endl;
-      cout << smpl.second.name << " : " << smpl.second.filename << endl;
+      cout << smpl.first << " : " << smpl.second.name << " : " << smpl.second.filename << endl;
       TFile *in_file = TFile::Open( directory + "/" + smpl.second.filename , "READ");
       TTree *tree = (TTree*) in_file->Get("TauCheck");
 
@@ -436,8 +537,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
 	  TH1D* hist_aux_x = new TH1D("hist_aux_x", "", 1000000, min_val_x, max_val_x);
 	  TH1D* hist_aux_y = new TH1D("hist_aux_y", "", 1000000, min_val_y, max_val_y);
-	  tree -> Draw( var_x + ">> hist_aux_x" , "1*("+cat.second.variable+Form(">%f",min_val_x)+ cat.second.cutstring + ")" );
-	  tree -> Draw( var_y + ">> hist_aux_y" , "1*("+cat.second.variable+Form(">%f",min_val_y)+ cat.second.cutstring + ")" );
+	  tree -> Draw( var_x + ">> hist_aux_x" , "1*("+var_x+Form(">%f",min_val_x)+ cat.second.cutstring + ")" );
+	  tree -> Draw( var_y + ">> hist_aux_y" , "1*("+var_y+Form(">%f",min_val_y)+ cat.second.cutstring + ")" );
 
 	  unsigned int idx_bins = 0;
 	  int count_events =0;
@@ -500,7 +601,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       // Make QCD estimation
       if( smpl.second.name == "QCD" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
-      else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
+      else if( !smpl.second.name.Contains("ggH") && !smpl.second.name.Contains("qqH") && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
 
       // Loop over systematic uncertainties
       for(auto &sys : smpl.second.uncertainties){
@@ -547,7 +648,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	if( !sys.first.Contains("qcd") ) continue;
 
 	if( smpl.second.name == "QCD" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , +1);
-	else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && sys.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , -1);
+	else if( !smpl.second.name.Contains("ggH") && !smpl.second.name.Contains("qqH") && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && sys.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , -1);
 
       } // end of loop over sys uncertainties
       in_file->Close();
