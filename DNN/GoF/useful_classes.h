@@ -97,6 +97,9 @@ public :
   TString gg_scale_weight_up   = "";
   TString gg_scale_weight_down = "";
 
+  int nbins_1d   = 20;
+  int nbins_2d_x = 20;
+  int nbins_2d_y = 20;
   vector<float> bins_1d;
   vector<float> binning_1d;
   vector<float> binning_2d_x;
@@ -111,4 +114,176 @@ public :
   }
 };
 // ********************************************************************************************
+
+vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidistant_binning, Category cat , TString directory){
+
+  TFile *file = new TFile( directory + "/" + cat.sample_list.at("0_Data").filename );
+  TTree *tree = (TTree*) file->Get("TauCheck");
+
+
+  float range_low  = 0;
+  float range_high = 0;
+  vector<double> percentile_ranges;
+  for(int i=0; i<=10; i++) percentile_ranges.push_back(0.01+i*0.098);
+
+  float min_val = tree->GetMinimum(cat.variable);
+  float max_val = tree->GetMaximum(cat.variable);
+  if(min_val == -10) min_val=0;
+  cout<<endl<<"Minimum value in tree = "<<min_val<<endl;
+  cout<<"Maximum value in tree = "<<max_val<<endl<<endl;
+  
+  TH1D* hist_aux = new TH1D("hist_aux", "", 1000000, min_val, max_val);
+  tree -> Draw( cat.variable + ">> hist_aux" , "1*("+cat.variable+Form(">%f",min_val)+ cat.cutstring + ")" );
+
+  cout<<"before 0"<<endl;
+  // 0.) Get result if simply binning from config should be used
+  if(!take_percentile_subrange && !apply_equidistant_binning){
+    return cat.binning_1d;
+  }
+  if(!take_percentile_subrange){
+    cout<<"which binning should be applied ? Please check you settings in the config"<<endl;
+  }
+  cout<<"before 1"<<endl;
+  // 1.) Find 0.01 and 0.99 percentiles to get the range of the histogram
+  unsigned int idx_bins=0;
+  int count =0;
+  float integral = hist_aux->GetSumOfWeights();
+  bool range_low_not_set = true;
+  for(int ibin=1; ibin<hist_aux->GetNbinsX()+1; ibin++){
+    count += hist_aux->GetBinContent(ibin);
+    if(count>=0.01*integral && range_low_not_set){
+      range_low  = hist_aux->GetBinCenter(ibin);
+      range_low_not_set = false;
+    }
+    else if(count>=0.99*integral){
+      range_high = hist_aux->GetBinCenter(ibin);
+      break;
+    }
+  }
+  cout<<"histo range starts at = "<<range_low<<endl;
+  cout<<"histo range ends at   = "<<range_high<<endl;
+
+  // 2.) Get result for equidistant binning
+  vector<float> binning;
+  if(apply_equidistant_binning){
+    for(int i=0; i<=cat.nbins_1d; i++) binning.push_back(range_low + i*(range_high-range_low)/cat.nbins_1d);
+    return binning;
+  }
+
+  // 3.) Get results for flat binning
+  idx_bins=0;
+  count =0;
+  binning.clear();
+  for(int ibin=1; ibin<hist_aux->GetNbinsX()+1; ibin++){
+    count += hist_aux->GetBinContent(ibin);
+    if(count>=percentile_ranges[idx_bins]*integral){
+      binning.push_back(hist_aux->GetBinCenter(ibin));
+      cout<<"bin range starts at = "<<hist_aux->GetBinCenter(ibin)<<endl;
+      if(idx_bins+1 == percentile_ranges.size()) break;
+      idx_bins +=1;
+    }
+  }
+
+  return binning;
+}
+
+// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subrange, bool apply_equidistant_binning, Category cat , TString directory){
+
+
+  TFile *file = new TFile( directory + "/" + cat.sample_list.at("0_Data").filename );
+  TTree *tree = (TTree*) file->Get("TauCheck");
+
+  vector<float> binning_2d_x;
+  vector<float> binning_2d_y;
+
+  float range_x_low  = 0;
+  float range_x_high = 0;
+  float range_y_low  = 0;
+  float range_y_high = 0;
+  vector<double> percentile_ranges;
+  for(int i=0; i<=10; i++) percentile_ranges.push_back(0.01+i*0.098);
+
+  TString var_y = cat.variable( 0 , cat.variable.First(":") );
+  TString var_x = cat.variable( cat.variable.First(":")+1 , cat.variable.Length());
+  float min_val_x = tree->GetMinimum(var_x);
+  float max_val_x = tree->GetMaximum(var_x);
+  float min_val_y = tree->GetMinimum(var_y);
+  float max_val_y = tree->GetMaximum(var_y);
+  if(min_val_x == -10) min_val_x=0;
+  if(min_val_y == -10) min_val_y=0;
+  cout<<endl<<"Minimum value of "<<var_x<<" in tree = "<<min_val_x<<endl;
+  cout<<"Maximum value of "<<var_x<<" in tree = "<<max_val_x<<endl;
+  cout<<"Minimum value of "<<var_y<<" in tree = "<<min_val_y<<endl;
+  cout<<"Maximum value of "<<var_y<<" in tree = "<<max_val_y<<endl<<endl;
+
+  TH1D* hist_aux_x = new TH1D("hist_aux_x", "", 1000000, min_val_x, max_val_x);
+  TH1D* hist_aux_y = new TH1D("hist_aux_y", "", 1000000, min_val_y, max_val_y);
+  tree -> Draw( var_x + ">> hist_aux_x" , "1*("+var_x+Form(">%f",min_val_x)+ cat.cutstring + ")" );
+  tree -> Draw( var_y + ">> hist_aux_y" , "1*("+var_y+Form(">%f",min_val_y)+ cat.cutstring + ")" );
+
+
+  // 0.) Get result if simply binning from config should be used
+  if(!take_percentile_subrange && !apply_equidistant_binning){
+    return std::make_pair(cat.binning_2d_x, cat.binning_2d_y);
+  }
+
+  if(!take_percentile_subrange){
+    cout<<"which binning should be applied ? Please check you settings in the config"<<endl;
+  }
+
+  // 1.) Find 0.01 and 0.99 percentiles to get the range of the histogram
+  int count_events = 0;
+  float integral_x = hist_aux_x->GetSumOfWeights();
+  for(int ibin=1; ibin<hist_aux_x->GetNbinsX()+1; ibin++){
+    count_events += hist_aux_x->GetBinContent(ibin);
+    if(count_events>=0.01*integral_x) range_x_low  = hist_aux_x->GetBinCenter(ibin);
+    if(count_events>=0.99*integral_x) range_x_high = hist_aux_x->GetBinCenter(ibin);
+  }
+  count_events =0;
+  float integral_y = hist_aux_y->GetSumOfWeights();
+  for(int ibin=1; ibin<hist_aux_y->GetNbinsX()+1; ibin++){
+    count_events += hist_aux_y->GetBinContent(ibin);
+    if(count_events>=0.01*integral_y) range_y_low  = hist_aux_y->GetBinCenter(ibin);
+    if(count_events>=0.99*integral_y) range_y_high = hist_aux_y->GetBinCenter(ibin);
+  }
+  cout<<"histo x range starts at = "<<range_x_low<<endl;
+  cout<<"histo x range ends at   = "<<range_x_high<<endl;
+  cout<<"histo y range starts at = "<<range_y_low<<endl;
+  cout<<"histo y range ends at   = "<<range_y_high<<endl;
+
+  // 2.) Get result for equidistant binning
+  vector<float> binning;
+  if(apply_equidistant_binning){
+    for(int i=0; i<=cat.nbins_2d_x; i++) binning_2d_x.push_back(range_x_low + i*(range_x_high-range_x_low)/cat.nbins_2d_x);
+    for(int i=0; i<=cat.nbins_2d_y; i++) binning_2d_y.push_back(range_y_low + i*(range_y_high-range_y_low)/cat.nbins_2d_y);
+    return std::make_pair(binning_2d_x, binning_2d_y);
+  }
+
+  // 3.) Get results for flat binning
+  unsigned int idx_bins=0;
+  count_events =0;
+  for(int ibin=1; ibin<hist_aux_x->GetNbinsX()+1; ibin++){
+    count_events += hist_aux_x->GetBinContent(ibin);
+    if(count_events >= percentile_ranges[idx_bins]*integral_x){
+      binning_2d_x.push_back(hist_aux_x->GetBinCenter(ibin));
+      cout<<"bin range starts at = "<<hist_aux_x->GetBinCenter(ibin)<<endl;
+      if(idx_bins+1 == percentile_ranges.size()) break;
+      idx_bins +=1;
+    }
+  }
+  idx_bins = 0;
+  count_events = 0;
+  for(int ibin=1; ibin<hist_aux_y->GetNbinsX()+1; ibin++){
+    count_events += hist_aux_y->GetBinContent(ibin);
+    if(count_events >= percentile_ranges[idx_bins]*integral_y){
+      binning_2d_y.push_back(hist_aux_y->GetBinCenter(ibin));
+      cout<<"bin range starts at = "<<hist_aux_y->GetBinCenter(ibin)<<endl;
+      if(idx_bins+1 == percentile_ranges.size()) break;
+      idx_bins +=1;
+    }
+  }
+  return std::make_pair(cat.binning_2d_x, cat.binning_2d_y);
+}
+
 #endif
