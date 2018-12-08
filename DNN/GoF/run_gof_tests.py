@@ -61,62 +61,6 @@ variable_list = [ "m_sv",
 
 #variable_list = [ "jeta_1"]
 
-axis_range = { "m_sv"  : [8 , 0  , 300],
-               "m_vis" : [8 , 0  , 300],
-               "pt_1"  : [8 , 10 , 400],
-               "pt_2"  : [8 , 10 , 300],
-               "eta_1" : [8 , -2.5 , +2.5],
-               "eta_2" : [8 ,-2.4 , +2.4],
-               "jpt_1" : [8 , 30 , 600],
-               "jpt_2" : [8 , 30 , 300],
-               "njets" : [10 , 0  , 10],
-               "nbtag" : [5 , 0  , 5],
-               "mt_1"  : [8 , 0 , 300],
-               "mt_2"  : [8 , 0 , 300],
-               "pt_tt" : [8 , 0 , 600],
-               "mjj"   : [8 , 0 , 1000],
-               "met"   : [8 , 0 , 400],
-               "dzeta" : [8 , -35 , 300],
-               "phi_1" : [8 , -R.TMath.Pi() , R.TMath.Pi()],
-               "phi_2" : [8 , -R.TMath.Pi() , R.TMath.Pi()],
-               "jphi_1"     : [8 , -R.TMath.Pi() , R.TMath.Pi()],
-               "jphi_2"     : [8 , -R.TMath.Pi() , R.TMath.Pi()],
-               "mTemu"      : [8 , 0, 600],
-               "mt_sv"      : [8 ,0, 3500 ],
-               "pt_sv"      : [8 ,0, 400 ],
-               "eta_sv"     : [8 ,-5.5,5.5 ],
-               "phi_sv"     : [8 , -R.TMath.Pi() , R.TMath.Pi()],
-               "iso_1"      : [8 , 0, 0.15],
-               "iso_2"      : [8 , 0, 0.2],
-               "d0_1"       : [8 , -0.045, 0.045],
-               "d0_2"       : [8 ,-0.045, 0.045 ],
-               "dZ_1"       : [8 ,-0.2,0.2 ],
-               "dZ_2"       : [8 , -0.2,0.2 ],
-               "mtmax"      : [8 , 0, 300],
-               "dphi_mumet" : [8 , 0 , R.TMath.Pi()],
-               "dphi_emet"  : [8 , 0 , R.TMath.Pi()],
-               "msvmet"     : [8 , 0, 400 ],
-               "dr_tt"      : [8 , 0,2*R.TMath.Pi() ],
-               "pzetavis"   : [8 , 0 , 300 ],
-               "pzetamiss"  : [8 , -50,300],
-               "njetspt20"  : [10 , 0, 10],
-               "jeta_1"     : [8 ,-4.5,4.5 ],
-               "jeta_2"     : [8 ,-4.5,4.5 ],
-               "jdeta"      : [8 , 0, 9],
-               "bpt_1"      : [8 , 0, 550],
-               "beta_1"     : [8 , -2.5,2.5],
-               "metphi"     : [8 , -R.TMath.Pi() , R.TMath.Pi()],
-               "d0_1_cal"   : [8 , -0.05 , +0.05],
-               "dZ_1_cal"   : [8 , -0.20 , +0.20],
-               "d0_2_cal"   : [8 , -0.05 , +0.05],
-               "dZ_2_cal"   : [8 , -0.20 , +0.20],
-               "mTdileptonMET" : [8 , 0 , 200],
-               "pt_ttjj" : [8,0,1000],
-               "dijetphi" : [8,0,1000] ,
-               "dijetpt" : [8,0,1000],
-               "pt_vis"     : [8 ,0, 400 ],
-               }
-
 # Execute produce_gof_inputs.cpp for all variables
 
 def process_vars(var):
@@ -125,9 +69,6 @@ def process_vars(var):
     print "****************************************************************************************"
     print "****************************************************************************************"
     print "Execute " + var + " : \n"
-
-    # Get axis ranges (if not specified set to default value of {10,400})
-    nbins , xmin , xmax = axis_range.get(var,[8, 0,400])
 
     # Produce the root-files (datacard input)
     # change config file
