@@ -40,16 +40,16 @@ def main():
         confusion[TDirs.index(TDir)] = compressDict(tempdict,classes,'em',embedded)
 
     # plotting confusion matrices
-    print "Writing confusion matrices to output/2016/figures/"
-    plot_confusion(confusion,classes,"output/2016/figures/em_confusion.pdf", "std")
+    print "Writing confusion matrices to output/"+era+"/figures/"
+    plot_confusion(confusion,classes,"output/"+era+"/figures/em_confusion.pdf", "std")
 
     conf_pur1, conf_pur2 = get_purity_representations(confusion)
-    plot_confusion(conf_pur1, classes, "output/2016/figures/em_confusion_pur1.pdf")
-    plot_confusion(conf_pur2, classes, "output/2016/figures/em_confusion_pur2.pdf", "pur")
+    plot_confusion(conf_pur1, classes, "output/"+era+"/figures/em_confusion_pur1.pdf")
+    plot_confusion(conf_pur2, classes, "output/"+era+"/figures/em_confusion_pur2.pdf", "pur")
 
     conf_eff1, conf_eff2 = get_efficiency_representations(confusion)
-    plot_confusion(conf_eff1, classes, "output/2016/figures/em_confusion_eff1.pdf")
-    plot_confusion(conf_eff2, classes, "output/2016/figures/em_confusion_eff2.pdf", "eff")
+    plot_confusion(conf_eff1, classes, "output/"+era+"/figures/em_confusion_eff1.pdf")
+    plot_confusion(conf_eff2, classes, "output/"+era+"/figures/em_confusion_eff2.pdf", "eff")
 
     rootfile.Close()
 
