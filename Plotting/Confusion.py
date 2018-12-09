@@ -63,7 +63,7 @@ def compressDict(tempdict,classes,channel,embedded):
     tmp[classes.index('{0}_qqh'.format(channel))]=tempdict['qqH125']
     tmp[classes.index('{0}_ss'.format(channel))]=tempdict['QCD']
     if embedded == True :
-        tmp[classes.index('{0}_emb'.format(channel))]=tempdict['EMB']
+        tmp[classes.index('{0}_ztt'.format(channel))]=tempdict['EMB']
     else :
         tmp[classes.index('{0}_ztt'.format(channel))]=tempdict['ZTT']
     tmp[classes.index('{0}_ggh'.format(channel))]=tempdict['ggH125']
