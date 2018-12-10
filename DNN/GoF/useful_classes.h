@@ -135,15 +135,14 @@ vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidist
   TH1D* hist_aux = new TH1D("hist_aux", "", 1000000, min_val, max_val);
   tree -> Draw( cat.variable + ">> hist_aux" , "1*("+cat.variable+Form(">%f",min_val)+ cat.cutstring + ")" );
 
-  cout<<"before 0"<<endl;
   // 0.) Get result if simply binning from config should be used
   if(!take_percentile_subrange && !apply_equidistant_binning){
     return cat.binning_1d;
   }
   if(!take_percentile_subrange){
-    cout<<"which binning should be applied ? Please check you settings in the config"<<endl;
+    cout<<"Which binning should be applied ? Please check your settings in the config. Either take_percentile_subrange AND apply_equidistant_binning is set to false OR take_percentile_subrange is set to true!"<<endl;
   }
-  cout<<"before 1"<<endl;
+
   // 1.) Find 0.01 and 0.99 percentiles to get the range of the histogram
   unsigned int idx_bins=0;
   int count =0;
@@ -229,7 +228,7 @@ std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subr
   }
 
   if(!take_percentile_subrange){
-    cout<<"which binning should be applied ? Please check you settings in the config"<<endl;
+    cout<<"Which binning should be applied ? Please check your settings in the config. Either take_percentile_subrange AND apply_equidistant_binning is set to false OR take_percentile_subrange is set to true!"<<endl;
   }
 
   // 1.) Find 0.01 and 0.99 percentiles to get the range of the histogram
