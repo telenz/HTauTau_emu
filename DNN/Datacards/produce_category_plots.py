@@ -55,10 +55,10 @@ os.system(cmd)
 # Make pre-fit plots
 print '-----------------------------------------------------------------------'
 print "\nMake pre-fit plots \n"
-for category in category_list:
-    make_category_plots(category)
-#num_cores=2
-#Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
+#for category in category_list:
+#    make_category_plots(category)
+num_cores=20
+Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
 
 # Print confusione matrices
 print '-----------------------------------------------------------------------'
