@@ -33,7 +33,7 @@ def main():
 
     for TDir in TDirs: 
         folder = rootfile.Get( TDir )
-        hists = [ hist.GetName() for hist in folder.GetListOfKeys() if not "_13TeV" in hist.GetName()]
+        hists = [ hist.GetName() for hist in folder.GetListOfKeys() if not "Up" in hist.GetName() and not "Down" in hist.GetName()]
         for hist in hists: 
             tempdict.update({hist:folder.Get(hist).Integral()})
 
