@@ -176,7 +176,9 @@ void plot_1d_var(
    }
 
    // Make a canvas
-   TCanvas * canv1 = MakeCanvas("canv1", "", 700, 800);
+   TCanvas * canv1 = 0;
+   if( category.Contains("unrolled") ) canv1 = MakeCanvas("canv1", "", 1400, 800);
+   else                                canv1 = MakeCanvas("canv1", "", 700, 800);
    TPad *upper = new TPad("upper", "pad",0,0.31,1,1);
    upper->Draw();
    upper->cd();
@@ -184,6 +186,10 @@ void plot_1d_var(
    float y_upper = data.hist->GetMaximum();
    float y_lower = qcd.hist->GetMaximum()*0.01;
    data.hist -> GetXaxis() -> SetTitle(variable);
+   if( category.Contains("unrolled") ){
+     data.hist->GetXaxis()->SetTitle("");
+     data.hist->GetXaxis()->SetLabelSize(0);
+   }
    data.hist -> GetYaxis() -> SetTitle("Events");
    if(draw_log_scale){
      if(draw_signal) y_lower = 0.1*qqh.hist->GetMaximum();
@@ -232,6 +238,11 @@ void plot_1d_var(
    if( data.hist->GetMaximumBin() <= data.hist->GetNbinsX()/2.) leg = new TLegend(0.62,0.45,0.9,0.9);
    else leg = new TLegend(0.2,0.45,0.45,0.9);
    SetLegendStyle(leg);
+   if( category.Contains("unrolled") ){
+     leg = new TLegend(0.2,0.7,0.8,0.9);
+     SetLegendStyle(leg);
+     leg->SetNColumns(5);
+   }
    vector<TString> already_added_to_legend;
    for (unsigned int i = sample_vec.size(); i-- > 0; ){
      if( find(already_added_to_legend.begin() , already_added_to_legend.end()  , sample_vec[i]->name) != already_added_to_legend.end() ) continue;
@@ -268,7 +279,7 @@ void plot_1d_var(
    else if(category == "em_ss")    category_name = "same sign";
    else if(category == "em_qqh")   category_name = "qqH";
    else if(category == "em_ggh")   category_name = "ggH";
-   plotchannel("e#mu " + category_name + " category",0.25,0.84);
+   plotchannel("e#mu " + category_name + " category",0.15,0.84);
     
    char KT[100];
    TLatex * cms = new TLatex(0.25,0.85,KT);
