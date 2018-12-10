@@ -28,6 +28,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   const TString output_file_suffix = cfg.get<string>("output_file_suffix");
   const bool is_dnn_prediction = cfg.get<bool>("is_dnn_prediction");
   const bool stage1 = cfg.get<bool>("stage1");
+  const bool no_uncertainties = cfg.get<bool>("no_uncertainties");
 
   vector<string> category_names_vector = cfg.get<vector<string>>("categories");
 
@@ -301,6 +302,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
   for(auto& cat : category_map){
     for(auto & smpl : cat.second.sample_list){
+
+      if( no_uncertainties ) continue;
+
       if( smpl.second.name == "data_obs" || smpl.first.Contains("cont") ) continue;
 
       // 1.) QCD uncertainties (10 nuisances)
@@ -656,11 +660,11 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     } // end of loop over samples
 
     // Calculate embedded uncertainty
-    if(use_embedded){
-      cat.second.sample_list["9_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(cat.second.sample_list["5_TTcont"].hist_1d , 0.1);
-      cat.second.sample_list["9_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(cat.second.sample_list["5_TTcont"].hist_1d , -0.1);
-      cat.second.sample_list["9_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(cat.second.sample_list["7_VVcont"].hist_1d , 0.1);
-      cat.second.sample_list["9_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(cat.second.sample_list["7_VVcont"].hist_1d , -0.1);
+    if(use_embedded && cat.second.sample_list.at("9_EMB").uncertainties.find("ttContEmbUp") != cat.second.sample_list.at("9_EMB").uncertainties.end()){
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbUp").hist_1d   -> Add(cat.second.sample_list.at("5_TTcont").hist_1d , 0.1);
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbDown").hist_1d -> Add(cat.second.sample_list.at("5_TTcont").hist_1d , -0.1);
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbUp").hist_1d   -> Add(cat.second.sample_list.at("7_VVcont").hist_1d , 0.1);
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbDown").hist_1d -> Add(cat.second.sample_list.at("7_VVcont").hist_1d , -0.1);
     }
 
     //***********************************************************************************************
