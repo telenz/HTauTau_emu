@@ -368,12 +368,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       // Calculate the binning
       if( smpl.second.name == "data_obs" ){
 	if(!cat.second.plot_2d){
-	  cat.second.binning_1d.clear();
 	  cat.second.binning_1d = calc_binning_1d(take_percentile_subrange, apply_equidistant_binning, cat.second, directory);
 	}
 	else{
-	  cat.second.binning_2d_x.clear();
-	  cat.second.binning_2d_y.clear();
 	  std::pair<vector<float>, vector<float>> binning = calc_binning_2d(take_percentile_subrange, apply_equidistant_binning, cat.second, directory);
 	  cat.second.binning_2d_x = binning.first;
 	  cat.second.binning_2d_y = binning.second;
