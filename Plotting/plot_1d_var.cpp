@@ -63,6 +63,8 @@ void plot_1d_var(
    SampleForPlotting qcd("QCD",{"QCD"});
    SampleForPlotting qqh("qqH",{"qqH125"});
    SampleForPlotting ggh("ggH",{"ggH125"});
+   SampleForPlotting zh("ZH",{"ZH125"});
+   SampleForPlotting wh("WH",{"WH125"});
 
    ztt.color = "#FFCC66";
    emb.color = "#FFCC66";
@@ -74,27 +76,33 @@ void plot_1d_var(
    qcd.color = "#FFCCFF";
    ggh.color = "#05B0BB"; //blue:"#03A8F5";
    qqh.color = "#BB051E";
+   zh.color  = "#EA32E9";
+   wh.color  = "#CCFFCC";
 
    ztt.legend_entry  = "Z#rightarrow #tau#tau (MC)";
    emb.legend_entry  = "Z#rightarrow #tau#tau (emb.)";
-   zl.legend_entry   = "Z#rightarrow ll";
-   w.legend_entry    = "W";
-   vv.legend_entry   = "VV";
-   st.legend_entry   = "ST";
-   tt.legend_entry   = "t#bar{t}";
-   qcd.legend_entry  = "QCD";
-   data.legend_entry = "Data";
-   qqh.legend_entry  = "qqH";
-   ggh.legend_entry  = "ggH";
+   zl.legend_entry   = "Z#rightarrow ll   ";
+   w.legend_entry    = "W   ";
+   vv.legend_entry   = "VV   ";
+   st.legend_entry   = "ST   ";
+   tt.legend_entry   = "t#bar{t}   ";
+   qcd.legend_entry  = "QCD   ";
+   data.legend_entry = "Data   ";
+   qqh.legend_entry  = "qqH   ";
+   ggh.legend_entry  = "ggH   ";
+   zh.legend_entry   = "ZH   ";
+   wh.legend_entry   = "WH   ";
  
    data.isData  = true;
    qqh.isSignal = true;
    ggh.isSignal = true;
+   zh.isSignal  = true;
+   wh.isSignal  = true;
 
    vector<SampleForPlotting*> sample_vec;
    if(draw_signal){
-     if(!use_embedded) sample_vec = { &qqh , &ggh , &qcd , &vv , &st , &zl ,  &w  , &tt , &ztt , &data  };
-     else              sample_vec = { &qqh , &ggh , &qcd , &vv , &st , &zl ,  &w  , &tt , &emb , &data  };
+     if(!use_embedded) sample_vec = { &wh , &zh , &qqh , &ggh , &qcd , &vv , &st , &zl ,  &w  , &tt , &ztt , &data  };
+     else              sample_vec = { &wh , &zh , &qqh , &ggh , &qcd , &vv , &st , &zl ,  &w  , &tt , &emb , &data  };
    }
    else{
      if(!use_embedded) sample_vec = { &qcd , &vv , &st , &zl , &w , &tt , &ztt , &data  };
@@ -194,10 +202,10 @@ void plot_1d_var(
    if(draw_log_scale){
      if(draw_signal) y_lower = 0.1*qqh.hist->GetMaximum();
      if(y_lower == 0) y_lower = 1;
-     data.hist -> GetYaxis() -> SetRangeUser(y_lower , 100*y_upper);
+     data.hist -> GetYaxis() -> SetRangeUser(y_lower , 1000*y_upper);
      upper -> SetLogy();
    }
-   else  data.hist -> GetYaxis() -> SetRangeUser(0,1.2*y_upper);
+   else  data.hist -> GetYaxis() -> SetRangeUser(0,1.75*y_upper);
 
    // Calculate signal strength (s+b/b) - needed for ratio plot and blinding
    TH1D * signal_strength    = (TH1D*) stack->GetStack()->Last()->Clone("ratioH");
@@ -230,14 +238,16 @@ void plot_1d_var(
    if(draw_signal){
      ggh.hist  -> Draw("hist same");
      qqh.hist  -> Draw("hist same");
+     zh.hist   -> Draw("hist same");
+     wh.hist   -> Draw("hist same");
    }
    canv1     -> Update();
 
    // Draw legend + other things
    TLegend *leg = 0;
-   if( data.hist->GetMaximumBin() <= data.hist->GetNbinsX()/2.) leg = new TLegend(0.62,0.45,0.9,0.9);
-   else leg = new TLegend(0.2,0.45,0.45,0.9);
+   leg = new TLegend(0.20,0.67,0.80,0.89);
    SetLegendStyle(leg);
+   leg->SetNColumns(3);
    if( category.Contains("unrolled") ){
      leg = new TLegend(0.2,0.7,0.8,0.9);
      SetLegendStyle(leg);
@@ -258,17 +268,6 @@ void plot_1d_var(
    if(era=="2016") CMS_lumi(upper,4,33);
    else if(era=="2017") CMS_lumi(upper,5,33);
    TString category_name = category;
-   ztt.legend_entry  = "Z#rightarrow #tau#tau (MC)";
-   emb.legend_entry  = "Z#rightarrow #tau#tau (emb.)";
-   zl.legend_entry   = "Z#rightarrow ll";
-   w.legend_entry    = "W";
-   vv.legend_entry   = "VV";
-   st.legend_entry   = "ST";
-   tt.legend_entry   = "t#bar{t}";
-   qcd.legend_entry  = "QCD";
-   data.legend_entry = "Data";
-   qqh.legend_entry  = "qqH";
-   ggh.legend_entry  = "ggH";
 
    if(category == "em_inclusive" ) category_name = "incl.";
    else if(category == "em_ztt")   category_name = "Z#rightarrow #tau#tau";
