@@ -5,7 +5,10 @@ import ROOT as R
 from joblib import Parallel, delayed
 import multiprocessing
 
-config_name = 'config_2016.cfg'
+parser = argparse.ArgumentParser()
+parser.add_argument('config', help='please specify config name')
+args = parser.parse_args()
+config_name = args.config
 
 # Find settings in config
 print ''
@@ -38,7 +41,7 @@ print ''
 def make_category_plots(category):
     # Plot log and non-log
     cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + str(category) + "\\\",true,true,\\\"output/" + era + "/\\\",\\\"" + era + "\\\"," + str(embedded)+")\""
-    #os.system(cmd)
+    os.system(cmd)
     cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + category + "\\\", true , false , \\\"output/" + era + "/\\\",\\\"" + era + "\\\"," + str(embedded)+")\""
     os.system(cmd)
 
@@ -52,19 +55,19 @@ os.system(cmd)
 # Make pre-fit plots
 print '-----------------------------------------------------------------------'
 print "\nMake pre-fit plots \n"
-for category in category_list:
-    make_category_plots(category)
-#num_cores=2
-#Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
+#for category in category_list:
+#    make_category_plots(category)
+num_cores=20
+Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
 
 # Print confusione matrices
 print '-----------------------------------------------------------------------'
 print "\nPlot confusion matrices \n"
-#if embedded_c == 'true':
-#    cmd = "python ../../Plotting/Confusion.py -e \""+era+"\" -emb "
-#else:
-#    cmd = "python ../../Plotting/Confusion.py -e \""+era+"\""
-#os.system(cmd)
+if embedded_c == 'true':
+    cmd = "python ../../Plotting/Confusion.py -e \""+era+"\" -emb "
+else:
+    cmd = "python ../../Plotting/Confusion.py -e \""+era+"\""
+os.system(cmd)
 
 # Measure stage0/inclusive signal strength constraint
 print '-----------------------------------------------------------------------'

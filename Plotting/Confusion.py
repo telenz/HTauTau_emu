@@ -33,23 +33,23 @@ def main():
 
     for TDir in TDirs: 
         folder = rootfile.Get( TDir )
-        hists = [ hist.GetName() for hist in folder.GetListOfKeys() if not "_13TeV" in hist.GetName()]
+        hists = [ hist.GetName() for hist in folder.GetListOfKeys() if not "Up" in hist.GetName() and not "Down" in hist.GetName()]
         for hist in hists: 
             tempdict.update({hist:folder.Get(hist).Integral()})
 
         confusion[TDirs.index(TDir)] = compressDict(tempdict,classes,'em',embedded)
 
     # plotting confusion matrices
-    print "Writing confusion matrices to output/2016/figures/"
-    plot_confusion(confusion,classes,"output/2016/figures/em_confusion.pdf", "std")
+    print "Writing confusion matrices to output/"+era+"/figures/"
+    plot_confusion(confusion,classes,"output/"+era+"/figures/em_confusion.pdf", "std")
 
     conf_pur1, conf_pur2 = get_purity_representations(confusion)
-    plot_confusion(conf_pur1, classes, "output/2016/figures/em_confusion_pur1.pdf")
-    plot_confusion(conf_pur2, classes, "output/2016/figures/em_confusion_pur2.pdf", "pur")
+    plot_confusion(conf_pur1, classes, "output/"+era+"/figures/em_confusion_pur1.pdf")
+    plot_confusion(conf_pur2, classes, "output/"+era+"/figures/em_confusion_pur2.pdf", "pur")
 
     conf_eff1, conf_eff2 = get_efficiency_representations(confusion)
-    plot_confusion(conf_eff1, classes, "output/2016/figures/em_confusion_eff1.pdf")
-    plot_confusion(conf_eff2, classes, "output/2016/figures/em_confusion_eff2.pdf", "eff")
+    plot_confusion(conf_eff1, classes, "output/"+era+"/figures/em_confusion_eff1.pdf")
+    plot_confusion(conf_eff2, classes, "output/"+era+"/figures/em_confusion_eff2.pdf", "eff")
 
     rootfile.Close()
 
@@ -63,7 +63,7 @@ def compressDict(tempdict,classes,channel,embedded):
     tmp[classes.index('{0}_qqh'.format(channel))]=tempdict['qqH125']
     tmp[classes.index('{0}_ss'.format(channel))]=tempdict['QCD']
     if embedded == True :
-        tmp[classes.index('{0}_emb'.format(channel))]=tempdict['EMB']
+        tmp[classes.index('{0}_ztt'.format(channel))]=tempdict['EMB']
     else :
         tmp[classes.index('{0}_ztt'.format(channel))]=tempdict['ZTT']
     tmp[classes.index('{0}_ggh'.format(channel))]=tempdict['ggH125']

@@ -42,6 +42,8 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2017;
     samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2017;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2017;
+    samples_map["NOMINAL_ntuple_ZH_"        + channel] = ZHToTauTau_2017;
+    samples_map["NOMINAL_ntuple_WH_"        + channel] = WHToTauTau_2017;
     samples_map["NOMINAL_ntuple_Embedded_"  + channel] = Embedded_2017;
     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
 
@@ -62,8 +64,9 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map["NOMINAL_ntuple_Diboson_"   + channel] = Diboson_2016;
     samples_map["NOMINAL_ntuple_ggH_"       + channel] = GluGluHToTauTau_2016;
     samples_map["NOMINAL_ntuple_VBFH_"      + channel] = VBFHToTauTau_2016;
+    samples_map["NOMINAL_ntuple_ZH_"        + channel] = ZHToTauTau_2016;
+    samples_map["NOMINAL_ntuple_WH_"        + channel] = WHToTauTau_2016;
     samples_map["NOMINAL_ntuple_Embedded_"  + channel] = Embedded_2016;
-    //  input_dir="/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/2016_legacy/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples_new_round_final/ntuples_v3/";
     input_dir="/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/2016_legacy/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/ntuples_v4/";
   }
 
@@ -89,7 +92,7 @@ void create_dnn_ntuples( TString era = "2017" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
-  TString output_dir = "NTuples_" + era + "_correct_unc_v1";
+  TString output_dir = "NTuples_" + era + "_vh_sample";
   gSystem -> Exec("mkdir " + output_dir);
 
   // Loop over all samples

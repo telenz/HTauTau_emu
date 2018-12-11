@@ -3,7 +3,8 @@
 # Script which executes a gof test for a given variable $var
 
 # Pleas specify the following input variables
-#ERA=2016
+#ERA=2017
+#EMB=1
 DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
