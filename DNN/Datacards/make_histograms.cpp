@@ -90,6 +90,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   Sample EMB("EMB");
   Sample ggH("ggH125");
   Sample qqH("qqH125");
+  Sample ZH("ZH125");
+  Sample WH("WH125");
   Sample ggH_0J("ggH_0J125");
   Sample ggH_1J_PTH_0_60("ggH_1J_PTH_0_60125");
   Sample ggH_1J_PTH_60_120("ggH_1J_PTH_60_120125");
@@ -139,6 +141,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     EMB.filename    = "NOMINAL_ntuple_Embedded_em.root" ;
     ggH.filename    = "NOMINAL_ntuple_ggH_em.root" ;
     qqH.filename    = "NOMINAL_ntuple_VBFH_em.root" ;
+    ZH.filename     = "NOMINAL_ntuple_ZH_em.root" ;
+    WH.filename     = "NOMINAL_ntuple_WH_em.root" ;
   }
   else{
     Data.filename   = "em-NOMINAL_ntuple_Data.root" ;
@@ -154,6 +158,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     EMB.filename    = "em-NOMINAL_ntuple_EMB.root" ;
     ggH.filename    = "em-NOMINAL_ntuple_ggH125.root" ;
     qqH.filename    = "em-NOMINAL_ntuple_qqH125.root" ;
+    ZH.filename    = "em-NOMINAL_ntuple_ZH125.root" ;
+    WH.filename    = "em-NOMINAL_ntuple_WH125.root" ;
     ggH_0J.filename = "em-NOMINAL_ntuple_ggH125.root" ;
     ggH_1J_PTH_0_60.filename = "em-NOMINAL_ntuple_ggH125.root" ;
     ggH_1J_PTH_60_120.filename = "em-NOMINAL_ntuple_ggH125.root" ;
@@ -187,6 +193,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 		  { "9_ZTT"   , ZTT } ,
 		  { "10_ggH125" , ggH },
 		  { "11_qqH125" , qqH }
+		  { "12_ZH125"  , ZH },
+		  { "13_WH125"  , WH }
     };
   }
   else{
@@ -218,6 +226,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 		  { "25_qqH_REST", qqH_REST },
 		  { "26_qqH_PTJET1_GT200", qqH_PTJET1_GT200 },
 		  { "27_qqH_VH2JET", qqH_VH2JET }
+		  { "28_ZH125" , ZH },
+		  { "29_WH125" , WH },
     };
   }
 
@@ -405,7 +415,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       }
 
 
-      if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name.Contains("ggH") || smpl.second.name.Contains("qqH")){
+      if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name.Contains("125")){
 	// 9.) Recoil scale/resolution uncertainties
        	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_metUp"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
        	smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_metDown", cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleDown");
@@ -607,7 +617,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       // Make QCD estimation
       if( smpl.second.name == "QCD" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
-      else if( !smpl.second.name.Contains("ggH") && !smpl.second.name.Contains("qqH") && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
+      else if( !smpl.second.name.Contains("125") && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
 
       // Loop over systematic uncertainties
       for(auto &sys : smpl.second.uncertainties){
@@ -654,7 +664,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	if( !sys.first.Contains("qcd") ) continue;
 
 	if( smpl.second.name == "QCD" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , +1);
-	else if( !smpl.second.name.Contains("ggH") && !smpl.second.name.Contains("qqH") && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && sys.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , -1);
+	else if( !smpl.second.name.Contains("125") && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && sys.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , -1);
 
       } // end of loop over sys uncertainties
       in_file->Close();
