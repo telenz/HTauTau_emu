@@ -158,8 +158,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     EMB.filename    = "em-NOMINAL_ntuple_EMB.root" ;
     ggH.filename    = "em-NOMINAL_ntuple_ggH125.root" ;
     qqH.filename    = "em-NOMINAL_ntuple_qqH125.root" ;
-    ZH.filename    = "em-NOMINAL_ntuple_ZH125.root" ;
-    WH.filename    = "em-NOMINAL_ntuple_WH125.root" ;
+    ZH.filename    = "em-NOMINAL_ntuple_zh125.root" ;
+    WH.filename    = "em-NOMINAL_ntuple_wh125.root" ;
     ggH_0J.filename = "em-NOMINAL_ntuple_ggH125.root" ;
     ggH_1J_PTH_0_60.filename = "em-NOMINAL_ntuple_ggH125.root" ;
     ggH_1J_PTH_60_120.filename = "em-NOMINAL_ntuple_ggH125.root" ;
@@ -192,7 +192,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 		  { "8_ST"    , ST },
 		  { "9_ZTT"   , ZTT } ,
 		  { "10_ggH125" , ggH },
-		  { "11_qqH125" , qqH }
+		  { "11_qqH125" , qqH },
 		  { "12_ZH125"  , ZH },
 		  { "13_WH125"  , WH }
     };
@@ -225,7 +225,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 		  { "24_qqH_VBFTOPO_JET3", qqH_VBFTOPO_JET3 },
 		  { "25_qqH_REST", qqH_REST },
 		  { "26_qqH_PTJET1_GT200", qqH_PTJET1_GT200 },
-		  { "27_qqH_VH2JET", qqH_VH2JET }
+		  { "27_qqH_VH2JET", qqH_VH2JET },
 		  { "28_ZH125" , ZH },
 		  { "29_WH125" , WH },
     };
