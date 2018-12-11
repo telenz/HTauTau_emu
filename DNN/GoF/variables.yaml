@@ -155,57 +155,65 @@ selected_variables:
             - dijetpt
             - met
         em:
-            - dijetpt          
+            - dijetpt
+            - dphi_emet
+            - dphi_mumet
+            - dr_tt
+            - dzeta
+            - iso_2 
+            - jdeta
+            - jeta_1
+            - jeta_2
+            - jpt_1
+            - jpt_2 
+            - mTdileptonMET
+            - mTemu
+            - m_sv 
+            - m_vis 
+            - mjj   
+            - mt_2
+            - mt_sv
+            - mtmax  
+            - njets
+            - pt_2  
+            - pt_sv 
+            - pt_tt  
+            - pt_vis  
+            - pzetamiss
+            - pzetavis
+    2017:
+        em:
+            - dijetpt        
             - dphi_emet        
             - dphi_mumet       
             - dr_tt            
             - dzeta            
+            - iso_1            
             - iso_2            
             - jdeta            
             - jeta_1           
             - jeta_2           
             - jpt_1            
             - jpt_2            
-            - mTdileptonMET       
-            - mTemu            
-            - m_sv             
-            - m_vis            
-            - mjj              
-            - mt_2             
-            - mt_sv            
-            - mtmax            
-            - njets            
-            - pt_2             
-            - pt_sv            
-            - pt_tt            
-            - pt_vis           
-            - pzetamiss        
-            - pzetavis        
-    2017:
-        em:
-            - dijetpt     
-            - dphi_emet       
-            - dphi_mumet      
-            - dr_tt           
-            - dzeta           
-            - iso_1           
-            - iso_2           
-            - jdeta           
-            - jeta_2          
-            - jpt_1           
-            - jpt_2           
             - mTdileptonMET     
-            - mTemu           
-            - met             
-            - mjj             
-            - mt_2            
-            - mtmax           
-            - njets                
-            - pt_tt           
-            - pt_ttjj         
-            - pt_vis          
-            - pzetamiss       
-            - pzetavis   
+            - mTemu          
+            - m_sv                 
+            - met            
+            - mjj            
+            - mt_1           
+            - mt_2           
+            - mt_sv          
+            - mtmax          
+            - njets         
+            - pt_2           
+            - pt_sv          
+            - pt_tt          
+            - pt_ttjj        
+            - pt_vis         
+            - pzetamiss      
+            - pzetavis       
+                    
+                              
         mt:
             # pt_1
             - pt_2
