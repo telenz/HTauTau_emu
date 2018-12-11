@@ -35,7 +35,8 @@ void SetPixelStyle()
   TStyle *HttStyle = new TStyle("Htt-Style","The Perfect Style for Plots ;-)");
   gStyle = HttStyle;
 
-  TGaxis::SetMaxDigits(4);
+  TGaxis::SetMaxDigits(3);
+  TGaxis::SetExponentOffset(-0.08, 0.02, "y"); // X and Y offset for Y axis
 
   // Canvas
   HttStyle->SetCanvasColor     (0);
