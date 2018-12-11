@@ -20,6 +20,7 @@ else :
 
 # some settings
 output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_2d/"
+#output_directory = "/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_2d/"
 
 config_filename_in = "config_for_gof_2016_with_placeholders_2d.cfg"
 if era == "2017" :
@@ -27,10 +28,7 @@ if era == "2017" :
     config_filename_in = "config_for_gof_2017_with_placeholders_2d.cfg"
 
 variable_list = [ "m_sv",
-                  "pt_sv",
                   "mt_sv",
-                  "m_vis",
-                  "pt_1",
                   "pt_2",
                   "jpt_1",
                   "jpt_2",
@@ -57,6 +55,7 @@ variable_list = [ "m_sv",
                   "pt_ttjj",
                   "dijetpt",
                   "pt_vis",
+                  "pt_sv"
                   ]
 
 #variable_list = [ "m_vis", "m_sv" ]
