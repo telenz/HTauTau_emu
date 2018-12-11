@@ -10,9 +10,11 @@ SEED=1234
 MASS=125
 CAT="ML"
 BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/Datacards/output/
+#BASE_PATH=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/Datacards/output/
 INPUT_FOLDER=${ERA}
 OUTPUT_FOLDER=2016_smhtt
 CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/CombineHarvester/2017/CMSSW_7_4_7/src
+#CMSSW_LOCATION=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CombineHarvester/2017/CMSSW_7_4_7/src
 CURRENT_PATH=$(pwd)
 
 

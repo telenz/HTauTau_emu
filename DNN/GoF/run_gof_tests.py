@@ -20,6 +20,7 @@ else :
 
 # some settings
 output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
+#output_directory = "/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
 
 config_filename_in = "config_for_gof_2016_with_placeholders.cfg"
 if era == "2017" :
