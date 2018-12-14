@@ -21,7 +21,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 labeldict = {
-    'pt_1' : '$p_{T}(\\$)',
+    'pt_1' : '$p_{T}(\\tau_1$)',
     'pt_2' : '$p_{T}(\\tau_2)$',
     'iso_1' : 'iso($\\tau_1$)',
     'iso_2' : 'iso($\\tau_2$)',
@@ -32,7 +32,7 @@ labeldict = {
     'mt_1' : '$m_{T}(\\tau_1,MET)$',
     'mt_2' : '$m_{T}(\\tau_2,MET)$',
     'pt_vis' : 'visible $p_T(\\tau\\tau)$',
-    'pt_tt' : '$p_T(\\tau\\tau)$',
+    'pt_tt' : '$p_{T}(\\tau\\tau)$',
     'mjj' : 'di-jet mass',
     'jdeta' : '$\Delta\eta_{jj}$',
     'm_vis' : 'visible di-$\\tau$ mass',
@@ -49,7 +49,7 @@ labeldict = {
     'pt_sv' : 'di-$\\tau$ $p_T$',
     'mt_sv' : 'di-$\\tau$ transverse mass',
     'mtmax' : 'max. ($m_{T}(\\tau_1,MET)$, $m_{T}(\\tau_2,MET)$)',
-    'pt_ttjj' : '$p_T(\\tau\\tau jj)$',
+    'pt_ttjj' : '$p_{T}(\\tau\\tau jj)$',
     'pzetamiss' : '$P_{\zeta}$',
     'pzetavis' : '$P_{\zeta}^{vis}$'
 }
