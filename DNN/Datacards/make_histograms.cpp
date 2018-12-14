@@ -260,8 +260,14 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["1_QCD"].weightString    = "1*";
     cat.second.sample_list["1_QCD"].weightStringSS  = "qcdweight*";
     cat.second.sample_list["1_QCD"].cutString       = "1==2";  // don't fill anything in this histogram should remain empty
-    cat.second.sample_list["2_ZL"].cutString       += "&&!isZTT";
-    cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTT";
+    if(use_embedded){
+    cat.second.sample_list["2_ZL"].cutString       += "&&!isZTTEM";
+    cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTTEM";
+    }
+    else{
+       cat.second.sample_list["2_ZL"].cutString       += "&&!isZTT";
+       cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTT";
+    }
     cat.second.sample_list["2_ZL"].weightString    += "zptmassweight*";
     cat.second.sample_list["2_ZL"].weightStringSS  += "zptmassweight*";
     cat.second.sample_list["4_TT"].weightString    += "topptweight*prefiring_weight*";
