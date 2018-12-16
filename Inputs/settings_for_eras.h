@@ -10,13 +10,17 @@ const vector<TString> DYJets_2017          = { "DY1JetsToLL_M-50_TuneCP5_13TeV-m
 					       "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-					       "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" };
+                      "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8", 
+                      "EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8", 
+                      "EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8"};
 const vector<TString> WJets_2017           = { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-					       "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8" };
+                      "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+                      "EWKWMinus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8" ,
+                      "EWKWPlus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8"};
 const vector<TString> TTbar_2017           = { "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8" ,
 					       "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8" ,
 					       "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8" };
@@ -56,12 +60,16 @@ const map<TString, double> xsec_map_2017 = {
   { "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 304.4*1.079 },
   { "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 111.5*1.079 },
   { "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 44.03*1.079 },
+  { "EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8" , 4.321 },
+  { "EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8" , 10.66 },
   { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 52940.0*1.162 },
   { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 8104.0*1.162 },
   { "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 2793.0*1.162 },
   { "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 992.5*1.162 },
   { "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 544.3*1.162 },
   { "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8"    , 464.4 },
+  { "EWKWMinus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8" , 23.24 },
+  { "EWKWPlus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8" , 29.59 },
   { "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8"        , 88.29 },
   { "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8"     , 377.96 },
   { "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8" , 365.35 },

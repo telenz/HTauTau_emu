@@ -160,8 +160,14 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["1_QCD"].weightString    = "1*";
     cat.second.sample_list["1_QCD"].weightStringSS  = "qcdweight*";
     cat.second.sample_list["1_QCD"].cutString       = "1==2";  // don't fill anything in this histogram should remain empty
+    if (!use_embedded){
     cat.second.sample_list["2_ZL"].cutString       += "&&!isZTT";
     cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTT";
+    }
+    else{
+       cat.second.sample_list["2_ZL"].cutString       += "&&!isZTTEM";
+       cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTTEM";
+    }
     cat.second.sample_list["2_ZL"].weightString    += "zptmassweight*";
     cat.second.sample_list["2_ZL"].weightStringSS  += "zptmassweight*";
     cat.second.sample_list["4_TT"].weightString    += "topptweight*prefiring_weight*";
@@ -190,6 +196,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     else{
       cat.second.sample_list["9_ZTT"].cutString      += "&&isZTT";
       cat.second.sample_list["9_ZTT"].cutStringSS    += "&&isZTT";
+      
       cat.second.sample_list["9_ZTT"].weightString   += "zptmassweight*";
       cat.second.sample_list["9_ZTT"].weightStringSS += "zptmassweight*";
     }
@@ -302,8 +309,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       // 11.) DY shape
       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" ){
-	smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShapeUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
-	smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShapeDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
+	smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShape_Run"+era+"Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
+	smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape_Run"+era+"Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
       }
 
       // 12.) ggh reweighting
