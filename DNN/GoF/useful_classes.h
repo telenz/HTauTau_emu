@@ -234,17 +234,31 @@ std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subr
   // 1.) Find 0.01 and 0.99 percentiles to get the range of the histogram
   int count_events = 0;
   float integral_x = hist_aux_x->GetSumOfWeights();
+  bool range_low_not_set = true;
   for(int ibin=1; ibin<hist_aux_x->GetNbinsX()+1; ibin++){
     count_events += hist_aux_x->GetBinContent(ibin);
-    if(count_events>=0.01*integral_x) range_x_low  = hist_aux_x->GetBinCenter(ibin);
-    if(count_events>=0.99*integral_x) range_x_high = hist_aux_x->GetBinCenter(ibin);
+    if(count_events>=0.01*integral_x&&range_low_not_set){
+      range_x_low  = hist_aux_x->GetBinCenter(ibin);
+      range_low_not_set = false;
+    }
+    if(count_events>=0.99*integral_x){
+      range_x_high = hist_aux_x->GetBinCenter(ibin);
+      break;
+    }
   }
   count_events =0;
   float integral_y = hist_aux_y->GetSumOfWeights();
+  range_low_not_set = true;
   for(int ibin=1; ibin<hist_aux_y->GetNbinsX()+1; ibin++){
     count_events += hist_aux_y->GetBinContent(ibin);
-    if(count_events>=0.01*integral_y) range_y_low  = hist_aux_y->GetBinCenter(ibin);
-    if(count_events>=0.99*integral_y) range_y_high = hist_aux_y->GetBinCenter(ibin);
+    if(count_events>=0.01*integral_y &&range_low_not_set){
+      range_y_low  = hist_aux_y->GetBinCenter(ibin);
+      range_low_not_set = false;
+    }
+    if(count_events>=0.99*integral_y){
+      range_y_high = hist_aux_y->GetBinCenter(ibin);
+      break;
+    }
   }
   cout<<"histo x range starts at = "<<range_x_low<<endl;
   cout<<"histo x range ends at   = "<<range_x_high<<endl;
@@ -282,7 +296,7 @@ std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subr
       idx_bins +=1;
     }
   }
-  return std::make_pair(cat.binning_2d_x, cat.binning_2d_y);
+  return std::make_pair(binning_2d_x, binning_2d_y);
 }
 
 #endif
