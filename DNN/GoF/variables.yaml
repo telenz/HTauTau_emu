@@ -82,7 +82,7 @@ selected_variables:
             - mtmax
             - njets
             #- pt_1
-            - pt_2
+            #- pt_2
             - pt_sv
             - pt_tt
             - pt_ttjj
