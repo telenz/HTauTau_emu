@@ -1,12 +1,12 @@
-#include "useful_classes.h"
-#include "systematic_uncertainties.h"
-#include "Unfold.C"
-#include "HttStylesNew.cc"
-#include "Config.cc"
-#include "TROOT.h"
+#include "bin/useful_classes.h"
+#include "bin/systematic_uncertainties.h"
+#include "bin/Unfold.C"
+#include "bin/HttStylesNew.cc"
+#include "bin/Config.cc"
 #include <algorithm>
 #include <typeinfo>
 #include "TSystem.h"
+#include "TROOT.h"
 
 using namespace std;
 

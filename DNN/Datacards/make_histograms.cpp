@@ -1,12 +1,12 @@
-#include "../GoF/useful_classes.h"
-#include "../GoF/systematic_uncertainties.h"
-#include "../GoF/Config.cc"
-#include "../GoF/Unfold.C"
-#include "../GoF/HttStylesNew.cc"
-#include "TROOT.h"
-#include "TSystem.h"
+#include "../GoF/bin/useful_classes.h"
+#include "../GoF/bin/systematic_uncertainties.h"
+#include "../GoF/bin/Config.cc"
+#include "../GoF/bin/Unfold.C"
+#include "../GoF/bin/HttStylesNew.cc"
 #include <algorithm>
 #include <typeinfo>
+#include "TSystem.h"
+#include "TROOT.h"
 
 using namespace std;
 
