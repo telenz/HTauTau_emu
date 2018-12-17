@@ -466,13 +466,12 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     } // end of loop over samples
 
     // Calculate embedded uncertainty
-    if(use_embedded){
-      cat.second.sample_list["9_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(cat.second.sample_list["5_TTcont"].hist_1d , 0.1);
-      cat.second.sample_list["9_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(cat.second.sample_list["5_TTcont"].hist_1d , -0.1);
-      cat.second.sample_list["9_EMB"].uncertainties["ttContEmbUp"].hist_1d   -> Add(cat.second.sample_list["7_VVcont"].hist_1d , 0.1);
-      cat.second.sample_list["9_EMB"].uncertainties["ttContEmbDown"].hist_1d -> Add(cat.second.sample_list["7_VVcont"].hist_1d , -0.1);
+    if(use_embedded && cat.second.sample_list.at("9_EMB").uncertainties.find("ttContEmbUp") != cat.second.sample_list.at("9_EMB").uncertainties.end()){
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbUp").hist_1d   -> Add(cat.second.sample_list.at("5_TTcont").hist_1d , 0.1);
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbDown").hist_1d -> Add(cat.second.sample_list.at("5_TTcont").hist_1d , -0.1);
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbUp").hist_1d   -> Add(cat.second.sample_list.at("7_VVcont").hist_1d , 0.1);
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbDown").hist_1d -> Add(cat.second.sample_list.at("7_VVcont").hist_1d , -0.1);
     }
-
     //***********************************************************************************************
     // Blinding
     double threshold = 0.5;
