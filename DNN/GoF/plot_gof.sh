@@ -4,5 +4,5 @@
 VARIABLES=variables.yaml
 
 
-python plot_gof.py $VARIABLES '/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/GoF/output/2017/var_2d' 'em' ${1}
+python plot_gof.py $VARIABLES 'em' ${1}
 
