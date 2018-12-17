@@ -48,10 +48,6 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     if(is_dnn_prediction) category_map.at(cat_name).class_nr = cfg.get<int>(cat_name+"_class_nr");
   }
 
-  double min_percentile = 0.01;
-  double max_percentile = 0.99;
-  vector<double> percentile_ranges; // = { 0.01 , 0.10 , 0.20 , 0.30 , 0.40 , 0.50 , 0.60 , 0.70 , 0.80 , 0.90 , 0.99 };
-  for(int i=0; i<=10; i++) percentile_ranges.push_back(0.01+i*0.098);
   //************************************************************************************************
   // Define some common weights and cuts
 
@@ -265,8 +261,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTTEM";
     }
     else{
-       cat.second.sample_list["2_ZL"].cutString       += "&&!isZTT";
-       cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTT";
+       cat.second.sample_list["2_ZL"].cutString       += "&&!isZTTEM";
+       cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTTEM";
     }
     cat.second.sample_list["2_ZL"].weightString    += "zptmassweight*";
     cat.second.sample_list["2_ZL"].weightStringSS  += "zptmassweight*";
@@ -303,8 +299,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       cat.second.sample_list["7_VVcont"].cutStringSS  += "&& veto_embedded>0.5";
     }
     else{
-      cat.second.sample_list["9_ZTT"].cutString      += "&&isZTT";
-      cat.second.sample_list["9_ZTT"].cutStringSS    += "&&isZTT";
+      cat.second.sample_list["9_ZTT"].cutString      += "&&isZTTEM";
+      cat.second.sample_list["9_ZTT"].cutStringSS    += "&&isZTTEM";
       cat.second.sample_list["9_ZTT"].weightString   += "zptmassweight*";
       cat.second.sample_list["9_ZTT"].weightStringSS += "zptmassweight*";
     }
