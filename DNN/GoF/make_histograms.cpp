@@ -86,6 +86,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   Sample EMB("EMB");
   Sample ggH("ggH125");
   Sample qqH("qqH125");
+  Sample ZH("ZH125");
+  Sample WH("WH125");
 
   if(!is_dnn_prediction){
     Data.filename   = "NOMINAL_ntuple_MuonEG_em.root";
@@ -101,6 +103,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     EMB.filename    = "NOMINAL_ntuple_Embedded_em.root" ;
     ggH.filename    = "NOMINAL_ntuple_ggH_em.root" ;
     qqH.filename    = "NOMINAL_ntuple_VBFH_em.root" ;
+    ZH.filename     = "NOMINAL_ntuple_ZH_em.root" ;
+    WH.filename     = "NOMINAL_ntuple_WH_em.root" ;
   }
   else{
     Data.filename   = "em-NOMINAL_ntuple_Data.root" ;
@@ -129,7 +133,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 				     { "8_ST"   , ST } ,
 				     { "9_ZTT"  , ZTT } ,
 				     { "10_ggH125" , ggH },
-				     { "11_qqH125" , qqH }
+				     { "11_qqH125" , qqH },
+				     { "12_ZH125"  , ZH },
+				     { "13_WH125"  , WH }
   };
 
   if(use_embedded){
@@ -161,8 +167,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["1_QCD"].weightStringSS  = "qcdweight*";
     cat.second.sample_list["1_QCD"].cutString       = "1==2";  // don't fill anything in this histogram should remain empty
     if (!use_embedded){
-    cat.second.sample_list["2_ZL"].cutString       += "&&!isZTT";
-    cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTT";
+    cat.second.sample_list["2_ZL"].cutString       += "&&!isZTTEM";
+    cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTTEM";
     }
     else{
        cat.second.sample_list["2_ZL"].cutString       += "&&!isZTTEM";
@@ -194,8 +200,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       cat.second.sample_list["7_VVcont"].cutStringSS  += "&& veto_embedded>0.5";
     }
     else{
-      cat.second.sample_list["9_ZTT"].cutString      += "&&isZTT";
-      cat.second.sample_list["9_ZTT"].cutStringSS    += "&&isZTT";
+      cat.second.sample_list["9_ZTT"].cutString      += "&&isZTTEM";
+      cat.second.sample_list["9_ZTT"].cutStringSS    += "&&isZTTEM";
       
       cat.second.sample_list["9_ZTT"].weightString   += "zptmassweight*";
       cat.second.sample_list["9_ZTT"].weightStringSS += "zptmassweight*";
@@ -290,7 +296,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       }
 
       // 8.) Recoil scale/resolution uncertainties
-      if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name == "ggH125" || smpl.second.name == "qqH125"){
+      if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name.Contains("125")){
 	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_metUp"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
 	smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_metDown", cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleDown");
 	smpl.second = create_systematic_uncertainty("recoilresoUp"  , "_CMS_htt_boson_reso_metUp"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilresoUp");
@@ -417,7 +423,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       // Make QCD estimation
       if( smpl.second.name == "QCD" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
-      else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
+      else if( !smpl.second.name.Contains("125") && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
 
       // Loop over systematic uncertainties
       for(auto &sys : smpl.second.uncertainties){
@@ -454,7 +460,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	if( !sys.first.Contains("qcd") ) continue;
 
 	if( smpl.second.name == "QCD" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , +1);
-	else if( smpl.second.name != "ggH125" && smpl.second.name != "qqH125" && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && sys.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , -1);;
+	else if( !smpl.second.name.Contains("125")  && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && sys.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , -1);;
 
       } // end of loop over sys uncertainties
     } // end of loop over samples
