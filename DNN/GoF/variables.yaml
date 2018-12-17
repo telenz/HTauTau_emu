@@ -30,9 +30,9 @@ variables:
 
 selected_variables:
     2016:
-        em:
-	    - dijetpt
-	    - dphi_emet
+        em: 
+            - dijetpt
+            - dphi_emet
             - dphi_mumet
             - dr_tt
             - dzeta
@@ -56,12 +56,12 @@ selected_variables:
             - pt_2
             - pt_sv
             - pt_tt
-	    #- pt_ttjj
-	    - pt_vis
+            #- pt_ttjj
+            - pt_vis
     2017:
         em:
-	    - dijetpt
-	    - dphi_emet
+            - dijetpt
+            - dphi_emet
             - dphi_mumet
             - dr_tt
             - dzeta
@@ -85,5 +85,5 @@ selected_variables:
             - pt_2
             - pt_sv
             - pt_tt
-	    - pt_ttjj
-	    - pt_vis
+            - pt_ttjj
+            - pt_vis
