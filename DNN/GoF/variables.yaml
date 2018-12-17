@@ -1,91 +1,89 @@
 variables:
-- dijetpt    
-- dphi_emet  
-- dphi_mumet 
-- dr_tt      
-- dzeta      
-#- iso_1      
-#- iso_2      
-- jdeta      
-- jeta_1     
-- jeta_2     
-- jpt_1      
-- jpt_2      
-- mTdileptonMET    
-- mTemu           
-- m_sv            
-- m_vis           
-- met             
-- mjj             
-- mt_1            
-- mt_2            
-- mt_sv           
-- mtmax           
-- njets           
-- pt_1            
-- pt_2            
-- pt_sv           
-- pt_tt           
-- pt_ttjj         
-- pt_vis          
-#- pzetamiss       
-#- pzetavis    
+- dijetpt
+- dphi_emet
+- dphi_mumet
+- dr_tt
+- dzeta
+- jdeta
+- jeta_1
+- jeta_2
+- jpt_1
+- jpt_2
+- mTdileptonMET
+- mTemu
+- m_sv
+- m_vis
+- met
+- mjj
+- mt_1
+- mt_2
+- mt_sv
+- mtmax
+- njets
+- pt_1
+- pt_2
+- pt_sv
+- pt_tt
+- pt_ttjj
+- pt_vis
 
 
 selected_variables:
     2016:
         em:
-            - dijetpt          
-            - dphi_emet        
-            - dphi_mumet       
-            - dr_tt            
-            - dzeta            
-            #- iso_2            
-            - jdeta            
-            - jeta_1           
-            - jeta_2           
-            - jpt_1            
-            - jpt_2            
-            - mTdileptonMET       
-            - mTemu            
-            - m_sv             
-            - m_vis            
-            - mjj              
-            - mt_2             
-            - mt_sv            
-            - mtmax            
-            - njets            
-            - pt_2             
-            - pt_sv            
-            - pt_tt            
-            - pt_vis           
-            #- pzetamiss        
-            #- pzetavis        
+	    - dijetpt
+	    - dphi_emet
+            - dphi_mumet
+            - dr_tt
+            - dzeta
+            - jdeta
+            - jeta_1
+            - jeta_2
+            - jpt_1
+            - jpt_2
+            - mTdileptonMET
+            - mTemu
+            - m_sv
+            - m_vis
+            #- met
+            - mjj
+            #- mt_1
+            - mt_2
+            - mt_sv
+            - mtmax
+            - njets
+            #- pt_1
+            - pt_2
+            - pt_sv
+            - pt_tt
+	    #- pt_ttjj
+	    - pt_vis
     2017:
         em:
-            - dijetpt          
-            - dphi_mumet       
-            - dphi_emet
-            - dr_tt            
-            - dzeta            
-            - jdeta            
-            - jeta_1           
-            - jeta_2           
-            - jpt_1            
-            - jpt_2            
-            - mTdileptonMET       
-            - mTemu            
+	    - dijetpt
+	    - dphi_emet
+            - dphi_mumet
+            - dr_tt
+            - dzeta
+            - jdeta
+            - jeta_1
+            - jeta_2
+            - jpt_1
+            - jpt_2
+            - mTdileptonMET
+            - mTemu
             - m_sv
+            #- m_vis
             - met
-            - mjj              
+            - mjj
             #- mt_1
-            - mt_2             
-            - mt_sv            
-            - mtmax            
-            - njets            
-            - pt_2             
-            - pt_sv            
+            - mt_2
+            - mt_sv
+            - mtmax
+            - njets
+            #- pt_1
+            - pt_2
+            - pt_sv
             - pt_tt
-            - pt_ttjj
-            - pt_vis
-  
+	    - pt_ttjj
+	    - pt_vis
