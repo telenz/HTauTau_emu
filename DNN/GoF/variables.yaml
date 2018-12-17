@@ -65,6 +65,7 @@ selected_variables:
         em:
             - dijetpt          
             - dphi_mumet       
+            - dphi_emet
             - dr_tt            
             - dzeta            
             - jdeta            
@@ -74,9 +75,10 @@ selected_variables:
             - jpt_2            
             - mTdileptonMET       
             - mTemu            
-            - m_sv             
+            - m_sv
+            - met
             - mjj              
-            - mt_1
+            #- mt_1
             - mt_2             
             - mt_sv            
             - mtmax            
@@ -86,4 +88,4 @@ selected_variables:
             - pt_tt
             - pt_ttjj
             - pt_vis
-            - met           
+  
