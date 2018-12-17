@@ -1,3 +1,4 @@
+[?1034havailable number of cores = 32
 m_sv:m_sv
 m_sv:pt_sv
 m_sv:mt_sv
@@ -14,8 +15,6 @@ m_sv:mjj
 m_sv:met
 m_sv:dzeta
 m_sv:mTemu
-m_sv:iso_1
-m_sv:iso_2
 m_sv:mtmax
 m_sv:dphi_mumet
 m_sv:dphi_emet
@@ -42,8 +41,6 @@ pt_sv:mjj
 pt_sv:met
 pt_sv:dzeta
 pt_sv:mTemu
-pt_sv:iso_1
-pt_sv:iso_2
 pt_sv:mtmax
 pt_sv:dphi_mumet
 pt_sv:dphi_emet
@@ -69,8 +66,6 @@ mt_sv:mjj
 mt_sv:met
 mt_sv:dzeta
 mt_sv:mTemu
-mt_sv:iso_1
-mt_sv:iso_2
 mt_sv:mtmax
 mt_sv:dphi_mumet
 mt_sv:dphi_emet
@@ -95,8 +90,6 @@ m_vis:mjj
 m_vis:met
 m_vis:dzeta
 m_vis:mTemu
-m_vis:iso_1
-m_vis:iso_2
 m_vis:mtmax
 m_vis:dphi_mumet
 m_vis:dphi_emet
@@ -120,8 +113,6 @@ pt_1:mjj
 pt_1:met
 pt_1:dzeta
 pt_1:mTemu
-pt_1:iso_1
-pt_1:iso_2
 pt_1:mtmax
 pt_1:dphi_mumet
 pt_1:dphi_emet
@@ -144,8 +135,6 @@ pt_2:mjj
 pt_2:met
 pt_2:dzeta
 pt_2:mTemu
-pt_2:iso_1
-pt_2:iso_2
 pt_2:mtmax
 pt_2:dphi_mumet
 pt_2:dphi_emet
@@ -167,8 +156,6 @@ jpt_1:mjj
 jpt_1:met
 jpt_1:dzeta
 jpt_1:mTemu
-jpt_1:iso_1
-jpt_1:iso_2
 jpt_1:mtmax
 jpt_1:dphi_mumet
 jpt_1:dphi_emet
@@ -189,8 +176,6 @@ jpt_2:mjj
 jpt_2:met
 jpt_2:dzeta
 jpt_2:mTemu
-jpt_2:iso_1
-jpt_2:iso_2
 jpt_2:mtmax
 jpt_2:dphi_mumet
 jpt_2:dphi_emet
@@ -210,8 +195,6 @@ njets:mjj
 njets:met
 njets:dzeta
 njets:mTemu
-njets:iso_1
-njets:iso_2
 njets:mtmax
 njets:dphi_mumet
 njets:dphi_emet
@@ -230,8 +213,6 @@ mt_1:mjj
 mt_1:met
 mt_1:dzeta
 mt_1:mTemu
-mt_1:iso_1
-mt_1:iso_2
 mt_1:mtmax
 mt_1:dphi_mumet
 mt_1:dphi_emet
@@ -249,8 +230,6 @@ mt_2:mjj
 mt_2:met
 mt_2:dzeta
 mt_2:mTemu
-mt_2:iso_1
-mt_2:iso_2
 mt_2:mtmax
 mt_2:dphi_mumet
 mt_2:dphi_emet
@@ -267,8 +246,6 @@ pt_tt:mjj
 pt_tt:met
 pt_tt:dzeta
 pt_tt:mTemu
-pt_tt:iso_1
-pt_tt:iso_2
 pt_tt:mtmax
 pt_tt:dphi_mumet
 pt_tt:dphi_emet
@@ -284,8 +261,6 @@ mjj:mjj
 mjj:met
 mjj:dzeta
 mjj:mTemu
-mjj:iso_1
-mjj:iso_2
 mjj:mtmax
 mjj:dphi_mumet
 mjj:dphi_emet
@@ -300,8 +275,6 @@ mjj:pt_vis
 met:met
 met:dzeta
 met:mTemu
-met:iso_1
-met:iso_2
 met:mtmax
 met:dphi_mumet
 met:dphi_emet
@@ -315,8 +288,6 @@ met:dijetpt
 met:pt_vis
 dzeta:dzeta
 dzeta:mTemu
-dzeta:iso_1
-dzeta:iso_2
 dzeta:mtmax
 dzeta:dphi_mumet
 dzeta:dphi_emet
@@ -329,8 +300,6 @@ dzeta:pt_ttjj
 dzeta:dijetpt
 dzeta:pt_vis
 mTemu:mTemu
-mTemu:iso_1
-mTemu:iso_2
 mTemu:mtmax
 mTemu:dphi_mumet
 mTemu:dphi_emet
@@ -342,31 +311,6 @@ mTemu:mTdileptonMET
 mTemu:pt_ttjj
 mTemu:dijetpt
 mTemu:pt_vis
-iso_1:iso_1
-iso_1:iso_2
-iso_1:mtmax
-iso_1:dphi_mumet
-iso_1:dphi_emet
-iso_1:dr_tt
-iso_1:jeta_1
-iso_1:jeta_2
-iso_1:jdeta
-iso_1:mTdileptonMET
-iso_1:pt_ttjj
-iso_1:dijetpt
-iso_1:pt_vis
-iso_2:iso_2
-iso_2:mtmax
-iso_2:dphi_mumet
-iso_2:dphi_emet
-iso_2:dr_tt
-iso_2:jeta_1
-iso_2:jeta_2
-iso_2:jdeta
-iso_2:mTdileptonMET
-iso_2:pt_ttjj
-iso_2:dijetpt
-iso_2:pt_vis
 mtmax:mtmax
 mtmax:dphi_mumet
 mtmax:dphi_emet
