@@ -16,8 +16,6 @@ m_sv:mtmax
 m_sv:dphi_mumet
 m_sv:dphi_emet
 m_sv:dr_tt
-m_sv:pzetavis
-m_sv:pzetamiss
 m_sv:jeta_1
 m_sv:jeta_2
 m_sv:jdeta
@@ -41,8 +39,6 @@ pt_sv:mtmax
 pt_sv:dphi_mumet
 pt_sv:dphi_emet
 pt_sv:dr_tt
-pt_sv:pzetavis
-pt_sv:pzetamiss
 pt_sv:jeta_1
 pt_sv:jeta_2
 pt_sv:jdeta
@@ -65,8 +61,6 @@ mt_sv:mtmax
 mt_sv:dphi_mumet
 mt_sv:dphi_emet
 mt_sv:dr_tt
-mt_sv:pzetavis
-mt_sv:pzetamiss
 mt_sv:jeta_1
 mt_sv:jeta_2
 mt_sv:jdeta
@@ -88,8 +82,6 @@ m_vis:mtmax
 m_vis:dphi_mumet
 m_vis:dphi_emet
 m_vis:dr_tt
-m_vis:pzetavis
-m_vis:pzetamiss
 m_vis:jeta_1
 m_vis:jeta_2
 m_vis:jdeta
@@ -110,8 +102,6 @@ pt_2:mtmax
 pt_2:dphi_mumet
 pt_2:dphi_emet
 pt_2:dr_tt
-pt_2:pzetavis
-pt_2:pzetamiss
 pt_2:jeta_1
 pt_2:jeta_2
 pt_2:jdeta
@@ -131,8 +121,6 @@ jpt_1:mtmax
 jpt_1:dphi_mumet
 jpt_1:dphi_emet
 jpt_1:dr_tt
-jpt_1:pzetavis
-jpt_1:pzetamiss
 jpt_1:jeta_1
 jpt_1:jeta_2
 jpt_1:jdeta
@@ -151,8 +139,6 @@ jpt_2:mtmax
 jpt_2:dphi_mumet
 jpt_2:dphi_emet
 jpt_2:dr_tt
-jpt_2:pzetavis
-jpt_2:pzetamiss
 jpt_2:jeta_1
 jpt_2:jeta_2
 jpt_2:jdeta
@@ -170,8 +156,6 @@ njets:mtmax
 njets:dphi_mumet
 njets:dphi_emet
 njets:dr_tt
-njets:pzetavis
-njets:pzetamiss
 njets:jeta_1
 njets:jeta_2
 njets:jdeta
@@ -188,8 +172,6 @@ mt_2:mtmax
 mt_2:dphi_mumet
 mt_2:dphi_emet
 mt_2:dr_tt
-mt_2:pzetavis
-mt_2:pzetamiss
 mt_2:jeta_1
 mt_2:jeta_2
 mt_2:jdeta
@@ -205,8 +187,6 @@ pt_tt:mtmax
 pt_tt:dphi_mumet
 pt_tt:dphi_emet
 pt_tt:dr_tt
-pt_tt:pzetavis
-pt_tt:pzetamiss
 pt_tt:jeta_1
 pt_tt:jeta_2
 pt_tt:jdeta
@@ -221,8 +201,6 @@ mjj:mtmax
 mjj:dphi_mumet
 mjj:dphi_emet
 mjj:dr_tt
-mjj:pzetavis
-mjj:pzetamiss
 mjj:jeta_1
 mjj:jeta_2
 mjj:jdeta
@@ -236,8 +214,6 @@ dzeta:mtmax
 dzeta:dphi_mumet
 dzeta:dphi_emet
 dzeta:dr_tt
-dzeta:pzetavis
-dzeta:pzetamiss
 dzeta:jeta_1
 dzeta:jeta_2
 dzeta:jdeta
@@ -250,8 +226,6 @@ mTemu:mtmax
 mTemu:dphi_mumet
 mTemu:dphi_emet
 mTemu:dr_tt
-mTemu:pzetavis
-mTemu:pzetamiss
 mTemu:jeta_1
 mTemu:jeta_2
 mTemu:jdeta
@@ -263,8 +237,6 @@ iso_2:mtmax
 iso_2:dphi_mumet
 iso_2:dphi_emet
 iso_2:dr_tt
-iso_2:pzetavis
-iso_2:pzetamiss
 iso_2:jeta_1
 iso_2:jeta_2
 iso_2:jdeta
@@ -275,8 +247,6 @@ mtmax:mtmax
 mtmax:dphi_mumet
 mtmax:dphi_emet
 mtmax:dr_tt
-mtmax:pzetavis
-mtmax:pzetamiss
 mtmax:jeta_1
 mtmax:jeta_2
 mtmax:jdeta
@@ -286,8 +256,6 @@ mtmax:pt_vis
 dphi_mumet:dphi_mumet
 dphi_mumet:dphi_emet
 dphi_mumet:dr_tt
-dphi_mumet:pzetavis
-dphi_mumet:pzetamiss
 dphi_mumet:jeta_1
 dphi_mumet:jeta_2
 dphi_mumet:jdeta
@@ -296,8 +264,6 @@ dphi_mumet:dijetpt
 dphi_mumet:pt_vis
 dphi_emet:dphi_emet
 dphi_emet:dr_tt
-dphi_emet:pzetavis
-dphi_emet:pzetamiss
 dphi_emet:jeta_1
 dphi_emet:jeta_2
 dphi_emet:jdeta
@@ -305,29 +271,12 @@ dphi_emet:mTdileptonMET
 dphi_emet:dijetpt
 dphi_emet:pt_vis
 dr_tt:dr_tt
-dr_tt:pzetavis
-dr_tt:pzetamiss
 dr_tt:jeta_1
 dr_tt:jeta_2
 dr_tt:jdeta
 dr_tt:mTdileptonMET
 dr_tt:dijetpt
 dr_tt:pt_vis
-pzetavis:pzetavis
-pzetavis:pzetamiss
-pzetavis:jeta_1
-pzetavis:jeta_2
-pzetavis:jdeta
-pzetavis:mTdileptonMET
-pzetavis:dijetpt
-pzetavis:pt_vis
-pzetamiss:pzetamiss
-pzetamiss:jeta_1
-pzetamiss:jeta_2
-pzetamiss:jdeta
-pzetamiss:mTdileptonMET
-pzetamiss:dijetpt
-pzetamiss:pt_vis
 jeta_1:jeta_1
 jeta_1:jeta_2
 jeta_1:jdeta
