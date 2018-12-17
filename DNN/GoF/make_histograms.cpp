@@ -474,6 +474,28 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     }
 
     //***********************************************************************************************
+    // Blinding
+    double threshold = 0.5;
+    double err_sys = 0.09;
+    TH1D * allBkg = (TH1D*) cat.second.sample_list["1_QCD"].hist_1d -> Clone();
+    allBkg -> Reset();
+    TH1D * allSig = (TH1D*) cat.second.sample_list["1_QCD"].hist_1d -> Clone();
+    allSig -> Reset();
+
+    for(auto & smpl : cat.second.sample_list) {
+      if( smpl.first.Contains("125") ) allSig->Add(smpl.second.hist_1d);
+      else if( smpl.second.name != "data_obs" &&  !smpl.first.Contains("cont")) allBkg->Add(smpl.second.hist_1d);
+    }
+
+    for(int i_bin=1; i_bin <= allSig->GetNbinsX(); i_bin++ ){
+      double s = allSig->GetBinContent(i_bin);
+      double b = allBkg->GetBinContent(i_bin);
+      if( s/TMath::Sqrt(s + b + TMath::Power(err_sys*b,2) ) > threshold){
+	cout<<"BLINDING applied!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
+	for(auto & smpl : cat.second.sample_list) smpl.second.hist_1d->SetBinContent(i_bin,0);
+      }
+    }
+    //***********************************************************************************************
     // Write all histograms to output file
     cout << endl << endl << "... Writing histograms to output file ... " << endl;
 
@@ -490,11 +512,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
     // Write the final sum of weights of the nominal selection
     cout << endl << "... Final histogram content : "<< endl;
-    TH1D * allBkg = (TH1D*) cat.second.sample_list["1_QCD"].hist_1d -> Clone();
     for(auto & smpl : cat.second.sample_list) {
+      if( smpl.first.Contains("cont") ) continue;
       cout << smpl.second.name << " : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
-      if( smpl.second.name == "data_obs" || smpl.second.name == "QCD" ) continue;
-      allBkg->Add(smpl.second.hist_1d);
     }
     cout << "Bkg together : " << allBkg -> GetSumOfWeights() << endl << endl;
   } // end of loop over categories
