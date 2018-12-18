@@ -25,7 +25,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   const bool use_embedded = cfg.get<bool>("use_embedded");
   const bool plot_2d      = cfg.get<bool>("plot_2d");
   const bool verbose      = cfg.get<bool>("verbose");
-  const bool take_percentile_subrange = cfg.get<bool>("take_percentile_subrange");
+  const bool take_percentile_subrange  = cfg.get<bool>("take_percentile_subrange");
+  const bool apply_equidistant_binning = cfg.get<bool>("apply_equidistant_binning");
   const TString output_file_suffix = cfg.get<string>("output_file_suffix");
   const bool is_dnn_prediction = cfg.get<bool>("is_dnn_prediction");
   const bool stage1 = cfg.get<bool>("stage1");
@@ -509,81 +510,17 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       TTree *tree = (TTree*) in_file->Get("TauCheck");
 
       //*******************************************************************************************
-      // Get the 1st and 99th percentiles
-      if( smpl.second.name == "data_obs" && take_percentile_subrange ){
-
+      // Calculate the binning
+      if( smpl.second.name == "data_obs" ){
 	if(!cat.second.plot_2d){
-	  cat.second.binning_1d.clear();
-	  cout<<endl;
-	  float min_val = tree->GetMinimum(cat.second.variable);
-	  float max_val = tree->GetMaximum(cat.second.variable);
-	  if(min_val == -10) min_val=0;
-	  cout<<endl<<"Minimum value in tree = "<<min_val<<endl;
-	  cout<<"Maximum value in tree = "<<max_val<<endl<<endl;
-
-	  TH1D* hist_aux = new TH1D("hist_aux", "", 1000000, min_val, max_val);
-	  tree -> Draw( cat.second.variable + ">> hist_aux" , "1*("+cat.second.variable+Form(">%f",min_val)+ cat.second.cutstring + ")" );
-	  unsigned int i_aux=0;
-	  int entries   = hist_aux->GetSumOfWeights();
-	  int nbins_aux = hist_aux->GetNbinsX()+1;
-	  int count =0;
-	  for(int ibin=1; ibin<nbins_aux+1; ibin++){
-	    count += hist_aux->GetBinContent(ibin);
-	    if(count>=percentile_ranges[i_aux]*entries){
-	      cat.second.binning_1d.push_back(hist_aux->GetBinCenter(ibin));
-	      cout<<"bin range starts at = "<<hist_aux->GetBinCenter(ibin)<<endl;
-	      if(i_aux+1 == percentile_ranges.size()) break;
-	      i_aux +=1;
-	    }
-	  }
+	  cat.second.binning_1d = calc_binning_1d(take_percentile_subrange, apply_equidistant_binning, cat.second, directory);
 	}
 	else{
-	  cat.second.binning_2d_x.clear();
-	  cat.second.binning_2d_y.clear();
-	  TString var_y = cat.second.variable( 0 , cat.second.variable.First(":") );
-	  TString var_x = cat.second.variable( cat.second.variable.First(":")+1 , cat.second.variable.Length());
-	  float min_val_x = tree->GetMinimum(var_x);
-	  float max_val_x = tree->GetMaximum(var_x);
-	  float min_val_y = tree->GetMinimum(var_y);
-	  float max_val_y = tree->GetMaximum(var_y);
-	  if(min_val_x == -10) min_val_x=0;
-	  if(min_val_y == -10) min_val_y=0;
-	  cout<<endl<<"Minimum value of "<<var_x<<" in tree = "<<min_val_x<<endl;
-	  cout<<"Maximum value of "<<var_x<<" in tree = "<<max_val_x<<endl;
-	  cout<<"Minimum value of "<<var_y<<" in tree = "<<min_val_y<<endl;
-	  cout<<"Maximum value of "<<var_y<<" in tree = "<<max_val_y<<endl<<endl;
-
-	  TH1D* hist_aux_x = new TH1D("hist_aux_x", "", 1000000, min_val_x, max_val_x);
-	  TH1D* hist_aux_y = new TH1D("hist_aux_y", "", 1000000, min_val_y, max_val_y);
-	  tree -> Draw( var_x + ">> hist_aux_x" , "1*("+var_x+Form(">%f",min_val_x)+ cat.second.cutstring + ")" );
-	  tree -> Draw( var_y + ">> hist_aux_y" , "1*("+var_y+Form(">%f",min_val_y)+ cat.second.cutstring + ")" );
-
-	  unsigned int idx_bins = 0;
-	  int count_events =0;
-	  for(int ibin=1; ibin<hist_aux_x->GetNbinsX()+1; ibin++){
-	    count_events += hist_aux_x->GetBinContent(ibin);
-	    if(count_events >= percentile_ranges[idx_bins]*hist_aux_x->GetEntries()){
-	      cat.second.binning_2d_x.push_back(hist_aux_x->GetBinCenter(ibin));
-	      cout<<"bin range starts at = "<<hist_aux_x->GetBinCenter(ibin)<<endl;
-	      if(idx_bins+1 == percentile_ranges.size()) break;
-	      idx_bins +=1;
-	    }
-	  }
-	  idx_bins = 0;
-	  count_events = 0;
-	  for(int ibin=1; ibin<hist_aux_y->GetNbinsX()+1; ibin++){
-	    count_events += hist_aux_y->GetBinContent(ibin);
-	    if(count_events >= percentile_ranges[idx_bins]*hist_aux_y->GetEntries()){
-	      cat.second.binning_2d_y.push_back(hist_aux_y->GetBinCenter(ibin));
-	      cout<<"bin range starts at = "<<hist_aux_y->GetBinCenter(ibin)<<endl;
-	      if(idx_bins+1 == percentile_ranges.size()) break;
-	      idx_bins +=1;
-	    }
-	  }
-
-
+	  std::pair<vector<float>, vector<float>> binning = calc_binning_2d(take_percentile_subrange, apply_equidistant_binning, cat.second, directory);
+	  cat.second.binning_2d_x = binning.first;
+	  cat.second.binning_2d_y = binning.second;
 	}
-      } // end of take_percentile_subrange
+      }
 
       nbins = cat.second.binning_1d.size() -1;
       file_out -> cd();
