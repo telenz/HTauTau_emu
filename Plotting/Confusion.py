@@ -24,12 +24,14 @@ def main():
 
     classes=[]
     for key in rootfile.GetListOfKeys():
+        if "unrolled" in key.GetName():
+            continue
     	classes.append(key.GetName())
 
     confusion =  np.zeros( (len(classes),len(classes)) )
     tempdict = {}
 
-    TDirs = [TDir.GetName() for TDir in rootfile.GetListOfKeys()]
+    TDirs = [TDir.GetName() for TDir in rootfile.GetListOfKeys() if not "unrolled" in TDir.GetName()]
 
     for TDir in TDirs: 
         folder = rootfile.Get( TDir )
