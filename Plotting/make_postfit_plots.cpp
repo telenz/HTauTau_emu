@@ -1,6 +1,6 @@
-#include "../DNN/GoF/HttStylesNew.cc"
-#include "../DNN/GoF/useful_classes.h"
-#include "../DNN/GoF/CMS_lumi.C"
+#include "../DNN/GoF/bin/HttStylesNew.cc"
+#include "../DNN/GoF/bin/useful_classes.h"
+#include "../DNN/GoF/bin/CMS_lumi.C"
 #include <iomanip>
 #include <iostream>
 #include "THStack.h"

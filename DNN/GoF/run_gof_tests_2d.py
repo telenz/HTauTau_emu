@@ -28,7 +28,10 @@ if era == "2017" :
     config_filename_in = "config_for_gof_2017_with_placeholders_2d.cfg"
 
 variable_list = [ "m_sv",
+                  "pt_sv",
                   "mt_sv",
+                  "m_vis",
+                  "pt_1",
                   "pt_2",
                   "jpt_1",
                   "jpt_2",
@@ -40,14 +43,10 @@ variable_list = [ "m_sv",
                   "met",
                   "dzeta",
                   "mTemu",
-                  "iso_1",
-                  "iso_2",
                   "mtmax",
                   "dphi_mumet",
                   "dphi_emet",
                   "dr_tt",
-                  "pzetavis",
-                  "pzetamiss",
                   "jeta_1",
                   "jeta_2",
                   "jdeta",
@@ -55,7 +54,6 @@ variable_list = [ "m_sv",
                   "pt_ttjj",
                   "dijetpt",
                   "pt_vis",
-                  "pt_sv"
                   ]
 
 #variable_list = [ "m_vis", "m_sv" ]
@@ -122,7 +120,7 @@ for i in range(0, len(variable_list)):
 #     for var_2 in variable_list:
 #         var_2d = var_1 + ":" + var_2
 #         variable_list_2d.append(var_2d)
- 
+
 for var in variable_list_2d:
     print var
 

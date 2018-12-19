@@ -40,12 +40,12 @@ labeldict = {
     'met' : 'MET',
     'dphi_emet' : '$\Delta\phi(\\tau_1,MET)$',
     'dphi_mumet' : '$\Delta\phi(\\tau_2,MET)$',
-    'dr_tt' : '$\Delta\eta_{\tau_1\tau_2}$',
+    'dr_tt' : '$\Delta R_{\\tau_1\\tau_2}$',
     'dzeta' : '$D_{\zeta}$',
     'jeta_1' : '$\eta$(leading jet)',
     'jeta_2' : '$\eta$(sub-leading jet)',
-    'mTdileptonMET' : '$m_{T}(\\tau_1\tau_2,MET)$',
-    'mTemu' : '$m_{T}(\\tau_1,\tau_2)$',
+    'mTdileptonMET' : '$m_{T}(\\tau_1\\tau_2,MET)$',
+    'mTemu' : '$m_{T}(\\tau_1,\\tau_2)$',
     'pt_sv' : 'di-$\\tau$ $p_T$',
     'mt_sv' : 'di-$\\tau$ transverse mass',
     'mtmax' : 'max. ($m_{T}(\\tau_1,MET)$, $m_{T}(\\tau_2,MET)$)',
@@ -59,8 +59,6 @@ def parse_arguments():
         description="Plot goodness of fit results")
     parser.add_argument(
         "variables", help="Considered variables in goodness of fit test")
-    parser.add_argument(
-        "path", help="Path to directory with goodness of fit results")
     parser.add_argument("channel", type=str, help="Select channel to be plotted")
     parser.add_argument("era", type=str, help="Select era to be plotted")
     return parser.parse_args()
@@ -133,11 +131,11 @@ def plot_1d(variables, results, filename):
     plt.savefig(filename, bbox_inches="tight")
 
 
-def search_results_1d(path, channel, era, variables):
+def search_results_1d(channel, era, variables):
     results = []
     missing = []
     for variable in variables:
-        filename = os.path.join("output/{}/var_1d/gof-{}.json".format(era, variable))
+        filename = "output/{}/var_1d/gof-{}.json".format(era, variable)
         if not os.path.exists(filename):
             missing.append(variable)
             results.append(-1.0)
@@ -152,14 +150,14 @@ def search_results_1d(path, channel, era, variables):
     return missing, results
 
 
-def search_results_2d(path, channel, era, variables):
+def search_results_2d(channel, era, variables):
     missing = []
     results = np.ones((len(variables), len(variables))) * (-1.0)
     for i1, v1 in enumerate(variables):
         for i2, v2 in enumerate(variables):
             if i2 <= i1:
                 continue
-            filename = os.path.join("output/{}/var_2d/gof-{}-{}.json".format(era, v1,v2))
+            filename = "output/{}/var_2d/gof-{}-{}.json".format(era, v1,v2)
             if not os.path.exists(filename):
                 filename = os.path.join("output/{}/var_2d/gof-{}-{}.json".format(era, v2,v1))
                 if not os.path.exists(filename):
@@ -180,14 +178,10 @@ def main(args):
     if not os.path.exists(args.variables):
         logger.fatal("File %s does not exist.")
         raise Exception
-    if not os.path.exists(args.path):
-        logger.fatal("Path %s does not exist.")
-        raise Exception
 
     # Plot 1D gof results
     variables = yaml.load(open(args.variables))["variables"]
-    missing_1d, results_1d = search_results_1d(args.path, args.channel, args.era,
-                                               variables)
+    missing_1d, results_1d = search_results_1d(args.channel, args.era,variables)
     logger.debug("Missing variables for 1D plot in channel %s:", args.channel)
     for variable in missing_1d:
         print("{} {} {}".format(args.era, args.channel, variable))
@@ -221,8 +215,7 @@ def main(args):
             "{}_{}_gof_1d_selected.pdf".format(args.era, args.channel))
 
     # Plot 2D gof results for reduced variable set
-    missing_2d_selected, results_2d_selected = search_results_2d(
-        args.path, args.channel, args.era, variables_selected)
+    missing_2d_selected, results_2d_selected = search_results_2d(args.channel, args.era, variables_selected)
     plot_2d(variables_selected, results_2d_selected,
             "{}_{}_gof_2d_selected.pdf".format(args.era, args.channel))
 
