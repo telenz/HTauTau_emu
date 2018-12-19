@@ -12,6 +12,8 @@ using namespace std;
 
 void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
+  TH1::SetDefaultSumw2();
+  TH2::SetDefaultSumw2();
   gROOT->SetBatch(kTRUE);
   SetStyle();
 
@@ -489,7 +491,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     for(int i_bin=1; i_bin <= allSig->GetNbinsX(); i_bin++ ){
       double s = allSig->GetBinContent(i_bin);
       double b = allBkg->GetBinContent(i_bin);
-      if( s/TMath::Sqrt(s + b + TMath::Power(err_sys*b,2) ) > threshold){
+      if( s/sqrt(s + b + pow(err_sys*b,2) ) > threshold){
 	cout<<"BLINDING applied!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
 	for(auto & smpl : cat.second.sample_list) smpl.second.hist_1d->SetBinContent(i_bin,0);
       }
