@@ -89,16 +89,22 @@ else:
 # Measure stage0/inclusive signal strength constraint
 print '-----------------------------------------------------------------------'
 print '/nMeasure signal strength constraint \n'
-#os.environ["ERA"] = str(era)
-#os.environ["EMB"] = str(embedded)
-#os.system("source ./measure_signal_strength.sh")
-#os.system("source ./measure_inclusive_signal_strength.sh")
+os.environ["ERA"] = str(era)
+os.environ["EMB"] = str(embedded)
+cmd = "cp output/2017/htt_em.inputs-sm-Run2017-ML.root output/2017/htt_em.inputs-sm-Run2017-ML_save.root"
+os.system(cmd)
+cmd = "python fix_em_shapes.py output/2017/htt_em.inputs-sm-Run2017-ML_save.root output/2017/htt_em.inputs-sm-Run2017-ML.root"
+os.system(cmd)
+os.system("source ./measure_signal_strength.sh")
+os.system("source ./measure_inclusive_signal_strength.sh")
 #os.system("source ./plot_impacts_fit.sh")
+cmd = "mv output/2017/htt_em.inputs-sm-Run2017-ML_save.root output/2017/htt_em.inputs-sm-Run2017-ML.root"
+os.system(cmd)
 
 # Make post-fit plots
 print '-----------------------------------------------------------------------'
 print '/nMake post-fit plots \n'
 cmd = "root -l -b -q ../../Plotting/make_postfit_plots.cpp\"(true,true,\\\"output\\\",\\\""+era+"\\\","+str(embedded)+")\""
-#os.system(cmd)
+os.system(cmd)
 cmd = "root -l -b -q ../../Plotting/make_postfit_plots.cpp\"(true,false,\\\"output\\\",\\\""+era+"\\\","+str(embedded)+")\""
-#os.system(cmd)
+os.system(cmd)
