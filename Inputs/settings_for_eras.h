@@ -35,6 +35,8 @@ const vector<TString> GluGluHToTauTau_2017 = { "GluGluHToTauTau_M125_13TeV_powhe
 const vector<TString> VBFHToTauTau_2017    = { "VBFHToTauTau_M125_13TeV_powheg_pythia8" };
 const vector<TString> ZHToTauTau_2017      = { "ZHToTauTau_M125_13TeV_powheg_pythia8"  };
 const vector<TString> WHToTauTau_2017      = { "WplusHToTauTau_M125_13TeV_powheg_pythia8" , "WminusHToTauTau_M125_13TeV_powheg_pythia8" };
+const vector<TString> ggHToWW_2017         = { "GluGluHToWWTo2L2Nu" };
+const vector<TString> VBFHToWW_2017        = { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" };
 const vector<TString> Embedded_2017        = { "Embedding_Run2017" };
 
 // 2016
@@ -48,6 +50,8 @@ const vector<TString> GluGluHToTauTau_2016 = { "GluGluHToTauTau_M125" };
 const vector<TString> VBFHToTauTau_2016    = { "VBFHToTauTau_M125" };
 const vector<TString> ZHToTauTau_2016      = { "ZHToTauTau_M125"  };
 const vector<TString> WHToTauTau_2016      = { "WplusHToTauTau_M125" , "WminusHToTauTau_M125" };
+const vector<TString> ggHToWW_2016         = { "GluGluHToWWTo2L2Nu_M125" };
+const vector<TString> VBFHToWW_2016        = { "VBFHToWWTo2L2Nu_M125" };
 const vector<TString> Embedded_2016        = { "Embedding_Run2016" };
 // **************************************************************************************************
 // **************************************************************************************************
@@ -84,7 +88,9 @@ const map<TString, double> xsec_map_2017 = {
   { "VBFHToTauTau_M125_13TeV_powheg_pythia8"    , 3.782*0.0627 },
   { "ZHToTauTau_M125_13TeV_powheg_pythia8"      , 0.0594 },
   { "WplusHToTauTau_M125_13TeV_powheg_pythia8"  , 0.0527 },
-  { "WminusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0358 }
+  { "WminusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0358 },
+  { "GluGluHToWWTo2L2Nu"                       , 28.87 },  // LO determined with GenXsecAnalyzer
+  { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 3.879 } // LO determined with GenXsecAnalyzer
 };
 
 // 2016 (taken from AN2016_355_v10 with minor unrelevant deviations - everything was checked)
@@ -123,7 +129,9 @@ const map<TString, double> xsec_map_2016 = {
     { "VBFHToTauTau_M125"        , 3.782*0.0627 },
     { "ZHToTauTau_M125"          , 0.0594 },
     { "WplusHToTauTau_M125"      , 0.0527 },
-    { "WminusHToTauTau_M125"     , 0.0358 }
+    { "WminusHToTauTau_M125"     , 0.0358 },
+    { "GluGluHToWWTo2L2Nu_M125"  , 30.52 }, // xsdb
+    { "VBFHToWWTo2L2Nu_M125"     , 3.754 }  //xsdb
   };
 // **************************************************************************************************
 // **************************************************************************************************
