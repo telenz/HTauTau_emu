@@ -19,3 +19,6 @@ mkdir -p CombineHarvester/HTTSM2017/shapes
 # Build
 scram b -j 24
 scram b python
+
+mkdir CombineHarvester/HTTSM2017/output
+cd -
