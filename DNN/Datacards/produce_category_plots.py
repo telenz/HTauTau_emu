@@ -74,14 +74,14 @@ print '-----------------------------------------------------------------------'
 print '/nMeasure signal strength constraint \n'
 os.environ["ERA"] = str(era)
 os.environ["EMB"] = str(embedded)
-cmd = "cp output/2017/htt_em.inputs-sm-Run2017-ML.root output/2017/htt_em.inputs-sm-Run2017-ML_save.root"
+cmd = "cp output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_save.root"
 os.system(cmd)
-cmd = "python fix_em_shapes.py output/2017/htt_em.inputs-sm-Run2017-ML_save.root output/2017/htt_em.inputs-sm-Run2017-ML.root"
+cmd = "python fix_em_shapes.py output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_save.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root"
 os.system(cmd)
 os.system("source ./measure_signal_strength.sh")
 os.system("source ./measure_inclusive_signal_strength.sh")
 #os.system("source ./plot_impacts_fit.sh")
-cmd = "mv output/2017/htt_em.inputs-sm-Run2017-ML_save.root output/2017/htt_em.inputs-sm-Run2017-ML.root"
+cmd = "mv output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_save.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root"
 os.system(cmd)
 
 # Make post-fit plots
