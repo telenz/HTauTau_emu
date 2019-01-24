@@ -34,16 +34,23 @@ print 'Era is : ' + era
 print 'Use embedded : ' + embedded_c
 print ''
 
+os.environ["ERA"] = str(era)
+os.environ["EMB"] = str(embedded)
+
+num_cores = multiprocessing.cpu_count()
+print "available number of cores = " + str(num_cores)
+num_cores = 8
+
 def make_category_plots(category):
     # Plot log and non-log
     cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + str(category) + "\\\",true,true,\\\"output/" + era + "/\\\",\\\"" + era + "\\\"," + str(embedded)+")\""
-    #os.system(cmd)
+    os.system(cmd)
     cmd = "root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\"ML\\\",\\\"" + category + "\\\", true , false , \\\"output/" + era + "/\\\",\\\"" + era + "\\\"," + str(embedded)+")\""
-    #os.system(cmd)
+    os.system(cmd)
 
 
 # Make datacard (root-files)
-def make_datacard(cat):
+def make_single_datacard(cat):
     with open(config_name) as f:
          newText=f.read().replace('categories=', 'categories='+ cat)
          newText=newText.replace('output_file_suffix = ML','output_file_suffix = ML__'+ cat)
@@ -51,35 +58,36 @@ def make_datacard(cat):
          with open(config_name_new, "w") as f:
               f.write(newText)
 
-    print '-----------------------------------------------------------------------'
-    print "\nMake datacards : \n"
-    cmd = "root -l -b -q make_histograms.cpp+\"(\\\"" + config_name_new + "\\\")\""
+    cmd = "root -l -b -q make_histograms.cpp\"(\\\"" + config_name_new + "\\\")\""
     os.system(cmd)
 
-num_cores = multiprocessing.cpu_count()
-print "available number of cores = " + str(num_cores)
+def make_final_datacard():
+    results = Parallel(n_jobs=num_cores)(delayed(make_single_datacard)(i) for i in category_list)
 
-num_cores = 8
+    os.system("hadd -f output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root output/"+era+"/*__*.root")
+    os.system("rm output/"+era+"/*__*.root")
+    os.system("cp output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_original_binning.root")
+    os.system("python fix_em_shapes.py output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_original_binning.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root")
+    os.system("rm config_for_datacard_*")
 
-results = Parallel(n_jobs=num_cores)(delayed(make_datacard)(i) for i in category_list)
 
+#####################################################################################
+####################   START  #######################################################
+#####################################################################################
+
+# Make datacards
 print '-----------------------------------------------------------------------'
-cmd = "hadd -f output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root output/"+era+"/*__*.root"
-os.system(cmd)
-cmd = "rm output/"+era+"/*__*.root"
-os.system(cmd)
+print "Make datacards : \n"
+make_final_datacard()
 
 # Make pre-fit plots
 print '-----------------------------------------------------------------------'
-print "\nMake pre-fit plots \n"
-#for category in category_list:
-#    make_category_plots(category)
-#num_cores=20
-#Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
+print "Make pre-fit plots \n"
+Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
 
-# Print confusione matrices
+# Print confusion matrices
 print '-----------------------------------------------------------------------'
-print "\nPlot confusion matrices \n"
+print "Plot confusion matrices \n"
 if embedded_c == 'true':
     cmd = "python ../../Plotting/Confusion.py -e \""+era+"\" -emb "
 else:
@@ -88,23 +96,15 @@ else:
 
 # Measure stage0/inclusive signal strength constraint
 print '-----------------------------------------------------------------------'
-print '/nMeasure signal strength constraint \n'
-os.environ["ERA"] = str(era)
-os.environ["EMB"] = str(embedded)
-cmd = "cp output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_save.root"
-os.system(cmd)
-cmd = "python fix_em_shapes.py output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_save.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root"
-os.system(cmd)
-os.system("source ./measure_signal_strength.sh")
-os.system("source ./measure_inclusive_signal_strength.sh")
+print 'Measure signal strength constraint \n'
+#os.system("source ./measure_signal_strength.sh")
+#os.system("source ./measure_inclusive_signal_strength.sh")
 #os.system("source ./plot_impacts_fit.sh")
-cmd = "mv output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_save.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root"
-os.system(cmd)
 
 # Make post-fit plots
 print '-----------------------------------------------------------------------'
-print '/nMake post-fit plots \n'
+print 'Make post-fit plots \n'
 cmd = "root -l -b -q ../../Plotting/make_postfit_plots.cpp\"(true,true,\\\"output\\\",\\\""+era+"\\\","+str(embedded)+")\""
-os.system(cmd)
+#os.system(cmd)
 cmd = "root -l -b -q ../../Plotting/make_postfit_plots.cpp\"(true,false,\\\"output\\\",\\\""+era+"\\\","+str(embedded)+")\""
-os.system(cmd)
+#os.system(cmd)
