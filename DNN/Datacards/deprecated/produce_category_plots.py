@@ -50,15 +50,15 @@ def make_category_plots(category):
 print '-----------------------------------------------------------------------'
 print "\nMake datacards : \n"
 cmd = "root -l -b -q make_histograms.cpp+\"(\\\"" + config_name + "\\\")\""
-os.system(cmd)
+#os.system(cmd)
 
 # Make pre-fit plots
 print '-----------------------------------------------------------------------'
 print "\nMake pre-fit plots \n"
 #for category in category_list:
 #    make_category_plots(category)
-num_cores=20
-Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
+#num_cores=20
+#Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
 
 # Print confusione matrices
 print '-----------------------------------------------------------------------'
@@ -67,7 +67,7 @@ if embedded_c == 'true':
     cmd = "python ../../Plotting/Confusion.py -e \""+era+"\" -emb "
 else:
     cmd = "python ../../Plotting/Confusion.py -e \""+era+"\""
-os.system(cmd)
+#os.system(cmd)
 
 # Measure stage0/inclusive signal strength constraint
 print '-----------------------------------------------------------------------'
@@ -79,7 +79,7 @@ os.system(cmd)
 cmd = "python fix_em_shapes.py output/2017/htt_em.inputs-sm-Run2017-ML_save.root output/2017/htt_em.inputs-sm-Run2017-ML.root"
 os.system(cmd)
 os.system("source ./measure_signal_strength.sh")
-os.system("source ./measure_inclusive_signal_strength.sh")
+#os.system("source ./measure_inclusive_signal_strength.sh")
 #os.system("source ./plot_impacts_fit.sh")
 cmd = "mv output/2017/htt_em.inputs-sm-Run2017-ML_save.root output/2017/htt_em.inputs-sm-Run2017-ML.root"
 os.system(cmd)
