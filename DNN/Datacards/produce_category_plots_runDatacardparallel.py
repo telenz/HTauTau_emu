@@ -99,7 +99,7 @@ print '-----------------------------------------------------------------------'
 print 'Measure signal strength constraint \n'
 #os.system("source ./measure_signal_strength.sh")
 #os.system("source ./measure_inclusive_signal_strength.sh")
-#os.system("source ./plot_impacts_fit.sh")
+#os.system("source ./plot_impacts_fit.sh")                   # does only work in combination with measure_inclusive_signal_strength.sh
 
 # Make post-fit plots
 print '-----------------------------------------------------------------------'
