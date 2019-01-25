@@ -75,20 +75,4 @@ combine -M FitDiagnostics -m 125 ${DATACARD_PATH}/${ERA}_workspace.root \
     --robustHesse 1 \
     --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0
 
-# Prefit shapes
-# The text datacard is referenced only to add the original binning of the shapes
-# to the output histograms of the command. Otherwise, the bins are numbered with
-# integers.
-#PostFitShapesFromWorkspace -m 125 -w ${DATACARD_PATH}/${ERA}_workspace.root \
-#    -d output/${ERA}_smhtt/cmb/125/combined.txt.cmb -o ${ERA}_datacard_shapes_prefit.root
-
-# Postfit shapes
-# The file mlfit${ERA}.root is the result of the MaxLikelihoodFit above#
-
-#PostFitShapesFromWorkspace -m 125 -w ${DATACARD_PATH}/${ERA}_workspace.root \
-#    -d output/${ERA}_smhtt/cmb/125/combined.txt.cmb -o ${ERA}_datacard_shapes_postfit_sb.root \
-#    -f mlfit${ERA}.root:fit_s --postfit
-
 cd ${CURRENT_PATH}
-
-#cp ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/${ERA}_datacard_shapes_postfit_sb.root output/${ERA}
