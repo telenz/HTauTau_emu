@@ -37,7 +37,7 @@ def main(args):
             x[0] = 0.125
             bins = [x[0]]
             offset = x[-1]-x[0]
-            if num_bins == 18*11: # ggh (with 101 and 102)
+            if num_bins == 18*9: # ggh (without 101 and 102)
                 num_unrolling = 9 # unrolling without 101 and 102
             elif num_bins == 18*5: # qqh
                 num_unrolling = 5
@@ -50,15 +50,9 @@ def main(args):
             for i, c in enumerate(bins):
                 v[i] = c
             hnew = ROOT.TH1D(name, title, len(bins)-1, v.data())
-            if num_unrolling == 9: # copy for ggh and leave out first two slices
-                offset = 2*18 + 1
-                for i in range(offset, num_bins+1):
-                    hnew.SetBinContent(i-offset+1, h.GetBinContent(i));
-                    hnew.SetBinError(i-offset+1, h.GetBinError(i));
-            else: # copy for qqh
-                for i in range(1, num_bins+1):
-                    hnew.SetBinContent(i, h.GetBinContent(i));
-                    hnew.SetBinError(i, h.GetBinError(i));
+            for i in range(1, num_bins+1):
+                hnew.SetBinContent(i, h.GetBinContent(i));
+                hnew.SetBinError(i, h.GetBinError(i));
             hnew.SetEntries(h.GetEntries())
             hnew.Write()
     fout.Write()

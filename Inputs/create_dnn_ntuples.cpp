@@ -257,17 +257,16 @@ void create_dnn_ntuples( TString era = "2017" ){
 	// add flags for cut categories which correspond to htxs_stage1cats
 	htxs_reco_flag_ggh = 0;
 	htxs_reco_flag_qqh = 0;
-	if((njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_tt>0)&&(pt_tt<200)&&(pt_ttjj>0)&&(pt_ttjj<25)) htxs_reco_flag_ggh = 101;
-	else if((njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_tt>0)&&(pt_tt<200)&&(pt_ttjj>25)) htxs_reco_flag_ggh = 102;
-	else if(njets==0) htxs_reco_flag_ggh = 103;
-	else if((njets==1)&&(pt_tt>0)&&(pt_tt<60)) htxs_reco_flag_ggh = 104;
-	else if((njets==1)&&(pt_tt>60)&&(pt_tt<120)) htxs_reco_flag_ggh = 105;
-	else if((njets==1)&&(pt_tt>120)&&(pt_tt<200)) htxs_reco_flag_ggh = 106;
-	else if((njets==1)&&(pt_tt>200)) htxs_reco_flag_ggh = 107;
-	else if((njets>=2)&&( (mjj>0&&mjj<400) || (mjj>400&&jdeta<2.8) )&&(pt_tt>0)&&(pt_tt<60)) htxs_reco_flag_ggh = 108;
-	else if((njets>=2)&&( (mjj>0&&mjj<400) || (mjj>400&&jdeta<2.8) )&&(pt_tt>60)&&(pt_tt<120)) htxs_reco_flag_ggh = 109;
-	else if((njets>=2)&&( (mjj>0&&mjj<400) || (mjj>400&&jdeta<2.8) )&&(pt_tt>120)&&(pt_tt<200)) htxs_reco_flag_ggh = 110;
-	else if((njets>=2)&&(pt_tt>200)) htxs_reco_flag_ggh = 111;
+	// reco bins 101 and 102 merged into 2jets categories (sicne hardly populated)
+	if(njets==0)                                    htxs_reco_flag_ggh = 103;
+	else if((njets==1) && (pt_tt>0)  &&(pt_tt<60))  htxs_reco_flag_ggh = 104;
+	else if((njets==1) && (pt_tt>60) &&(pt_tt<120)) htxs_reco_flag_ggh = 105;
+	else if((njets==1) && (pt_tt>120)&&(pt_tt<200)) htxs_reco_flag_ggh = 106;
+	else if((njets==1) && (pt_tt>200))              htxs_reco_flag_ggh = 107;
+	else if((njets>=2) && (pt_tt>0)  &&(pt_tt<60))  htxs_reco_flag_ggh = 108;
+	else if((njets>=2) && (pt_tt>60) &&(pt_tt<120)) htxs_reco_flag_ggh = 109;
+	else if((njets>=2) && (pt_tt>120)&&(pt_tt<200)) htxs_reco_flag_ggh = 110;
+	else if((njets>=2) && (pt_tt>200))              htxs_reco_flag_ggh = 111;
 
 	if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_ttjj>0)&&(pt_ttjj<25)) htxs_reco_flag_qqh = 201;
 	else if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_ttjj>25)) htxs_reco_flag_qqh = 202;
