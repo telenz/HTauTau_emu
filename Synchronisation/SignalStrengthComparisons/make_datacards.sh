@@ -3,7 +3,7 @@ INPUT=$1
 ERA=$2
 REAL=$3
 CMSSW_LOCATION=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CombineHarvester/2017/CMSSW_8_1_0/src
-BASE_PATH=${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/shapes/
+BASE_PATH=${CMSSW_LOCATION}/CombineHarvester/HTTSM2017/shapes/
 CAT="ML"
 
 export SCRAM_ARCH=slc6_amd64_gcc530
