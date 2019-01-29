@@ -39,7 +39,7 @@ os.environ["EMB"] = str(embedded)
 
 num_cores = multiprocessing.cpu_count()
 print "available number of cores = " + str(num_cores)
-num_cores = 8
+num_cores = 10
 
 def make_category_plots(category):
     # Plot log and non-log
@@ -83,7 +83,7 @@ make_final_datacard()
 # Make pre-fit plots
 print '-----------------------------------------------------------------------'
 print "Make pre-fit plots \n"
-Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
+#Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
 
 # Print confusion matrices
 print '-----------------------------------------------------------------------'
