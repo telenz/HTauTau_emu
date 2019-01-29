@@ -387,29 +387,27 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       if(era=="2017"){
 	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleUp"  , "_CMS_scale_j_RelativeSample_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleUp");
 	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleDown", "_CMS_scale_j_RelativeSample_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleDown");
+	smpl.second.uncertainties["jecUncRelativeSampleUp"].filename.ReplaceAll("NOMINAL","_jecUncRelativeSampleUp");
+	smpl.second.uncertainties["jecUncRelativeSampleDown"].filename.ReplaceAll("NOMINAL","_jecUncRelativeSampleDown");
       }
 
         // // 8.) JES correlated
        smpl.second = create_systematic_uncertainty("jecUncEta0To5Up_corr"  , "_CMS_scale_j_eta0to5Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
        smpl.second = create_systematic_uncertainty("jecUncEta0To5Down_corr", "_CMS_scale_j_eta0to5Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
-       smpl.second.uncertainties["jecUncEta0To5Up"].filename.ReplaceAll("NOMINAL","_jecUncEta0To5Up");
-       smpl.second.uncertainties["jecUncEta0To5Down"].filename.ReplaceAll("NOMINAL","_jecUncEta0To5Down");
+       smpl.second.uncertainties["jecUncEta0To5Up_corr"].filename.ReplaceAll("NOMINAL","_jecUncEta0To5Up");
+       smpl.second.uncertainties["jecUncEta0To5Down_corr"].filename.ReplaceAll("NOMINAL","_jecUncEta0To5Down");
        smpl.second = create_systematic_uncertainty("jecUncEta0To3Up_corr"  , "_CMS_scale_j_eta0to3Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
        smpl.second = create_systematic_uncertainty("jecUncEta0To3Down_corr", "_CMS_scale_j_eta0to3Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
-       smpl.second.uncertainties["jecUncEta0To3Up"].filename.ReplaceAll("NOMINAL","_jecUncEta0To3Up");
-       smpl.second.uncertainties["jecUncEta0To3Down"].filename.ReplaceAll("NOMINAL","_jecUncEta0To3Down");
+       smpl.second.uncertainties["jecUncEta0To3Up_corr"].filename.ReplaceAll("NOMINAL","_jecUncEta0To3Up");
+       smpl.second.uncertainties["jecUncEta0To3Down_corr"].filename.ReplaceAll("NOMINAL","_jecUncEta0To3Down");
        smpl.second = create_systematic_uncertainty("jecUncEta3To5Up_corr"  , "_CMS_scale_j_eta3to5Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
        smpl.second = create_systematic_uncertainty("jecUncEta3To5Down_corr", "_CMS_scale_j_eta3to5Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
-       smpl.second.uncertainties["jecUncEta3To5Up"].filename.ReplaceAll("NOMINAL","_jecUncEta3To5Up");
-       smpl.second.uncertainties["jecUncEta3To5Down"].filename.ReplaceAll("NOMINAL","_jecUncEta3To5Down");
+       smpl.second.uncertainties["jecUncEta3To5Up_corr"].filename.ReplaceAll("NOMINAL","_jecUncEta3To5Up");
+       smpl.second.uncertainties["jecUncEta3To5Down_corr"].filename.ReplaceAll("NOMINAL","_jecUncEta3To5Down");
        smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp_corr"  , "_CMS_scale_j_RelativeBalUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
        smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown_corr", "_CMS_scale_j_RelativeBalDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
-       smpl.second.uncertainties["jecUncRelativeBalUp"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalUp");
-       smpl.second.uncertainties["jecUncRelativeBalDown"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalDown");
-      if(era=="2017"){
-	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleUp_corr"  , "_CMS_scale_j_RelativeSampleUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleUp");
-	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleDown_corr", "_CMS_scale_j_RelativeSampleDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleDown");
-      }
+       smpl.second.uncertainties["jecUncRelativeBalUp_corr"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalUp");
+       smpl.second.uncertainties["jecUncRelativeBalDown_corr"].filename.ReplaceAll("NOMINAL","_jecUncRelativeBalDown");
 
 
       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name.Contains("125")){
