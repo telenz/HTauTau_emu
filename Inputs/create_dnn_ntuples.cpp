@@ -47,6 +47,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map[channel + "-NOMINAL_ntuple_WH"       ] = WHToTauTau_2017;
     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2017;
+    samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2017;
     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
 
   }
@@ -71,6 +72,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map[channel + "-NOMINAL_ntuple_WH"       ] = WHToTauTau_2016;
     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2016;
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2016;
+    samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2016;
     input_dir="/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/2016_legacy/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/ntuples_v5/";
 
 
@@ -98,7 +100,7 @@ void create_dnn_ntuples( TString era = "2017" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
-  TString output_dir = "NTuples_" + era + "_new_naming";
+  TString output_dir = "NTuples_" + era + "_jetptGt30";
   gSystem -> Exec("mkdir " + output_dir);
 
   // Loop over all samples
@@ -137,7 +139,12 @@ void create_dnn_ntuples( TString era = "2017" ){
       float jdeta;
       float pt_tt;
       float pt_ttjj;
+      float dijetpt;
       float jpt_1;
+      float jpt_2;
+      float jeta_1;
+      float jeta_2;
+      int htxs_stage1cat;
       inTree->SetBranchAddress("npartons",&npartons);
       inTree->SetBranchAddress("iso_1",&iso_1);
       inTree->SetBranchAddress("iso_2",&iso_2);
@@ -155,7 +162,12 @@ void create_dnn_ntuples( TString era = "2017" ){
       inTree->SetBranchAddress("jdeta",&jdeta);
       inTree->SetBranchAddress("pt_tt",&pt_tt);
       inTree->SetBranchAddress("pt_ttjj",&pt_ttjj);
+      inTree->SetBranchAddress("dijetpt",&dijetpt);
       inTree->SetBranchAddress("jpt_1",&jpt_1);
+      inTree->SetBranchAddress("jpt_2",&jpt_2);
+      inTree->SetBranchAddress("jeta_1",&jeta_1);
+      inTree->SetBranchAddress("jeta_2",&jeta_2);
+      inTree->SetBranchAddress("htxs_stage1cat",&htxs_stage1cat);
 
       outFile->cd();
       TTree *currentTree = new TTree(subsample,"temporary tree");
@@ -219,6 +231,20 @@ void create_dnn_ntuples( TString era = "2017" ){
 	xsec_lumi_weight = xsec*luminosity/nevents;
 	qcd_correction = qcd_ss_os_iso_relaxed_ratio;
 	trigger_filter_weight = trigger_filter_efficiency;
+
+	// Replace jet variables to have an effectie cut of jetpt > 30 GeV
+	if(njets < 2){
+	  jdeta   = -10;
+	  mjj     = -10;
+	  dijetpt = -10;
+	  pt_ttjj = -10;
+	  jpt_2   = -10;
+	  jeta_2  = -10;
+	  if(njets < 1){
+	    jpt_1 = -10;
+	    jeta_1= -10;
+	  }
+	}
 	
 	// Stitching only for wjets MC in n-jet binned samples in npartons
 	if( subsample.Contains("W") && subsample.Contains("JetsToLNu") ){
@@ -288,6 +314,12 @@ void create_dnn_ntuples( TString era = "2017" ){
 	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 204 && era == "2017") prefiring_weight = 0.970;
 	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 205 && era == "2016") prefiring_weight = 0.920;
 	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 205 && era == "2017") prefiring_weight = 0.850;
+
+	// Select hadronic and leptonic part of VH sample
+	if( subsample.Contains("VH") || subsample.Contains("WplusH") || subsample.Contains("WminusH") ){
+	  if( sample.first.Contains("VBFH") && (htxs_stage1cat>206 || htxs_stage1cat<200) ) continue;
+	  if( (sample.first.Contains("WH") || sample.first.Contains("ZH")) && htxs_stage1cat<=206 && htxs_stage1cat>=200 ) continue;
+	}
 
 	currentTree->Fill();
       }

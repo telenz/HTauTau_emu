@@ -6,21 +6,22 @@
 // 2017
 const vector<TString> MuonEG_Run2017       = { "MuonEG_Run2017B" ,
 					       "MuonEG_Run2017CtoF"};
+const vector<TString> Embedded_2017        = { "Embedding_Run2017" };
 const vector<TString> DYJets_2017          = { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-                      "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8", 
-                      "EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8", 
-                      "EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8"};
+					       "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8",
+					       "EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8",
+					       "EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8"};
 const vector<TString> WJets_2017           = { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-                      "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-                      "EWKWMinus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8" ,
-                      "EWKWPlus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8"};
+					       "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+					       "EWKWMinus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8" ,
+					       "EWKWPlus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8"};
 const vector<TString> TTbar_2017           = { "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8" ,
 					       "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8" ,
 					       "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8" };
@@ -32,27 +33,32 @@ const vector<TString> Diboson_2017         = { "WW_TuneCP5_13TeV-pythia8" ,
 					       "WZ_TuneCP5_13TeV-pythia8" ,
 					       "ZZ_TuneCP5_13TeV-pythia8" };
 const vector<TString> GluGluHToTauTau_2017 = { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" };
-const vector<TString> VBFHToTauTau_2017    = { "VBFHToTauTau_M125_13TeV_powheg_pythia8" };
-const vector<TString> ZHToTauTau_2017      = { "ZHToTauTau_M125_13TeV_powheg_pythia8"  };
+const vector<TString> VBFHToTauTau_2017    = { "VBFHToTauTau_M125_13TeV_powheg_pythia8",
+					       "ZHToTauTau_M125_13TeV_powheg_pythia8",
+					       "WplusHToTauTau_M125_13TeV_powheg_pythia8",
+					       "WminusHToTauTau_M125_13TeV_powheg_pythia8" };
+const vector<TString> ZHToTauTau_2017      = { "ZHToTauTau_M125_13TeV_powheg_pythia8" };
 const vector<TString> WHToTauTau_2017      = { "WplusHToTauTau_M125_13TeV_powheg_pythia8" , "WminusHToTauTau_M125_13TeV_powheg_pythia8" };
 const vector<TString> ggHToWW_2017         = { "GluGluHToWWTo2L2Nu" };
 const vector<TString> VBFHToWW_2017        = { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" };
-const vector<TString> Embedded_2017        = { "Embedding_Run2017" };
+const vector<TString> ttH_2017             = { "ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8" };
 
 // 2016
-const vector<TString> MuonEG_Run2016  = { "MuonEG_Run2016B" , "MuonEG_Run2016C" , "MuonEG_Run2016D" , "MuonEG_Run2016E" , "MuonEG_Run2016F" , "MuonEG_Run2016G" , "MuonEG_Run2016H" };
-const vector<TString> DYJets_2016     = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" , "EWKZ2Jets" };
-const vector<TString> WJets_2016      = { "W1JetsToLNu" , "W2JetsToLNu" , "W3JetsToLNu" , "W4JetsToLNu" , "WJetsToLNu" , "WGToLNuG" , "WGstarToLNuEE" , "WGstarToLNuMuMu" , "EWKWPlus2Jets" , "EWKWMinus2Jet" };
-const vector<TString> TTbar_2016      = { "TTbar" };
-const vector<TString> SingleTop_2016  = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
-const vector<TString> Diboson_2016    = { "VVTo2L2Nu" , "WZJToLLLNu" , "WZTo1L1Nu2Q" , "WZTo1L3Nu" , "WZTo2L2Q" , "ZZTo2L2Q" , "ZZTo4L" , "WWToLNuQQ" };
+const vector<TString> MuonEG_Run2016       = { "MuonEG_Run2016B" , "MuonEG_Run2016C" , "MuonEG_Run2016D" , "MuonEG_Run2016E" , "MuonEG_Run2016F" , "MuonEG_Run2016G" , "MuonEG_Run2016H" };
+const vector<TString> Embedded_2016        = { "Embedding_Run2016" };
+const vector<TString> DYJets_2016          = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" , "EWKZ2Jets" };
+const vector<TString> WJets_2016           = { "W1JetsToLNu" , "W2JetsToLNu" , "W3JetsToLNu" , "W4JetsToLNu" , "WJetsToLNu" , "WGToLNuG" , "WGstarToLNuEE" , "WGstarToLNuMuMu" , "EWKWPlus2Jets" , "EWKWMinus2Jet" };
+const vector<TString> TTbar_2016           = { "TTbar" };
+const vector<TString> SingleTop_2016       = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
+const vector<TString> Diboson_2016         = { "VVTo2L2Nu" , "WZJToLLLNu" , "WZTo1L1Nu2Q" , "WZTo1L3Nu" , "WZTo2L2Q" , "ZZTo2L2Q" , "ZZTo4L" , "WWToLNuQQ" };
 const vector<TString> GluGluHToTauTau_2016 = { "GluGluHToTauTau_M125" };
-const vector<TString> VBFHToTauTau_2016    = { "VBFHToTauTau_M125" };
-const vector<TString> ZHToTauTau_2016      = { "ZHToTauTau_M125"  };
+const vector<TString> VBFHToTauTau_2016    = { "VBFHToTauTau_M125" , "ZHToTauTau_M125" , "WplusHToTauTau_M125" , "WminusHToTauTau_M125" };
+const vector<TString> ZHToTauTau_2016      = { "ZHToTauTau_M125" };
 const vector<TString> WHToTauTau_2016      = { "WplusHToTauTau_M125" , "WminusHToTauTau_M125" };
 const vector<TString> ggHToWW_2016         = { "GluGluHToWWTo2L2Nu_M125" };
 const vector<TString> VBFHToWW_2016        = { "VBFHToWWTo2L2Nu_M125" };
-const vector<TString> Embedded_2016        = { "Embedding_Run2016" };
+const vector<TString> ttH_2016             = { "ttHJetToTT_M125" };
+
 // **************************************************************************************************
 // **************************************************************************************************
 // Cross-section map
@@ -90,7 +96,8 @@ const map<TString, double> xsec_map_2017 = {
   { "WplusHToTauTau_M125_13TeV_powheg_pythia8"  , 0.0527 },
   { "WminusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0358 },
   { "GluGluHToWWTo2L2Nu"                       , 28.87 },  // LO determined with GenXsecAnalyzer
-  { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 3.879 } // LO determined with GenXsecAnalyzer
+  { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 3.879 }, // LO determined with GenXsecAnalyzer
+  { "ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8"         , 0.5269 }  // xsdb
 };
 
 // 2016 (taken from AN2016_355_v10 with minor unrelevant deviations - everything was checked)
@@ -119,7 +126,7 @@ const map<TString, double> xsec_map_2016 = {
     { "WZJToLLLNu"               , 5.26 },
     { "ZZTo4L"                   , 1.212 },
     { "ZZTo2L2Q"                 , 3.22 },
-    { "WGToLNuG"                 , 489.0 },
+    { "WGToLNuG"                 , 178.4 }, // xsdb
     { "WGstarToLNuMuMu"          , 2.793 },
     { "WGstarToLNuEE"            , 3.526 },
     { "EWKWPlus2Jets"            , 25.62 },
@@ -130,8 +137,9 @@ const map<TString, double> xsec_map_2016 = {
     { "ZHToTauTau_M125"          , 0.0594 },
     { "WplusHToTauTau_M125"      , 0.0527 },
     { "WminusHToTauTau_M125"     , 0.0358 },
-    { "GluGluHToWWTo2L2Nu_M125"  , 30.52 }, // xsdb
-    { "VBFHToWWTo2L2Nu_M125"     , 3.754 }  //xsdb
+    { "GluGluHToWWTo2L2Nu_M125"  , 26.8 }, // xsdb
+    { "VBFHToWWTo2L2Nu_M125"     , 3.769 }, // xsdb
+    { "ttHJetToTT_M125"          , 0.4905 } // xsdb
   };
 // **************************************************************************************************
 // **************************************************************************************************
