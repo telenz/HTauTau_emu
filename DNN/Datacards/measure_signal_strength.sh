@@ -1,8 +1,8 @@
 #!bin/bash
 
 # Please specify the following input variables
-ERA=2017
-EMB=1
+#ERA=2017
+#EMB=1
 DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
