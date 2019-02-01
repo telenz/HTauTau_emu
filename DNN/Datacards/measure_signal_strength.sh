@@ -21,9 +21,8 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 cmsenv
 
 cd ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017
-cd output
-rm -rf *
-cd -
+rm -rf output/*
+
 
 # Produce the datacard for the em channel (please add the em channel in category gof in the morphing script)
 ulimit -s unlimited
