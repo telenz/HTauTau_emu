@@ -100,6 +100,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   Sample ggH_GE2J_PTH_60_120("ggH_GE2J_PTH_60_120125");
   Sample ggH_GE2J_PTH_120_200("ggH_GE2J_PTH_120_200125");
   Sample ggH_GE2J_PTH_GT200("ggH_GE2J_PTH_GT200125");
+  Sample ggH_VBFTOPO_JET3VETO("ggH_VBFTOPO_JET3VETO125");
+  Sample ggH_VBFTOPO_JET3("ggH_VBFTOPO_JET3125");
   Sample qqH_VBFTOPO_JET3VETO("qqH_VBFTOPO_JET3VETO125");
   Sample qqH_VBFTOPO_JET3("qqH_VBFTOPO_JET3125");
   Sample qqH_REST("qqH_REST125");
@@ -115,6 +117,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   ggH_GE2J_PTH_60_120.htxs_stage1_flag = "109";
   ggH_GE2J_PTH_120_200.htxs_stage1_flag = "110";
   ggH_GE2J_PTH_GT200.htxs_stage1_flag = "111";
+  ggH_VBFTOPO_JET3VETO.htxs_stage1_flag = "101";
+  ggH_VBFTOPO_JET3.htxs_stage1_flag = "102";
   qqH_VBFTOPO_JET3VETO.htxs_stage1_flag = "201";
   qqH_VBFTOPO_JET3.htxs_stage1_flag = "202";
   qqH_REST.htxs_stage1_flag = "204";
@@ -165,6 +169,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     ggH_GE2J_PTH_120_200.filename = "em-NOMINAL_ntuple_ggH125.root" ;
     ggH_GE2J_PTH_GT200.filename = "em-NOMINAL_ntuple_ggH125.root" ;
     qqH_VBFTOPO_JET3VETO.filename = "em-NOMINAL_ntuple_qqH125.root" ;
+    ggH_VBFTOPO_JET3VETO.filename = "em-NOMINAL_ntuple_ggH125.root" ;
+    ggH_VBFTOPO_JET3.filename = "em-NOMINAL_ntuple_ggH125.root" ;
     qqH_VBFTOPO_JET3.filename = "em-NOMINAL_ntuple_qqH125.root" ;
     qqH_REST.filename = "em-NOMINAL_ntuple_qqH125.root" ;
     qqH_PTJET1_GT200.filename = "em-NOMINAL_ntuple_qqH125.root" ;
@@ -212,6 +218,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 		  { "18_ggH_GE2J_PTH_60_120", ggH_GE2J_PTH_60_120 },
 		  { "19_ggH_GE2J_PTH_120_200", ggH_GE2J_PTH_120_200 },
 		  { "20_ggH_GE2J_PTH_GT200", ggH_GE2J_PTH_GT200 },
+		  { "21_ggH_VBFTOPO_JET3VETO", ggH_VBFTOPO_JET3VETO },
+		  { "22_ggH_VBFTOPO_JET3", ggH_VBFTOPO_JET3 },
 		  { "23_qqH_VBFTOPO_JET3VETO", qqH_VBFTOPO_JET3VETO },
 		  { "24_qqH_VBFTOPO_JET3", qqH_VBFTOPO_JET3 },
 		  { "25_qqH_REST", qqH_REST },
