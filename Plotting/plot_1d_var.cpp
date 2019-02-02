@@ -142,9 +142,9 @@ void plot_1d_var(
 
    // Give warning if there are empty bins
    TH1 *last = (TH1*)stack->GetStack()->Last();
-   for (int iB=1; iB<=last->GetNbinsX(); ++iB) {
-     if(last->GetBinContent(iB) <=0) cout<<endl<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WARNNING : empty bins !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl<<endl;
-   }
+   // for (int iB=1; iB<=last->GetNbinsX(); ++iB) {
+   //   if(last->GetBinContent(iB) <=0) cout<<endl<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WARNNING : empty bins !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl<<endl;
+   // }
 
    // Initialize a background error histogram
    TH1D * bkgdErr = (TH1D*) stack -> GetStack() -> Last() -> Clone("bkgdErr");
