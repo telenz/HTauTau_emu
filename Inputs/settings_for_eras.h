@@ -95,9 +95,9 @@ const map<TString, double> xsec_map_2017 = {
   { "ZHToTauTau_M125_13TeV_powheg_pythia8"      , 0.0594 },
   { "WplusHToTauTau_M125_13TeV_powheg_pythia8"  , 0.0527 },
   { "WminusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0358 },
-  { "GluGluHToWWTo2L2Nu"                       , 28.87 },  // LO determined with GenXsecAnalyzer
-  { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 3.879 }, // LO determined with GenXsecAnalyzer
-  { "ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8"         , 0.5269 }  // xsdb
+  { "GluGluHToWWTo2L2Nu"                        , 48.6*0.02374 },  // from: https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHXSWG#Higgs_cross_sections_and_decay_b and https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageBR#H_llll_ll
+  { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 3.78*0.02374 }, // from: see links above
+  { "ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8"         , 0.5071*0.0627 }  // from: see links above
 };
 
 // 2016 (taken from AN2016_355_v10 with minor unrelevant deviations - everything was checked)
@@ -137,9 +137,9 @@ const map<TString, double> xsec_map_2016 = {
     { "ZHToTauTau_M125"          , 0.0594 },
     { "WplusHToTauTau_M125"      , 0.0527 },
     { "WminusHToTauTau_M125"     , 0.0358 },
-    { "GluGluHToWWTo2L2Nu_M125"  , 26.8 }, // xsdb
-    { "VBFHToWWTo2L2Nu_M125"     , 3.769 }, // xsdb
-    { "ttHJetToTT_M125"          , 0.4905 } // xsdb
+    { "GluGluHToWWTo2L2Nu_M125"  , 48.6*0.02374 }, // see 2017
+    { "VBFHToWWTo2L2Nu_M125"     , 3.78*0.02374 }, // see 2017
+    { "ttHJetToTT_M125"          , 0.5071*0.0627 } // see 2017
   };
 // **************************************************************************************************
 // **************************************************************************************************
