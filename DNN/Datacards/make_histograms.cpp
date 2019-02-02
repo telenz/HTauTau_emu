@@ -91,6 +91,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   Sample qqH("qqH125");
   Sample ZH("ZH125");
   Sample WH("WH125");
+  Sample ggHWW("ggHWW125");
+  Sample qqHWW("qqHWW125");
+  Sample ttH("ttH125");
   Sample ggH_0J("ggH_0J125");
   Sample ggH_1J_PTH_0_60("ggH_1J_PTH_0_60125");
   Sample ggH_1J_PTH_60_120("ggH_1J_PTH_60_120125");
@@ -159,6 +162,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     qqH.filename    = "em-NOMINAL_ntuple_qqH125.root" ;
     ZH.filename    = "em-NOMINAL_ntuple_zh125.root" ;
     WH.filename    = "em-NOMINAL_ntuple_wh125.root" ;
+    ggHWW.filename  = "em-NOMINAL_ntuple_ggHWW.root" ;
+    qqHWW.filename  = "em-NOMINAL_ntuple_qqHWW.root" ;
+    ttH.filename    = "em-NOMINAL_ntuple_ttH.root" ;
     ggH_0J.filename = "em-NOMINAL_ntuple_ggH125.root" ;
     ggH_1J_PTH_0_60.filename = "em-NOMINAL_ntuple_ggH125.root" ;
     ggH_1J_PTH_60_120.filename = "em-NOMINAL_ntuple_ggH125.root" ;
@@ -193,7 +199,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 		  { "10_ggH125" , ggH },
 		  { "11_qqH125" , qqH },
 		  { "12_ZH125"  , ZH },
-		  { "13_WH125"  , WH }
+		  { "13_WH125"  , WH },
+		  { "14_ggHWW"  , ggHWW },
+		  { "15_qqHWW"  , qqHWW },
+		  { "16_ttH"    , ttH }
     };
   }
   else{
@@ -227,6 +236,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 		  { "27_qqH_VH2JET", qqH_VH2JET },
 		  { "28_ZH125" , ZH },
 		  { "29_WH125" , WH },
+		  { "30_ggHWW"  , ggHWW },
+		  { "31_qqHWW"  , qqHWW },
+		  { "32_ttH"    , ttH }
     };
   }
 
@@ -453,7 +465,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       }
 
       // 12.) ggh reweighting
-      if( smpl.second.name.Contains("ggH") ){
+      if( smpl.second.name.Contains("ggH") && ( smpl.second.name != "ggHWW125" || era == "2017") ){
 	smpl.second = create_systematic_uncertainty("gghShapeResUp"  , "_THU_ggH_ResUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Res*");
 	smpl.second = create_systematic_uncertainty("gghShapeResDown", "_THU_ggH_ResDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Res*");
 	smpl.second = create_systematic_uncertainty("gghShapeMig01Up"  , "_THU_ggH_Mig01Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Mig01*");
