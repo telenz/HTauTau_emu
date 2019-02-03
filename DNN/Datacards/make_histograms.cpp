@@ -372,8 +372,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       // 5.) TT contamination in embedded sample  (only initialize this uncertainty -> calculate it later)
       if(smpl.second.name == "EMB"){
-	smpl.second = create_systematic_uncertainty("ttContEmbUp"  , "_CMS_htt_emb_ttbarUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", false, "","");
-	smpl.second = create_systematic_uncertainty("ttContEmbDown", "_CMS_htt_emb_ttbarDown", cat.second.plot_2d, smpl.second, tree_, false, "", false, "","");
+	smpl.second = create_systematic_uncertainty("ttContEmbUp"  , "_CMS_htt_emb_ttbar_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", false, "","");
+	smpl.second = create_systematic_uncertainty("ttContEmbDown", "_CMS_htt_emb_ttbar_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, false, "", false, "","");
       }
 
       if(smpl.second.name == "EMB") continue;
