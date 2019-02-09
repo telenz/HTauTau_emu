@@ -285,10 +285,24 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["4_TT"].weightStringSS  += "topptweight*prefiring_weight*";
     cat.second.sample_list["5_TTcont"].weightString    += "topptweight*prefiring_weight*";
     cat.second.sample_list["5_TTcont"].weightStringSS  += "topptweight*prefiring_weight*";
+    if(era=="2017"){
+       cat.second.sample_list["6_VV"].weightString    += "1.56*";
+       cat.second.sample_list["6_VV"].weightStringSS  += "1.56*";
+       cat.second.sample_list["7_VVcont"].weightString    += "1.56*";
+       cat.second.sample_list["7_VVcont"].weightStringSS  += "1.56*";
+    }
+    if(!stage1){
+       cat.second.sample_list["12_ZH125"].weightString    += "0.933*"; // correction of 7% to account for ggZH
+       cat.second.sample_list["12_ZH125"].weightStringSS  += "0.933*"; // correction of 7% to account for ggZH
+    }
+    else{
+       cat.second.sample_list["28_ZH125"].weightString    += "0.933*"; // correction of 7% to account for ggZH
+       cat.second.sample_list["28_ZH125"].weightStringSS  += "0.933*"; // correction of 7% to account for ggZH
+    }
     for(auto& smpl : cat.second.sample_list){
       if( smpl.second.name.Contains("ggH") ){
-	cat.second.sample_list[smpl.first].weightString    += "weight_ggh_NNLOPS*";
-	cat.second.sample_list[smpl.first].weightStringSS  += "weight_ggh_NNLOPS*";
+	cat.second.sample_list[smpl.first].weightString    += "weight_ggh_NNLOPS*1.01*"; // correction of 1% to account for bbH
+	cat.second.sample_list[smpl.first].weightStringSS  += "weight_ggh_NNLOPS*1.01*";
       }
       if( smpl.second.name.Contains("qqH") ){
 	cat.second.sample_list[smpl.first].weightString    += "prefiring_weight*";
@@ -432,12 +446,12 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name.Contains("125")){
 	// 9.) Recoil scale/resolution uncertainties
-       	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_metUp"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
-       	smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_metDown", cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleDown");
+       	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_met_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
+       	smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_met_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleDown");
        	smpl.second.uncertainties["recoilscaleUp"].filename.ReplaceAll("NOMINAL","_recoilscaleUp");
        	smpl.second.uncertainties["recoilscaleDown"].filename.ReplaceAll("NOMINAL","_recoilscaleDown");
-       	smpl.second = create_systematic_uncertainty("recoilresoUp"  , "_CMS_htt_boson_reso_metUp"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilresoUp");
-       	smpl.second = create_systematic_uncertainty("recoilresoDown", "_CMS_htt_boson_reso_metDown", cat.second.plot_2d, smpl.second, tree_, true, "recoilresoDown");
+       	smpl.second = create_systematic_uncertainty("recoilresoUp"  , "_CMS_htt_boson_reso_met_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilresoUp");
+       	smpl.second = create_systematic_uncertainty("recoilresoDown", "_CMS_htt_boson_reso_met_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, true, "recoilresoDown");
        	smpl.second.uncertainties["recoilresoUp"].filename.ReplaceAll("NOMINAL","_recoilresoUp");
        	smpl.second.uncertainties["recoilresoDown"].filename.ReplaceAll("NOMINAL","_recoilresoDown");
        	// 8.) Unclustered MET scale
