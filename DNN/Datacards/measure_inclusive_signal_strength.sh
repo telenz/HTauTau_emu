@@ -11,7 +11,7 @@ BASE_PATH=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/Datacards/ou
 #BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/Datacards/output/
 INPUT_FOLDER=${ERA}
 OUTPUT_FOLDER=${ERA}_smhtt
-CMSSW_LOCATION=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CombineForUnbliding/CMSSW_8_1_0/src
+CMSSW_LOCATION=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CombineHarvester/2017/CMSSW_8_1_0/src/
 #CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/CombineHarvester/2017/CMSSW_7_4_7/src
 CURRENT_PATH=$(pwd)
 
@@ -21,7 +21,7 @@ source /cvmfs/cms.cern.ch/cmsset_default.sh
 cmsenv
 
 cd ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017
-#rm -rf output/*
+rm -rf output/*
 
 
 # Produce the datacard for the em channel (please add the em channel in category gof in the morphing script)
@@ -65,7 +65,7 @@ DATACARD_PATH=output/${ERA}_smhtt/cmb/125
 combineTool.py -M T2W -o ${ERA}_workspace.root -i ${DATACARD_PATH} --parallel 12
 
 combineTool.py -M MultiDimFit -m 125 -d ${DATACARD_PATH}/${ERA}_workspace.root \
-    --algo singles\
+    --algo singles \
     --robustFit 1 -n $ERA \
     --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0 \
     --rMin -50.0 --rMax 50.0
