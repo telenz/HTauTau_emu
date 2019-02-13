@@ -3,6 +3,7 @@ import ROOT as R
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
+import yaml
 
 def main(): 
 
@@ -41,6 +42,7 @@ def main():
 
         confusion[TDirs.index(TDir)] = compressDict(tempdict,classes,'em',embedded)
 
+
     # plotting confusion matrices
     print "Writing confusion matrices to output/"+era+"/figures/"
     plot_confusion(confusion,classes,"output/"+era+"/figures/em_confusion.pdf", "std")
@@ -52,6 +54,18 @@ def main():
     conf_eff1, conf_eff2 = get_efficiency_representations(confusion)
     plot_confusion(conf_eff1, classes, "output/"+era+"/figures/em_confusion_eff1.pdf")
     plot_confusion(conf_eff2, classes, "output/"+era+"/figures/em_confusion_eff2.pdf", "eff")
+
+    names = ["em_confusion_pur1","em_confusion_pur2","em_confusion_eff1","em_confusion_eff2"]
+    i=0
+    for confmatrix in conf_pur1,conf_pur2,conf_eff1,conf_eff2:
+        d = {}
+        for i1, c1 in enumerate(classes):
+          d[c1] = {}
+          for i2, c2 in enumerate(classes):
+                d[c1][c2] = float(confmatrix[i2, i1])
+          f = open("output/"+era+"/yamlfiles/"+names[i]+".yaml", "w")
+          yaml.dump(d, f)
+        i=i+1
 
     rootfile.Close()
 
