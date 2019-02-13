@@ -1,0 +1,1 @@
+python get_soverb.py --output-directory="Test3" --era="2017" --num-threads=1 --postfit-file=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/Datacards/output/2017/2017_datacard_shapes_postfit_sb.root --directory="Test"
