@@ -260,6 +260,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       cat.second.sample_list[smpl.first].cutStringSS    = "q_1*q_2>0" + cat.second.cutstring;
       cat.second.sample_list[smpl.first].weightStringSS = weight + "qcdweight*";
       cat.second.sample_list[smpl.first].variable       = cat.second.variable;
+      // if (cat.second.name.Contains("ggh") || cat.second.name.Contains("qqh")){
+      //    cat.second.sample_list[smpl.first].cutString += "&& predicted_prob > 0.5";
+      //    cat.second.sample_list[smpl.first].cutStringSS += "&& predicted_prob > 0.5";
+      // }
     }
   }
 
