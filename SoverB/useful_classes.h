@@ -115,15 +115,15 @@ public :
 };
 // ********************************************************************************************
 
-//vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidistant_binning, Category cat , TString directory,TString directory_friendtree ){
-vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidistant_binning, Category cat , TString directory ){
+vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidistant_binning, Category cat , TString directory,TString directory_friendtree ){
+
   TFile *file = new TFile( directory + "/" + cat.sample_list.at("0_Data").filename );
   TTree *tree = (TTree*) file->Get("TauCheck");
 
-  //TFile *file_friend = new TFile( directory_friendtree + "/" + cat.sample_list.at("0_Data").filename );
-  //TTree *tree_friend = (TTree*) file_friend->Get("TauCheck");
-  //tree->AddFriend(tree_friend);
-  //tree->AddFriend("friendtree=TauCheck",directory_friendtree + "/" + cat.sample_list.at("0_Data").filename);
+  TFile *file_friend = new TFile( directory_friendtree + "/" + cat.sample_list.at("0_Data").filename );
+  TTree *tree_friend = (TTree*) file_friend->Get("TauCheck");
+  tree->AddFriend(tree_friend);
+  tree->AddFriend("friendtree=TauCheck",directory_friendtree + "/" + cat.sample_list.at("0_Data").filename);
 
 
   float range_low  = 0;
@@ -200,16 +200,15 @@ vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidist
 }
 
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-//std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subrange, bool apply_equidistant_binning, Category cat , TString directory, TString directory_friendtree){
-std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subrange, bool apply_equidistant_binning, Category cat , TString directory){
+std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subrange, bool apply_equidistant_binning, Category cat , TString directory, TString directory_friendtree){
 
   TFile *file = new TFile( directory + "/" + cat.sample_list.at("0_Data").filename );
   TTree *tree = (TTree*) file->Get("TauCheck");
 
-  //TFile *file_friend = new TFile( directory_friendtree + "/" + cat.sample_list.at("0_Data").filename );
-  //TTree *tree_friend = (TTree*) file_friend->Get("TauCheck");
-  //tree->AddFriend(tree_friend);
-  //tree->AddFriend("friendtree=TauCheck",directory_friendtree + "/" + cat.sample_list.at("0_Data").filename);
+  TFile *file_friend = new TFile( directory_friendtree + "/" + cat.sample_list.at("0_Data").filename );
+  TTree *tree_friend = (TTree*) file_friend->Get("TauCheck");
+  tree->AddFriend(tree_friend);
+  tree->AddFriend("friendtree=TauCheck",directory_friendtree + "/" + cat.sample_list.at("0_Data").filename);
 
   vector<float> binning_2d_x;
   vector<float> binning_2d_y;
