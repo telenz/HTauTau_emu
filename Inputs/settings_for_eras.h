@@ -3,6 +3,32 @@
 
 // **************************************************************************************************
 // Define the subsamples that belong to a certain process
+// 2018
+const vector<TString> MuonEG_Run2018       = { "MuonEG_Run2018A" ,
+                                               "MuonEG_Run2018B", 
+                                               "MuonEG_Run2018C",
+                                               "MuonEG_Run2018D"};
+const vector<TString> DYJets_2018          = { "DY1JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" ,
+                                               "DY2JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" ,
+                                               "DY3JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" ,
+                                               "DY4JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" ,
+                                               "DYJetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"};
+const vector<TString> WJets_2018           = { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+                                               "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+                                               "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+                                               "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+                                               "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" };
+const vector<TString> TTbar_2018           = { "TTTo2L2Nu_TuneCP5_13TeV_powheg_pythia8" ,
+                                               "TTToHadronic_TuneCP5_13TeV_powheg_pythia8" ,
+                                               "TTToSemiLeptonic_TuneCP5_13TeV_powheg_pythia8" };
+const vector<TString> SingleTop_2018       = { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8" ,
+                                               "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8" ,
+                                               "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" ,
+                                               "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" };
+const vector<TString> Diboson_2018         = { "WW_TuneCP5_13TeV-pythia8" ,
+                                               "WZ_TuneCP5_13TeV-pythia8" ,
+                                               "ZZ_TuneCP5_13TeV-pythia8" };
+
 // 2017
 const vector<TString> MuonEG_Run2017       = { "MuonEG_Run2017B" ,
 					       "MuonEG_Run2017CtoF"};
@@ -62,6 +88,29 @@ const vector<TString> ttH_2016             = { "ttHJetToTT_M125" };
 // **************************************************************************************************
 // **************************************************************************************************
 // Cross-section map
+// 2018 (taken from 2018, have to be checked!)
+const map<TString, double> xsec_map_2018 = {
+   { "DYJetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"  , 5765.4*1.079 }, // 5765.4 is the old NNLO xsec - it has been updated to 6225.42 - has been decided to keep the old value for consistency
+   { "DY1JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 877.8*1.079 },
+   { "DY2JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 304.4*1.079 },
+   { "DY3JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 111.5*1.079 },
+   { "DY4JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 44.03*1.079 },
+   { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 52940.0*1.162 },
+   { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 8104.0*1.162 },
+   { "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 2793.0*1.162 },
+   { "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 992.5*1.162 },
+   { "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 544.3*1.162 },
+   { "TTTo2L2Nu_TuneCP5_13TeV_powheg_pythia8"        , 88.29 },
+   { "TTToHadronic_TuneCP5_13TeV_powheg_pythia8"     , 377.96 },
+   { "TTToSemiLeptonic_TuneCP5_13TeV_powheg_pythia8" , 365.35 },
+   { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8" , 80.95 },
+   { "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"     , 136.02 },
+   { "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                  , 35.85 },
+   { "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                      , 35.85 },
+   { "WW_TuneCP5_13TeV-pythia8" , 75.88 },
+   { "WZ_TuneCP5_13TeV-pythia8" , 27.57 },
+   { "ZZ_TuneCP5_13TeV-pythia8" , 12.14 }
+};
 // 2017 (checked ! - reference is https://twiki.cern.ch/twiki/bin/view/CMS/HiggsToTauTauWorking2017 )
 const map<TString, double> xsec_map_2017 = {
    // { "DYJetsToLL_M-10to50"      , 15820*1.079 },
@@ -144,6 +193,18 @@ const map<TString, double> xsec_map_2016 = {
 // **************************************************************************************************
 // **************************************************************************************************
 // maps short name to filenames - needed for stitching
+const map<TString , TString> process_map_2018 = {
+  { "WJets"   , "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"},
+  { "W1Jets"  , "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"},
+  { "W2Jets"  , "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"},
+  { "W3Jets"  , "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"},
+  { "W4Jets"  , "W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"},
+  { "DYJets"  , "DYJetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"},
+  { "DY1Jets" , "DY1JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"},
+  { "DY2Jets" , "DY2JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"},
+  { "DY3Jets" , "DY3JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"},
+  { "DY4Jets" , "DY4JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"},
+};
 
 const map<TString , TString> process_map_2017 = {
   { "WJets"   , "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"},

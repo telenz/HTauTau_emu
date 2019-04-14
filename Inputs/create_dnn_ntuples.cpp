@@ -10,7 +10,7 @@
 
 bool applyPreselection = true;
 
-void create_dnn_ntuples( TString era = "2017" ){
+void create_dnn_ntuples( TString era = "2018" ){
 
   // Some definitions
   TString channel = "em";
@@ -25,11 +25,27 @@ void create_dnn_ntuples( TString era = "2017" ){
   map< TString , vector<TString> > samples_map;
   const map<TString, double>  *xsec_map    = 0;
   const map<TString, TString> *process_map = 0;
-
-  if(era == "2017"){
+  
+  if (era == "2018"){
+     xsec_map    = &xsec_map_2018;
+     process_map = &process_map_2018;
+     luminosity  = 59740;
+     trigger_filter_efficiency = 1.0;
+     qcd_ss_os_iso_relaxed_ratio = 1.89; //number from Janek's talk in TauPOG meeting (10.04.19)
+     embedded_trigger_weight  = 1.00;
+     embedded_tracking_weight = 1.00;
+     samples_map[channel + "-NOMINAL_ntuple_MuonEG"   ] = MuonEG_Run2018;
+     samples_map[channel + "-NOMINAL_ntuple_DYJets"   ] = DYJets_2018;
+     samples_map[channel + "-NOMINAL_ntuple_WJets"    ] = WJets_2018;
+     samples_map[channel + "-NOMINAL_ntuple_TTbar"    ] = TTbar_2018;
+     samples_map[channel + "-NOMINAL_ntuple_SingleTop"] = SingleTop_2018;
+     samples_map[channel + "-NOMINAL_ntuple_Diboson"  ] = Diboson_2018;
+     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CMSSW_10_2_5/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2018_all_eras/";  
+  }
+  else if(era == "2017"){
     xsec_map    = &xsec_map_2017;
     process_map = &process_map_2017;
-    luminosity  = 41900;
+    luminosity  = 41900;                 //FIXME: different number on HTT twiki
     trigger_filter_efficiency = 1.0;
     qcd_ss_os_iso_relaxed_ratio = 2.38;
     embedded_trigger_weight  = 1.00;
@@ -54,7 +70,7 @@ void create_dnn_ntuples( TString era = "2017" ){
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
     process_map = &process_map_2016;
-    luminosity  = 35866;
+    luminosity  = 35866;                   //FIXME: different number on HTT twiki
     trigger_filter_efficiency = 0.979;
     qcd_ss_os_iso_relaxed_ratio = 2.3;
     embedded_trigger_weight  = 1.03;
@@ -100,7 +116,7 @@ void create_dnn_ntuples( TString era = "2017" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
-  TString output_dir = "NTuples_" + era + "_jetptGt30";
+  TString output_dir = "NTuples_" + era;
   gSystem -> Exec("mkdir " + output_dir);
 
   // Loop over all samples
