@@ -6,7 +6,7 @@ from joblib import Parallel, delayed
 import multiprocessing
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-e', dest='era', help='ERA' ,choices = ['2016','2017'], default = '2016')
+parser.add_argument('-e', dest='era', help='ERA' ,choices = ['2016','2017','2018'], default = '2016')
 parser.add_argument('-emb', dest='embedded',   help='embedded samples used' , action='store_true')
 args = parser.parse_args()
 
@@ -26,6 +26,9 @@ config_filename_in = "config_for_gof_2016_with_placeholders.cfg"
 if era == "2017" :
     print "era is 2017"
     config_filename_in = "config_for_gof_2017_with_placeholders.cfg"
+if era == "2018" :
+    print "era is 2018"
+    config_filename_in = "config_for_gof_2018_with_placeholders.cfg"
 
 variable_list = [ "m_sv",
                   "pt_sv",
