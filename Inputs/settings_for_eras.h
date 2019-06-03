@@ -21,8 +21,8 @@ const vector<TString> WJets_2018           = { "W1JetsToLNu_TuneCP5_13TeV-madgra
 const vector<TString> TTbar_2018           = { "TTTo2L2Nu_TuneCP5_13TeV_powheg_pythia8" ,
                                                "TTToHadronic_TuneCP5_13TeV_powheg_pythia8" ,
                                                "TTToSemiLeptonic_TuneCP5_13TeV_powheg_pythia8" };
-const vector<TString> SingleTop_2018       = { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8" ,
-                                               "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8" ,
+const vector<TString> SingleTop_2018       = { "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8" ,
+                                               "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8" ,
                                                "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" ,
                                                "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" };
 const vector<TString> Diboson_2018         = { "WW_TuneCP5_13TeV-pythia8" ,
@@ -103,8 +103,8 @@ const map<TString, double> xsec_map_2018 = {
    { "TTTo2L2Nu_TuneCP5_13TeV_powheg_pythia8"        , 88.29 },
    { "TTToHadronic_TuneCP5_13TeV_powheg_pythia8"     , 377.96 },
    { "TTToSemiLeptonic_TuneCP5_13TeV_powheg_pythia8" , 365.35 },
-   { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8" , 80.95 },
-   { "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"     , 136.02 },
+   { "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8" , 80.95 },
+   { "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"     , 136.02 },
    { "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                  , 35.85 },
    { "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                      , 35.85 },
    { "WW_TuneCP5_13TeV-pythia8" , 75.88 },
