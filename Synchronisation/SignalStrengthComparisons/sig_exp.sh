@@ -11,3 +11,4 @@ combineTool.py -M T2W -o ${ERA}_workspace.root -i output/${ERA}_smhtt/cmb/125   
           
 combine -M Significance -t -1 --expectSignal 1 --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0 --significance -m 125 -n $ERA --toysFrequentist output/${ERA}_smhtt/cmb/125/${ERA}_workspace.root
 
+#combine -M AsymptoticLimits -t -1 --expectSignal 1 --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0 --significance -m 125 -n $ERA output/${ERA}_smhtt/cmb/125/${ERA}_workspace.root
