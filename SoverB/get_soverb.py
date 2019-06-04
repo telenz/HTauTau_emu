@@ -75,11 +75,11 @@ def calculate_soverb(config):
        
     for channel in category_map.keys():
         for i, nick in enumerate(category_map[channel]):
-            histsig = postfit_file.Get("htt_{ch}_{cat}_Run{era}_postfit/ggH".format(ch=channel, cat=nick, era=args.era))
-            histsig.Add(postfit_file.Get("htt_{ch}_{cat}_Run{era}_postfit/qqH".format(ch=channel, cat=nick, era=args.era)))
+            histsig = postfit_file.Get("htt_{ch}_{cat}_Run{era}_prefit/ggH".format(ch=channel, cat=nick, era=args.era))
+            histsig.Add(postfit_file.Get("htt_{ch}_{cat}_Run{era}_prefit/qqH".format(ch=channel, cat=nick, era=args.era)))
             
             hists[channel][i]["sig"] = histsig
-            hists[channel][i]["bkg"] = postfit_file.Get("htt_{ch}_{cat}_Run{era}_postfit/TotalBkg".format(ch=channel, cat=nick, era=args.era)) #already contains signal in CMSSW_8 combine
+            hists[channel][i]["bkg"] = postfit_file.Get("htt_{ch}_{cat}_Run{era}_prefit/TotalBkg".format(ch=channel, cat=nick, era=args.era)) #already contains signal in CMSSW_8 combine
     
     input_file = ROOT.TFile(os.path.join(args.directory, datafile), "READ")
    
