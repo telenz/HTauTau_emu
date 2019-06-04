@@ -1,0 +1,6 @@
+ShapeComparisons/*.root
+SignalStrengthComparisons/*.json
+SignalStrengthComparisons/*.png
+SignalStrengthComparisons/*.txt
+SignalStrengthComparisons/*~
+ShapeComparisons/*~

@@ -1,0 +1,6 @@
+*.log
+*~
+*.json
+*.png
+*.pdf
+output
