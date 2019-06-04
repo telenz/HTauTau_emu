@@ -182,10 +182,13 @@ def getResult(prompt):
     results = {}
     for line in prompt.splitlines():
         if "-- Significance --" in line: save = True
+        #if "-- AsymptoticLimits ( CLs ) --" in line: save = True
         if "Done" in line: save = False
 
         if save and "Significance:" in line:
             results["sig"]= float( line.replace("Significance:","").replace(" ","") )
+        #if save and "Observed Limit:" in line:
+        #    results["sig"]= float( line.replace("Observed Limit: r < ","").replace(" ","") )
         else:
             print line    
     return results
