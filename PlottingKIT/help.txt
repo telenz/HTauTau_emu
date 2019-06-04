@@ -1,0 +1,4 @@
+plot_shapes.sh 2016 stxs_stage0 stxs_stage1 1 1 em
+
+
+plot_shapes.sh 2017 stxs_stage0 stxs_stage1 1 1 em
