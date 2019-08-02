@@ -35,12 +35,20 @@ void create_dnn_ntuples( TString era = "2018" ){
      embedded_trigger_weight  = 1.00;
      embedded_tracking_weight = 1.00;
      samples_map[channel + "-NOMINAL_ntuple_MuonEG"   ] = MuonEG_Run2018;
+     samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2018;
      samples_map[channel + "-NOMINAL_ntuple_DYJets"   ] = DYJets_2018;
      samples_map[channel + "-NOMINAL_ntuple_WJets"    ] = WJets_2018;
      samples_map[channel + "-NOMINAL_ntuple_TTbar"    ] = TTbar_2018;
      samples_map[channel + "-NOMINAL_ntuple_SingleTop"] = SingleTop_2018;
      samples_map[channel + "-NOMINAL_ntuple_Diboson"  ] = Diboson_2018;
-     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CMSSW_10_2_5/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2018_all_eras/";  
+     samples_map[channel + "-NOMINAL_ntuple_ggH"      ] = GluGluHToTauTau_2018;
+     samples_map[channel + "-NOMINAL_ntuple_VBFH"     ] = VBFHToTauTau_2018;
+     samples_map[channel + "-NOMINAL_ntuple_ZH"       ] = ZHToTauTau_2018;
+     samples_map[channel + "-NOMINAL_ntuple_WH"       ] = WHToTauTau_2018;
+     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2018;
+     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2018;
+     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2018;
+     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2018_all_eras/FastMTTValuesForMela";  
   }
   else if(era == "2017"){
     xsec_map    = &xsec_map_2017;
@@ -64,7 +72,7 @@ void create_dnn_ntuples( TString era = "2018" ){
     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2017;
-    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_10/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
 
   }
   else if(era == "2016"){
@@ -116,7 +124,7 @@ void create_dnn_ntuples( TString era = "2018" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
-  TString output_dir = "NTuples_" + era;
+  TString output_dir = "NTuples_v2_FastMTTValuesMELA" + era;
   gSystem -> Exec("mkdir " + output_dir);
 
   // Loop over all samples
