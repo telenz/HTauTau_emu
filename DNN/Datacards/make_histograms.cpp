@@ -130,21 +130,21 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
   if(!is_dnn_prediction){
     
-    Data.filename   = "NOMINAL_ntuple_MuonEG_em.root";
-    ZTT.filename    = "NOMINAL_ntuple_DYJets_em.root" ;
-    ZL.filename     = "NOMINAL_ntuple_DYJets_em.root" ;
-    W.filename      = "NOMINAL_ntuple_WJets_em.root" ;
-    TT.filename     = "NOMINAL_ntuple_TTbar_em.root" ;
-    TTcont.filename = "NOMINAL_ntuple_TTbar_em.root" ;
-    VV.filename     = "NOMINAL_ntuple_Diboson_em.root" ;
-    VVcont.filename = "NOMINAL_ntuple_Diboson_em.root" ;
-    ST.filename     = "NOMINAL_ntuple_SingleTop_em.root" ;
-    QCD.filename    = "NOMINAL_ntuple_MuonEG_em.root" ;
-    EMB.filename    = "NOMINAL_ntuple_Embedded_em.root" ;
-    ggH.filename    = "NOMINAL_ntuple_ggH_em.root" ;
-    qqH.filename    = "NOMINAL_ntuple_VBFH_em.root" ;
-    ZH.filename     = "NOMINAL_ntuple_ZH_em.root" ;
-    WH.filename     = "NOMINAL_ntuple_WH_em.root" ;
+    Data.filename   = "em-NOMINAL_ntuple_MuonEG.root";
+    ZTT.filename    = "em-NOMINAL_ntuple_DYJets.root" ;
+    ZL.filename     = "em-NOMINAL_ntuple_DYJets.root" ;
+    W.filename      = "em-NOMINAL_ntuple_WJets.root" ;
+    TT.filename     = "em-NOMINAL_ntuple_TTbar.root" ;
+    TTcont.filename = "em-NOMINAL_ntuple_TTbar.root" ;
+    VV.filename     = "em-NOMINAL_ntuple_Diboson.root" ;
+    VVcont.filename = "em-NOMINAL_ntuple_Diboson.root" ;
+    ST.filename     = "em-NOMINAL_ntuple_SingleTop.root" ;
+    QCD.filename    = "em-NOMINAL_ntuple_MuonEG.root" ;
+    EMB.filename    = "em-NOMINAL_ntuple_Embedded.root" ;
+    ggH.filename    = "em-NOMINAL_ntuple_ggH.root" ;
+    qqH.filename    = "em-NOMINAL_ntuple_VBFH.root" ;
+    ZH.filename     = "em-NOMINAL_ntuple_ZH.root" ;
+    WH.filename     = "em-NOMINAL_ntuple_WH.root" ;
   }
   else{
     Data.filename   = "em-NOMINAL_ntuple_Data.root" ;
