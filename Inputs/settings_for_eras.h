@@ -108,17 +108,17 @@ const vector<TString> ttH_2016             = { "ttHJetToTT_M125" };
 // **************************************************************************************************
 // **************************************************************************************************
 // Cross-section map
-// 2018 (taken from 2017, have to be checked!)
+// 2018 (taken from 2017 - 2017 was checked)
 const map<TString, double> xsec_map_2018 = {
-   { "DYJetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"  , 5765.4*1.079 }, // 5765.4 is the old NNLO xsec - it has been updated to 6225.42 - has been decided to keep the old value for consistency
-   { "DY1JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 877.8*1.079 },
-   { "DY2JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 304.4*1.079 },
-   { "DY3JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 111.5*1.079 },
-   { "DY4JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 44.03*1.079 },
+   { "DYJetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"  ,  6225.42 }, // NNLO xsec -> k-factor=1.165
+   { "DY1JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 877.8*1.165 },
+   { "DY2JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 304.4*1.165 },
+   { "DY3JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 111.5*1.165 },
+   { "DY4JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 44.04*1.165 },
    { "EWKZ2Jets_ZToNuNu_TuneCP5_PSweights_13TeV-madgraph-pythia8" , 10.66 },
    { "EWKZ2Jets_ZToLL_M-50_TuneCP5_PSweights_13TeV-madgraph-pythia8" , 4.321 },
    { "DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8" , 21658.0 },
-   { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 52940.0*1.162 },
+   { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 61526.7 },   // NNLO -> k-factor=1.162
    { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 8104.0*1.162 },
    { "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 2793.0*1.162 },
    { "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 992.5*1.162 },
@@ -133,7 +133,7 @@ const map<TString, double> xsec_map_2018 = {
    { "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8"     , 136.02 },
    { "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                  , 35.85 },
    { "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                      , 35.85 },
-   { "WW_TuneCP5_13TeV-pythia8" , 75.88 },
+   { "WW_TuneCP5_13TeV-pythia8" , 118.7 },  // NNLO
    { "WZ_TuneCP5_13TeV-pythia8" , 27.57 },
    { "ZZ_TuneCP5_13TeV-pythia8" , 12.14 },
    { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" , 48.58*0.0627 },
@@ -145,17 +145,17 @@ const map<TString, double> xsec_map_2018 = {
    { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 3.78*0.02374 },
    { "ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8" , 0.5071*0.0627 },
 };
-// 2017 (checked ! - reference is https://twiki.cern.ch/twiki/bin/view/CMS/HiggsToTauTauWorking2017 )
+// 2017 (checked again - reference is http://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2018/255 -> DY xsec updated )
 const map<TString, double> xsec_map_2017 = {
    // { "DYJetsToLL_M-10to50"      , 15820*1.079 },
-  { "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"  , 5765.4*1.079 }, // 5765.4 is the old NNLO xsec - it has been updated to 6225.42 - has been decided to keep the old value for consistency
-  { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 877.8*1.079 },
-  { "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 304.4*1.079 },
-  { "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 111.5*1.079 },
-  { "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 44.03*1.079 },
+  { "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"  , 6225.42 }, // NNLO xsec -> k-factor=1.165
+  { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 877.8*1.165 },
+  { "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 304.4*1.165 },
+  { "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 111.5*1.165 },
+  { "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 44.04*1.165 },
   { "EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8" , 4.321 },
   { "EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8" , 10.66 },
-  { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 52940.0*1.162 },
+  { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 61526.7 },   // NNLO -> k-factor=1.162
   { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 8104.0*1.162 },
   { "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 2793.0*1.162 },
   { "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 992.5*1.162 },
@@ -170,7 +170,7 @@ const map<TString, double> xsec_map_2017 = {
   { "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8"     , 136.02 },
   { "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                  , 35.85 },
   { "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8"                      , 35.85 },
-  { "WW_TuneCP5_13TeV-pythia8" , 75.88 },
+  { "WW_TuneCP5_13TeV-pythia8" , 118.7 },  // NNLO
   { "WZ_TuneCP5_13TeV-pythia8" , 27.57 },
   { "ZZ_TuneCP5_13TeV-pythia8" , 12.14 },
   { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" , 48.58*0.0627 },
