@@ -53,7 +53,7 @@ void create_dnn_ntuples( TString era = "2018" ){
   else if(era == "2017"){
     xsec_map    = &xsec_map_2017;
     process_map = &process_map_2017;
-    luminosity  = 41900;                 //FIXME: different number on HTT twiki
+    luminosity  = 41530;                 // Take number from LUMI twiki : https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM#SummaryTable
     trigger_filter_efficiency = 1.0;
     qcd_ss_os_iso_relaxed_ratio = 2.38;
     embedded_trigger_weight  = 1.00;
@@ -78,7 +78,7 @@ void create_dnn_ntuples( TString era = "2018" ){
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
     process_map = &process_map_2016;
-    luminosity  = 35866;                   //FIXME: different number on HTT twiki
+    luminosity  = 35920;               // Take number from LUMI twiki : https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM#SummaryTable
     trigger_filter_efficiency = 0.979;
     qcd_ss_os_iso_relaxed_ratio = 2.3;
     embedded_trigger_weight  = 1.03;
@@ -313,7 +313,7 @@ void create_dnn_ntuples( TString era = "2018" ){
 	else if(njets>=2 && mjj>=350 && pt_tt<200)  htxs_reco_flag_qqh = 202;
 	else if(njets>=2 && mjj>=350 && pt_tt>=200) htxs_reco_flag_qqh = 203;
 
-	// Select hadronic and leptonic part of VH sample  // FIXME -> what do I need to do here.
+	// Select hadronic and leptonic part of VH sample
 	if( subsample.Contains("VH") || subsample.Contains("WplusH") || subsample.Contains("WminusH") ){
 	  if( sample.first.Contains("VBFH") && (htxs_stage1p1cat>210 || htxs_stage1p1cat<200) ) continue;
 	  if( (sample.first.Contains("WH") || sample.first.Contains("ZH")) && htxs_stage1p1cat<=210 && htxs_stage1p1cat>=200 ) continue;
