@@ -1,8 +1,8 @@
-#include "bin/useful_classes.h"
-#include "bin/systematic_uncertainties.h"
-#include "bin/Unfold.C"
-#include "bin/HttStylesNew.cc"
-#include "bin/Config.cc"
+#include "../GoF/bin/useful_classes.h"
+#include "../GoF/bin/systematic_uncertainties.h"
+#include "../GoF/bin/Config.cc"
+#include "../GoF/bin/Unfold.C"
+#include "../GoF/bin/HttStylesNew.cc"
 #include <algorithm>
 #include <typeinfo>
 #include "TSystem.h"
@@ -90,6 +90,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   Sample qqH("qqH125");
   Sample ZH("ZH125");
   Sample WH("WH125");
+  Sample ggHWW("ggHWW125");
+  Sample qqHWW("qqHWW125");
+  Sample ttH("ttH125");
 
   if(!is_dnn_prediction){
     Data.filename   = "em-NOMINAL_ntuple_MuonEG.root";
@@ -107,6 +110,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     qqH.filename    = "em-NOMINAL_ntuple_VBFH.root" ;
     ZH.filename     = "em-NOMINAL_ntuple_ZH.root" ;
     WH.filename     = "em-NOMINAL_ntuple_WH.root" ;
+    ggHWW.filename  = "em-NOMINAL_ntuple_ggHWW.root" ;
+    qqHWW.filename  = "em-NOMINAL_ntuple_VBFHWW.root" ;
+    ttH.filename    = "em-NOMINAL_ntuple_ttH.root" ;
   }
   else{
     Data.filename   = "em-NOMINAL_ntuple_Data.root" ;
@@ -137,7 +143,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 				     { "10_ggH125" , ggH },
 				     { "11_qqH125" , qqH },
 				     { "12_ZH125"  , ZH },
-				     { "13_WH125"  , WH }
+				     { "13_WH125"  , WH },
+				     { "14_ggHWW"  , ggHWW },
+				     { "15_qqHWW"  , qqHWW },
+				     { "16_ttH"    , ttH }
   };
 
   if(use_embedded){
@@ -178,14 +187,14 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     }
     cat.second.sample_list["2_ZL"].weightString    += "zptmassweight*";
     cat.second.sample_list["2_ZL"].weightStringSS  += "zptmassweight*";
-    cat.second.sample_list["4_TT"].weightString    += "topptweight*prefiring_weight*";
-    cat.second.sample_list["4_TT"].weightStringSS  += "topptweight*prefiring_weight*";
-    cat.second.sample_list["5_TTcont"].weightString    += "topptweight*prefiring_weight*";
-    cat.second.sample_list["5_TTcont"].weightStringSS  += "topptweight*prefiring_weight*";
+    cat.second.sample_list["4_TT"].weightString    += "topptweight*";
+    cat.second.sample_list["4_TT"].weightStringSS  += "topptweight*";
+    cat.second.sample_list["5_TTcont"].weightString    += "topptweight*";
+    cat.second.sample_list["5_TTcont"].weightStringSS  += "topptweight*";
     cat.second.sample_list["10_ggH125"].weightString    += "weight_ggh_NNLOPS*";
     cat.second.sample_list["10_ggH125"].weightStringSS  += "weight_ggh_NNLOPS*";
-    cat.second.sample_list["11_qqH125"].weightString    += "prefiring_weight*";
-    cat.second.sample_list["11_qqH125"].weightStringSS  += "prefiring_weight*";
+    cat.second.sample_list["11_qqH125"].weightString    += "prefiringweight*";
+    cat.second.sample_list["11_qqH125"].weightStringSS  += "prefiringweight*";
 
     if(use_embedded){
       cat.second.sample_list["9_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
@@ -230,7 +239,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       smpl.second = create_systematic_uncertainty("qcd0jetShapeDown", "_CMS_htt_qcd_0jet_shape_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_down*");
       smpl.second = create_systematic_uncertainty("qcd1jetShapeUp"  , "_CMS_htt_qcd_1jet_shape_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_up*");
       smpl.second = create_systematic_uncertainty("qcd1jetShapeDown", "_CMS_htt_qcd_1jet_shape_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_down*");
-      smpl.second = create_systematic_uncertainty("qcdIsoUp"  , "_CMS_htt_qcd_isoUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_up*");
+      smpl.second = create_systematic_uncertainty("qcdIsoUp"  , "_CMS_htt_qcd_isoUp", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_up*");
       smpl.second = create_systematic_uncertainty("qcdIsoDown", "_CMS_htt_qcd_isoDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_down*");
 
       if( smpl.second.name == "QCD"  ) continue;
@@ -253,8 +262,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       // 5.) TT contamination in embedded sample  (only initialize this uncertainty -> calculate it later)
       if(smpl.second.name == "EMB"){
-	smpl.second = create_systematic_uncertainty("ttContEmbUp"  , "_CMS_htt_emb_ttbarUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", false, "","");
-	smpl.second = create_systematic_uncertainty("ttContEmbDown", "_CMS_htt_emb_ttbarDown", cat.second.plot_2d, smpl.second, tree_, false, "", false, "","");
+	smpl.second = create_systematic_uncertainty("ttContEmbUp"  , "_CMS_htt_emb_ttbar_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", false, "","");
+	smpl.second = create_systematic_uncertainty("ttContEmbDown", "_CMS_htt_emb_ttbar_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, false, "", false, "","");
       }
 
       if(smpl.second.name == "EMB") continue;
@@ -299,10 +308,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       // 8.) Recoil scale/resolution uncertainties
       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name.Contains("125")){
-	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_metUp"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
-	smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_metDown", cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleDown");
-	smpl.second = create_systematic_uncertainty("recoilresoUp"  , "_CMS_htt_boson_reso_metUp"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilresoUp");
-	smpl.second = create_systematic_uncertainty("recoilresoDown", "_CMS_htt_boson_reso_metDown", cat.second.plot_2d, smpl.second, tree_, true, "recoilresoDown");
+	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_met_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
+	smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_met_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleDown");
+	smpl.second = create_systematic_uncertainty("recoilresoUp"  , "_CMS_htt_boson_reso_met_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilresoUp");
+	smpl.second = create_systematic_uncertainty("recoilresoDown", "_CMS_htt_boson_reso_met_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, true, "recoilresoDown");
       }
 
       // 9.) Unclustered MET scale
@@ -321,8 +330,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape_Run"+era+"Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
       }
 
-      // 12.) ggh reweighting
-      if(smpl.second.name == "ggH125" ){
+      // 12.) ggh reweighting // FIXME -> is this if condition correct? -> talk to Mareike about it.
+      if( smpl.second.name.Contains("ggH") && ( smpl.second.name != "ggHWW125" || era == "2017") ){
 	smpl.second = create_systematic_uncertainty("gghShapeResUp"  , "_THU_ggH_ResUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Res*");
 	smpl.second = create_systematic_uncertainty("gghShapeResDown", "_THU_ggH_ResDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Res*");
 	smpl.second = create_systematic_uncertainty("gghShapeMig01Up"  , "_THU_ggH_Mig01Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Mig01*");
