@@ -84,7 +84,7 @@ make_final_datacard()
 # Make pre-fit plots
 print '-----------------------------------------------------------------------'
 print "Make pre-fit plots \n"
-Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
+Parallel(n_jobs=num_cores, prefer="threads")(delayed(make_category_plots)(i) for i in category_list)
 
 # Print confusion matrices
 print '-----------------------------------------------------------------------'
@@ -98,7 +98,7 @@ else:
 # Measure stage0/inclusive signal strength constraint
 print '-----------------------------------------------------------------------'
 print 'Measure signal strength constraint \n'
-#os.system("source ./measure_signal_strength.sh")
+os.system("source ./measure_signal_strength.sh")
 #os.system("source ./measure_inclusive_signal_strength.sh")
 #os.system("source ./plot_impacts_fit.sh")                   # does only work in combination with measure_inclusive_signal_strength.sh
 #os.system("source ./make_post-fit.sh")            # does only work in combination with measure_inclusive_signal_strength.s
