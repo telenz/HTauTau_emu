@@ -40,7 +40,7 @@ void plot_1d_var(
    // Set some options
    bool plotLeg = true;
    double scaleSignal = 50;
-   bool blindData = false;
+   bool blindData = true;
 
    TH1::SetDefaultSumw2();
    TH2::SetDefaultSumw2();
@@ -56,10 +56,10 @@ void plot_1d_var(
    SampleForPlotting ztt("ZTT",{"ZTT"});
    SampleForPlotting emb("EMB",{"EMB"});
    SampleForPlotting zl("ZL",{"ZL"});
-   SampleForPlotting vv("VV",{"VV"});
+   SampleForPlotting vv("VV",{"VVL","VVT"});
    SampleForPlotting st("ST",{"ST"});
    SampleForPlotting w("W",{"W"});
-   SampleForPlotting tt("TT",{"TT"});
+   SampleForPlotting tt("TT",{"TTL","TTT"});
    SampleForPlotting qcd("QCD",{"QCD"});
    SampleForPlotting qqh("qqH",{"qqH125"});
    SampleForPlotting ggh("ggH",{"ggH125"});
@@ -224,10 +224,12 @@ void plot_1d_var(
    //     data.hist->SetBinError(i,0);
    //   }
    // }
-   if(category.Contains("ggh") || category.Contains("qqh")){
-     for(int i = 1 ; i <= data.hist->GetNbinsX() ; i++){
+   if(blindData){
+     if(category.Contains("ggh") || category.Contains("qqh")){
+       for(int i = 1 ; i <= data.hist->GetNbinsX() ; i++){
 	 data.hist->SetBinContent(i,0);
 	 data.hist->SetBinError(i,0);
+       }
      }
    }
 
