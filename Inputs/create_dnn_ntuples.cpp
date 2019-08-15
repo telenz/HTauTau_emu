@@ -122,7 +122,7 @@ void create_dnn_ntuples( TString era = "2018" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
-  TString output_dir = "NTuples_v2_FastMTTValuesMELA" + era;
+  TString output_dir = "NTuples_" + era;
   gSystem -> Exec("mkdir " + output_dir);
 
   // Loop over all samples
