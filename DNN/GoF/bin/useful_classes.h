@@ -40,6 +40,9 @@ public :
 
   TString htxs_stage1_flag = "-1";
 
+  bool is_signal = false;
+  bool subtract_from_ss = true;
+
   map< TString , Sample > uncertainties;
 
   /* Sample(TString sampleName = "", TString filepath){ */

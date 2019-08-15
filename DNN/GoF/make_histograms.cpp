@@ -27,10 +27,12 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   const bool use_embedded = cfg.get<bool>("use_embedded");
   const bool plot_2d      = cfg.get<bool>("plot_2d");
   const bool verbose      = cfg.get<bool>("verbose");
-  const bool take_percentile_subrange = cfg.get<bool>("take_percentile_subrange");
-  const bool apply_equidistant_binning       = cfg.get<bool>("apply_equidistant_binning");
-  const TString output_file_suffix    = cfg.get<string>("output_file_suffix");
-  const bool is_dnn_prediction        = cfg.get<bool>("is_dnn_prediction");
+  const bool take_percentile_subrange  = cfg.get<bool>("take_percentile_subrange");
+  const bool apply_equidistant_binning = cfg.get<bool>("apply_equidistant_binning");
+  const TString output_file_suffix     = cfg.get<string>("output_file_suffix");
+  const bool is_dnn_prediction         = cfg.get<bool>("is_dnn_prediction");
+  const bool stage1                    = cfg.get<bool>("stage1");
+  const bool no_uncertainties          = cfg.get<bool>("no_uncertainties");
 
   vector<string> category_names_vector = cfg.get<vector<string>>("categories");
 
@@ -79,10 +81,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   Sample ZTT("ZTT");
   Sample ZL("ZL");
   Sample W("W");
-  Sample TT("TT");
-  Sample TTcont("TTcont");
-  Sample VV("VV");
-  Sample VVcont("VVcont");
+  Sample TTL("TTL");
+  Sample TTT("TTT");
+  Sample VVL("VVL");
+  Sample VVT("VVT");
   Sample ST("ST");
   Sample QCD("QCD");
   Sample EMB("EMB");
@@ -94,15 +96,23 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   Sample qqHWW("qqHWW125");
   Sample ttH("ttH125");
 
+  ggH.is_signal   = true;
+  qqH.is_signal   = true;
+  ZH.is_signal    = true;
+  WH.is_signal    = true;
+  ggHWW.is_signal = true;
+  qqHWW.is_signal = true;
+  ttH.is_signal   = true;
+
   if(!is_dnn_prediction){
     Data.filename   = "em-NOMINAL_ntuple_MuonEG.root";
     ZTT.filename    = "em-NOMINAL_ntuple_DYJets.root" ;
     ZL.filename     = "em-NOMINAL_ntuple_DYJets.root" ;
     W.filename      = "em-NOMINAL_ntuple_WJets.root" ;
-    TT.filename     = "em-NOMINAL_ntuple_TTbar.root" ;
-    TTcont.filename = "em-NOMINAL_ntuple_TTbar.root" ;
-    VV.filename     = "em-NOMINAL_ntuple_Diboson.root" ;
-    VVcont.filename = "em-NOMINAL_ntuple_Diboson.root" ;
+    TTL.filename    = "em-NOMINAL_ntuple_TTbar.root" ;
+    TTT.filename    = "em-NOMINAL_ntuple_TTbar.root" ;
+    VVL.filename    = "em-NOMINAL_ntuple_Diboson.root" ;
+    VVT.filename    = "em-NOMINAL_ntuple_Diboson.root" ;
     ST.filename     = "em-NOMINAL_ntuple_SingleTop.root" ;
     QCD.filename    = "em-NOMINAL_ntuple_MuonEG.root" ;
     EMB.filename    = "em-NOMINAL_ntuple_Embedded.root" ;
@@ -119,10 +129,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     ZTT.filename    = "em-NOMINAL_ntuple_ZTT.root" ;
     ZL.filename     = "em-NOMINAL_ntuple_ZL.root" ;
     W.filename      = "em-NOMINAL_ntuple_W.root" ;
-    TT.filename     = "em-NOMINAL_ntuple_TT.root" ;
-    TTcont.filename = "em-NOMINAL_ntuple_TT.root" ;
-    VV.filename     = "em-NOMINAL_ntuple_Diboson.root" ;
-    VVcont.filename = "em-NOMINAL_ntuple_Diboson.root" ;
+    TTL.filename    = "em-NOMINAL_ntuple_TT.root" ;
+    TTT.filename    = "em-NOMINAL_ntuple_TT.root" ;
+    VVL.filename    = "em-NOMINAL_ntuple_Diboson.root" ;
+    VVT.filename    = "em-NOMINAL_ntuple_Diboson.root" ;
     ST.filename     = "em-NOMINAL_ntuple_SingleTop.root" ;
     QCD.filename    = "em-NOMINAL_ntuple_Data.root" ;
     EMB.filename    = "em-NOMINAL_ntuple_ZTT.root" ;
@@ -134,10 +144,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 				     { "1_QCD"  , QCD } ,
 				     { "2_ZL"   , ZL } ,
 				     { "3_W"    , W } ,
-				     { "4_TT"   , TT } ,
-				     { "5_TTcont", TTcont } ,
-				     { "6_VV"   , VV } ,
-				     { "7_VVcont", VVcont } ,
+				     { "4_TTL"  , TTL } ,
+				     { "5_TTT"  , TTT } ,
+				     { "6_VVL"  , VVL } ,
+				     { "7_VVT"  , VVT } ,
 				     { "8_ST"   , ST } ,
 				     { "9_ZTT"  , ZTT } ,
 				     { "10_ggH125" , ggH },
@@ -177,20 +187,26 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["1_QCD"].weightString    = "1*";
     cat.second.sample_list["1_QCD"].weightStringSS  = "qcdweight*";
     cat.second.sample_list["1_QCD"].cutString       = "1==2";  // don't fill anything in this histogram should remain empty
-    if (!use_embedded){
+
     cat.second.sample_list["2_ZL"].cutString       += "&&!isZTTEM";
     cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTTEM";
-    }
-    else{
-       cat.second.sample_list["2_ZL"].cutString       += "&&!isZTTEM";
-       cat.second.sample_list["2_ZL"].cutStringSS     += "&&!isZTTEM";
-    }
     cat.second.sample_list["2_ZL"].weightString    += "zptmassweight*";
     cat.second.sample_list["2_ZL"].weightStringSS  += "zptmassweight*";
-    cat.second.sample_list["4_TT"].weightString    += "topptweight*";
-    cat.second.sample_list["4_TT"].weightStringSS  += "topptweight*";
-    cat.second.sample_list["5_TTcont"].weightString    += "topptweight*";
-    cat.second.sample_list["5_TTcont"].weightStringSS  += "topptweight*";
+
+    cat.second.sample_list["4_TTL"].cutString      += "&& isZTTEM<0.5";
+    cat.second.sample_list["4_TTL"].cutStringSS    += "&& isZTTEM<0.5";
+    cat.second.sample_list["5_TTT"].cutString      += "&& isZTTEM>0.5";
+    cat.second.sample_list["5_TTT"].cutStringSS    += "&& isZTTEM>0.5";
+    cat.second.sample_list["4_TTL"].weightString   += "topptweight*";
+    cat.second.sample_list["4_TTL"].weightStringSS += "topptweight*";
+    cat.second.sample_list["5_TTT"].weightString   += "topptweight*";
+    cat.second.sample_list["5_TTT"].weightStringSS += "topptweight*";
+
+    cat.second.sample_list["6_VVL"].cutString      += "&& isZTTEM<0.5";
+    cat.second.sample_list["6_VVL"].cutStringSS    += "&& isZTTEM<0.5";
+    cat.second.sample_list["7_VVT"].cutString      += "&& isZTTEM>0.5";
+    cat.second.sample_list["7_VVT"].cutStringSS    += "&& isZTTEM>0.5";
+
     cat.second.sample_list["10_ggH125"].weightString    += "weight_ggh_NNLOPS*";
     cat.second.sample_list["10_ggH125"].weightStringSS  += "weight_ggh_NNLOPS*";
     cat.second.sample_list["11_qqH125"].weightString    += "prefiringweight*";
@@ -201,23 +217,30 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       cat.second.sample_list["9_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*qcdweight*";
       cat.second.sample_list["9_EMB"].cutString   += "&& mcweight<1";
       cat.second.sample_list["9_EMB"].cutStringSS += "&& mcweight<1";
-      cat.second.sample_list["4_TT"].cutString    += "&& veto_embedded<0.5";
-      cat.second.sample_list["4_TT"].cutStringSS  += "&& veto_embedded<0.5";
-      cat.second.sample_list["6_VV"].cutString    += "&& veto_embedded<0.5";
-      cat.second.sample_list["6_VV"].cutStringSS  += "&& veto_embedded<0.5";
-      cat.second.sample_list["5_TTcont"].cutString    += "&& veto_embedded>0.5";
-      cat.second.sample_list["5_TTcont"].cutStringSS  += "&& veto_embedded>0.5";
-      cat.second.sample_list["7_VVcont"].cutString    += "&& veto_embedded>0.5";
-      cat.second.sample_list["7_VVcont"].cutStringSS  += "&& veto_embedded>0.5";
     }
     else{
       cat.second.sample_list["9_ZTT"].cutString      += "&&isZTTEM";
       cat.second.sample_list["9_ZTT"].cutStringSS    += "&&isZTTEM";
-      
       cat.second.sample_list["9_ZTT"].weightString   += "zptmassweight*";
       cat.second.sample_list["9_ZTT"].weightStringSS += "zptmassweight*";
     }
-  }
+
+    // These samples are not supposed to be subtracted from the ss region for QCD estimation
+    cat.second.sample_list["0_Data"].subtract_from_ss    = false;
+    cat.second.sample_list["1_QCD"].subtract_from_ss     = false;
+    cat.second.sample_list["10_ggH125"].subtract_from_ss = false;
+    cat.second.sample_list["11_qqH125"].subtract_from_ss = false;
+    cat.second.sample_list["12_ZH125"].subtract_from_ss  = false;
+    cat.second.sample_list["13_WH125"].subtract_from_ss  = false;
+    cat.second.sample_list["14_ggHWW"].subtract_from_ss  = false;
+    cat.second.sample_list["15_qqHWW"].subtract_from_ss  = false;
+    cat.second.sample_list["16_ttH"].subtract_from_ss    = false;
+    if(use_embedded){ // if embedded is used, the following two processes are included in the embedded sample
+      cat.second.sample_list["5_TTT"].subtract_from_ss   = false;
+      cat.second.sample_list["7_VVT"].subtract_from_ss   = false;
+    }
+
+  } // end of loop over categories
 
   //************************************************************************************************
   // Define systematic uncertainties
@@ -228,7 +251,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
   for(auto& cat : category_map){
     for(auto & smpl : cat.second.sample_list){
-      if( smpl.second.name == "data_obs" || smpl.first.Contains("cont") ) continue;
+
+      if( no_uncertainties ) continue;
+
+      if( smpl.second.name == "data_obs" ) continue;
 
       // 1.) QCD uncertainties (10 nuisances)
       smpl.second = create_systematic_uncertainty("qcd0jetRateUp"  , "_CMS_htt_qcd_0jet_rate_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_up*");
@@ -319,7 +345,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       smpl.second = create_systematic_uncertainty("unclMetDown", "_CMS_scale_met_unclusteredDown", cat.second.plot_2d, smpl.second, tree_, true, "unclMetDown");
 
       // 10.) TTbar shape
-      if(smpl.second.name == "TT"){
+      if(smpl.second.name == "TTT" || smpl.second.name == "TTL"){
 	smpl.second = create_systematic_uncertainty("ttbarShapeUp"  , "_CMS_htt_ttbarShapeUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "topptweight*","topptweight*topptweight*");
 	smpl.second = create_systematic_uncertainty("ttbarShapeDown", "_CMS_htt_ttbarShapeDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "topptweight*","");
       }
@@ -433,8 +459,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       }
 
       // Make QCD estimation
-      if( smpl.second.name == "QCD" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
-      else if( !smpl.second.name.Contains("125") && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && smpl.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
+      if( smpl.second.name == "QCD" )         cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , +1);
+      else if( smpl.second.subtract_from_ss ) cat.second.sample_list["1_QCD"].hist_1d -> Add(smpl.second.histSS_1d , -1);
 
       // Loop over systematic uncertainties
       for(auto &sys : smpl.second.uncertainties){
@@ -470,18 +496,18 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	// Make QCD estimation for up-downward variation for qcdweight
 	if( !sys.first.Contains("qcd") ) continue;
 
-	if( smpl.second.name == "QCD" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , +1);
-	else if( !smpl.second.name.Contains("125")  && smpl.second.name != "data_obs" && smpl.second.name != "TTcont" && sys.second.name != "VVcont" ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , -1);;
+	if( smpl.second.name == "QCD" )         cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , +1);
+	else if( smpl.second.subtract_from_ss ) cat.second.sample_list["1_QCD"].uncertainties[sys.first].hist_1d -> Add(sys.second.histSS_1d , -1);;
 
       } // end of loop over sys uncertainties
     } // end of loop over samples
 
     // Calculate embedded uncertainty
     if(use_embedded && cat.second.sample_list.at("9_EMB").uncertainties.find("ttContEmbUp") != cat.second.sample_list.at("9_EMB").uncertainties.end()){
-      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbUp").hist_1d   -> Add(cat.second.sample_list.at("5_TTcont").hist_1d , 0.1);
-      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbDown").hist_1d -> Add(cat.second.sample_list.at("5_TTcont").hist_1d , -0.1);
-      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbUp").hist_1d   -> Add(cat.second.sample_list.at("7_VVcont").hist_1d , 0.1);
-      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbDown").hist_1d -> Add(cat.second.sample_list.at("7_VVcont").hist_1d , -0.1);
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbUp").hist_1d   -> Add(cat.second.sample_list.at("5_TTT").hist_1d , 0.1);
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbDown").hist_1d -> Add(cat.second.sample_list.at("5_TTT").hist_1d , -0.1);
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbUp").hist_1d   -> Add(cat.second.sample_list.at("7_VVT").hist_1d , 0.1);
+      cat.second.sample_list.at("9_EMB").uncertainties.at("ttContEmbDown").hist_1d -> Add(cat.second.sample_list.at("7_VVT").hist_1d , -0.1);
     }
     //***********************************************************************************************
     // Blinding
@@ -493,8 +519,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     allSig -> Reset();
 
     for(auto & smpl : cat.second.sample_list) {
-      if( smpl.first.Contains("125") ) allSig->Add(smpl.second.hist_1d);
-      else if( smpl.second.name != "data_obs" &&  !smpl.first.Contains("cont")) allBkg->Add(smpl.second.hist_1d);
+      if( smpl.second.is_signal )  allSig->Add(smpl.second.hist_1d);
+      else if( smpl.second.name != "data_obs" && ( !use_embedded || (smpl.first != "TTT" && smpl.first != "VVT") )) allBkg->Add(smpl.second.hist_1d);
     }
 
     for(int i_bin=1; i_bin <= allSig->GetNbinsX(); i_bin++ ){
@@ -512,7 +538,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     file_out -> mkdir(cat.second.name);
     file_out -> cd(cat.second.name);
     for(auto & smpl : cat.second.sample_list){
-      if( smpl.first.Contains("cont") ) continue;
+      if( use_embedded && (smpl.first.Contains("TTT") || smpl.first.Contains("VVT")) ) continue;
       smpl.second.hist_1d -> Write( smpl.second.name );
       for(auto & sys : smpl.second.uncertainties){
 	if(sys.second.name.Contains("qcd") && smpl.second.name != "QCD") continue;
@@ -523,7 +549,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     // Write the final sum of weights of the nominal selection
     cout << endl << "... Final histogram content : "<< endl;
     for(auto & smpl : cat.second.sample_list) {
-      if( smpl.first.Contains("cont") ) continue;
+      if( use_embedded && (smpl.first.Contains("TTT") || smpl.first.Contains("VVT")) ) continue;
       cout << smpl.second.name << " : " << smpl.second.hist_1d -> GetSumOfWeights() << endl;
     }
     cout << "Bkg together : " << allBkg -> GetSumOfWeights() << endl << endl;
