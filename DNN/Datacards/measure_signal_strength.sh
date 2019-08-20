@@ -28,7 +28,7 @@ $CMSSW_BASE/bin/slc6_amd64_gcc530/MorphingSM2017 \
     --input_folder_em=$INPUT_FOLDER \
     --real_data=false \
     --classic_bbb=false \
-    --binomial_bbb=true \
+    --binomial_bbb=false \
     --jetfakes=false \
     --embedding=${EMB} \
     --postfix="-$CAT" \
@@ -73,7 +73,7 @@ workspace_location=${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/${ERA}_sm
 combineTool.py -M MultiDimFit -m 125 -d ${workspace_location}/${ERA}_workspace.root \
     --algo singles --robustFit 1 \
     --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0 \
-    -t -1 --expectSignal 1 \
+    -t -1 --expectSignal 1 --floatOtherPOIs 1 \
     -n $ERA 
 
 cd ${CURRENT_PATH}
