@@ -88,6 +88,7 @@ public :
   TString name = "";
   TString suffix = "";
   unsigned int class_nr = 0;
+  int htxs_reco_flag    = -1;
 
   TString variable_1d = "";
   TString variable_2d = "";
