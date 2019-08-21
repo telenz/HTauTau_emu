@@ -11,6 +11,7 @@ args = parser.parse_args()
 config_name = args.config
 
 category_list = ["em_ztt","em_db","em_ss","em_tt","em_misc","em_st","em_ggh","em_ggh_100","em_ggh_101","em_ggh_102","em_ggh_103","em_qqh","em_qqh_200","em_qqh_201","em_qqh_202","em_qqh_203"]
+#category_list = ["em_ztt","em_db","em_ss","em_tt","em_misc","em_st","em_ggh","em_qqh"]
 
 # Find settings in config
 print ''
@@ -93,7 +94,7 @@ if embedded_c == 'true':
     cmd = "python ../../Plotting/Confusion.py -e \""+era+"\" -emb "
 else:
     cmd = "python ../../Plotting/Confusion.py -e \""+era+"\""
-#os.system(cmd)
+os.system(cmd)
 
 # Measure stage0/inclusive signal strength constraint
 print '-----------------------------------------------------------------------'
