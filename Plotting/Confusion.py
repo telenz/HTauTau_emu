@@ -23,40 +23,36 @@ def main():
     print "Loading datacard: " + filepath
     rootfile=R.TFile(filepath, "READ")
 
-    classes=[]
-    for key in rootfile.GetListOfKeys():
-        if "unrolled" in key.GetName():
-            continue
-    	classes.append(key.GetName())
-
+    classes = [TDir.GetName() for TDir in rootfile.GetListOfKeys() if not "ggh_" in TDir.GetName() and not "qqh_" in TDir.GetName()]
     confusion =  np.zeros( (len(classes),len(classes)) )
     tempdict = {}
-
-    TDirs = [TDir.GetName() for TDir in rootfile.GetListOfKeys() if not "unrolled" in TDir.GetName()]
-
-    for TDir in TDirs: 
-        folder = rootfile.Get( TDir )
-        hists = [ hist.GetName() for hist in folder.GetListOfKeys() if not "Up" in hist.GetName() and not "Down" in hist.GetName()]
-        for hist in hists: 
+    print "\nFollowing categories are considered:"
+    for cl in classes:
+        folder = rootfile.Get( cl )
+        print "-" + cl
+        hists = [ hist.GetName() for hist in folder.GetListOfKeys() if not "Up" in hist.GetName() and not "Down" in hist.GetName() and not "ggH_" in hist.GetName() and not "qqH_" in hist.GetName()  and not "HWW" in hist.GetName() and not "ZH" in hist.GetName() and not "WH" in hist.GetName() and not "ttH" in hist.GetName() and not "data" in hist.GetName()  ]
+        for hist in hists:
             tempdict.update({hist:folder.Get(hist).Integral()})
 
-        confusion[TDirs.index(TDir)] = compressDict(tempdict,classes,'em',embedded)
+        confusion[classes.index(cl)] = compressDict(tempdict,classes,'em',embedded)
 
 
     # plotting confusion matrices
     print "Writing confusion matrices to output/"+era+"/figures/"
-    plot_confusion(confusion,classes,"output/"+era+"/figures/em_confusion.pdf", "std")
+    plot_confusion(confusion,classes,"output/"+era+"/figures/em_confusion.png", "std")
 
     conf_pur1, conf_pur2 = get_purity_representations(confusion)
-    plot_confusion(conf_pur1, classes, "output/"+era+"/figures/em_confusion_pur1.pdf")
-    plot_confusion(conf_pur2, classes, "output/"+era+"/figures/em_confusion_pur2.pdf", "pur")
+    plot_confusion(conf_pur1, classes, "output/"+era+"/figures/em_confusion_pur1.png")
+    plot_confusion(conf_pur2, classes, "output/"+era+"/figures/em_confusion_pur2.png", "pur")
 
     conf_eff1, conf_eff2 = get_efficiency_representations(confusion)
-    plot_confusion(conf_eff1, classes, "output/"+era+"/figures/em_confusion_eff1.pdf")
-    plot_confusion(conf_eff2, classes, "output/"+era+"/figures/em_confusion_eff2.pdf", "eff")
+    plot_confusion(conf_eff1, classes, "output/"+era+"/figures/em_confusion_eff1.png")
+    plot_confusion(conf_eff2, classes, "output/"+era+"/figures/em_confusion_eff2.png", "eff")
 
     names = ["em_confusion_pur1","em_confusion_pur2","em_confusion_eff1","em_confusion_eff2"]
     i=0
+    if not os.path.isdir("output/"+era+"/yamlfiles/"):
+        os.mkdir("output/"+era+"/yamlfiles/")
     for confmatrix in conf_pur1,conf_pur2,conf_eff1,conf_eff2:
         d = {}
         for i1, c1 in enumerate(classes):
@@ -73,7 +69,7 @@ def main():
 def compressDict(tempdict,classes,channel,embedded):
 
     tmp = np.zeros(len(classes))
-    tmp[classes.index('{0}_tt'.format(channel))]=tempdict['TT']
+    tmp[classes.index('{0}_tt'.format(channel))]=tempdict['TTT']+tempdict['TTL']
     tmp[classes.index('{0}_st'.format(channel))]=tempdict['ST']
     tmp[classes.index('{0}_misc'.format(channel))]=tempdict['W']+tempdict['ZL']
     tmp[classes.index('{0}_qqh'.format(channel))]=tempdict['qqH125']
@@ -83,7 +79,7 @@ def compressDict(tempdict,classes,channel,embedded):
     else :
         tmp[classes.index('{0}_ztt'.format(channel))]=tempdict['ZTT']
     tmp[classes.index('{0}_ggh'.format(channel))]=tempdict['ggH125']
-    tmp[classes.index('{0}_vv'.format(channel))]=tempdict['VV']
+    tmp[classes.index('{0}_db'.format(channel))]=tempdict['VVT']+tempdict['VVL']
 
     return tmp
 
@@ -127,7 +123,8 @@ def get_purity_representations(m):
     mb = np.zeros(m.shape)
     for i in range(m.shape[0]):
         for j in range(m.shape[1]):
-            ma[i, j] = m[i, j] / m[i, i]
+            if m[i,i] != 0:
+                ma[i, j] = m[i, j] / m[i, i]
             mb[i, j] = m[i, j] / np.sum(m[i, :])
     return ma, mb
 
@@ -137,7 +134,8 @@ def get_efficiency_representations(m):
     mb = np.zeros(m.shape)
     for i in range(m.shape[0]):
         for j in range(m.shape[1]):
-            ma[i, j] = m[i, j] / m[j, j]
+            if m[j,j] != 0:
+                ma[i, j] = m[i, j] / m[j, j]
             mb[i, j] = m[i, j] / np.sum(m[:, j])
     return ma, mb
 
