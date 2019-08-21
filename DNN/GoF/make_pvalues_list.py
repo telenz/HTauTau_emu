@@ -26,6 +26,6 @@ for filename in sorted(files_list):
         pvalue = pvalue.split(": ")[1]
         pvalue = pvalue.split(",")[0]
         pvalue = pvalue[0:4]
-        print ('{:<10} {:<10}'.format(var,pvalue))
+        print ('{:<10} : {:<10}'.format(var,pvalue))
         
     

@@ -53,13 +53,13 @@ void create_dnn_ntuples( TString era = "2018" ){
   else if(era == "2017"){
     xsec_map    = &xsec_map_2017;
     process_map = &process_map_2017;
-    luminosity  = 41900;                 //FIXME: different number on HTT twiki
+    luminosity  = 41530;                 // Take number from LUMI twiki : https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM#SummaryTable
     trigger_filter_efficiency = 1.0;
     qcd_ss_os_iso_relaxed_ratio = 2.38;
     embedded_trigger_weight  = 1.00;
     embedded_tracking_weight = 0.99;
     samples_map[channel + "-NOMINAL_ntuple_MuonEG"   ] = MuonEG_Run2017;
-    samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2017;
+    // samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2017;
     samples_map[channel + "-NOMINAL_ntuple_DYJets"   ] = DYJets_2017;
     samples_map[channel + "-NOMINAL_ntuple_WJets"    ] = WJets_2017;
     samples_map[channel + "-NOMINAL_ntuple_TTbar"    ] = TTbar_2017;
@@ -72,13 +72,13 @@ void create_dnn_ntuples( TString era = "2018" ){
     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2017;
-    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_10/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
-
+    //input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
+    input_dir="/nfs/dust/cms/user/tlenz/13TeV/2018/CMSSW/all_eras/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras";
   }
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
     process_map = &process_map_2016;
-    luminosity  = 35866;                   //FIXME: different number on HTT twiki
+    luminosity  = 35920;               // Take number from LUMI twiki : https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM#SummaryTable
     trigger_filter_efficiency = 0.979;
     qcd_ss_os_iso_relaxed_ratio = 2.3;
     embedded_trigger_weight  = 1.03;
@@ -98,8 +98,6 @@ void create_dnn_ntuples( TString era = "2018" ){
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2016;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2016;
     input_dir="/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/2016_legacy/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/ntuples_v5/";
-
-
   }
 
   // Needed for stitching
@@ -124,7 +122,7 @@ void create_dnn_ntuples( TString era = "2018" ){
   double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
   double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
 
-  TString output_dir = "NTuples_v2_FastMTTValuesMELA" + era;
+  TString output_dir = "NTuples_" + era;
   gSystem -> Exec("mkdir " + output_dir);
 
   // Loop over all samples
@@ -168,7 +166,7 @@ void create_dnn_ntuples( TString era = "2018" ){
       float jpt_2;
       float jeta_1;
       float jeta_2;
-      int htxs_stage1cat;
+      int htxs_stage1p1cat;
       inTree->SetBranchAddress("npartons",&npartons);
       inTree->SetBranchAddress("iso_1",&iso_1);
       inTree->SetBranchAddress("iso_2",&iso_2);
@@ -191,7 +189,7 @@ void create_dnn_ntuples( TString era = "2018" ){
       inTree->SetBranchAddress("jpt_2",&jpt_2);
       inTree->SetBranchAddress("jeta_1",&jeta_1);
       inTree->SetBranchAddress("jeta_2",&jeta_2);
-      inTree->SetBranchAddress("htxs_stage1cat",&htxs_stage1cat);
+      inTree->SetBranchAddress("htxs_stage1p1cat",&htxs_stage1p1cat);
 
       outFile->cd();
       TTree *currentTree = new TTree(subsample,"temporary tree");
@@ -202,7 +200,6 @@ void create_dnn_ntuples( TString era = "2018" ){
       float trigger_filter_weight;
       float embedded_stitching_weight;
       float embedded_rate_weight;
-      float prefiring_weight;
       int htxs_reco_flag_ggh;
       int htxs_reco_flag_qqh;
       if(firstTree){
@@ -212,7 +209,6 @@ void create_dnn_ntuples( TString era = "2018" ){
 	outTree->Branch("trigger_filter_weight", &trigger_filter_weight, "trigger_filter_weight/F");
 	outTree->Branch("embedded_stitching_weight", &embedded_stitching_weight, "embedded_stitching_weight/F");
 	outTree->Branch("embedded_rate_weight", &embedded_rate_weight, "embedded_rate_weight/F");
-	outTree->Branch("prefiring_weight", &prefiring_weight, "prefiring_weight/F");
 	outTree->Branch("htxs_reco_flag_ggh", &htxs_reco_flag_ggh, "htxs_reco_flag_ggh/I");
 	outTree->Branch("htxs_reco_flag_qqh", &htxs_reco_flag_qqh, "htxs_reco_flag_qqh/I");
 	firstTree  = false;
@@ -223,7 +219,6 @@ void create_dnn_ntuples( TString era = "2018" ){
       currentTree->Branch("trigger_filter_weight", &trigger_filter_weight, "trigger_filter_weight/F");
       currentTree->Branch("embedded_stitching_weight", &embedded_stitching_weight, "embedded_stitching_weight/F");
       currentTree->Branch("embedded_rate_weight", &embedded_rate_weight, "embedded_rate_weight/F");
-      currentTree->Branch("prefiring_weight", &prefiring_weight, "prefiring_weight/F");
       currentTree->Branch("htxs_reco_flag_ggh", &htxs_reco_flag_ggh, "htxs_reco_flag_ggh/I");
       currentTree->Branch("htxs_reco_flag_qqh", &htxs_reco_flag_qqh, "htxs_reco_flag_qqh/I");
 
@@ -304,45 +299,24 @@ void create_dnn_ntuples( TString era = "2018" ){
 
 	embedded_rate_weight = embedded_trigger_weight * embedded_tracking_weight;
 
-	// add flags for cut categories which correspond to htxs_stage1cats
+	// add flags for cut categories which correspond to htxs_stage1p1cats
 	htxs_reco_flag_ggh = 0;
 	htxs_reco_flag_qqh = 0;
-	// reco bins 101 and 102 merged into 2jets categories (sicne hardly populated)
-	if(njets==0)                                    htxs_reco_flag_ggh = 103;
-	else if((njets==1) && (pt_tt>0)  &&(pt_tt<60))  htxs_reco_flag_ggh = 104;
-	else if((njets==1) && (pt_tt>60) &&(pt_tt<120)) htxs_reco_flag_ggh = 105;
-	else if((njets==1) && (pt_tt>120)&&(pt_tt<200)) htxs_reco_flag_ggh = 106;
-	else if((njets==1) && (pt_tt>200))              htxs_reco_flag_ggh = 107;
-	else if((njets>=2) && (pt_tt>0)  &&(pt_tt<60))  htxs_reco_flag_ggh = 108;
-	else if((njets>=2) && (pt_tt>60) &&(pt_tt<120)) htxs_reco_flag_ggh = 109;
-	else if((njets>=2) && (pt_tt>120)&&(pt_tt<200)) htxs_reco_flag_ggh = 110;
-	else if((njets>=2) && (pt_tt>200))              htxs_reco_flag_ggh = 111;
+	// reco bins corresponding to stage 1.1 categories (see: https://indico.cern.ch/event/788748/contributions/3492755/attachments/1882178/3101573/SMHTT_ML_2017_status.pdf)
+	if(njets==0)                    htxs_reco_flag_ggh = 100;
+	else if(njets==1 && pt_tt<120)  htxs_reco_flag_ggh = 101;
+	else if(njets==1 && pt_tt>=120) htxs_reco_flag_ggh = 102;
+	else if(njets>=2)               htxs_reco_flag_ggh = 103;
 
-	if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_ttjj>0)&&(pt_ttjj<25)) htxs_reco_flag_qqh = 201;
-	else if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>400)&&(jdeta>2.8)&&(pt_ttjj>25)) htxs_reco_flag_qqh = 202;
-	else if((jpt_1>0)&&(jpt_1<200)&&(njets>=2)&&(mjj>60)&&(mjj<120)) htxs_reco_flag_qqh = 203;
-	else if(( (jpt_1>0&&jpt_1<200&&njets<2) || (jpt_1>0&&jpt_1<200&&njets>=2&&mjj>400&&jdeta<2.8) || (jpt_1>0&&jpt_1<200&&njets>=2&&mjj>0&&mjj<60) || (jpt_1>0&&jpt_1<200&&njets>=2&&mjj>120&&mjj<400))) htxs_reco_flag_qqh = 204;
-	else if(jpt_1>200) htxs_reco_flag_qqh = 205;
-
-	// prefiring weights (from AN-18-255)
-	prefiring_weight=1;
-	if( sample.first.Contains("TTBar") && era == "2016")      prefiring_weight = 0.989;
-	else if( sample.first.Contains("TTBar") && era == "2017") prefiring_weight = 0.984;
-	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 201 && era == "2016") prefiring_weight = 0.972;
-	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 201 && era == "2017") prefiring_weight = 0.950;
-	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 202 && era == "2016") prefiring_weight = 0.972;
-	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 202 && era == "2017") prefiring_weight = 0.950;
-	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 203 && era == "2016") prefiring_weight = 0.972;
-	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 203 && era == "2017") prefiring_weight = 0.950;
-	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 204 && era == "2016") prefiring_weight = 0.983;
-	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 204 && era == "2017") prefiring_weight = 0.970;
-	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 205 && era == "2016") prefiring_weight = 0.920;
-	else if( sample.first.Contains("VBFH") && htxs_reco_flag_qqh == 205 && era == "2017") prefiring_weight = 0.850;
+	if(njets<=1)                                htxs_reco_flag_qqh = 200;
+	else if(njets>=2 && mjj<350)                htxs_reco_flag_qqh = 201;
+	else if(njets>=2 && mjj>=350 && pt_tt<200)  htxs_reco_flag_qqh = 202;
+	else if(njets>=2 && mjj>=350 && pt_tt>=200) htxs_reco_flag_qqh = 203;
 
 	// Select hadronic and leptonic part of VH sample
 	if( subsample.Contains("VH") || subsample.Contains("WplusH") || subsample.Contains("WminusH") ){
-	  if( sample.first.Contains("VBFH") && (htxs_stage1cat>206 || htxs_stage1cat<200) ) continue;
-	  if( (sample.first.Contains("WH") || sample.first.Contains("ZH")) && htxs_stage1cat<=206 && htxs_stage1cat>=200 ) continue;
+	  if( sample.first.Contains("VBFH") && (htxs_stage1p1cat>210 || htxs_stage1p1cat<200) ) continue;
+	  if( (sample.first.Contains("WH") || sample.first.Contains("ZH")) && htxs_stage1p1cat<=210 && htxs_stage1p1cat>=200 ) continue;
 	}
 
 	currentTree->Fill();

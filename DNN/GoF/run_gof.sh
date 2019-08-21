@@ -2,20 +2,20 @@
 
 # Script which executes a gof test for a given variable $var
 
-# Pleas specify the following input variables
+# Please specify the following input variables
 #ERA=2017
 #EMB=0
+#VAR="pt_2"
+#INPUT_FOLDER=var_1d
 DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
 NUM_TOYS=300
-# VAR="pt_2"
-BASE_PATH=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/GoF/output/${ERA}
-#BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/${ERA}
-#INPUT_FOLDER=var_1d
+CURRENT_PATH=$(pwd)
+BASE_PATH=${CURRENT_PATH}/output/${ERA}
 OUTPUT_FOLDER=${ERA}_${VAR}_smhtt
-#CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/CombineHarvester/2017/CMSSW_7_4_7/src
-CMSSW_LOCATION=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CombineHarvester/2017/CMSSW_8_1_0/src
+#CMSSW_LOCATION=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CombineHarvester/2017/CMSSW_8_1_0/src
+CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2018/CMSSW/SMHTauTau/CMSSW_8_1_0/src
 
 export SCRAM_ARCH=slc6_amd64_gcc530
 cd ${CMSSW_LOCATION}
@@ -32,20 +32,21 @@ echo "var is " $VAR
 MorphingSM2017 \
     --base_path=${BASE_PATH} \
     --input_folder_em=$INPUT_FOLDER \
-    --real_data=true \ 
-    --classic_bbb=true \ 
+    --real_data=true \
+    --classic_bbb=true \
     --jetfakes=false \
     --embedding=${EMB} \
     --postfix="-$VAR" \
     --channel="em" \
-    --auto_rebin=true \
+    --auto_rebin=false \
     --stxs_signals=stxs_stage0 \
     --categories=gof \
-    --gof_category_name="em_inclusive"  \    
-    --era=${ERA}\
+    --gof_category_name="em_inclusive" \
+    --era=${ERA} \
     --output=$OUTPUT_FOLDER \
     --regional_jec=true \
-    --ggh_wg1=true
+    --ggh_wg1=true \
+    --rebin_categories=false
 
 # Create workspace
 combineTool.py -M T2W -o ${ERA}_workspace.root -m $MASS -i ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/${OUTPUT_FOLDER}/cmb/125/

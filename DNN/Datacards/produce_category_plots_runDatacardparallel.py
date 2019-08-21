@@ -10,7 +10,8 @@ parser.add_argument('config', help='please specify config name')
 args = parser.parse_args()
 config_name = args.config
 
-category_list = ["em_ztt","em_vv","em_ss","em_tt","em_misc","em_st","em_qqh","em_ggh","em_qqh_unrolled","em_ggh_unrolled"]
+category_list = ["em_ztt","em_db","em_ss","em_tt","em_misc","em_st","em_ggh","em_ggh_100","em_ggh_101","em_ggh_102","em_ggh_103","em_qqh","em_qqh_200","em_qqh_201","em_qqh_202","em_qqh_203"]
+#category_list = ["em_ztt","em_db","em_ss","em_tt","em_misc","em_st","em_ggh","em_qqh"]
 
 # Find settings in config
 print ''
@@ -39,7 +40,8 @@ os.environ["EMB"] = str(embedded)
 
 num_cores = multiprocessing.cpu_count()
 print "available number of cores = " + str(num_cores)
-num_cores = 10
+num_cores = len(category_list)
+print "used number of cores = " + str(num_cores)
 
 def make_category_plots(category):
     # Plot log and non-log
@@ -51,23 +53,23 @@ def make_category_plots(category):
 
 # Make datacard (root-files)
 def make_single_datacard(cat):
-    with open(config_name) as f:
-         newText=f.read().replace('categories=', 'categories='+ cat)
+    with open(config_name) as f1:
+         newText=f1.read().replace('categories=', 'categories='+ cat)
          newText=newText.replace('output_file_suffix = ML','output_file_suffix = ML__'+ cat)
          config_name_new = "config_for_datacard_"+era+"__"+cat+".cfg"
-         with open(config_name_new, "w") as f:
-              f.write(newText)
+         with open(config_name_new, "w") as f2:
+              f2.write(newText)
 
     cmd = "root -l -b -q make_histograms.cpp\"(\\\"" + config_name_new + "\\\")\""
     os.system(cmd)
 
 def make_final_datacard():
-    results = Parallel(n_jobs=num_cores)(delayed(make_single_datacard)(i) for i in category_list)
+    results = Parallel(n_jobs=num_cores, prefer="threads")(delayed(make_single_datacard)(i) for i in category_list)
 
     os.system("hadd -f output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root output/"+era+"/*__*.root")
     os.system("rm output/"+era+"/*__*.root")
-    os.system("cp output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_original_binning.root")
-    os.system("python fix_em_shapes.py output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_original_binning.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root")
+    #os.system("cp output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_original_binning.root")
+    #os.system("python fix_em_shapes.py output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML_original_binning.root output/"+era+"/htt_em.inputs-sm-Run"+era+"-ML.root")
     os.system("rm config_for_datacard_*")
 
 
@@ -83,7 +85,7 @@ make_final_datacard()
 # Make pre-fit plots
 print '-----------------------------------------------------------------------'
 print "Make pre-fit plots \n"
-#Parallel(n_jobs=num_cores)(delayed(make_category_plots)(i) for i in category_list)
+Parallel(n_jobs=num_cores, prefer="threads")(delayed(make_category_plots)(i) for i in category_list)
 
 # Print confusion matrices
 print '-----------------------------------------------------------------------'
@@ -92,12 +94,12 @@ if embedded_c == 'true':
     cmd = "python ../../Plotting/Confusion.py -e \""+era+"\" -emb "
 else:
     cmd = "python ../../Plotting/Confusion.py -e \""+era+"\""
-#os.system(cmd)
+os.system(cmd)
 
 # Measure stage0/inclusive signal strength constraint
 print '-----------------------------------------------------------------------'
 print 'Measure signal strength constraint \n'
-#os.system("source ./measure_signal_strength.sh")
+os.system("source ./measure_signal_strength.sh")
 #os.system("source ./measure_inclusive_signal_strength.sh")
 #os.system("source ./plot_impacts_fit.sh")                   # does only work in combination with measure_inclusive_signal_strength.sh
 #os.system("source ./make_post-fit.sh")            # does only work in combination with measure_inclusive_signal_strength.s

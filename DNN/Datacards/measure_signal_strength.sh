@@ -2,18 +2,16 @@
 
 # Please specify the following input variables
 #ERA=2017
-#EMB=1
+#EMB=0
 DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
 CAT="ML"
-#BASE_PATH=/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/Datacards/output/
-BASE_PATH=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/Datacards/output/
+CURRENT_PATH=$(pwd)
+BASE_PATH=${CURRENT_PATH}/output/
 INPUT_FOLDER=${ERA}
 OUTPUT_FOLDER=${ERA}_smhtt
-CMSSW_LOCATION=/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/CombineHarvester/2017/CMSSW_8_1_0/src
-#CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/CMSSW_8_1_0/src
-CURRENT_PATH=$(pwd)
+CMSSW_LOCATION=/nfs/dust/cms/user/tlenz/13TeV/2018/CMSSW/SMHTauTau/CMSSW_8_1_0/src
 
 export SCRAM_ARCH=slc6_amd64_gcc530
 cd ${CMSSW_LOCATION}
@@ -23,7 +21,6 @@ cmsenv
 cd ${CMSSW_BASE}/src/CombineHarvester/HTTSM2017
 rm -rf output/*
 
-
 # Produce the datacard for the em channel (please add the em channel in category gof in the morphing script)
 ulimit -s unlimited
 $CMSSW_BASE/bin/slc6_amd64_gcc530/MorphingSM2017 \
@@ -31,18 +28,19 @@ $CMSSW_BASE/bin/slc6_amd64_gcc530/MorphingSM2017 \
     --input_folder_em=$INPUT_FOLDER \
     --real_data=false \
     --classic_bbb=false \
-    --binomial_bbb=true \
+    --binomial_bbb=false \
     --jetfakes=false \
     --embedding=${EMB} \
     --postfix="-$CAT" \
     --channel="em" \
     --auto_rebin=true \
     --stxs_signals=stxs_stage0 \
-    --categories=stxs_stage1 \
+    --categories=stxs_stage1p1 \
     --era=${ERA}\
     --output=$OUTPUT_FOLDER \
     --regional_jec=true \
-    --ggh_wg1=true
+    --ggh_wg1=true \
+    --rebin_categories=false
 
 
 cd output/${ERA}_smhtt/cmb/125/
@@ -75,7 +73,7 @@ workspace_location=${CMSSW_BASE}/src/CombineHarvester/HTTSM2017/output/${ERA}_sm
 combineTool.py -M MultiDimFit -m 125 -d ${workspace_location}/${ERA}_workspace.root \
     --algo singles --robustFit 1 \
     --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0 \
-    -t -1 --expectSignal 1 \
+    -t -1 --expectSignal 1 --floatOtherPOIs 1 \
     -n $ERA 
 
 cd ${CURRENT_PATH}

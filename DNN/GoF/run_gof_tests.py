@@ -19,7 +19,7 @@ else :
     embedded_c='false'
 
 # some settings
-output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
+output_directory = "/nfs/dust/cms/user/tlenz/13TeV/2018/SM_HTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
 #output_directory = "/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/DNN/GoF/output/" + era +"/var_1d/"
 
 config_filename_in = "config_for_gof_2016_with_placeholders.cfg"
@@ -100,6 +100,8 @@ def process_vars(var):
 num_cores = multiprocessing.cpu_count()
 print "available number of cores = " + str(num_cores)
 
-num_cores = 16
+num_cores = num_cores/2
+
+print "number of cores that will be used = " + str(num_cores)
 
 results = Parallel(n_jobs=num_cores)(delayed(process_vars)(i) for i in variable_list)
