@@ -22,11 +22,11 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
   Config cfg(config_name);
 
-  const TString directory = cfg.get<string>("directory");
-  const string era        = cfg.get<string>("era");
-  const bool use_embedded = cfg.get<bool>("use_embedded");
-  const bool plot_2d      = cfg.get<bool>("plot_2d");
-  const bool verbose      = cfg.get<bool>("verbose");
+  const TString directory              = cfg.get<string>("directory");
+  const string era                     = cfg.get<string>("era");
+  const bool use_embedded              = cfg.get<bool>("use_embedded");
+  const bool plot_2d                   = cfg.get<bool>("plot_2d");
+  const bool verbose                   = cfg.get<bool>("verbose");
   const bool take_percentile_subrange  = cfg.get<bool>("take_percentile_subrange");
   const bool apply_equidistant_binning = cfg.get<bool>("apply_equidistant_binning");
   const TString output_file_suffix     = cfg.get<string>("output_file_suffix");
@@ -43,13 +43,13 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   int nbins = 0;
   for( auto cat_name : category_names_vector){
     class Category category_(cat_name);
-    category_map[cat_name] = category_;
-    category_map.at(cat_name).plot_2d = cfg.get<bool>(cat_name+"_plot_2d");
-    category_map.at(cat_name).variable = cfg.get<string>(cat_name+"_variable");
-    category_map.at(cat_name).nbins_1d = cfg.get<int>(cat_name+"_nbins_1d");
-    category_map.at(cat_name).binning_1d = cfg.get<vector<float>>(cat_name+"_binning_1d");
-    category_map.at(cat_name).binning_2d_x = cfg.get<vector<float>>(cat_name+"_binning_2d_x");
-    category_map.at(cat_name).binning_2d_y = cfg.get<vector<float>>(cat_name+"_binning_2d_y");
+    category_map[cat_name]                     = category_;
+    category_map.at(cat_name).plot_2d          = cfg.get<bool>(cat_name+"_plot_2d");
+    category_map.at(cat_name).variable         = cfg.get<string>(cat_name+"_variable");
+    category_map.at(cat_name).nbins_1d         = cfg.get<int>(cat_name+"_nbins_1d");
+    category_map.at(cat_name).binning_1d       = cfg.get<vector<float>>(cat_name+"_binning_1d");
+    category_map.at(cat_name).binning_2d_x     = cfg.get<vector<float>>(cat_name+"_binning_2d_x");
+    category_map.at(cat_name).binning_2d_y     = cfg.get<vector<float>>(cat_name+"_binning_2d_y");
     if(is_dnn_prediction){
       category_map.at(cat_name).class_nr       = cfg.get<int>(cat_name+"_class_nr");
       category_map.at(cat_name).htxs_reco_flag = cfg.get<int>(cat_name+"_htxs_reco_flag");
@@ -59,7 +59,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   //************************************************************************************************
   // Define some common weights and cuts
 
-  TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*";
+  TString weight    = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*";
   TString mt_cut    = "&& mTdileptonMET<60 ";
   TString cuts_kine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron && nbtag == 0";
   cuts_kine += mt_cut;
@@ -306,9 +306,9 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       cat.second.sample_list[smpl.first].cutStringSS    = "q_1*q_2>0" + cat.second.cutstring;
       cat.second.sample_list[smpl.first].weightStringSS = weight + "qcdweight*";
       cat.second.sample_list[smpl.first].variable       = cat.second.variable;
-      // if (cat.second.name.Contains("ggh") || cat.second.name.Contains("qqh")){
-      //    cat.second.sample_list[smpl.first].cutString += "&& predicted_prob > 0.5";
-      //    cat.second.sample_list[smpl.first].cutStringSS += "&& predicted_prob > 0.5";
+      // if( cat.second.name.Contains("ggh") ){
+      // 	cat.second.sample_list[smpl.first].cutString   += "&& njets == 1";
+      // 	cat.second.sample_list[smpl.first].cutStringSS += "&& njets == 1";
       // }
     }
   }
