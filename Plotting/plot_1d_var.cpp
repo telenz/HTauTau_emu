@@ -139,7 +139,7 @@ void plot_1d_var(
      if( smpl->isSignal == true ) continue;
      stack -> Add(smpl->hist);
    }
-
+   
    // Give warning if there are empty bins
    TH1 *last = (TH1*)stack->GetStack()->Last();
    // for (int iB=1; iB<=last->GetNbinsX(); ++iB) {
@@ -210,7 +210,10 @@ void plot_1d_var(
    // Calculate signal strength (s+b/b) - needed for ratio plot and blinding
    TH1D * signal_strength    = (TH1D*) stack->GetStack()->Last()->Clone("ratioH");
    for(auto  *smpl : sample_vec){
-     if(smpl->isSignal) signal_strength -> Add(smpl->hist);
+      if(smpl->isSignal) {
+         signal_strength -> Add(smpl->hist);
+         smpl->hist->Scale(scaleSignal);
+      }
    }
    signal_strength -> Divide((TH1D*)stack->GetStack()->Last());
    signal_strength -> SetLineColor(2);

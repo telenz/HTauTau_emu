@@ -48,7 +48,7 @@ void create_dnn_ntuples( TString era = "2018" ){
      samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2018;
      samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2018;
      samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2018;
-     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2018_all_eras/FastMTTValuesForMela";  
+     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2018_all_eras/";  
   }
   else if(era == "2017"){
     xsec_map    = &xsec_map_2017;
@@ -235,8 +235,8 @@ void create_dnn_ntuples( TString era = "2018" ){
 
 	// Add here preselection if necessary
 	if(applyPreselection){
-	  if( iso_1 > 0.15 )               continue;
-	  if( iso_2 > 0.2 )                continue;
+	  if( iso_1 > 0.5 )                continue;
+	  if( iso_2 > 0.5 )                continue;
 	  if( extraelec_veto > 0.5 )       continue;
 	  if( extramuon_veto > 0.5 )       continue;
 	  if( pt_1 < 10 )                  continue;

@@ -30,37 +30,71 @@ if era == "2018" :
     print "era is 2018"
     config_filename_in = "config_for_gof_2018_with_placeholders.cfg"
 
-variable_list = [ "m_sv",
-                  "pt_sv",
-                  "mt_sv",
-                  "m_vis",
-                  "pt_1",
-                  "pt_2",
-                  "jpt_1",
-                  "jpt_2",
-                  "njets",
-                  "mt_1",
-                  "mt_2",
-                  "pt_tt",
-                  "mjj",
-                  "met",
-                  "dzeta",
-                  "mTemu",
-                  "mtmax",
-                  "dphi_mumet",
-                  "dphi_emet",
-                  "dr_tt",
-                  "jeta_1",
-                  "jeta_2",
-                  "jdeta",
-                  "mTdileptonMET",
-                  "pt_ttjj",
-                  "dijetpt",
-                  "pt_vis",
-                  ]
+#variable_list = [ "m_sv",done
+#                  "pt_sv",done
+#                  "mt_sv",done
+#                  "m_vis",done
+#                  "pt_1",done
+#                  "pt_2",done
+#                  "jpt_1",done
+#                  "jpt_2",done
+#                  "njets",done
+#                  "mt_1",done
+#                  "mt_2",done
+#                  "pt_tt",done
+#                  "mjj",done
+#                  "met",done
+#                  "dzeta",
+#                  "mTemu",done
+#                  "mtmax",done
+#                  "dphi_mumet",done
+#                  "dphi_emet",done
+#                  "dr_tt",
+#                  "jeta_1",done
+#                  "jeta_2",done
+#                  "jdeta",done
+#                  "mTdileptonMET",done
+#                  "pt_ttjj",done
+#                  "dijetpt",done
+#                  "pt_vis",done
+#                  ]
 
-#variable_list = [ "jeta_1"]
+#variable_list = [ "m_sv",
+#                  "m_vis",
+#                  "pt_1",
+#                  "pt_2",
+#                  "jpt_1",
+#                  "jpt_2",
+#                  "met",
+#                  ]
 
+#variable_list = [ "ME_vbf_vs_Z",
+#                  "ME_ggh_vs_Z",
+#                  "ME_vbf_vs_ggh",
+#                  "ME_q2v1",
+#                  "ME_q2v2",
+#                  "ME_costheta1",
+#                  "ME_costheta2",
+#                  "ME_costhetastar",
+#                  "ME_phi1",
+#                  "ME_phi",
+#]
+variable_list = [ "ME_vbf_vs_ggh",
+]
+
+
+#variable_list = [ "ME_q2v1",
+#                  "ME_q2v2",
+#]
+
+#variable_list = [ "ME_costheta1",
+#                  "ME_costheta2",
+#                  "ME_costhetastar"
+#]
+
+#variable_list = [ "ME_phi1",
+#                  "ME_phi",
+#]
 # Execute produce_gof_inputs.cpp for all variables
 
 def process_vars(var):
@@ -82,16 +116,16 @@ def process_vars(var):
     os.system(cmd)
 
     # Now start to make the actual gof test
-    os.environ["VAR"] = var
-    os.environ["ERA"] = era
-    os.environ["EMB"] = str(embedded)
-    os.environ["INPUT_FOLDER"] = 'var_1d'
-    os.system("source ./run_gof.sh")
+    #os.environ["VAR"] = var
+    #os.environ["ERA"] = era
+    #os.environ["EMB"] = str(embedded)
+    #os.environ["INPUT_FOLDER"] = 'var_1d'
+    #os.system("source ./run_gof.sh")
 
     # Plotting
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,false,\\\"" + output_directory + "\\\",\\\"" + era + "\\\"," + str(embedded) + ")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",true,false,\\\"" + output_directory + "\\\",\\\"" + era + "\\\"," + str(embedded) + ")\""
     os.system(cmd)
-    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",false,true,\\\"" + output_directory + "\\\",\\\"" + era + "\\\"," + str(embedded)+ ")\""
+    cmd="root -l -b -q ../../Plotting/plot_1d_var.cpp\"(\\\""+var+"\\\",\\\"em_inclusive\\\",true,true,\\\"" + output_directory + "\\\",\\\"" + era + "\\\"," + str(embedded)+ ")\""
     os.system(cmd)
 
     os.system("rm config_for_gof_"+era+"_"+var+".cfg")
