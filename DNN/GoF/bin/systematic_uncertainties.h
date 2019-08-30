@@ -10,8 +10,7 @@ Sample create_systematic_uncertainty( TString unc_name, TString combine_harveste
   Sample uncertainty_sample = mother_sample;
   uncertainty_sample.uncertainties.clear();
   TString variable = "";
-  if(!gof_2d) variable = mother_sample.variable_1d;
-  else        variable = mother_sample.variable_2d;
+  variable = mother_sample.variable;
 
   mother_sample.uncertainties.insert( make_pair( unc_name , uncertainty_sample ) );
   mother_sample.uncertainties[unc_name].name += combine_harvester_name;
@@ -23,19 +22,19 @@ Sample create_systematic_uncertainty( TString unc_name, TString combine_harveste
     if(input_tree -> GetBranch("mTdileptonMET_" +shift_name)) mother_sample.uncertainties[unc_name].cutString.ReplaceAll("mTdileptonMET","mTdileptonMET_"+shift_name);
     if(input_tree -> GetBranch("nbtag_" +shift_name)) mother_sample.uncertainties[unc_name].cutString.ReplaceAll("nbtag","nbtag_"+shift_name);
     if(!gof_2d){
-      if(input_tree -> GetBranch( variable + "_" + shift_name )) mother_sample.uncertainties[unc_name].variable_1d = variable + "_" + shift_name;
+      if(input_tree -> GetBranch( variable + "_" + shift_name )) mother_sample.uncertainties[unc_name].variable = variable + "_" + shift_name;
       //      else cout<<"No systematic shift for "<<shift_name<<" for variable "<<variable<<" available in tree."<<endl;
     }
     else{
       // split the two variables into two seperate strings
       TString var1, var1_variation, var2, var2_variation;
-      var1 = mother_sample.variable_2d( 0 , mother_sample.variable_2d.First(":") );
-      var2 = mother_sample.variable_2d( mother_sample.variable_2d.First(":")+1 , mother_sample.variable_2d.Length() );
+      var1 = mother_sample.variable( 0 , mother_sample.variable.First(":") );
+      var2 = mother_sample.variable( mother_sample.variable.First(":")+1 , mother_sample.variable.Length() );
       var1_variation   = var1;
       var2_variation   = var2;
       if(input_tree -> GetBranch(var1_variation+"_"+shift_name)) var1_variation = var1 + "_" + shift_name;
       if(input_tree -> GetBranch(var2_variation+"_"+shift_name)) var2_variation = var2 + "_" + shift_name;
-      mother_sample.uncertainties[unc_name].variable_2d = var1_variation   + ":" + var2_variation;
+      mother_sample.uncertainties[unc_name].variable = var1_variation   + ":" + var2_variation;
     }
   }
 

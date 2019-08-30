@@ -28,9 +28,7 @@ public :
   TString qcdweight     = "1*";
   TString norm          = "1*";
 
-  TString variable_1d = "m_vis";
-  TString variable_2d = "m_vis : pt_2";
-  TString variable = "m_vis";
+  TString variable = "";
 
   TH1D *hist_1d;
   TH1D *histSS_1d;
@@ -90,8 +88,6 @@ public :
   unsigned int class_nr = 0;
   int htxs_reco_flag    = -1;
 
-  TString variable_1d = "";
-  TString variable_2d = "";
   TString variable    = "";
   bool plot_2d = false;
   TString cutstring   = "";
