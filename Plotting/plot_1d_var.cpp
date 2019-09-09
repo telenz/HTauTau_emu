@@ -39,7 +39,7 @@ void plot_1d_var(
 
    // Set some options
    bool plotLeg = true;
-   double scaleSignal = 50;
+   double scaleSignal = 1;
    bool blindData = true;
 
    TH1::SetDefaultSumw2();
@@ -65,6 +65,13 @@ void plot_1d_var(
    SampleForPlotting ggh("ggH",{"ggH125"});
    SampleForPlotting zh("ZH",{"ZH125"});
    SampleForPlotting wh("WH",{"WH125"});
+
+   if(use_embedded){
+     vv.subsamples.clear();
+     vv.subsamples.push_back("VVL");
+     tt.subsamples.clear();
+     tt.subsamples.push_back("TTL");
+   }
 
    ztt.color = "#FFCC66";
    emb.color = "#FFCC66";
