@@ -55,7 +55,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   //************************************************************************************************
   // Define some common weights and cuts
 
-  TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*";
+  TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight/trigweight*trigger_filter_weight*";
   TString mt_cut    = "&& mTdileptonMET<60 ";
   TString cuts_kine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron && nbtag == 0";
   cuts_kine += mt_cut;
@@ -175,7 +175,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       cat.second.sample_list[smpl.first].cutString      = "q_1*q_2<0" + cat.second.cutstring;
       cat.second.sample_list[smpl.first].weightString   = weight;
       cat.second.sample_list[smpl.first].cutStringSS    = "q_1*q_2>0" + cat.second.cutstring;
-      cat.second.sample_list[smpl.first].weightStringSS = weight + "qcdweight*";
+      cat.second.sample_list[smpl.first].weightStringSS = weight + "qcd_correction*";
       cat.second.sample_list[smpl.first].variable       = cat.second.variable;
     }
   }
@@ -185,7 +185,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["0_Data"].weightString   = "1*";
     cat.second.sample_list["0_Data"].weightStringSS = "1*";
     cat.second.sample_list["1_QCD"].weightString    = "1*";
-    cat.second.sample_list["1_QCD"].weightStringSS  = "qcdweight*";
+    cat.second.sample_list["1_QCD"].weightStringSS  = "qcd_correction*";
     cat.second.sample_list["1_QCD"].cutString       = "1==2";  // don't fill anything in this histogram should remain empty
 
     cat.second.sample_list["2_ZL"].cutString       += "&&!isZTTEM";
@@ -213,8 +213,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["11_qqH125"].weightStringSS  += "prefiringweight*";
 
     if(use_embedded){
-      cat.second.sample_list["9_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
-      cat.second.sample_list["9_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*qcdweight*";
+      cat.second.sample_list["9_EMB"].weightString   = "mcweight*effweight/trigweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
+      cat.second.sample_list["9_EMB"].weightStringSS = "mcweight*effweight/trigweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*qcd_correction*";
       cat.second.sample_list["9_EMB"].cutString   += "&& mcweight<1";
       cat.second.sample_list["9_EMB"].cutStringSS += "&& mcweight<1";
     }
