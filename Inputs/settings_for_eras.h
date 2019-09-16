@@ -141,8 +141,8 @@ const map<TString, double> xsec_map_2018 = {
    { "ZHToTauTau_M125_13TeV_powheg_pythia8" , 0.0594 },
    { "WplusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0527 },
    { "WminusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0358 },
-   { "GluGluHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 48.6*0.02374 }, // from: https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHXSWG#Higgs_cross_sections_and_decay_b and https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageBR#H_llll_ll
-   { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 3.78*0.02374 },
+   { "GluGluHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 1.091343 }, // 48.58 (Production) * 0.214 (H->WW) * 0.104976 (WW->2l2Nu), from Dennis Roy (Heavy H->WW analysis), SM H->WW analysis still uses old ggh cross section (according to their AN), other values are the same
+   { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 0.084962 },// 3.782 * 0.214 * 0.104976, from Dennis Roy (Heavy H->WW analysis)
    { "ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8" , 0.5071*0.0627 },
 };
 // 2017 (checked again - reference is http://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2018/255 -> DY xsec updated )
@@ -178,8 +178,8 @@ const map<TString, double> xsec_map_2017 = {
   { "ZHToTauTau_M125_13TeV_powheg_pythia8"      , 0.0594 },
   { "WplusHToTauTau_M125_13TeV_powheg_pythia8"  , 0.0527 },
   { "WminusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0358 },
-  { "GluGluHToWWTo2L2Nu"                        , 48.6*0.02374 },  // from: https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHXSWG#Higgs_cross_sections_and_decay_b and https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageBR#H_llll_ll
-  { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 3.78*0.02374 }, // from: see links above
+  { "GluGluHToWWTo2L2Nu"                        , 1.091343 },  // see 2018
+  { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 0.084962 }, // see 2018
   { "ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8"         , 0.5071*0.0627 }  // from: see links above
 };
 
@@ -220,8 +220,8 @@ const map<TString, double> xsec_map_2016 = {
     { "ZHToTauTau_M125"          , 0.0594 },
     { "WplusHToTauTau_M125"      , 0.0527 },
     { "WminusHToTauTau_M125"     , 0.0358 },
-    { "GluGluHToWWTo2L2Nu_M125"  , 48.6*0.02374 }, // see 2017
-    { "VBFHToWWTo2L2Nu_M125"     , 3.78*0.02374 }, // see 2017
+    { "GluGluHToWWTo2L2Nu_M125"  , 1.091343 }, // see 2018
+    { "VBFHToWWTo2L2Nu_M125"     , 0.084962 }, // see 2018
     { "ttHJetToTT_M125"          , 0.5071*0.0627 } // see 2017
   };
 // **************************************************************************************************
