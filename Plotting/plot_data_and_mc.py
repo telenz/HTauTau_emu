@@ -7,7 +7,7 @@ rt.gROOT.SetBatch(rt.kTRUE)
 
 # Variable list and definition of x-axis ranges
 variable_list = [  "pt_1"  ]
-axis_range = {"pt_1" : [10,0,100] } 
+axis_range = {"pt_1" : [10,30,100] }
 
 # open tree
 input_dir = "/nfs/dust/cms/user/tlenz/13TeV/2018/SM_HTauTau/HTauTau_emu/Inputs/NTuples_2017/"
