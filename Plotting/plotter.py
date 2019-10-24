@@ -7,17 +7,15 @@ variable_list = [  "pt_1"  , "m_vis" ]
 axis_range = {"pt_1" : [10,0,100] , "pt_2" : [10,0,200] , "m_vis" : [20,0,200]} 
 
 # open tree
-inDir = "../Inputs/NTuples_2016/"
-channel = "em"
-version = "v1"
-f0,tree_Data      = f.openTree(inDir+"/MuonEG_Run2016_dnn_"+channel+"_"+version+".root","TauCheck")
-f1,tree_DYJets    = f.openTree(inDir+"/DYJets_dnn_"+channel+"_"+version+".root","TauCheck")
-f2,tree_WJets     = f.openTree(inDir+"/WJets_dnn_"+channel+"_"+version+".root" ,"TauCheck")
-f3,tree_TTbar     = f.openTree(inDir+"/TTbar_dnn_"+channel+"_"+version+".root","TauCheck")
-f4,tree_SingleTop = f.openTree(inDir+"/SingleTop_dnn_"+channel+"_"+version+".root","TauCheck")
-f5,tree_Diboson   = f.openTree(inDir+"/Diboson_dnn_"+channel+"_"+version+".root","TauCheck")
-f6,tree_ggH       = f.openTree(inDir+"/ggH_dnn_"+channel+"_"+version+".root","TauCheck")
-f7,tree_VBFH      = f.openTree(inDir+"/VBFH_dnn_"+channel+"_"+version+".root","TauCheck")
+inDir = "/nfs/dust/cms/user/tlenz/13TeV/2018/SM_HTauTau/HTauTau_emu/Inputs/NTuples_2017"
+f0,tree_Data      = f.openTree(inDir+"/em-NOMINAL_ntuple_MuonEG.root","TauCheck")
+f1,tree_DYJets    = f.openTree(inDir+"/em-NOMINAL_ntuple_DYJets.root","TauCheck")
+f2,tree_WJets     = f.openTree(inDir+"/em-NOMINAL_ntuple_WJets.root" ,"TauCheck")
+f3,tree_TTbar     = f.openTree(inDir+"/em-NOMINAL_ntuple_TTbar.root","TauCheck")
+f4,tree_SingleTop = f.openTree(inDir+"/em-NOMINAL_ntuple_SingleTop.root","TauCheck")
+f5,tree_Diboson   = f.openTree(inDir+"/em-NOMINAL_ntuple_Diboson.root","TauCheck")
+f6,tree_ggH       = f.openTree(inDir+"/em-NOMINAL_ntuple_ggH.root","TauCheck")
+f7,tree_VBFH      = f.openTree(inDir+"/em-NOMINAL_ntuple_VBFH.root","TauCheck")
 
 # define selection
 selection = "pt_2>30 && pt_1>30"
