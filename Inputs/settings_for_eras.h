@@ -110,11 +110,11 @@ const vector<TString> ttH_2016             = { "ttHJetToTT_M125" };
 // Cross-section map
 // 2018 (taken from 2017 - 2017 was checked)
 const map<TString, double> xsec_map_2018 = {
-   { "DYJetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"  ,  6225.42 }, // NNLO xsec -> k-factor=1.165
-   { "DY1JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 877.8*1.165 },
-   { "DY2JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 304.4*1.165 },
-   { "DY3JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 111.5*1.165 },
-   { "DY4JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 44.04*1.165 },
+   { "DYJetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8"  , 6077.22 }, // NNLO xsec -> k-factor=1.1137 (see mail from Izaak on tauid hn 14.10.19)
+   { "DY1JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 877.8*1.137 },
+   { "DY2JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 304.4*1.137 },
+   { "DY3JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 111.5*1.137 },
+   { "DY4JetsToLL_M-50_TuneCP5_13TeV_madgraphMLM_pythia8" , 44.04*1.137 },
    { "EWKZ2Jets_ZToNuNu_TuneCP5_PSweights_13TeV-madgraph-pythia8" , 10.66 },
    { "EWKZ2Jets_ZToLL_M-50_TuneCP5_PSweights_13TeV-madgraph-pythia8" , 4.321 },
    { "DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8" , 21658.0 },
@@ -148,11 +148,11 @@ const map<TString, double> xsec_map_2018 = {
 // 2017 (checked again - reference is http://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2018/255 -> DY xsec updated )
 const map<TString, double> xsec_map_2017 = {
    // { "DYJetsToLL_M-10to50"      , 15820*1.079 },
-  { "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"  , 6225.42 }, // NNLO xsec -> k-factor=1.165
-  { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 877.8*1.165 },
-  { "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 304.4*1.165 },
-  { "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 111.5*1.165 },
-  { "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 44.04*1.165 },
+  { "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"  , 6077.22 }, // NNLO xsec -> k-factor=1.137 (see mail from Izaak on tauid hn 14.10.19)
+  { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 877.8*1.137 },
+  { "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 304.4*1.137 },
+  { "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 111.5*1.137 },
+  { "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 44.04*1.137 },
   { "EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8" , 4.321 },
   { "EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8" , 10.66 },
   { "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 61526.7 },   // NNLO -> k-factor=1.162
@@ -186,11 +186,11 @@ const map<TString, double> xsec_map_2017 = {
 // 2016 (taken from AN2016_355_v10 with minor unrelevant deviations - everything was checked)
 const map<TString, double> xsec_map_2016 = {
     { "DYJetsToLL_M-10to50"      , 18610 },
-    { "DYJetsToLL_M-50"          , 5765 },
-    { "DY1JetsToLL_M-50"         , 1.164*1012.5 },
-    { "DY2JetsToLL_M-50"         , 1.164*332.8 },
-    { "DY3JetsToLL_M-50"         , 1.164*101.8 },
-    { "DY4JetsToLL_M-50"         , 1.164*54.8 },
+    { "DYJetsToLL_M-50"          , 6077.22 }, // NNLO xsec -> k-factor=1.227 (see mail from Izaak on tauid hn 14.10.19)
+    { "DY1JetsToLL_M-50"         , 1.227*1012.5 },
+    { "DY2JetsToLL_M-50"         , 1.227*332.8 },
+    { "DY3JetsToLL_M-50"         , 1.227*101.8 },
+    { "DY4JetsToLL_M-50"         , 1.227*54.8 },
     { "WJetsToLNu"               , 61526.7 },
     { "W1JetsToLNu"              , 1.221*9644.5 },
     { "W2JetsToLNu"              , 1.221*3144.5 },
