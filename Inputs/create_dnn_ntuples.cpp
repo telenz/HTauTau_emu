@@ -10,7 +10,7 @@
 
 bool applyPreselection = true;
 
-void create_dnn_ntuples( TString era = "2018" ){
+void create_dnn_ntuples( TString era = "2017" ){
 
   // Some definitions
   TString channel = "em";
@@ -59,7 +59,7 @@ void create_dnn_ntuples( TString era = "2018" ){
     embedded_trigger_weight  = 1.00;
     embedded_tracking_weight = 0.99;
     samples_map[channel + "-NOMINAL_ntuple_MuonEG"   ] = MuonEG_Run2017;
-    // samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2017;
+    samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2017;
     samples_map[channel + "-NOMINAL_ntuple_DYJets"   ] = DYJets_2017;
     samples_map[channel + "-NOMINAL_ntuple_WJets"    ] = WJets_2017;
     samples_map[channel + "-NOMINAL_ntuple_TTbar"    ] = TTbar_2017;
@@ -73,7 +73,7 @@ void create_dnn_ntuples( TString era = "2018" ){
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2017;
     //input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
-    input_dir="/nfs/dust/cms/user/tlenz/13TeV/2018/CMSSW/all_eras/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/"
   }
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
@@ -242,7 +242,7 @@ void create_dnn_ntuples( TString era = "2018" ){
 	  if( pt_1 < 10 )                  continue;
 	  if( pt_2 < 10 )                  continue;
 	  if( TMath::Max(pt_1,pt_2) < 20 ) continue;
-	  if( dzeta < -50 )                continue;
+	  //if( dzeta < -50 )                continue;
 	  if( mTdileptonMET > 90 )         continue;
 	  if( metFilters < 0.5 )           continue;
 	  if( trg_muonelectron < 0.5 )     continue;
