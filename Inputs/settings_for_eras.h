@@ -56,10 +56,11 @@ const vector<TString> Embedded_2017        = { "Embedding_Run2017" };
 const vector<TString> DYJets_2017          = { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-					       "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
-					       "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8",
-					       "EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8",
-					       "EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8"};
+                      "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+                      "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8",
+                      "EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8",
+                      "EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8"
+                      };
 const vector<TString> WJets_2017           = { "W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" ,
@@ -266,6 +267,39 @@ const map<TString , TString> process_map_2016 = {
   { "DY4Jets" , "DY4JetsToLL_M-50"},
 };
 
+// **************************************************************************************************
+// **************************************************************************************************
+// maps for number of events in sample, needed for proper normalization in 2016 & 2017
+map<TString, int> n_events_per_sample_2017 = {
+{"WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8"  , 74635450},
+{"W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 54988117},
+{"W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 32368249},
+{"W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 19700377},
+{"W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8" , 11333705},
+{"ZZ_TuneCP5_13TeV-pythia8" , 1949768},
+{"WW_TuneCP5_13TeV-pythia8" , 7791498},
+{"WZ_TuneCP5_13TeV-pythia8" , 3928630},
+{"DYJetsToLL_M-10to50" , 39521230},
+{"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"     , 97800939},
+{"DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"    , 34859434},
+{"DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"    , 9790490},
+{"DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"    , 6897933},
+{"DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"    , 4346952},
+{"EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8" , 3000000},
+{"EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8" , 954336},
+{"EWKWMinus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8" , 4449714},
+{"EWKWPlus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8" , 4453013},
+{"WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8" , 6283083},
+{"VBFHToTauTau_M125_13TeV_powheg_pythia8" , 2977152},
+{"ZHToTauTau_M125_13TeV_powheg_pythia8" , 4940230},
+{"WplusHToTauTau_M125_13TeV_powheg_pythia8" , 4000000},
+{"WminusHToTauTau_M125_13TeV_powheg_pythia8" , 3860872},
+{"GluGluHToWWTo2L2Nu" , 953600}, 
+{"VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 500000},
+{"ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8" , 21713806},
+};
+//TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8, TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8, TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8 , ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, GluGluHToTauTau_M125_13TeV_powheg_pythia8 can be normalized using GetSumOfWeights()
+
 double getNEventsProcessed(TString filename)
 {
   TFile * file = new TFile(filename);
@@ -275,6 +309,7 @@ double getNEventsProcessed(TString filename)
     exit(-1);
   }
   double nevents = histWeightsH->GetSumOfWeights();
+  std::cout<<"--------------------------------Normalization from GetSumOfWeights()-----------------------------------"<<std::endl;
   file -> Close();
   delete file;
   return nevents;

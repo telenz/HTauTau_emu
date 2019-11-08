@@ -25,6 +25,7 @@ void create_dnn_ntuples( TString era = "2017" ){
   map< TString , vector<TString> > samples_map;
   const map<TString, double>  *xsec_map    = 0;
   const map<TString, TString> *process_map = 0;
+  map<TString , int> n_events_per_sample;
   
   if (era == "2018"){
      xsec_map    = &xsec_map_2018;
@@ -53,6 +54,7 @@ void create_dnn_ntuples( TString era = "2017" ){
   else if(era == "2017"){
     xsec_map    = &xsec_map_2017;
     process_map = &process_map_2017;
+    n_events_per_sample = n_events_per_sample_2017;
     luminosity  = 41530;                 // Take number from LUMI twiki : https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM#SummaryTable
     trigger_filter_efficiency = 1.0;
     qcd_ss_os_iso_relaxed_ratio = 2.38;
@@ -73,7 +75,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2017;
     //input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
-    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/"
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
   }
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
@@ -111,17 +113,40 @@ void create_dnn_ntuples( TString era = "2017" ){
   double xsecDY2Jets    = xsec_map->at(process_map->at("DY2Jets"));
   double xsecDY3Jets    = xsec_map->at(process_map->at("DY3Jets"));
   double xsecDY4Jets    = xsec_map->at(process_map->at("DY4Jets"));
-  double neventsWIncl   = getNEventsProcessed(input_dir+"/"+process_map->at("WJets")+".root");
-  double neventsW1Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W1Jets")+".root");
-  double neventsW2Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W2Jets")+".root");
-  double neventsW3Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W3Jets")+".root");
-  double neventsW4Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W4Jets")+".root");
-  double neventsDYIncl  = getNEventsProcessed(input_dir+"/"+process_map->at("DYJets")+".root");
-  double neventsDY1Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY1Jets")+".root");
-  double neventsDY2Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY2Jets")+".root");
-  double neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
-  double neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
-
+  double neventsWIncl = 0;
+  double neventsW1Jets  = 0;
+  double neventsW2Jets  = 0;
+  double neventsW3Jets  = 0;
+  double neventsW4Jets  = 0;
+  double neventsDYIncl  = 0;
+  double neventsDY1Jets = 0;
+  double neventsDY2Jets = 0;
+  double neventsDY3Jets = 0;
+  double neventsDY4Jets = 0;
+  if (n_events_per_sample.size()==0){
+     neventsWIncl   = getNEventsProcessed(input_dir+"/"+process_map->at("WJets")+".root");
+     neventsW1Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W1Jets")+".root");
+     neventsW2Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W2Jets")+".root");
+     neventsW3Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W3Jets")+".root");
+     neventsW4Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W4Jets")+".root");
+     neventsDYIncl  = getNEventsProcessed(input_dir+"/"+process_map->at("DYJets")+".root");
+     neventsDY1Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY1Jets")+".root");
+     neventsDY2Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY2Jets")+".root");
+     neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
+     neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
+  }
+  else{
+     neventsWIncl   = n_events_per_sample.at("WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8");
+     neventsW1Jets  = n_events_per_sample.at("W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8");
+     neventsW2Jets  = n_events_per_sample.at("W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8");
+     neventsW3Jets  = n_events_per_sample.at("W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8");
+     neventsW4Jets  = n_events_per_sample.at("W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8");
+     neventsDYIncl  = n_events_per_sample.at("DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8");
+     neventsDY1Jets = n_events_per_sample.at("DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8");
+     neventsDY2Jets = n_events_per_sample.at("DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8");
+     neventsDY3Jets = n_events_per_sample.at("DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8");
+     neventsDY4Jets = n_events_per_sample.at("DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8");
+  }
   TString output_dir = "NTuples_" + era;
   gSystem -> Exec("mkdir " + output_dir);
 
@@ -135,14 +160,24 @@ void create_dnn_ntuples( TString era = "2017" ){
     bool firstTree = true;
     TList* treeList = new TList();
 
+    
     for(TString const& subsample: sample.second) {
-
+       bool FoundSampleInMap=false;
       cout << "  - " << subsample << " : ";
 
       TFile *inFile  = new TFile( input_dir + "/" + subsample + ".root" ,"READ");
       TTree *inTree  = (TTree*) inFile -> Get("TauCheck");
-      double nevents = getNEventsProcessed( input_dir + "/" + subsample + ".root" );
-
+      double nevents=0.;
+      for (auto const& sample_evt : n_events_per_sample){
+         if (subsample==sample_evt.first){
+            nevents=n_events_per_sample.at(subsample);
+            FoundSampleInMap=true;
+         }
+      }
+      if (!FoundSampleInMap){
+         nevents = getNEventsProcessed( input_dir + "/" + subsample + ".root" );
+      }
+      
       // SetBranchAddress for variables that need are needed for preselection or stitching
       unsigned int npartons;
       float iso_1;
@@ -231,7 +266,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       if(!sample.first.Contains("MuonEG") && !sample.first.Contains("Embedded")) xsec = xsec_map->at(subsample);
 
       for (int i=0; i<inTree->GetEntries(); i++) {
-	inTree->GetEntry(i);
+         inTree->GetEntry(i);
 
 	// Add here preselection if necessary
 	if(applyPreselection){
@@ -247,6 +282,7 @@ void create_dnn_ntuples( TString era = "2017" ){
 	  if( metFilters < 0.5 )           continue;
 	  if( trg_muonelectron < 0.5 )     continue;
 	}
+
 	xsec_lumi_weight = xsec*luminosity/nevents;
 	qcd_correction = qcd_ss_os_iso_relaxed_ratio;
 	trigger_filter_weight = trigger_filter_efficiency;
