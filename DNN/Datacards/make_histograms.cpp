@@ -341,9 +341,6 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["7_VVT"].cutString      += "&& isZTTEM>0.5";
     cat.second.sample_list["7_VVT"].cutStringSS    += "&& isZTTEM>0.5";
 
-    cat.second.sample_list["12_ZH125"].weightString    += "0.933*"; // correction of 7% to account for ggZH
-    cat.second.sample_list["12_ZH125"].weightStringSS  += "0.933*"; // correction of 7% to account for ggZH
-
     for(auto& smpl : cat.second.sample_list){
       if( smpl.second.name.Contains("ggH") ){
 	cat.second.sample_list[smpl.first].weightString    += "weight_ggh_NNLOPS*1.01*"; // correction of 1% to account for bbH

@@ -139,7 +139,7 @@ const map<TString, double> xsec_map_2018 = {
    { "ZZ_TuneCP5_13TeV-pythia8" , 12.14 },
    { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" , 48.58*0.0627 },
    { "VBFHToTauTau_M125_13TeV_powheg_pythia8" , 3.782*0.0627 },
-   { "ZHToTauTau_M125_13TeV_powheg_pythia8" , 0.0594 },
+   { "ZHToTauTau_M125_13TeV_powheg_pythia8" , 0.0554},
    { "WplusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0527 },
    { "WminusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0358 },
    { "GluGluHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 1.091343 }, // 48.58 (Production) * 0.214 (H->WW) * 0.104976 (WW->2l2Nu), from Dennis Roy (Heavy H->WW analysis), SM H->WW analysis still uses old ggh cross section (according to their AN), other values are the same
@@ -176,7 +176,7 @@ const map<TString, double> xsec_map_2017 = {
   { "ZZ_TuneCP5_13TeV-pythia8" , 12.14 },
   { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" , 48.58*0.0627 },
   { "VBFHToTauTau_M125_13TeV_powheg_pythia8"    , 3.782*0.0627 },
-  { "ZHToTauTau_M125_13TeV_powheg_pythia8"      , 0.0594 },
+  { "ZHToTauTau_M125_13TeV_powheg_pythia8"      , 0.0554 },
   { "WplusHToTauTau_M125_13TeV_powheg_pythia8"  , 0.0527 },
   { "WminusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0358 },
   { "GluGluHToWWTo2L2Nu"                        , 1.091343 },  // see 2018
@@ -218,7 +218,7 @@ const map<TString, double> xsec_map_2016 = {
     { "EWKZ2Jets"                , 3.987 },
     { "GluGluHToTauTau_M125"     , 48.58*0.0627 },
     { "VBFHToTauTau_M125"        , 3.782*0.0627 },
-    { "ZHToTauTau_M125"          , 0.0594 },
+    { "ZHToTauTau_M125"          , 0.0554 },
     { "WplusHToTauTau_M125"      , 0.0527 },
     { "WminusHToTauTau_M125"     , 0.0358 },
     { "GluGluHToWWTo2L2Nu_M125"  , 1.091343 }, // see 2018
