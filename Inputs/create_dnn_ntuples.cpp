@@ -80,6 +80,7 @@ void create_dnn_ntuples( TString era = "2017" ){
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
     process_map = &process_map_2016;
+    //n_events_per_sample = n_events_per_sample_2016;
     luminosity  = 35920;               // Take number from LUMI twiki : https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM#SummaryTable
     trigger_filter_efficiency = 0.979;
     qcd_ss_os_iso_relaxed_ratio = 2.3;
