@@ -144,9 +144,9 @@ vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidist
 
   // 1.) Find 0.01 and 0.99 percentiles to get the range of the histogram
   // Check if variable is of type float
-  int var;
+  float var;
   int valid_type = tree->SetBranchAddress(cat.variable,&var);
-  if(valid_type==0){
+  if(valid_type!=0){
     cout<<"Variable is not appropriate for percentile range. binning_1d as specified in config is used !"<<endl;
     return cat.binning_1d;
   }
@@ -239,10 +239,10 @@ std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subr
 
   // 1.) Find 0.01 and 0.99 percentiles to get the range of the histogram
   // Check if variable is of type float
-  int var1, var2;
+  float var1, var2;
   int valid_type_x = tree->SetBranchAddress(var_x,&var1);
   int valid_type_y = tree->SetBranchAddress(var_y,&var2);
-  if(valid_type_x==0 && valid_type_y==0){
+  if(valid_type_x!=0 || valid_type_y!=0){
     cout<<"Variable x and y are not appropriate for percentile range. binning_2_x _yd as specified in config is used !"<<endl;
     return std::make_pair(cat.binning_2d_x, cat.binning_2d_y);
   }
@@ -284,11 +284,11 @@ std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subr
   if(apply_equidistant_binning){
     for(int i=0; i<=cat.nbins_2d_x; i++) binning_2d_x.push_back(range_x_low + i*(range_x_high-range_x_low)/cat.nbins_2d_x);
     for(int i=0; i<=cat.nbins_2d_y; i++) binning_2d_y.push_back(range_y_low + i*(range_y_high-range_y_low)/cat.nbins_2d_y);
-    if( valid_type_x==0 ){
+    if( valid_type_x!=0 ){
       cout<<"Variable x is not appropriate for percentile range. binning_2d_x as specified in config is used !"<<endl;
       return std::make_pair(cat.binning_2d_x, binning_2d_y);
     }
-    if( valid_type_y==0 ){
+    if( valid_type_y!=0 ){
       cout<<"Variable x is not appropriate for percentile range. binning_2d_y as specified in config is used !"<<endl;
       return std::make_pair(binning_2d_x, cat.binning_2d_y);
     }
@@ -318,8 +318,8 @@ std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subr
       idx_bins +=1;
     }
   }
-  if( valid_type_x==0 ) return std::make_pair(cat.binning_2d_x, binning_2d_y);
-  if( valid_type_y==0 ) return std::make_pair(binning_2d_x, cat.binning_2d_y);
+  if( valid_type_x!=0 ) return std::make_pair(cat.binning_2d_x, binning_2d_y);
+  if( valid_type_y!=0 ) return std::make_pair(binning_2d_x, cat.binning_2d_y);
   return std::make_pair(binning_2d_x, binning_2d_y);
 }
 
