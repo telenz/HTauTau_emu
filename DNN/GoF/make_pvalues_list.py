@@ -3,7 +3,7 @@ from glob import glob
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-e', dest='era', help='ERA' ,choices = ['2016','2017'], default = '2016')
+parser.add_argument('-e', dest='era', help='ERA' ,choices = ['2016','2017', '2018'], default = '2016')
 args = parser.parse_args()
 
 era= args.era
