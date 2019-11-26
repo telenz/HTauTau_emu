@@ -1,89 +1,76 @@
 variables:
-- dijetpt
-- dphi_emet
-- dphi_mumet
-- dr_tt
-- dzeta
-- jdeta
-- jeta_1
-- jeta_2
-- jpt_1
-- jpt_2
-- mTdileptonMET
-- mTemu
-- m_sv
 - m_vis
-- met
+- pt_vis
+- pt_2
+- m_sv
+- jpt_1
+- dijetpt
 - mjj
-- mt_1
-- mt_2
-- mt_sv
-- mtmax
 - njets
 - pt_1
-- pt_2
-- pt_sv
+- ME_q2v1
+- ME_q2v2
 - pt_tt
-- pt_ttjj
-- pt_vis
+- jpt_2
+- eta_1
+- mTdileptonMET
+- jdeta
 
 
 selected_variables:
     2016:
         em: 
-            - dijetpt
-            - dphi_emet
-            - dphi_mumet
-            - dr_tt
-            - dzeta
-            - jdeta
-            - jeta_1
-            - jeta_2
-            - jpt_1
-            - jpt_2
-            - mTdileptonMET
-            - mTemu
-            - m_sv
-            - m_vis
-            #- met
-            - mjj
-            #- mt_1
-            - mt_2
-            - mt_sv
-            - mtmax
-            - njets
-            #- pt_1
-            - pt_2
-            - pt_sv
-            - pt_tt
-            #- pt_ttjj
-            - pt_vis
+           - m_vis
+           - pt_vis
+           - pt_2
+           - m_sv
+           - jpt_1
+           - dijetpt
+           - mjj
+           - njets
+           - pt_1
+           - ME_q2v1
+           - ME_q2v2
+           - pt_tt
+           - jpt_2
+           - eta_1
+           - mTdileptonMET
+           - jdeta
+            
     2017:
         em:
-            - dijetpt
-            - dphi_emet
-            - dphi_mumet
-            - dr_tt
-            - dzeta
-            - jdeta
-            - jeta_1
-            - jeta_2
-            - jpt_1
-            - jpt_2
-            - mTdileptonMET
-            - mTemu
-            - m_sv
-            #- m_vis
-            - met
-            - mjj
-            #- mt_1
-            - mt_2
-            - mt_sv
-            - mtmax
-            - njets
-            #- pt_1
-            #- pt_2
-            - pt_sv
-            - pt_tt
-            - pt_ttjj
-            - pt_vis
+           - m_vis
+           - pt_vis
+           - pt_2
+           - m_sv
+           - jpt_1
+           - dijetpt
+           - mjj
+           - njets
+           - pt_1
+           - ME_q2v1
+           - ME_q2v2
+           - pt_tt
+           - jpt_2
+           - eta_1
+           - mTdileptonMET
+           - jdeta      
+
+    2018:
+        em:
+           - m_vis
+           - pt_vis
+           - pt_2
+           - m_sv
+           - jpt_1
+           - dijetpt
+           - mjj
+           - njets
+           - pt_1
+           - ME_q2v1
+           - ME_q2v2
+           - pt_tt
+           - jpt_2
+           - eta_1
+           - mTdileptonMET
+           - jdeta      
