@@ -51,7 +51,10 @@ labeldict = {
     'mtmax' : 'max. ($m_{T}(\\tau_1,MET)$, $m_{T}(\\tau_2,MET)$)',
     'pt_ttjj' : '$p_{T}(\\tau\\tau jj)$',
     'pzetamiss' : '$P_{\zeta}$',
-    'pzetavis' : '$P_{\zeta}^{vis}$'
+    'pzetavis' : '$P_{\zeta}^{vis}$',
+    'ME_q2v1' :'ME_q2v1',
+    'ME_q2v2' :'ME_q2v2',
+    'eta_1' : 'eta_1'
 }
 
 def parse_arguments():
