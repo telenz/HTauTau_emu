@@ -55,7 +55,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   //************************************************************************************************
   // Define some common weights and cuts
 
-  TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight/trigweight*trigger_filter_weight*";
+  TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*prefiringweight*";
   TString mt_cut    = "&& mTdileptonMET<60 ";
   TString cuts_kine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron && nbtag == 0";
   cuts_kine += mt_cut;
@@ -66,7 +66,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   //************************************************************************************************
   // Set cuts, weights and binning on category level (cuts and weights will be later changed on individual basis)
 
-  TString cuts_category_specific = "&& dzeta>-35";
+  TString cuts_category_specific = "";
   for(auto &cat : category_map){
     cat.second.cutstring    = cuts_kine + cuts_iso_general + cuts_category_specific;
     if(is_dnn_prediction)   cat.second.cutstring += Form("&& predicted_class == %d",cat.second.class_nr);
@@ -175,7 +175,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       cat.second.sample_list[smpl.first].cutString      = "q_1*q_2<0" + cat.second.cutstring;
       cat.second.sample_list[smpl.first].weightString   = weight;
       cat.second.sample_list[smpl.first].cutStringSS    = "q_1*q_2>0" + cat.second.cutstring;
-      cat.second.sample_list[smpl.first].weightStringSS = weight + "qcd_correction*";
+      cat.second.sample_list[smpl.first].weightStringSS = weight + "qcdweight*";
       cat.second.sample_list[smpl.first].variable       = cat.second.variable;
     }
   }
@@ -185,7 +185,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["0_Data"].weightString   = "1*";
     cat.second.sample_list["0_Data"].weightStringSS = "1*";
     cat.second.sample_list["1_QCD"].weightString    = "1*";
-    cat.second.sample_list["1_QCD"].weightStringSS  = "qcd_correction*";
+    cat.second.sample_list["1_QCD"].weightStringSS  = "qcdweight*";
     cat.second.sample_list["1_QCD"].cutString       = "1==2";  // don't fill anything in this histogram should remain empty
 
     cat.second.sample_list["2_ZL"].cutString       += "&&!isZTTEM";
@@ -209,12 +209,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
     cat.second.sample_list["10_ggH125"].weightString    += "weight_ggh_NNLOPS*";
     cat.second.sample_list["10_ggH125"].weightStringSS  += "weight_ggh_NNLOPS*";
-    cat.second.sample_list["11_qqH125"].weightString    += "prefiringweight*";
-    cat.second.sample_list["11_qqH125"].weightStringSS  += "prefiringweight*";
 
     if(use_embedded){
-      cat.second.sample_list["9_EMB"].weightString   = "mcweight*effweight/trigweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
-      cat.second.sample_list["9_EMB"].weightStringSS = "mcweight*effweight/trigweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*qcd_correction*";
+      cat.second.sample_list["9_EMB"].weightString   = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*";
+      cat.second.sample_list["9_EMB"].weightStringSS = "mcweight*effweight*embeddedWeight*embedded_stitching_weight*embedded_rate_weight*qcdweight*";
       cat.second.sample_list["9_EMB"].cutString   += "&& mcweight<1";
       cat.second.sample_list["9_EMB"].cutStringSS += "&& mcweight<1";
     }
@@ -259,14 +257,22 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       // 1.) QCD uncertainties (10 nuisances)
       smpl.second = create_systematic_uncertainty("qcd0jetRateUp"  , "_CMS_htt_qcd_0jet_rate_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_up*");
       smpl.second = create_systematic_uncertainty("qcd0jetRateDown", "_CMS_htt_qcd_0jet_rate_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_down*");
-      // smpl.second = create_systematic_uncertainty("qcd1jetRateUp"  , "_CMS_htt_qcd_1jet_rate_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_up*");
-      // smpl.second = create_systematic_uncertainty("qcd1jetRateDown", "_CMS_htt_qcd_1jet_rate_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_down*");
+      smpl.second = create_systematic_uncertainty("qcd1jetRateUp"  , "_CMS_htt_qcd_1jet_rate_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_up*");
+      smpl.second = create_systematic_uncertainty("qcd1jetRateDown", "_CMS_htt_qcd_1jet_rate_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_down*");
+      if (era=="2018"){ //FIXME: ADD OTHER YEARS IF WE SWITCH TO 3 JET BINS
+         smpl.second = create_systematic_uncertainty("qcd2jetRateUp"  , "_CMS_htt_qcd_2jet_rate_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_rate_up*");
+         smpl.second = create_systematic_uncertainty("qcd2jetRateDown", "_CMS_htt_qcd_2jet_rate_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_rate_down*");
+      }
       smpl.second = create_systematic_uncertainty("qcd0jetShapeUp"  , "_CMS_htt_qcd_0jet_shape_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_up*");
       smpl.second = create_systematic_uncertainty("qcd0jetShapeDown", "_CMS_htt_qcd_0jet_shape_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_down*");
       smpl.second = create_systematic_uncertainty("qcd1jetShapeUp"  , "_CMS_htt_qcd_1jet_shape_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_up*");
       smpl.second = create_systematic_uncertainty("qcd1jetShapeDown", "_CMS_htt_qcd_1jet_shape_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_down*");
       smpl.second = create_systematic_uncertainty("qcdIsoUp"  , "_CMS_htt_qcd_isoUp", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_up*");
       smpl.second = create_systematic_uncertainty("qcdIsoDown", "_CMS_htt_qcd_isoDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_down*");
+      if (era=="2018"){
+         smpl.second = create_systematic_uncertainty("qcd2jetShapeUp"  , "_CMS_htt_qcd_2jet_shape_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_shape_up*");
+         smpl.second = create_systematic_uncertainty("qcd2jetShapeDown", "_CMS_htt_qcd_2jet_shape_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_shape_down*");
+      }
 
       if( smpl.second.name == "QCD"  ) continue;
 
@@ -293,7 +299,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       }
 
       if(smpl.second.name == "EMB") continue;
-
+      
       // 6.) (b-)mistag uncertainty
       smpl.second = create_systematic_uncertainty("mistagUp"  , "_CMS_htt_mistag_b_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "mistagUp");
       smpl.second = create_systematic_uncertainty("mistagDown", "_CMS_htt_mistag_b_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "mistagDown");
@@ -311,7 +317,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_eta3to5_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
       smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBal_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
       smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
-      if(era=="2017"){
+      if(era=="2017" || era=="2018"){
 	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleUp"  , "_CMS_scale_j_RelativeSample_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleUp");
 	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleDown", "_CMS_scale_j_RelativeSample_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleDown");
       }
@@ -376,6 +382,12 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	smpl.second = create_systematic_uncertainty("gghShapeqmtopDown", "_THU_ggH_qmtopDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_qmtop*");
 	smpl.second = create_systematic_uncertainty("gghShapeMuUp"  , "_THU_ggH_MuUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Mu*");
 	smpl.second = create_systematic_uncertainty("gghShapeMuDown", "_THU_ggH_MuDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Mu*");
+      }
+
+      // 13.) prefire uncertainty
+      if (era !="2018"){
+         smpl.second = create_systematic_uncertainty("prefireWeightUp"  , "_CMS_prefiring_Run"+era+"Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*","prefiringweightup*");
+         smpl.second = create_systematic_uncertainty("prefireWeightDown", "_CMS_prefiring_Run"+era+"Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*","prefiringweightdown*");
       }
     } // end of loop over samples
     if(verbose){
