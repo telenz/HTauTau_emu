@@ -58,6 +58,7 @@ const vector<TString> DYJets_2017          = { "DY1JetsToLL_M-50_TuneCP5_13TeV-m
 					       "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
                       "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
                       "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8",
+                      "DYJetsToLL_M-10to50_13TeV-12Apr2018",
                       "EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8",
                       "EWKZ2Jets_ZToNuNu_TuneCP5_13TeV-madgraph-pythia8"
                       };
@@ -148,7 +149,7 @@ const map<TString, double> xsec_map_2018 = {
 };
 // 2017 (checked again - reference is http://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2018/255 -> DY xsec updated )
 const map<TString, double> xsec_map_2017 = {
-   // { "DYJetsToLL_M-10to50"      , 15820*1.079 },
+  { "DYJetsToLL_M-10to50_13TeV-12Apr2018"      , 21658.0 },
   { "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"  , 6077.22 }, // NNLO xsec -> k-factor=1.137 (see mail from Izaak on tauid hn 14.10.19)
   { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 877.8*1.137 },
   { "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" , 304.4*1.137 },
