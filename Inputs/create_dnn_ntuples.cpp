@@ -20,6 +20,9 @@ void create_dnn_ntuples( TString era = "2017" ){
   float embedded_trigger_weight = 1.0;
   float embedded_tracking_weight = 1.0;
   TString input_dir;
+  bool IsEra2016 = 0;
+  bool IsEra2017 = 0;
+  bool IsEra2018 = 0;
 
   // Mapping of subsamples to output root-file
   map< TString , vector<TString> > samples_map;
@@ -35,6 +38,7 @@ void create_dnn_ntuples( TString era = "2017" ){
      qcd_ss_os_iso_relaxed_ratio = 1.89; //number from Janek's talk in TauPOG meeting (10.04.19)
      embedded_trigger_weight  = 1.00;
      embedded_tracking_weight = 0.99; //2017 scale factors for embedded currently used
+     IsEra2018 = 1;
      samples_map[channel + "-NOMINAL_ntuple_MuonEG"   ] = MuonEG_Run2018;
      samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2018;
      samples_map[channel + "-NOMINAL_ntuple_DYJets"   ] = DYJets_2018;
@@ -60,6 +64,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     qcd_ss_os_iso_relaxed_ratio = 2.38;
     embedded_trigger_weight  = 1.00;
     embedded_tracking_weight = 0.99;
+    IsEra2017 = 1;
     samples_map[channel + "-NOMINAL_ntuple_MuonEG"   ] = MuonEG_Run2017;
     samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2017;
     samples_map[channel + "-NOMINAL_ntuple_DYJets"   ] = DYJets_2017;
@@ -86,6 +91,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     qcd_ss_os_iso_relaxed_ratio = 2.3;
     embedded_trigger_weight  = 1.03;
     embedded_tracking_weight = 0.98;
+    IsEra2016 = 1;
     samples_map[channel + "-NOMINAL_ntuple_MuonEG"   ] = MuonEG_Run2016;
     samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2016;
     samples_map[channel + "-NOMINAL_ntuple_DYJets"   ] = DYJets_2016;
@@ -238,6 +244,9 @@ void create_dnn_ntuples( TString era = "2017" ){
       float embedded_rate_weight;
       int htxs_reco_flag_ggh;
       int htxs_reco_flag_qqh;
+      bool era2016;
+      bool era2017;
+      bool era2018;
       if(firstTree){
 	outTree    = inTree->CloneTree(0);
 	outTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
@@ -247,6 +256,9 @@ void create_dnn_ntuples( TString era = "2017" ){
 	outTree->Branch("embedded_rate_weight", &embedded_rate_weight, "embedded_rate_weight/F");
 	outTree->Branch("htxs_reco_flag_ggh", &htxs_reco_flag_ggh, "htxs_reco_flag_ggh/I");
 	outTree->Branch("htxs_reco_flag_qqh", &htxs_reco_flag_qqh, "htxs_reco_flag_qqh/I");
+  outTree->Branch("era2016", &era2016, "era2016/O");
+  outTree->Branch("era2017", &era2017, "era2017/O");
+  outTree->Branch("era2018", &era2018, "era2018/O");
 	firstTree  = false;
       }
       currentTree = inTree->CloneTree(0);
@@ -257,7 +269,9 @@ void create_dnn_ntuples( TString era = "2017" ){
       currentTree->Branch("embedded_rate_weight", &embedded_rate_weight, "embedded_rate_weight/F");
       currentTree->Branch("htxs_reco_flag_ggh", &htxs_reco_flag_ggh, "htxs_reco_flag_ggh/I");
       currentTree->Branch("htxs_reco_flag_qqh", &htxs_reco_flag_qqh, "htxs_reco_flag_qqh/I");
-
+      currentTree->Branch("era2016", &era2016, "era2016/O");
+      currentTree->Branch("era2017", &era2017, "era2017/O");
+      currentTree->Branch("era2018", &era2018, "era2018/O");
       // lumi-xsec-weight added
       if( xsec_map->find(subsample) == xsec_map->end() && !sample.first.Contains("MuonEG")  && !sample.first.Contains("Embedded")){
 	cout << endl << endl << "Sample " << subsample << " is missing in xsec_map. Exit code." << endl << endl ;
@@ -287,6 +301,9 @@ void create_dnn_ntuples( TString era = "2017" ){
 	xsec_lumi_weight = xsec*luminosity/nevents;
 	qcd_correction = qcd_ss_os_iso_relaxed_ratio;
 	trigger_filter_weight = trigger_filter_efficiency;
+  era2016=IsEra2016;
+  era2017=IsEra2017;
+  era2018=IsEra2018;
 
 	// Replace jet variables to have an effectie cut of jetpt > 30 GeV
 	if(njets < 2){
