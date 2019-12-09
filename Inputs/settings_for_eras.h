@@ -280,7 +280,7 @@ map<TString, int> n_events_per_sample_2017 = {
 {"ZZ_TuneCP5_13TeV-pythia8" , 1949768},
 {"WW_TuneCP5_13TeV-pythia8" , 7791498},
 {"WZ_TuneCP5_13TeV-pythia8" , 3928630},
-{"DYJetsToLL_M-10to50" , 39521230},
+{"DYJetsToLL_M-10to50_13TeV-12Apr2018" , 39521230},
 {"DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"     , 97800939},
 {"DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"    , 34859434},
 {"DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8"    , 9790490},
