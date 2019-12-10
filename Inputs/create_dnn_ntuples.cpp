@@ -339,17 +339,7 @@ void create_dnn_ntuples( TString era = "2017" ){
 	  xsec_lumi_weight = 1.;
 	  trigger_filter_weight = 1.;
 	}
-	if( sample.first.Contains("Embedded") && era == "2016"){
-	  embedded_stitching_weight = 
-	    ((run >= 272007) && (run < 275657))*(1.0/0.891)
-	    +((run >= 275657) && (run < 276315))*(1.0/0.910)
-	    +((run >= 276315) && (run < 276831))*(1.0/0.953)
-	    +((run >= 276831) && (run < 277772))*(1.0/0.947)
-	    +((run >= 277772) && (run < 278820))*(1.0/0.942)
-	    +((run >= 278820) && (run < 280919))*(1.0/0.906)
-	    +((run >= 280919) && (run < 284045))*(1.0/0.950);
-	}
-	else embedded_stitching_weight = 1.;
+	embedded_stitching_weight = 1.;
 
 	embedded_rate_weight = embedded_trigger_weight * embedded_tracking_weight;
 
