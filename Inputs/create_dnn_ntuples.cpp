@@ -80,12 +80,12 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2017;
     //input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
-    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/SaveRootFiles/";
   }
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
     process_map = &process_map_2016;
-    //n_events_per_sample = n_events_per_sample_2016;
+    n_events_per_sample = n_events_per_sample_2016;
     luminosity  = 35920;               // Take number from LUMI twiki : https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM#SummaryTable
     trigger_filter_efficiency = 0.979;
     qcd_ss_os_iso_relaxed_ratio = 2.3;
@@ -106,7 +106,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2016;
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2016;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2016;
-    input_dir="/nfs/dust/cms/user/tlenz/13TeV/2017/CMSSW/2016_legacy/CMSSW_8_0_29/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016/NTuples/ntuples_v5/";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016_all_eras/SaveRootFiles/";
   }
 
   // Needed for stitching
@@ -143,16 +143,16 @@ void create_dnn_ntuples( TString era = "2017" ){
      neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
   }
   else{
-     neventsWIncl   = n_events_per_sample.at("WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8");
-     neventsW1Jets  = n_events_per_sample.at("W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8");
-     neventsW2Jets  = n_events_per_sample.at("W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8");
-     neventsW3Jets  = n_events_per_sample.at("W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8");
-     neventsW4Jets  = n_events_per_sample.at("W4JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8");
-     neventsDYIncl  = n_events_per_sample.at("DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8");
-     neventsDY1Jets = n_events_per_sample.at("DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8");
-     neventsDY2Jets = n_events_per_sample.at("DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8");
-     neventsDY3Jets = n_events_per_sample.at("DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8");
-     neventsDY4Jets = n_events_per_sample.at("DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8");
+     neventsWIncl   = n_events_per_sample.at(process_map->at("WJets"));
+     neventsW1Jets  = n_events_per_sample.at(process_map->at("W1Jets"));
+     neventsW2Jets  = n_events_per_sample.at(process_map->at("W2Jets"));
+     neventsW3Jets  = n_events_per_sample.at(process_map->at("W3Jets"));
+     neventsW4Jets  = n_events_per_sample.at(process_map->at("W4Jets"));
+     neventsDYIncl  = n_events_per_sample.at(process_map->at("DYJets"));
+     neventsDY1Jets = n_events_per_sample.at(process_map->at("DY1Jets"));
+     neventsDY2Jets = n_events_per_sample.at(process_map->at("DY2Jets"));
+     neventsDY3Jets = n_events_per_sample.at(process_map->at("DY3Jets"));
+     neventsDY4Jets = n_events_per_sample.at(process_map->at("DY4Jets"));
   }
   TString output_dir = "NTuples_" + era;
   gSystem -> Exec("mkdir " + output_dir);
