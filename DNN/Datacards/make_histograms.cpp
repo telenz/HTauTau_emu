@@ -343,8 +343,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
     for(auto& smpl : cat.second.sample_list){
       if( smpl.second.name.Contains("ggH") ){
-	cat.second.sample_list[smpl.first].weightString    += "weight_ggh_NNLOPS*1.01*"; // correction of 1% to account for bbH
-	cat.second.sample_list[smpl.first].weightStringSS  += "weight_ggh_NNLOPS*1.01*";
+	cat.second.sample_list[smpl.first].weightString    += "weight_ggh_NNLOPS*";
+	cat.second.sample_list[smpl.first].weightStringSS  += "weight_ggh_NNLOPS*";
 	cat.second.sample_list[smpl.first].subtract_from_ss = false;
       }
       if( smpl.second.name.Contains("qqH") ){
@@ -433,7 +433,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape_Run"+era+"Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
       }
 
-      // 5.) ggh reweighting
+      // 5.) ggh reweighting //CHECK!!
       if( smpl.second.name.Contains("ggH") && ( smpl.second.name != "ggHWW125" || era == "2017") ){
 	smpl.second = create_systematic_uncertainty("gghShapeResUp"    , "_THU_ggH_ResUp"    , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Res*");
 	smpl.second = create_systematic_uncertainty("gghShapeResDown"  , "_THU_ggH_ResDown"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Res*");
