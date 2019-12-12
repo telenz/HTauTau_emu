@@ -53,6 +53,14 @@ void create_dnn_ntuples( TString era = "2017" ){
      samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2018;
      samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2018;
      samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2018;
+     // samples_map[channel + "-NOMINAL_ntuple_ggh_1J_PTH0to120"      ] = GluGluHToTauTau_STXS1p1_Bin104to105_2018;
+     // samples_map[channel + "-NOMINAL_ntuple_ggh_2J"                ] = GluGluHToTauTau_STXS1p1_Bin107to109_2018;
+     // samples_map[channel + "-NOMINAL_ntuple_ggh_1J_PTH120to200"    ] = GluGluHToTauTau_STXS1p1_Bin106_2018;
+     // samples_map[channel + "-NOMINAL_ntuple_vbftopo"               ] = GluGluHToTauTau_STXS1p1_Bin110to113_2018; //noch weiter trennen?
+     // samples_map[channel + "-NOMINAL_ntuple_ggh_PTHGT200"          ] = GluGluHToTauTau_STXS1p1_Bin101_2018;
+     // samples_map[channel + "-NOMINAL_ntuple_qqh_2J"                ] = VBFHToTauTau_STXS1p1_Bin203to205_2018;
+     // samples_map[channel + "-NOMINAL_ntuple_qqh_PTHGT200"          ] = VBFHToTauTau_STXS1p1_Bin206_2018;
+     // samples_map[channel + "-NOMINAL_ntuple_vbftopo"               ] = VBFHToTauTau_STXS1p1_Bin207to210_2018;  //noch weiter trennen?
      input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2018_all_eras/";  
   }
   else if(era == "2017"){
@@ -79,8 +87,16 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2017;
+    // samples_map[channel + "-NOMINAL_ntuple_ggh_1J_PTH0to120"      ] = GluGluHToTauTau_STXS1p1_Bin104to105_2017;
+    // samples_map[channel + "-NOMINAL_ntuple_ggh_2J"                ] = GluGluHToTauTau_STXS1p1_Bin107to109_2017;
+    // samples_map[channel + "-NOMINAL_ntuple_ggh_1J_PTH120to200"    ] = GluGluHToTauTau_STXS1p1_Bin106_2017;
+    // samples_map[channel + "-NOMINAL_ntuple_vbftopo"               ] = GluGluHToTauTau_STXS1p1_Bin110to113_2017; //noch weiter trennen?
+    // samples_map[channel + "-NOMINAL_ntuple_ggh_PTHGT200"          ] = GluGluHToTauTau_STXS1p1_Bin101_2017;
+    // samples_map[channel + "-NOMINAL_ntuple_qqh_2J"                ] = VBFHToTauTau_STXS1p1_Bin203to205_2017;
+    // samples_map[channel + "-NOMINAL_ntuple_qqh_PTHGT200"          ] = VBFHToTauTau_STXS1p1_Bin206_2017;
+    // samples_map[channel + "-NOMINAL_ntuple_vbftopo"               ] = VBFHToTauTau_STXS1p1_Bin207to210_2017;  //noch weiter trennen?
     //input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
-    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/SaveRootFiles/";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
   }
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
@@ -106,7 +122,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2016;
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2016;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2016;
-    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016_all_eras/SaveRootFiles/";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016_all_eras/";
   }
 
   // Needed for stitching
@@ -130,6 +146,17 @@ void create_dnn_ntuples( TString era = "2017" ){
   double neventsDY2Jets = 0;
   double neventsDY3Jets = 0;
   double neventsDY4Jets = 0;
+  double neventsGluGluHIncl = 0;
+  double neventsGluGluHBin104to105   = 0;
+  double neventsGluGluHBin107to109   = 0; 
+  double neventsGluGluHBin106        = 0; 
+  double neventsGluGluHBin110to113   = 0; 
+  double neventsGluGluHBin101        = 0; 
+  double neventsVBFIncl              = 0; 
+  double neventsVBFBin203to205    = 0; 
+  double neventsVBFBin206         = 0; 
+  double neventsVBFBin207to210    = 0; 
+
   if (n_events_per_sample.size()==0){
      neventsWIncl   = getNEventsProcessed(input_dir+"/"+process_map->at("WJets")+".root");
      neventsW1Jets  = getNEventsProcessed(input_dir+"/"+process_map->at("W1Jets")+".root");
@@ -141,6 +168,16 @@ void create_dnn_ntuples( TString era = "2017" ){
      neventsDY2Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY2Jets")+".root");
      neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
      neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
+     neventsGluGluHIncl        = getNEventsProcessed(input_dir+"/GluGluHToTauTau_M125_13TeV_powheg_pythia8.root");
+     neventsGluGluHBin104to105 = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin104to105_M125.root");
+     neventsGluGluHBin107to109 = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin107to109_M125.root");
+     neventsGluGluHBin106      = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin106_M125.root");     
+     neventsGluGluHBin110to113 = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin110to113_M125.root");
+     neventsGluGluHBin101      = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin101_M125.root");     
+     neventsVBFIncl            = getNEventsProcessed(input_dir+"/VBFHToTauTau_M125_13TeV_powheg_pythia8.root");           
+     neventsVBFBin203to205  = getNEventsProcessed(input_dir+"/VBFHToTauTau_HTXSFilter_STXS1p1_Bin203to205_M125.root");
+     neventsVBFBin206       = getNEventsProcessed(input_dir+"/VBFHToTauTau_HTXSFilter_STXS1p1_Bin206_M125.root");      
+     neventsVBFBin207to210  = getNEventsProcessed(input_dir+"/VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125.root");
   }
   else{
      neventsWIncl   = n_events_per_sample.at(process_map->at("WJets"));
@@ -334,6 +371,42 @@ void create_dnn_ntuples( TString era = "2017" ){
 	  else if(npartons == 4) xsec_lumi_weight = luminosity / ( neventsDY4Jets/xsecDY4Jets + neventsDYIncl/xsecDYIncl );
 	  else                   xsec_lumi_weight = luminosity / ( neventsDYIncl/xsecDYIncl );
 	}
+   // Stitching for STXS binned signal samples
+   if( subsample.Contains("GluGluHToTauTau") ){
+      if (htxs_stage1p1cat == 104 || htxs_stage1p1cat == 105) {
+         xsec_lumi_weight = luminosity * xsec_map->at("GluGluHToTauTau_M125_13TeV_powheg_pythia8") / (neventsGluGluHIncl + neventsGluGluHBin104to105 / xsec_map->at("GluGluHToTauTau_HTXSFilter_STXS1p1_Bin104to105_M125"));
+      }
+      else if (htxs_stage1p1cat == 107 || htxs_stage1p1cat == 108 || htxs_stage1p1cat == 109) {
+         xsec_lumi_weight = luminosity * xsec_map->at("GluGluHToTauTau_M125_13TeV_powheg_pythia8") / (neventsGluGluHIncl + neventsGluGluHBin107to109 / xsec_map->at("GluGluHToTauTau_HTXSFilter_STXS1p1_Bin107to109_M125"));
+      }
+      else if (htxs_stage1p1cat == 106) {
+         xsec_lumi_weight = luminosity * xsec_map->at("GluGluHToTauTau_M125_13TeV_powheg_pythia8") / (neventsGluGluHIncl + neventsGluGluHBin106 / xsec_map->at("GluGluHToTauTau_HTXSFilter_STXS1p1_Bin106_M125"));
+      }
+      else if (htxs_stage1p1cat >=110 && htxs_stage1p1cat <=113) {
+         xsec_lumi_weight = luminosity * xsec_map->at("GluGluHToTauTau_M125_13TeV_powheg_pythia8") / (neventsGluGluHIncl + neventsGluGluHBin110to113 / xsec_map->at("GluGluHToTauTau_HTXSFilter_STXS1p1_Bin110to113_M125"));
+      }
+      else if (htxs_stage1p1cat == 101) {
+         xsec_lumi_weight = luminosity * xsec_map->at("GluGluHToTauTau_M125_13TeV_powheg_pythia8") / (neventsGluGluHIncl + neventsGluGluHBin101 / xsec_map->at("GluGluHToTauTau_HTXSFilter_STXS1p1_Bin101_M125"));
+      }
+      else {
+         xsec_lumi_weight = luminosity / ( neventsGluGluHIncl / xsec_map->at("GluGluHToTauTau_M125_13TeV_powheg_pythia8"));
+      }
+   }
+
+   if( subsample.Contains("VBFHToTauTau") ){
+      if (htxs_stage1p1cat == 206) {
+            xsec_lumi_weight = luminosity * xsec_map->at("VBFHToTauTau_M125_13TeV_powheg_pythia8") / (neventsVBFIncl + neventsVBFBin206 / xsec_map->at("VBFHToTauTau_HTXSFilter_STXS1p1_Bin206_M125"));
+      }
+      else if (htxs_stage1p1cat == 203 || htxs_stage1p1cat == 204 || htxs_stage1p1cat == 205) {
+         xsec_lumi_weight = luminosity * xsec_map->at("VBFHToTauTau_M125_13TeV_powheg_pythia8") / (neventsVBFIncl + neventsVBFBin203to205 / xsec_map->at("VBFHToTauTau_HTXSFilter_STXS1p1_Bin203to205_M125"));
+      }
+      else if (htxs_stage1p1cat >=207 && htxs_stage1p1cat <=210) {
+         xsec_lumi_weight = luminosity * xsec_map->at("VBFHToTauTau_M125_13TeV_powheg_pythia8") / (neventsVBFIncl + neventsVBFBin207to210 / xsec_map->at("VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125"));
+      }
+      else {
+         xsec_lumi_weight = luminosity / ( neventsVBFIncl / xsec_map->at("VBFHToTauTau_M125_13TeV_powheg_pythia8"));
+      }
+   }
 
 	if( sample.first.Contains("MuonEG") || sample.first.Contains("Embedded")){
 	  xsec_lumi_weight = 1.;
