@@ -58,6 +58,7 @@ void create_dnn_ntuples( TString era = "2017" ){
      // samples_map[channel + "-NOMINAL_ntuple_ggh_1J_PTH120to200"    ] = GluGluHToTauTau_STXS1p1_Bin106_2018;
      // samples_map[channel + "-NOMINAL_ntuple_vbftopo"               ] = GluGluHToTauTau_STXS1p1_Bin110to113_2018; //noch weiter trennen?
      // samples_map[channel + "-NOMINAL_ntuple_ggh_PTHGT200"          ] = GluGluHToTauTau_STXS1p1_Bin101_2018;
+
      // samples_map[channel + "-NOMINAL_ntuple_qqh_2J"                ] = VBFHToTauTau_STXS1p1_Bin203to205_2018;
      // samples_map[channel + "-NOMINAL_ntuple_qqh_PTHGT200"          ] = VBFHToTauTau_STXS1p1_Bin206_2018;
      // samples_map[channel + "-NOMINAL_ntuple_vbftopo"               ] = VBFHToTauTau_STXS1p1_Bin207to210_2018;  //noch weiter trennen?
@@ -168,16 +169,6 @@ void create_dnn_ntuples( TString era = "2017" ){
      neventsDY2Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY2Jets")+".root");
      neventsDY3Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY3Jets")+".root");
      neventsDY4Jets = getNEventsProcessed(input_dir+"/"+process_map->at("DY4Jets")+".root");
-     neventsGluGluHIncl        = getNEventsProcessed(input_dir+"/GluGluHToTauTau_M125_13TeV_powheg_pythia8.root");
-     neventsGluGluHBin104to105 = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin104to105_M125.root");
-     neventsGluGluHBin107to109 = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin107to109_M125.root");
-     neventsGluGluHBin106      = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin106_M125.root");     
-     neventsGluGluHBin110to113 = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin110to113_M125.root");
-     neventsGluGluHBin101      = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin101_M125.root");     
-     neventsVBFIncl            = getNEventsProcessed(input_dir+"/VBFHToTauTau_M125_13TeV_powheg_pythia8.root");           
-     neventsVBFBin203to205  = getNEventsProcessed(input_dir+"/VBFHToTauTau_HTXSFilter_STXS1p1_Bin203to205_M125.root");
-     neventsVBFBin206       = getNEventsProcessed(input_dir+"/VBFHToTauTau_HTXSFilter_STXS1p1_Bin206_M125.root");      
-     neventsVBFBin207to210  = getNEventsProcessed(input_dir+"/VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125.root");
   }
   else{
      neventsWIncl   = n_events_per_sample.at(process_map->at("WJets"));
@@ -190,6 +181,18 @@ void create_dnn_ntuples( TString era = "2017" ){
      neventsDY2Jets = n_events_per_sample.at(process_map->at("DY2Jets"));
      neventsDY3Jets = n_events_per_sample.at(process_map->at("DY3Jets"));
      neventsDY4Jets = n_events_per_sample.at(process_map->at("DY4Jets"));
+  }
+  if (era!="2016"){
+     neventsGluGluHIncl        = getNEventsProcessed(input_dir+"/GluGluHToTauTau_M125_13TeV_powheg_pythia8.root");
+     neventsGluGluHBin104to105 = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin104to105_M125.root");
+     neventsGluGluHBin107to109 = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin107to109_M125.root");
+     neventsGluGluHBin106      = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin106_M125.root");     
+     neventsGluGluHBin110to113 = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin110to113_M125.root");
+     neventsGluGluHBin101      = getNEventsProcessed(input_dir+"/GluGluHToTauTau_HTXSFilter_STXS1p1_Bin101_M125.root");     
+     neventsVBFIncl            = getNEventsProcessed(input_dir+"/VBFHToTauTau_M125_13TeV_powheg_pythia8.root");           
+     neventsVBFBin203to205  = getNEventsProcessed(input_dir+"/VBFHToTauTau_HTXSFilter_STXS1p1_Bin203to205_M125.root");
+     neventsVBFBin206       = getNEventsProcessed(input_dir+"/VBFHToTauTau_HTXSFilter_STXS1p1_Bin206_M125.root");      
+     neventsVBFBin207to210  = getNEventsProcessed(input_dir+"/VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125.root");
   }
   TString output_dir = "NTuples_" + era;
   gSystem -> Exec("mkdir " + output_dir);
@@ -372,7 +375,7 @@ void create_dnn_ntuples( TString era = "2017" ){
 	  else                   xsec_lumi_weight = luminosity / ( neventsDYIncl/xsecDYIncl );
 	}
    // Stitching for STXS binned signal samples
-   if( subsample.Contains("GluGluHToTauTau") ){
+   if( subsample.Contains("GluGluHToTauTau") && era!="2016"){
       if (htxs_stage1p1cat == 104 || htxs_stage1p1cat == 105) {
          xsec_lumi_weight = luminosity * xsec_map->at("GluGluHToTauTau_M125_13TeV_powheg_pythia8") / (neventsGluGluHIncl + neventsGluGluHBin104to105 / xsec_map->at("GluGluHToTauTau_HTXSFilter_STXS1p1_Bin104to105_M125"));
       }
@@ -393,7 +396,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       }
    }
 
-   if( subsample.Contains("VBFHToTauTau") ){
+   if( subsample.Contains("VBFHToTauTau") && era!="2016"){
       if (htxs_stage1p1cat == 206) {
             xsec_lumi_weight = luminosity * xsec_map->at("VBFHToTauTau_M125_13TeV_powheg_pythia8") / (neventsVBFIncl + neventsVBFBin206 / xsec_map->at("VBFHToTauTau_HTXSFilter_STXS1p1_Bin206_M125"));
       }
