@@ -48,7 +48,7 @@ void plot_1d_var(
    
 
    // Read file
-   TString filename = directory + "/htt_em.inputs-sm-Run" + era + "-" + variable + ".root";
+   TString filename = directory + "/"+era+"em-synced-"+ variable + ".root";
    TFile *file      = new TFile( filename , "READ");
 
    // Define sample categorization
