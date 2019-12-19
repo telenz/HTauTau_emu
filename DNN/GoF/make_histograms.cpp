@@ -384,8 +384,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       // 13.) prefire uncertainty
       if (era !="2018"){
-         smpl.second = create_systematic_uncertainty("prefireWeightUp"  , "_CMS_prefiring_Run"+era+"Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*","prefiringweightup*");
-         smpl.second = create_systematic_uncertainty("prefireWeightDown", "_CMS_prefiring_Run"+era+"Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*","prefiringweightdown*");
+         smpl.second = create_systematic_uncertainty("prefireWeightUp"  , "_CMS_prefiringUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*","prefiringweightup*");
+         smpl.second = create_systematic_uncertainty("prefireWeightDown", "_CMS_prefiringDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*","prefiringweightdown*");
       }
     } // end of loop over samples
     if(verbose){
@@ -401,7 +401,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
   cout << endl << endl << "... Drawing ... " << endl;
 
   // Define output file
-  TString filename = "htt_em.inputs-sm-Run"+era+"-"+output_file_suffix+".root";
+  TString filename = era+"em-synced-"+output_file_suffix+".root";
   TString output_dir = "output/"+era+"/";
   if(!is_dnn_prediction){
     if(!plot_2d) output_dir += "/var_1d/";
