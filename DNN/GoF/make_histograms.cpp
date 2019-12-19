@@ -259,24 +259,20 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       smpl.second = create_systematic_uncertainty("qcd0jetRateDown", "_CMS_htt_qcd_0jet_rate_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_rate_down*");
       smpl.second = create_systematic_uncertainty("qcd1jetRateUp"  , "_CMS_htt_qcd_1jet_rate_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_up*");
       smpl.second = create_systematic_uncertainty("qcd1jetRateDown", "_CMS_htt_qcd_1jet_rate_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_rate_down*");
-      if (era=="2018"){ //FIXME: ADD OTHER YEARS IF WE SWITCH TO 3 JET BINS
-         smpl.second = create_systematic_uncertainty("qcd2jetRateUp"  , "_CMS_htt_qcd_2jet_rate_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_rate_up*");
-         smpl.second = create_systematic_uncertainty("qcd2jetRateDown", "_CMS_htt_qcd_2jet_rate_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_rate_down*");
-      }
+      smpl.second = create_systematic_uncertainty("qcd2jetRateUp"  , "_CMS_htt_qcd_2jet_rate_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_rate_up*");
+      smpl.second = create_systematic_uncertainty("qcd2jetRateDown", "_CMS_htt_qcd_2jet_rate_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_rate_down*");
       smpl.second = create_systematic_uncertainty("qcd0jetShapeUp"  , "_CMS_htt_qcd_0jet_shape_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_up*");
       smpl.second = create_systematic_uncertainty("qcd0jetShapeDown", "_CMS_htt_qcd_0jet_shape_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_0jet_shape_down*");
       smpl.second = create_systematic_uncertainty("qcd1jetShapeUp"  , "_CMS_htt_qcd_1jet_shape_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_up*");
       smpl.second = create_systematic_uncertainty("qcd1jetShapeDown", "_CMS_htt_qcd_1jet_shape_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_1jet_shape_down*");
       smpl.second = create_systematic_uncertainty("qcdIsoUp"  , "_CMS_htt_qcd_isoUp", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_up*");
       smpl.second = create_systematic_uncertainty("qcdIsoDown", "_CMS_htt_qcd_isoDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_iso_down*");
-      if (era=="2018"){
-         smpl.second = create_systematic_uncertainty("qcd2jetShapeUp"  , "_CMS_htt_qcd_2jet_shape_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_shape_up*");
-         smpl.second = create_systematic_uncertainty("qcd2jetShapeDown", "_CMS_htt_qcd_2jet_shape_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_shape_down*");
-      }
-
+      smpl.second = create_systematic_uncertainty("qcd2jetShapeUp"  , "_CMS_htt_qcd_2jet_shape_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_shape_up*");
+      smpl.second = create_systematic_uncertainty("qcd2jetShapeDown", "_CMS_htt_qcd_2jet_shape_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "qcdweight*","qcdweight_2jet_shape_down*");
+      
       if( smpl.second.name == "QCD"  ) continue;
 
-      // 2.) Electron scale (applied on both embedded and mc)
+      // 2.) Electron scale (applied on both embedded and mc) // not used at the moment
       smpl.second = create_systematic_uncertainty("escale_all_Up"  , "_CMS_scale_eUp"  , cat.second.plot_2d, smpl.second, tree_, true, "escaleUp");
       smpl.second = create_systematic_uncertainty("escale_all_Down", "_CMS_scale_eDown", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
 
@@ -286,10 +282,12 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	smpl.second = create_systematic_uncertainty("escale_emb_Down", "_CMS_scale_emb_eDown", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
       }
 
-      // 4.) Electron scale (applied only on MC)
+      // 4.) Electron scale and resolution (applied only on MC)
       if(smpl.second.name != "EMB"){
 	smpl.second = create_systematic_uncertainty("escale_mc_Up"  , "_CMS_scale_mc_eUp"  , cat.second.plot_2d, smpl.second, tree_, true, "escaleUp");
 	smpl.second = create_systematic_uncertainty("escale_mc_Down", "_CMS_scale_mc_eDown", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
+   smpl.second = create_systematic_uncertainty("ereso_mc_Up"  , "_CMS_reso_mc_eUp"  , cat.second.plot_2d, smpl.second, tree_, true, "eresoUp");
+	smpl.second = create_systematic_uncertainty("ereso_mc_Down", "_CMS_reso_mc_eDown", cat.second.plot_2d, smpl.second, tree_, true, "eresoDown");
       }
 
       // 5.) TT contamination in embedded sample  (only initialize this uncertainty -> calculate it later)
