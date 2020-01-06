@@ -122,8 +122,8 @@ const vector<TString> TTbar_2016           = { "TTbar" };
 const vector<TString> SingleTop_2016       = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
 //const vector<TString> Diboson_2016         = { "VVTo2L2Nu" , "WZJToLLLNu" , "WZTo1L1Nu2Q" , "WZTo1L3Nu" , "WZTo2L2Q" , "ZZTo2L2Q" , "ZZTo4L" , "WWToLNuQQ" };
 const vector<TString> Diboson_2016         = { "WW", "WZ", "ZZ" };
-const vector<TString> GluGluHToTauTau_2016 = { "GluGluHToTauTau_M125" };
-const vector<TString> VBFHToTauTau_2016    = { "VBFHToTauTau_M125" , "ZHToTauTau_M125" , "WplusHToTauTau_M125" , "WminusHToTauTau_M125" };
+const vector<TString> GluGluHToTauTau_2016 = { "GluGluHToTauTau_M125", "GluGluHToTauTau_M125_ext1" };
+const vector<TString> VBFHToTauTau_2016    = { "VBFHToTauTau_M125" , "VBFHToTauTau_M125_ext1" , "ZHToTauTau_M125" , "WplusHToTauTau_M125" , "WminusHToTauTau_M125" };
 const vector<TString> ZHToTauTau_2016      = { "ZHToTauTau_M125" };
 const vector<TString> WHToTauTau_2016      = { "WplusHToTauTau_M125" , "WminusHToTauTau_M125" };
 const vector<TString> ggHToWW_2016         = { "GluGluHToWWTo2L2Nu_M125" };
@@ -262,6 +262,8 @@ const map<TString, double> xsec_map_2016 = {
     { "EWKZ2Jets_ZToNuNu"        , 10.66 },
     { "GluGluHToTauTau_M125"     , 3.08 },//bottom quark associated production with 1% of the gluon fusion cross section is included in ggh
     { "VBFHToTauTau_M125"        , 3.782*0.0627 },
+    { "GluGluHToTauTau_M125_ext1" , 3.08 },//bottom quark associated production with 1% of the gluon fusion cross section is included in ggh
+    { "VBFHToTauTau_M125_ext1"   , 3.782*0.0627 },
     { "ZHToTauTau_M125"          , 0.0554 },
     { "WplusHToTauTau_M125"      , 0.0527 },
     { "WminusHToTauTau_M125"     , 0.0334 },
