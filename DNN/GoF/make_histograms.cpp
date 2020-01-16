@@ -356,12 +356,18 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       // 11.) DY shape
       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" ){
-	smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShape_Run"+era+"Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
-	smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape_Run"+era+"Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
+         if (era == "2016"){
+            smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShape_Run"+era+"Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
+            smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape_Run"+era+"Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
+         }
+         else{
+            smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShape"+era+"Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
+            smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape"+era+"Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
+         }
       }
 
-      // 12.) ggh reweighting // FIXME -> is this if condition correct? -> talk to Mareike about it.
-      if( smpl.second.name.Contains("ggH") && ( smpl.second.name != "ggHWW125" || era == "2017") ){
+      // 12.) ggh reweightings
+      if( smpl.second.name.Contains("ggH") ){
 	smpl.second = create_systematic_uncertainty("gghShapeResUp"  , "_THU_ggH_ResUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Res*");
 	smpl.second = create_systematic_uncertainty("gghShapeResDown", "_THU_ggH_ResDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Res*");
 	smpl.second = create_systematic_uncertainty("gghShapeMig01Up"  , "_THU_ggH_Mig01Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Mig01*");
