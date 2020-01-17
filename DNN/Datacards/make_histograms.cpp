@@ -435,8 +435,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
             smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape_Run"+era+"Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
          }
          else{
-            smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShape"+era+"Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
-            smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShape"+era+"Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
+            smpl.second = create_systematic_uncertainty("dyShapeUp"  , "_CMS_htt_dyShapeUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+1.1*(zptmassweight-1))*");
+            smpl.second = create_systematic_uncertainty("dyShapeDown", "_CMS_htt_dyShapeDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "zptmassweight*","(1.0+0.9*(zptmassweight-1))*");
          }
       }
 
@@ -460,6 +460,30 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	smpl.second = create_systematic_uncertainty("gghShapeqmtopDown", "_THU_ggH_qmtopDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_qmtop*");
 	smpl.second = create_systematic_uncertainty("gghShapeMuUp"     , "_THU_ggH_MuUp"     , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS*THU_ggH_Mu*");
 	smpl.second = create_systematic_uncertainty("gghShapeMuDown"   , "_THU_ggH_MuDown"   , cat.second.plot_2d, smpl.second, tree_, false, "", true, "weight_ggh_NNLOPS*", "weight_ggh_NNLOPS/THU_ggH_Mu*");
+      }
+
+      // 15.) VBF thory uncertainties
+      if( smpl.second.name.Contains("qqH") ){
+         smpl.second = create_systematic_uncertainty("qqhShapeTOTUp"  , "_THU_qqH_TOTUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight*THU_qqH_TOT*");
+         smpl.second = create_systematic_uncertainty("qqhShapeTOTDown", "_THU_qqH_TOTDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight/THU_qqH_TOT*");
+         smpl.second = create_systematic_uncertainty("qqhShapePTH200Up"  , "_THU_qqH_PTH200Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight*THU_qqH_PTH200*");
+         smpl.second = create_systematic_uncertainty("qqhShapePTH200Down", "_THU_qqH_PTH200Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight/THU_qqH_PTH200*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj60Up"  , "_THU_qqH_Mjj60Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight*THU_qqH_Mjj60*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj60Down", "_THU_qqH_Mjj60Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight/THU_qqH_Mjj60*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj120Up"  , "_THU_qqH_Mjj120Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight*THU_qqH_Mjj120*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj120Down", "_THU_qqH_Mjj120Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight/THU_qqH_Mjj120*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj350Up"  , "_THU_qqH_Mjj350Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight*THU_qqH_Mjj350*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj350Down", "_THU_qqH_Mjj350Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight/THU_qqH_Mjj350*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj700Up"  , "_THU_qqH_Mjj700Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight*THU_qqH_Mjj700*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj700Down", "_THU_qqH_Mjj700Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight/THU_qqH_Mjj700*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj1000Up"  , "_THU_qqH_Mjj1000Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight*THU_qqH_Mjj1000*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj1000Down", "_THU_qqH_Mjj1000Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight/THU_qqH_Mjj1000*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj1500Up"  , "_THU_qqH_Mjj1500Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight*THU_qqH_Mjj1500*");
+         smpl.second = create_systematic_uncertainty("qqhShapeMjj1500Down", "_THU_qqH_Mjj1500Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight/THU_qqH_Mjj1500*");
+         smpl.second = create_systematic_uncertainty("qqhShape25Up"  , "_THU_qqH_25Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight*THU_qqH_25*");
+         smpl.second = create_systematic_uncertainty("qqhShape25Down", "_THU_qqH_25Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight/THU_qqH_25*");
+         smpl.second = create_systematic_uncertainty("qqhShapeJET01Up"  , "_THU_qqH_JET01Up"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight*THU_qqH_JET01*");
+         smpl.second = create_systematic_uncertainty("qqhShapeJET01Down", "_THU_qqH_JET01Down", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*", "prefiringweight/THU_qqH_JET01*");
       }
 
       // 6.) (b-)mistag uncertainty
