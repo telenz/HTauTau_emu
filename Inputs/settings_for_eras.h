@@ -66,7 +66,9 @@ const vector<TString> MuonEG_Run2017       = { "MuonEG_Run2017B" ,
 const vector<TString> Embedded_2017        = { "Embedding_Run2017" };
 const vector<TString> DYJets_2017          = { "DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
 					       "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+                      "DY2JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_ext" ,
 					       "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
+                      "DY3JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_ext" ,                         
                       "DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8" ,
                       "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8",
                       "DYJetsToLL_M-10to50_13TeV-12Apr2018",
@@ -82,8 +84,11 @@ const vector<TString> WJets_2017           = { "W1JetsToLNu_TuneCP5_13TeV-madgra
 					       "EWKWMinus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8" ,
 					       "EWKWPlus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8"};
 const vector<TString> TTbar_2017           = { "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8" ,
+                      "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8" ,
 					       "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8" ,
-					       "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8" };
+                      "TTToHadronic_TuneCP5_13TeV-powheg-pythia8" ,
+                      "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8",
+                       "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8"       };
 const vector<TString> SingleTop_2017       = { "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" ,
 					       "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" ,
 					       "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" ,
