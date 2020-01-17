@@ -305,37 +305,39 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       smpl.second = create_systematic_uncertainty("btagDown", "_CMS_htt_eff_b_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "btagDown");
 
       // 7.) JES
-      // smpl.second = create_systematic_uncertainty("jesUp"  , "_CMS_scale_j_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jesUp");
-      // smpl.second = create_systematic_uncertainty("jesDown", "_CMS_scale_j_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jesDown");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To5Up"  , "_CMS_scale_j_eta0to5_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To5Down", "_CMS_scale_j_eta0to5_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To3Up"  , "_CMS_scale_j_eta0to3_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To3Down", "_CMS_scale_j_eta0to3_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
-      smpl.second = create_systematic_uncertainty("jecUncEta3To5Up"  , "_CMS_scale_j_eta3to5_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
-      smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_eta3to5_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
-      smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBal_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
-      smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBal_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
-      if(era=="2017" || era=="2018"){
-	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleUp"  , "_CMS_scale_j_RelativeSample_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleUp");
-	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleDown", "_CMS_scale_j_RelativeSample_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleDown");
-      }
-
-      // 8.) JES correlated
-      // smpl.second = create_systematic_uncertainty("jesUp"  , "_CMS_scale_j_RunUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jesUp");
-      // smpl.second = create_systematic_uncertainty("jesDown", "_CMS_scale_j_RunDown", cat.second.plot_2d, smpl.second, tree_, true, "jesDown");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To5Up_corr"  , "_CMS_scale_j_eta0to5Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To5Down_corr", "_CMS_scale_j_eta0to5Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To3Up_corr"  , "_CMS_scale_j_eta0to3Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
-      smpl.second = create_systematic_uncertainty("jecUncEta0To3Down_corr", "_CMS_scale_j_eta0to3Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
-      smpl.second = create_systematic_uncertainty("jecUncEta3To5Up_corr"  , "_CMS_scale_j_eta3to5Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
-      smpl.second = create_systematic_uncertainty("jecUncEta3To5Down_corr", "_CMS_scale_j_eta3to5Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
-      smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp_corr"  , "_CMS_scale_j_RelativeBalUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
-      smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown_corr", "_CMS_scale_j_RelativeBalDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
-      if(era=="2017"){
-	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleUp_corr"  , "_CMS_scale_j_RelativeSampleUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleUp");
-	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleDown_corr", "_CMS_scale_j_RelativeSampleDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleDown");
-      }
-
+      smpl.second = create_systematic_uncertainty("jecUncEta0To5Up"  , "_CMS_scale_j_AbsoluteUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Up");
+      smpl.second = create_systematic_uncertainty("jecUncEta0To5Down", "_CMS_scale_j_AbsoluteDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To5Down");
+       
+      smpl.second = create_systematic_uncertainty("jecUncEta0To3Up"  , "_CMS_scale_j_BBEC1Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Up");
+      smpl.second = create_systematic_uncertainty("jecUncEta0To3Down", "_CMS_scale_j_BBEC1Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta0To3Down");
+       
+      smpl.second = create_systematic_uncertainty("jecUncEta3To5Up"  , "_CMS_scale_j_HFUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Up");
+      smpl.second = create_systematic_uncertainty("jecUncEta3To5Down", "_CMS_scale_j_HFDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEta3To5Down");
+       
+      smpl.second = create_systematic_uncertainty("jecUncRelativeBalUp"  , "_CMS_scale_j_RelativeBalUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalUp");
+      smpl.second = create_systematic_uncertainty("jecUncRelativeBalDown", "_CMS_scale_j_RelativeBalDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeBalDown");
+       
+      smpl.second = create_systematic_uncertainty("jecUncRelativeSampleYearUp"  , "_CMS_scale_j_RelativeSample_Run" +era+ "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleYearUp");
+      smpl.second = create_systematic_uncertainty("jecUncRelativeSampleYearDown", "_CMS_scale_j_RelativeSample_Run" +era+ "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleYearDown");
+ 
+      smpl.second = create_systematic_uncertainty("jecUncAbsoluteYearUp"  , "_CMS_scale_j_Absolute_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncAbsoluteYearUp");
+      smpl.second = create_systematic_uncertainty("jecUncAbsoluteYearDown", "_CMS_scale_j_Absolute_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncAbsoluteYearDown");
+       
+      smpl.second = create_systematic_uncertainty("jecUncBBEC1YearUp"  , "_CMS_scale_j_BBEC1_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncBBEC1YearUp");
+      smpl.second = create_systematic_uncertainty("jecUncBBEC1YearDown", "_CMS_scale_j_BBEC1_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncBBEC1YearDown");
+ 
+      smpl.second = create_systematic_uncertainty("jecHFYearUp"  , "_CMS_scale_j_HF_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncHFYearUp");
+      smpl.second = create_systematic_uncertainty("jecUncHFYearDown", "_CMS_scale_j_HF_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncHFYearDown");
+ 
+      smpl.second = create_systematic_uncertainty("jecEC2YearUp"  , "_CMS_scale_j_EC2_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEC2YearUp");
+      smpl.second = create_systematic_uncertainty("jecUncEC2YearDown", "_CMS_scale_j_EC2_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEC2YearDown");
+ 
+      smpl.second = create_systematic_uncertainty("jecEC2Up"  , "_CMS_scale_j_EC2Up"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncEC2Up");
+      smpl.second = create_systematic_uncertainty("jecUncEC2Down", "_CMS_scale_j_EC2Down", cat.second.plot_2d, smpl.second, tree_, true, "jecUncEC2Down");
+ 
+      smpl.second = create_systematic_uncertainty("jecFlavorQCDUp"  , "_CMS_scale_j_FlavorQCDUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncFlavorQCDUp");
+      smpl.second = create_systematic_uncertainty("jecUncFlavorQCDDown", "_CMS_scale_j_FlavorQCDDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncFlavorQCDDown");
+ 
       // 14.) Recoil scale/resolution uncertainties
       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name.Contains("125")){
 	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_met_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
