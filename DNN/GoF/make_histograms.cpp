@@ -273,8 +273,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       if( smpl.second.name == "QCD"  ) continue;
 
       // 2.) Electron scale (applied on both embedded and mc) // not used at the moment
-      smpl.second = create_systematic_uncertainty("escale_all_Up"  , "_CMS_scale_eUp"  , cat.second.plot_2d, smpl.second, tree_, true, "escaleUp");
-      smpl.second = create_systematic_uncertainty("escale_all_Down", "_CMS_scale_eDown", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
+      //smpl.second = create_systematic_uncertainty("escale_all_Up"  , "_CMS_scale_eUp"  , cat.second.plot_2d, smpl.second, tree_, true, "escaleUp");
+      //smpl.second = create_systematic_uncertainty("escale_all_Down", "_CMS_scale_eDown", cat.second.plot_2d, smpl.second, tree_, true, "escaleDown");
 
       // 3.) Electron scale (applied only on embedded)
       if(smpl.second.name == "EMB"){
@@ -336,17 +336,22 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 	smpl.second = create_systematic_uncertainty("jecUncRelativeSampleDown_corr", "_CMS_scale_j_RelativeSampleDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncRelativeSampleDown");
       }
 
-      // 8.) Recoil scale/resolution uncertainties
+      // 14.) Recoil scale/resolution uncertainties
       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name.Contains("125")){
 	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_met_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
 	smpl.second = create_systematic_uncertainty("recoilscaleDown", "_CMS_htt_boson_scale_met_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleDown");
 	smpl.second = create_systematic_uncertainty("recoilresoUp"  , "_CMS_htt_boson_reso_met_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilresoUp");
 	smpl.second = create_systematic_uncertainty("recoilresoDown", "_CMS_htt_boson_reso_met_Run" + era + "Down", cat.second.plot_2d, smpl.second, tree_, true, "recoilresoDown");
+	// 9.) Unclustered MET scale (FIXME : is this really the correct way to estimate it?)
+	smpl.second = create_systematic_uncertainty("unclMetUp"  , "_CMS_scale_met_unclusteredUp"  , cat.second.plot_2d, smpl.second, tree_, true, "");
+	smpl.second = create_systematic_uncertainty("unclMetDown", "_CMS_scale_met_unclusteredDown", cat.second.plot_2d, smpl.second, tree_, true, "");
+      }
+      else{
+	// 9.) Unclustered MET scale
+	smpl.second = create_systematic_uncertainty("unclMetUp"  , "_CMS_scale_met_unclusteredUp"  , cat.second.plot_2d, smpl.second, tree_, true, "unclMetUp");
+	smpl.second = create_systematic_uncertainty("unclMetDown", "_CMS_scale_met_unclusteredDown", cat.second.plot_2d, smpl.second, tree_, true, "unclMetDown");
       }
 
-      // 9.) Unclustered MET scale
-      smpl.second = create_systematic_uncertainty("unclMetUp"  , "_CMS_scale_met_unclusteredUp"  , cat.second.plot_2d, smpl.second, tree_, true, "unclMetUp");
-      smpl.second = create_systematic_uncertainty("unclMetDown", "_CMS_scale_met_unclusteredDown", cat.second.plot_2d, smpl.second, tree_, true, "unclMetDown");
 
       // 10.) TTbar shape
       if(smpl.second.name == "TTT" || smpl.second.name == "TTL"){
