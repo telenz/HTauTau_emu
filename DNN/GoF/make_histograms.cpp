@@ -197,10 +197,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
     cat.second.sample_list["4_TTL"].cutStringSS    += "&& isZTTEM<0.5";
     cat.second.sample_list["5_TTT"].cutString      += "&& isZTTEM>0.5";
     cat.second.sample_list["5_TTT"].cutStringSS    += "&& isZTTEM>0.5";
-    cat.second.sample_list["4_TTL"].weightString   += "topptweight*";
-    cat.second.sample_list["4_TTL"].weightStringSS += "topptweight*";
-    cat.second.sample_list["5_TTT"].weightString   += "topptweight*";
-    cat.second.sample_list["5_TTT"].weightStringSS += "topptweight*";
+    cat.second.sample_list["4_TTL"].weightString   += "topptweightRun2*";
+    cat.second.sample_list["4_TTL"].weightStringSS += "topptweightRun2*";
+    cat.second.sample_list["5_TTT"].weightString   += "topptweightRun2*";
+    cat.second.sample_list["5_TTT"].weightStringSS += "topptweightRun2*";
 
     cat.second.sample_list["6_VVL"].cutString      += "&& isZTTEM<0.5";
     cat.second.sample_list["6_VVL"].cutStringSS    += "&& isZTTEM<0.5";
@@ -357,8 +357,8 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
       // 10.) TTbar shape
       if(smpl.second.name == "TTT" || smpl.second.name == "TTL"){
-	smpl.second = create_systematic_uncertainty("ttbarShapeUp"  , "_CMS_htt_ttbarShapeUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "topptweight*","topptweight*topptweight*");
-	smpl.second = create_systematic_uncertainty("ttbarShapeDown", "_CMS_htt_ttbarShapeDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "topptweight*","");
+	smpl.second = create_systematic_uncertainty("ttbarShapeUp"  , "_CMS_htt_ttbarShapeUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "topptweightRun2*","topptweightRun2*topptweightRun2*");
+	smpl.second = create_systematic_uncertainty("ttbarShapeDown", "_CMS_htt_ttbarShapeDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "topptweightRun2*","");
       }
 
       // 11.) DY shape
