@@ -132,7 +132,7 @@ vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidist
   cout<<"Maximum value in tree = "<<max_val<<endl<<endl;
   
   TH1D* hist_aux = new TH1D("hist_aux", "", 1000000, min_val, max_val);
-  tree -> Draw( cat.variable + ">> hist_aux" , "1*("+cat.variable+Form(">%f",min_val)+ cat.cutstring + ")" );
+  tree -> Draw( cat.variable + ">> hist_aux" , "1*("+cat.variable+Form(">%f",min_val)+ "&& q_1*q_2<0" + cat.cutstring + ")" );
 
   // 0.) Get result if simply binning from config should be used
   if(!take_percentile_subrange && !apply_equidistant_binning){
@@ -225,8 +225,8 @@ std::pair<vector<float>,vector<float>> calc_binning_2d(bool take_percentile_subr
 
   TH1D* hist_aux_x = new TH1D("hist_aux_x", "", 1000000, min_val_x, max_val_x);
   TH1D* hist_aux_y = new TH1D("hist_aux_y", "", 1000000, min_val_y, max_val_y);
-  tree -> Draw( var_x + ">> hist_aux_x" , "1*("+var_x+Form(">%f",min_val_x)+ cat.cutstring + ")" );
-  tree -> Draw( var_y + ">> hist_aux_y" , "1*("+var_y+Form(">%f",min_val_y)+ cat.cutstring + ")" );
+  tree -> Draw( var_x + ">> hist_aux_x" , "1*("+var_x+Form(">%f",min_val_x)+ "&& q_1*q_2<0" + cat.cutstring + ")" );
+  tree -> Draw( var_y + ">> hist_aux_y" , "1*("+var_y+Form(">%f",min_val_y)+ "&& q_1*q_2<0" + cat.cutstring + ")" );
 
   // 0.) Get result if simply binning from config should be used
   if(!take_percentile_subrange && !apply_equidistant_binning){
