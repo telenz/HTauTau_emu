@@ -50,27 +50,31 @@ MorphingSMRun2Legacy \
     --rebin_categories=false
 
 # Create workspace
-combineTool.py -M T2W -o ${ERA}_workspace.root -m $MASS -i ${CMSSW_BASE}/src/CombineHarvester/SMRun2Legacy/${OUTPUT_FOLDER}/cmb/125/
+combineTool.py -M T2W -o ${ERA}_workspace.root -m $MASS -i ${CMSSW_BASE}/src/CombineHarvester/SMRun2Legacy/${OUTPUT_FOLDER}/cmb/125/ --parallel 8
 
 workspace_location=${CMSSW_BASE}/src/CombineHarvester/SMRun2Legacy/${OUTPUT_FOLDER}/cmb/125/
 cd ${workspace_location}
 
-# Get test statistic value
-combine -M GoodnessOfFit --algo=saturated -m $MASS -d $DATACARD
+for ALGO in saturated AD KS; do
 
-# Throw toys
-combine -M GoodnessOfFit --algo=saturated -m $MASS -d $DATACARD -s $SEED -t $NUM_TOYS
+    # Get test statistic value
+    combineTool.py -M GoodnessOfFit --algo=$ALGO -m $MASS -d $DATACARD -n ".$ALGO" --plots --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0
 
-# Collect results
-combineTool.py -M CollectGoodnessOfFit --input higgsCombineTest.GoodnessOfFit.mH$MASS.root higgsCombineTest.GoodnessOfFit.mH$MASS.$SEED.root --output gof-${VAR}.json
+    # Throw toys
+    combineTool.py -M GoodnessOfFit --algo=$ALGO -m $MASS --there -d $DATACARD -s $SEED -t $NUM_TOYS -n ".$ALGO.toys" --parallel 8 --verbose 0 --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0
 
-# Plot
-plotGof.py --statistic saturated --mass $MASS.0 --output gof-${VAR} gof-${VAR}.json
+    # Collect results
+    combineTool.py -M CollectGoodnessOfFit --input higgsCombine.$ALGO.GoodnessOfFit.mH$MASS.root higgsCombine.$ALGO.toys.GoodnessOfFit.mH$MASS.$SEED.root --output gof-${VAR}.$ALGO.json
 
-cp gof-${VAR}.json ${BASE_PATH}/${INPUT_FOLDER}/.
+    # Plot
+    plotGof.py --statistic ${ALGO} --mass $MASS.0 --output gof-${VAR}.${ALGO} gof-${VAR}.${ALGO}.json
 
-# Get p-value printed out
-echo ""
-grep "p" *.json
-echo ""
+    cp gof-${VAR}.${ALGO}.json ${BASE_PATH}/${INPUT_FOLDER}/.
+    cp *.png ${BASE_PATH}/${INPUT_FOLDER}/.
 
+    # Get p-value printed out
+    echo ""
+    grep "p" *.json
+    echo ""
+
+done
