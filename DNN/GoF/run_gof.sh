@@ -10,7 +10,7 @@
 DATACARD=${ERA}_workspace.root
 SEED=1234
 MASS=125
-NUM_TOYS=300
+NUM_TOYS=2
 CURRENT_PATH=$(pwd)
 BASE_PATH=${CURRENT_PATH}/output/${ERA}
 OUTPUT_FOLDER=output/${ERA}_${VAR}_smhtt
@@ -69,6 +69,17 @@ for ALGO in saturated AD KS; do
     # Plot
     plotGof.py --statistic ${ALGO} --mass $MASS.0 --output gof-${VAR}.${ALGO} gof-${VAR}.${ALGO}.json
 
+    combineTool.py -M FitDiagnostics -d $DATACARD -n ${ERA}_${ALGO} --saveShapes --saveWithUncertainties
+
+    PostFitShapesFromWorkspace -m 125 -w ${DATACARD} \
+    -d combined.txt.cmb -o ${ERA}_${VAR}_datacard_shapes_prefit_$ALGO.root
+
+    PostFitShapesFromWorkspace -m 125 -w ${DATACARD} \
+    -d combined.txt.cmb -o ${ERA}_${VAR}_datacard_shapes_postfit_sb_$ALGO.root \
+    -f fitDiagnostics${ERA}_${ALGO}.root:fit_s --postfit
+
+    cp ${ERA}_${VAR}_datacard_shapes_postfit_sb_$ALGO.root ${BASE_PATH}/${INPUT_FOLDER}/.
+    cp ${ERA}_${VAR}_datacard_shapes_prefit_$ALGO.root ${BASE_PATH}/${INPUT_FOLDER}/.
     cp gof-${VAR}.${ALGO}.json ${BASE_PATH}/${INPUT_FOLDER}/.
     cp *.png ${BASE_PATH}/${INPUT_FOLDER}/.
 
