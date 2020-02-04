@@ -138,7 +138,7 @@ def search_results_1d(channel, era, variables):
     results = []
     missing = []
     for variable in variables:
-        filename = "output/{}/var_1d/gof-{}.json".format(era, variable)
+        filename = "output/{}/var_1d/gof-{}.saturated.json".format(era, variable)
         if not os.path.exists(filename):
             missing.append(variable)
             results.append(-1.0)
