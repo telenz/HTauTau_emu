@@ -338,6 +338,10 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
       smpl.second = create_systematic_uncertainty("jecFlavorQCDUp"  , "_CMS_scale_j_FlavorQCDUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jecUncFlavorQCDUp");
       smpl.second = create_systematic_uncertainty("jecUncFlavorQCDDown", "_CMS_scale_j_FlavorQCDDown", cat.second.plot_2d, smpl.second, tree_, true, "jecUncFlavorQCDDown");
  
+      //16.) JER uncertainty
+      smpl.second = create_systematic_uncertainty("jerUp"  , "_CMS_reso_jUp"  , cat.second.plot_2d, smpl.second, tree_, true, "jerUp");
+      smpl.second = create_systematic_uncertainty("jerDown", "_CMS_reso_jDown", cat.second.plot_2d, smpl.second, tree_, true, "jerDown");
+      
       // 14.) Recoil scale/resolution uncertainties
       if(smpl.second.name == "ZTT" || smpl.second.name == "ZL" || smpl.second.name == "W" || smpl.second.name.Contains("125")){
 	smpl.second = create_systematic_uncertainty("recoilscaleUp"  , "_CMS_htt_boson_scale_met_Run" + era + "Up"  , cat.second.plot_2d, smpl.second, tree_, true, "recoilscaleUp");
@@ -426,9 +430,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
          smpl.second = create_systematic_uncertainty("prefireWeightDown", "_CMS_prefiringDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*","prefiringweightdown*");
       }
 
-      //16.) JER uncertainty
-      smpl.second = create_systematic_uncertainty("jerUp"  , "_CMS_reso_j"  , cat.second.plot_2d, smpl.second, tree_, true, "jerUp");
-      smpl.second = create_systematic_uncertainty("jerDown", "_CMS_reso_j", cat.second.plot_2d, smpl.second, tree_, true, "jerDown");
+    
 
     } // end of loop over samples
     if(verbose){
