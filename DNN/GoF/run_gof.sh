@@ -58,10 +58,10 @@ cd ${workspace_location}
 for ALGO in saturated AD KS; do
 
     # Get test statistic value
-    combineTool.py -M GoodnessOfFit --algo=$ALGO -m $MASS -d $DATACARD -n ".$ALGO" --plots --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0
+    combineTool.py -M GoodnessOfFit --algo=$ALGO -m $MASS -d $DATACARD -n ".$ALGO" --plots --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0 --fixedSignalStrength=0
 
     # Throw toys
-    combineTool.py -M GoodnessOfFit --algo=$ALGO -m $MASS --there -d $DATACARD -s $SEED -t $NUM_TOYS -n ".$ALGO.toys" --parallel 8 --verbose 0 --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0
+    combineTool.py -M GoodnessOfFit --algo=$ALGO -m $MASS --there -d $DATACARD -s $SEED -t $NUM_TOYS -n ".$ALGO.toys" --parallel 8 --verbose 0 --X-rtd MINIMIZER_analytic --cminDefaultMinimizerStrategy 0 --fixedSignalStrength=0
 
     # Collect results
     combineTool.py -M CollectGoodnessOfFit --input higgsCombine.$ALGO.GoodnessOfFit.mH$MASS.root higgsCombine.$ALGO.toys.GoodnessOfFit.mH$MASS.$SEED.root --output gof-${VAR}.$ALGO.json
