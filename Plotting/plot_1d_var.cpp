@@ -16,7 +16,8 @@ void plot_1d_var(
 		 bool draw_log_scale = false,
 		 TString directory   = "/nfs/dust/cms/user/tlenz/13TeV/2017/SM_HTauTau/HTauTau_emu/DNN/GoF/output/var_1d/",
 		 TString era         = "2016",
-		 bool use_embedded   = false
+		 bool use_embedded   = false,
+       bool log_scale_x    = false
 		 ) {
 
   // General uncertainties
@@ -214,6 +215,10 @@ void plot_1d_var(
    }
    else  data.hist -> GetYaxis() -> SetRangeUser(0,1.75*y_upper);
 
+   if (log_scale_x) {
+      upper->SetLogx();
+   }
+
    // Calculate signal strength (s+b/b) - needed for ratio plot and blinding
    TH1D * signal_strength    = (TH1D*) stack->GetStack()->Last()->Clone("ratioH");
    for(auto  *smpl : sample_vec){
@@ -333,6 +338,10 @@ void plot_1d_var(
    ratioErrH->Draw("e2same");
    if(draw_signal) signal_strength->Draw("hist same");
 
+   if (log_scale_x) {
+      lower->SetLogx();
+   }
+
    lower->Modified();
    lower->RedrawAxis();
    canv1->cd();
@@ -342,6 +351,7 @@ void plot_1d_var(
 
    TString out_filename = variable + "_" + category;
    if(draw_log_scale) out_filename += "_log";
+   if (log_scale_x) out_filename += "_log_x";
 
    TString output_dir = directory + "/figures/";
    gSystem -> Exec("mkdir " + output_dir);
