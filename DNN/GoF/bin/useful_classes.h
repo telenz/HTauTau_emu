@@ -123,7 +123,10 @@ vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidist
   float range_low  = 0;
   float range_high = 0;
   vector<double> percentile_ranges;
-  for(int i=0; i<=10; i++) percentile_ranges.push_back(0.01+i*0.098);
+  for(int i=0; i<=10; i++) {
+     if (take_percentile_subrange) percentile_ranges.push_back(0.01+i*0.098);
+     else percentile_ranges.push_back(0.0+i*0.1);
+  }
 
   float min_val = tree->GetMinimum(cat.variable);
   float max_val = tree->GetMaximum(cat.variable);
@@ -135,36 +138,43 @@ vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidist
   tree -> Draw( cat.variable + ">> hist_aux" , "1*("+cat.variable+Form(">%f",min_val)+ "&& q_1*q_2<0" + cat.cutstring + ")" );
 
   // 0.) Get result if simply binning from config should be used
-  if(!take_percentile_subrange && !apply_equidistant_binning){
-    return cat.binning_1d;
-  }
-  if(!take_percentile_subrange){
-    cout<<"Which binning should be applied ? Please check your settings in the config. Either take_percentile_subrange AND apply_equidistant_binning is set to false OR take_percentile_subrange is set to true!"<<endl;
-  }
+  //if(!take_percentile_subrange && !apply_equidistant_binning){
+  //  return cat.binning_1d;
+  //}
+  //if(!take_percentile_subrange){
+  //  cout<<"Which binning should be applied ? Please check your settings in the config. Either take_percentile_subrange AND apply_equidistant_binning is set to false OR take_percentile_subrange is set to true!"<<endl;
+  //}
 
   // 1.) Find 0.01 and 0.99 percentiles to get the range of the histogram
   // Check if variable is of type float
   float var;
   int valid_type = tree->SetBranchAddress(cat.variable,&var);
   if(valid_type!=0){
-    cout<<"Variable is not appropriate for percentile range. binning_1d as specified in config is used !"<<endl;
-    return cat.binning_1d;
+     cout<<"Variable is not appropriate for percentile range. binning_1d as specified in config is used !"<<endl;
+     return cat.binning_1d;
   }
-
+  
   unsigned int idx_bins=0;
   int count =0;
   float integral = hist_aux->GetSumOfWeights();
   bool range_low_not_set = true;
-  for(int ibin=1; ibin<hist_aux->GetNbinsX()+1; ibin++){
-    count += hist_aux->GetBinContent(ibin);
-    if(count>=0.01*integral && range_low_not_set){
-      range_low  = hist_aux->GetBinCenter(ibin);
-      range_low_not_set = false;
-    }
-    else if(count>=0.99*integral){
-      range_high = hist_aux->GetBinCenter(ibin);
-      break;
-    }
+  if (take_percentile_subrange){
+     for(int ibin=1; ibin<hist_aux->GetNbinsX()+1; ibin++){
+        count += hist_aux->GetBinContent(ibin);
+        if(count>=0.01*integral && range_low_not_set){
+           range_low  = hist_aux->GetBinCenter(ibin);
+           range_low_not_set = false;
+        }
+        else if(count>=0.99*integral){
+           range_high = hist_aux->GetBinCenter(ibin);
+           break;
+        }
+     }
+  }
+  else {
+     range_low  = hist_aux->GetBinCenter(1);
+     range_low_not_set = false;
+     range_high = hist_aux->GetBinCenter(hist_aux->GetNbinsX());
   }
   cout<<"histo range starts at = "<<range_low<<endl;
   cout<<"histo range ends at   = "<<range_high<<endl;
