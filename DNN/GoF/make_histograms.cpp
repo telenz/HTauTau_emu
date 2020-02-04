@@ -425,6 +425,11 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
          smpl.second = create_systematic_uncertainty("prefireWeightUp"  , "_CMS_prefiringUp"  , cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*","prefiringweightup*");
          smpl.second = create_systematic_uncertainty("prefireWeightDown", "_CMS_prefiringDown", cat.second.plot_2d, smpl.second, tree_, false, "", true, "prefiringweight*","prefiringweightdown*");
       }
+
+      //16.) JER uncertainty
+      smpl.second = create_systematic_uncertainty("jerUp"  , "_CMS_reso_j"  , cat.second.plot_2d, smpl.second, tree_, true, "jerUp");
+      smpl.second = create_systematic_uncertainty("jerDown", "_CMS_reso_j", cat.second.plot_2d, smpl.second, tree_, true, "jerDown");
+
     } // end of loop over samples
     if(verbose){
       cout << endl << endl << "... Uncertainties of samples ... " << endl << endl ;
