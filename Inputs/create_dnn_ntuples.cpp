@@ -2,6 +2,8 @@
 #include <map>
 #include "TString.h"
 #include "TFile.h"
+#include "TF1.h"
+#include "TH2F.h"
 #include "TTree.h"
 #include "TH1.h"
 #include "TList.h"
@@ -29,6 +31,20 @@ void create_dnn_ntuples( TString era = "2017" ){
   const map<TString, double>  *xsec_map    = 0;
   const map<TString, TString> *process_map = 0;
   map<TString , int> n_events_per_sample;
+  // TH1F *hNonClosureCorrection_njet1 = NULL;
+  // TH1F *hNonClosureCorrection_njetgt1 = NULL;
+  // TH1F *hNonClosureCorrection_njet0 = NULL;
+  // TH2F *hIsolationCorrection= NULL;
+  // TH2F *OS_SS_transfer_factors_deltar2to4= NULL;
+  // TH2F *OS_SS_transfer_factors_deltarlt2= NULL;
+  // TH2F *OS_SS_transfer_factors_deltarltp8= NULL;
+  // TH2F *OS_SS_transfer_factors_deltargt4= NULL;
+
+  TH2F *hNonClosureCorrection = NULL;
+  TH2F *hIsolationCorrection= NULL;
+  TF1 *hOS_SS_transfer_factors_njetgt1= NULL;
+  TF1 *hOS_SS_transfer_factors_njet1= NULL;
+  TF1 *hOS_SS_transfer_factors_njet0= NULL;
   
   if (era == "2018"){
      xsec_map    = &xsec_map_2018;
@@ -37,8 +53,22 @@ void create_dnn_ntuples( TString era = "2017" ){
      trigger_filter_efficiency = 1.0;
      qcd_ss_os_iso_relaxed_ratio = 1.89; //number from Janek's talk in TauPOG meeting (10.04.19)
      embedded_trigger_weight  = 1.00;
-     embedded_tracking_weight = 0.99; //2017 scale factors for embedded currently used
+     embedded_tracking_weight = 1.00; 
      IsEra2018 = 1;
+     TFile *f= new TFile("/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/QCDEstimation/output_2018_final/QCDweights.root","READ");
+     hNonClosureCorrection=(TH2F*)f->Get("NonClosureCorrection");
+     hIsolationCorrection=(TH2F*)f->Get("IsolationCorrection");
+     hOS_SS_transfer_factors_njetgt1=(TF1*)f->Get("OS_SS_transfer_factors_njetgt1");
+     hOS_SS_transfer_factors_njet1=(TF1*)f->Get("OS_SS_transfer_factors_njet1");
+     hOS_SS_transfer_factors_njet0=(TF1*)f->Get("OS_SS_transfer_factors_njet0");
+     // OS_SS_transfer_factors_deltarltp8=(TH2F*)f->Get("OS_SS_transfer_factors_deltarltp8");
+     // OS_SS_transfer_factors_deltar2to4=(TH2F*)f->Get("OS_SS_transfer_factors_deltar2to4");
+     // OS_SS_transfer_factors_deltargt4=(TH2F*)f->Get("OS_SS_transfer_factors_deltargt4");
+     // OS_SS_transfer_factors_deltarlt2=(TH2F*)f->Get("OS_SS_transfer_factors_deltarlt2");
+     // hNonClosureCorrection_njet0=(TH1F*)f->Get("NonClosureCorrection_njet0");
+     // hNonClosureCorrection_njet1=(TH1F*)f->Get("NonClosureCorrection_njet1");
+     // hNonClosureCorrection_njetgt1=(TH1F*)f->Get("NonClosureCorrection_njetgt1");
+
      samples_map[channel + "-NOMINAL_ntuple_MuonEG"   ] = MuonEG_Run2018;
      samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2018;
      samples_map[channel + "-NOMINAL_ntuple_DYJets"   ] = DYJets_2018;
@@ -74,6 +104,12 @@ void create_dnn_ntuples( TString era = "2017" ){
     embedded_trigger_weight  = 1.00;
     embedded_tracking_weight = 0.99;
     IsEra2017 = 1;
+    TFile *f= new TFile("/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/QCDEstimation/output_2017_final/QCDweights.root","READ");
+    hNonClosureCorrection=(TH2F*)f->Get("NonClosureCorrection");
+    hIsolationCorrection=(TH2F*)f->Get("IsolationCorrection");
+    hOS_SS_transfer_factors_njetgt1=(TF1*)f->Get("OS_SS_transfer_factors_njetgt1");
+    hOS_SS_transfer_factors_njet1=(TF1*)f->Get("OS_SS_transfer_factors_njet1");
+    hOS_SS_transfer_factors_njet0=(TF1*)f->Get("OS_SS_transfer_factors_njet0");
     samples_map[channel + "-NOMINAL_ntuple_MuonEG"   ] = MuonEG_Run2017;
     samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2017;
     samples_map[channel + "-NOMINAL_ntuple_DYJets"   ] = DYJets_2017;
@@ -97,7 +133,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     // samples_map[channel + "-NOMINAL_ntuple_qqh_PTHGT200"          ] = VBFHToTauTau_STXS1p1_Bin206_2017;
     // samples_map[channel + "-NOMINAL_ntuple_vbftopo"               ] = VBFHToTauTau_STXS1p1_Bin207to210_2017;  //noch weiter trennen?
     //input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
-    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
+    input_dir="/ceph/mmeyer/";
   }
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
@@ -106,9 +142,15 @@ void create_dnn_ntuples( TString era = "2017" ){
     luminosity  = 35920;               // Take number from LUMI twiki : https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM#SummaryTable
     trigger_filter_efficiency = 0.979;
     qcd_ss_os_iso_relaxed_ratio = 2.3;
-    embedded_trigger_weight  = 1.03;
-    embedded_tracking_weight = 0.98;
+    embedded_trigger_weight  = 1.0;
+    embedded_tracking_weight = 1.0;
     IsEra2016 = 1;
+    TFile *f= new TFile("/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/HTauTau_emu/QCDEstimation/output_2016_final/QCDweights.root","READ");
+    hNonClosureCorrection=(TH2F*)f->Get("NonClosureCorrection");
+    hIsolationCorrection=(TH2F*)f->Get("IsolationCorrection");
+    hOS_SS_transfer_factors_njetgt1=(TF1*)f->Get("OS_SS_transfer_factors_njetgt1");
+    hOS_SS_transfer_factors_njet1=(TF1*)f->Get("OS_SS_transfer_factors_njet1");
+    hOS_SS_transfer_factors_njet0=(TF1*)f->Get("OS_SS_transfer_factors_njet0");
     samples_map[channel + "-NOMINAL_ntuple_MuonEG"   ] = MuonEG_Run2016;
     samples_map[channel + "-NOMINAL_ntuple_Embedded" ] = Embedded_2016;
     samples_map[channel + "-NOMINAL_ntuple_DYJets"   ] = DYJets_2016;
@@ -249,6 +291,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       float jeta_1;
       float jeta_2;
       int htxs_stage1p1cat;
+      float dr_tt;
       inTree->SetBranchAddress("npartons",&npartons);
       inTree->SetBranchAddress("iso_1",&iso_1);
       inTree->SetBranchAddress("iso_2",&iso_2);
@@ -272,6 +315,7 @@ void create_dnn_ntuples( TString era = "2017" ){
       inTree->SetBranchAddress("jeta_1",&jeta_1);
       inTree->SetBranchAddress("jeta_2",&jeta_2);
       inTree->SetBranchAddress("htxs_stage1p1cat",&htxs_stage1p1cat);
+      inTree->SetBranchAddress("dr_tt",&dr_tt);
 
       outFile->cd();
       TTree *currentTree = new TTree(subsample,"temporary tree");
@@ -287,6 +331,11 @@ void create_dnn_ntuples( TString era = "2017" ){
       bool era2016;
       bool era2017;
       bool era2018;
+      float qcdweightml;
+      float qcdweightml_1;
+      float qcdweightml_2;
+      float qcdweightml_3;
+      
       if(firstTree){
 	outTree    = inTree->CloneTree(0);
 	outTree->Branch("xsec_lumi_weight", &xsec_lumi_weight, "xsec_lumi_weight/F");
@@ -299,6 +348,10 @@ void create_dnn_ntuples( TString era = "2017" ){
   outTree->Branch("era2016", &era2016, "era2016/O");
   outTree->Branch("era2017", &era2017, "era2017/O");
   outTree->Branch("era2018", &era2018, "era2018/O");
+  outTree->Branch("qcdweightml", &qcdweightml, "qcdweightml/F");
+  outTree->Branch("qcdweightml_1", &qcdweightml_1, "qcdweightml_1/F");
+  outTree->Branch("qcdweightml_2", &qcdweightml_2, "qcdweightml_2/F");
+  outTree->Branch("qcdweightml_3", &qcdweightml_3, "qcdweightml_3/F");
 	firstTree  = false;
       }
       currentTree = inTree->CloneTree(0);
@@ -312,6 +365,10 @@ void create_dnn_ntuples( TString era = "2017" ){
       currentTree->Branch("era2016", &era2016, "era2016/O");
       currentTree->Branch("era2017", &era2017, "era2017/O");
       currentTree->Branch("era2018", &era2018, "era2018/O");
+      currentTree->Branch("qcdweightml", &qcdweightml, "qcdweightml/F");
+      currentTree->Branch("qcdweightml_1", &qcdweightml_1, "qcdweightml_1/F");
+      currentTree->Branch("qcdweightml_2", &qcdweightml_2, "qcdweightml_2/F");
+      currentTree->Branch("qcdweightml_3", &qcdweightml_3, "qcdweightml_3/F");
       // lumi-xsec-weight added
       if( xsec_map->find(subsample) == xsec_map->end() && !sample.first.Contains("MuonEG")  && !sample.first.Contains("Embedded")){
 	cout << endl << endl << "Sample " << subsample << " is missing in xsec_map. Exit code." << endl << endl ;
@@ -345,7 +402,93 @@ void create_dnn_ntuples( TString era = "2017" ){
   era2017=IsEra2017;
   era2018=IsEra2018;
 
-	// Replace jet variables to have an effectie cut of jetpt > 30 GeV
+  
+  qcdweightml=1.0;
+  qcdweightml_1=1.0;
+  qcdweightml_2=1.0;
+  qcdweightml_3=1.0;
+
+  // if (dr_tt < 0.8){
+  //     if (pt_1>pt_2){
+  //        qcdweightml =OS_SS_transfer_factors_deltarltp8->GetBinContent(OS_SS_transfer_factors_deltarltp8->GetXaxis()->FindBin(pt_2),OS_SS_transfer_factors_deltarltp8->GetYaxis()->FindBin(pt_1));
+  //        qcdweightml_1 =OS_SS_transfer_factors_deltarltp8->GetBinContent(OS_SS_transfer_factors_deltarltp8->GetXaxis()->FindBin(pt_2),OS_SS_transfer_factors_deltarltp8->GetYaxis()->FindBin(pt_1));
+  //     }
+  //     else {
+  //         qcdweightml =OS_SS_transfer_factors_deltarltp8->GetBinContent(OS_SS_transfer_factors_deltarltp8->GetXaxis()->FindBin(pt_1),OS_SS_transfer_factors_deltarltp8->GetYaxis()->FindBin(pt_2));
+  //        qcdweightml_1 =O
+   //          S_SS_transfer_factors_deltarltp8->GetBinContent(OS_SS_transfer_factors_deltarltp8->GetXaxis()->FindBin(pt_1),OS_SS_transfer_factors_deltarltp8->GetYaxis()->FindBin(pt_2));
+   //    }
+   // }
+
+   // if (dr_tt < 2 && dr_tt >= 0.8){
+   //    if (pt_1>pt_2){
+   //       qcdweightml =OS_SS_transfer_factors_deltarlt2->GetBinContent(OS_SS_transfer_factors_deltarlt2->GetXaxis()->FindBin(pt_2),OS_SS_transfer_factors_deltarlt2->GetYaxis()->FindBin(pt_1));
+   //       qcdweightml_1 =OS_SS_transfer_factors_deltarlt2->GetBinContent(OS_SS_transfer_factors_deltarlt2->GetXaxis()->FindBin(pt_2),OS_SS_transfer_factors_deltarlt2->GetYaxis()->FindBin(pt_1));
+   //    }
+   //    else {
+   //        qcdweightml =OS_SS_transfer_factors_deltarlt2->GetBinContent(OS_SS_transfer_factors_deltarlt2->GetXaxis()->FindBin(pt_1),OS_SS_transfer_factors_deltarlt2->GetYaxis()->FindBin(pt_2));
+   //       qcdweightml_1 =OS_SS_transfer_factors_deltarlt2->GetBinContent(OS_SS_transfer_factors_deltarlt2->GetXaxis()->FindBin(pt_1),OS_SS_transfer_factors_deltarlt2->GetYaxis()->FindBin(pt_2));
+   //    }
+   // }
+   // if (dr_tt >= 2 && dr_tt<4){
+   //    if (pt_1>pt_2){
+   //       qcdweightml =OS_SS_transfer_factors_deltar2to4->GetBinContent(OS_SS_transfer_factors_deltar2to4->GetXaxis()->FindBin(pt_2),OS_SS_transfer_factors_deltar2to4->GetYaxis()->FindBin(pt_1));
+   //       qcdweightml_1 =OS_SS_transfer_factors_deltar2to4->GetBinContent(OS_SS_transfer_factors_deltar2to4->GetXaxis()->FindBin(pt_2),OS_SS_transfer_factors_deltar2to4->GetYaxis()->FindBin(pt_1));
+   //    }
+   //    else {
+   //       qcdweightml =OS_SS_transfer_factors_deltar2to4->GetBinContent(OS_SS_transfer_factors_deltar2to4->GetXaxis()->FindBin(pt_1),OS_SS_transfer_factors_deltar2to4->GetYaxis()->FindBin(pt_2));
+   //       qcdweightml_1 =OS_SS_transfer_factors_deltar2to4->GetBinContent(OS_SS_transfer_factors_deltar2to4->GetXaxis()->FindBin(pt_1),OS_SS_transfer_factors_deltar2to4->GetYaxis()->FindBin(pt_2));
+   //    }
+   // }
+   // if (dr_tt >= 4 ){
+   //    if (pt_1>pt_2){
+   //       qcdweightml =OS_SS_transfer_factors_deltargt4->GetBinContent(OS_SS_transfer_factors_deltargt4->GetXaxis()->FindBin(pt_2),OS_SS_transfer_factors_deltargt4->GetYaxis()->FindBin(pt_1));
+   //       qcdweightml_1 =OS_SS_transfer_factors_deltargt4->GetBinContent(OS_SS_transfer_factors_deltargt4->GetXaxis()->FindBin(pt_2),OS_SS_transfer_factors_deltargt4->GetYaxis()->FindBin(pt_1));
+   //    }
+   //    else {
+   //      qcdweightml =OS_SS_transfer_factors_deltargt4->GetBinContent(OS_SS_transfer_factors_deltargt4->GetXaxis()->FindBin(pt_1),OS_SS_transfer_factors_deltargt4->GetYaxis()->FindBin(pt_2));
+   //       qcdweightml_1 =OS_SS_transfer_factors_deltargt4->GetBinContent(OS_SS_transfer_factors_deltargt4->GetXaxis()->FindBin(pt_1),OS_SS_transfer_factors_deltargt4->GetYaxis()->FindBin(pt_2));
+   //    }
+   // }
+  
+   // if(njets==0){
+   //    qcdweightml =hNonClosureCorrection_njet0->GetBinContent(hNonClosureCorrection_njet0->GetXaxis()->FindBin(1.0));
+   //    qcdweightml_2 =hNonClosureCorrection_njet0->GetBinContent(hNonClosureCorrection_njet0->GetXaxis()->FindBin(1.0));
+   // }
+   // else if(njets ==1) {
+   //    qcdweightml = hNonClosureCorrection_njet1->GetBinContent(hNonClosureCorrection_njet1->GetXaxis()->FindBin(1.0));
+   //    qcdweightml_2 = hNonClosureCorrection_njet1->GetBinContent(hNonClosureCorrection_njet1->GetXaxis()->FindBin(1.0));
+   // }
+   // else {
+   //   qcdweightml = hNonClosureCorrection_njetgt1->GetBinContent(hNonClosureCorrection_njetgt1->GetXaxis()->FindBin(1.0));
+   //    qcdweightml_2 = hNonClosureCorrection_njetgt1->GetBinContent(hNonClosureCorrection_njetgt1->GetXaxis()->FindBin(1.0));
+   // }
+   // qcdweightml = qcdweightml*hIsolationCorrection->GetBinContent(hIsolationCorrection->GetXaxis()->FindBin(pt_2),hIsolationCorrection->GetYaxis()->FindBin(pt_1));
+   // qcdweightml_3 = hIsolationCorrection->GetBinContent(hIsolationCorrection->GetXaxis()->FindBin(pt_2),hIsolationCorrection->GetYaxis()->FindBin(pt_1));
+ 
+
+  if (njets==0){
+     qcdweightml =hOS_SS_transfer_factors_njet0->Eval(dr_tt);
+     qcdweightml_1 =hOS_SS_transfer_factors_njet0->Eval(dr_tt);
+  }
+  if (njets==1){
+        qcdweightml =hOS_SS_transfer_factors_njet1->Eval(dr_tt);
+        qcdweightml_1 =hOS_SS_transfer_factors_njet1->Eval(dr_tt);
+  }
+  if (njets>1){
+        qcdweightml =hOS_SS_transfer_factors_njetgt1->Eval(dr_tt);
+        qcdweightml_1 =hOS_SS_transfer_factors_njetgt1->Eval(dr_tt);
+  }
+  qcdweightml = qcdweightml*hNonClosureCorrection->GetBinContent(hNonClosureCorrection->GetXaxis()->FindBin(pt_2),hNonClosureCorrection->GetYaxis()->FindBin(pt_1));
+  qcdweightml_2 = hNonClosureCorrection->GetBinContent(hNonClosureCorrection->GetXaxis()->FindBin(pt_2),hNonClosureCorrection->GetYaxis()->FindBin(pt_1));
+  qcdweightml = qcdweightml*hIsolationCorrection->GetBinContent(hIsolationCorrection->GetXaxis()->FindBin(pt_2),hIsolationCorrection->GetYaxis()->FindBin(pt_1));
+  qcdweightml_3 = hIsolationCorrection->GetBinContent(hIsolationCorrection->GetXaxis()->FindBin(pt_2),hIsolationCorrection->GetYaxis()->FindBin(pt_1));
+ 
+
+
+
+
+  // Replace jet variables to have an effectie cut of jetpt > 30 GeV
 	if(njets < 2){
 	  jdeta   = -10;
 	  mjj     = -10;
