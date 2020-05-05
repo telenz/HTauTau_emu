@@ -133,7 +133,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     // samples_map[channel + "-NOMINAL_ntuple_qqh_PTHGT200"          ] = VBFHToTauTau_STXS1p1_Bin206_2017;
     // samples_map[channel + "-NOMINAL_ntuple_vbftopo"               ] = VBFHToTauTau_STXS1p1_Bin207to210_2017;  //noch weiter trennen?
     //input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
-    input_dir="/ceph/mmeyer/";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
   }
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
