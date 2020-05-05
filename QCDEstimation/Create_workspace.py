@@ -1,7 +1,7 @@
-import ROOT as rt
+import ROOT
 import imp
 wsptools = imp.load_source('wsptools', 'workspaceTools.py')
-w = rt.RooWorkspace('w')
+w = ROOT.RooWorkspace('w')
 
 def GetFromTFile(str):
     f = ROOT.TFile(str.split(':')[0])
@@ -13,10 +13,11 @@ def main():
 
     loc = 'output/QCDweights.root'
 
-    #FIXME NJET BINS? wsptools.SafeWrapHist(w, ['expr::m_pt_max100("min(10,100)")', 'expr::e_pt_max100("min(13,100)")'],  GetFromTFile(loc+':'), 'em_qcd_factors')
-    wsptools.SafeWrapHist(w, ['expr::m_pt_max100("min(10,100)")', 'expr::e_pt_max100("min(13,100)")'],  GetFromTFile(loc+':NonClosureCorrection'), 'em_qcd_factors_bothaiso')
-    wsptools.SafeWrapHist(w, ['expr::m_pt_max40("min(10,40)")','expr::e_pt_max40("min(13,40)")'],  GetFromTFile(loc+':IsolationCorrection'), 'em_qcd_extrap_uncert')
+    wsptools.SafeWrapHist(w, ['expr::m_pt_max100("min(@0,100)",m_pt[0])', 'expr::e_pt_max100("min(@0,100)",e_pt[0])'],  GetFromTFile(loc+':NonClosureCorrection'), 'em_qcd_factors')
+    wsptools.SafeWrapHist(w, ['expr::m_pt_max100("min(@0,100)",m_pt[0])', 'expr::e_pt_max100("min(@0,100)",e_pt[0])'],  GetFromTFile(loc+':NonClosureCorrectionValidation'), 'em_qcd_factors_bothaiso')
+    wsptools.SafeWrapHist(w, ['expr::m_pt_max40("min(@0,40)",m_pt[0])','expr::e_pt_max40("min(@0,40)",e_pt[0])'],  GetFromTFile(loc+':IsolationCorrection'), 'em_qcd_extrap_uncert')
 
+    #FIXME: corrections as function of njets, deltaR
     w.factory('expr::em_qcd_osss_binned("((@0<0.15)*((@1==0)*(2.505-0.1545*@2) + (@1>0)*(2.896-0.3304*@2))*@3 + (@0>=0.15)*((@1==0)*(3.048-0.1726*@2) + (@1>0)*(3.398-0.3965*@2))*@4)*@5" ,iso[0],njets[0],dR[0],em_qcd_factors,em_qcd_factors_bothaiso, em_qcd_extrap_uncert)')
 
     w.factory('expr::em_qcd_osss_0jet_rateup("((@0<0.15)*((@1==0)*(2.660-0.1545*@2) + (@1>0)*(2.896-0.3304*@2))*@3 + (@0>=0.15)*((@1==0)*(3.173-0.1726*@2) + (@1>0)*(3.398-0.3965*@2))*@4)*@5" ,iso[0],njets[0],dR[0],em_qcd_factors,em_qcd_factors_bothaiso, em_qcd_extrap_uncert)')

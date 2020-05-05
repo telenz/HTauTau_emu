@@ -17,9 +17,9 @@ os.system(cmd)
 print "Determining OS/SS transfer factors as function of deltaR(e,mu) in bins of different jet multiplicities ..."
 cmd="python QCDWeights.py -e "+era
 os.system(cmd)
-#print "Determining non-closure corrections..."
-#cmd="python NonClosureCorrection.py"
-#os.system(cmd)
-#print "Determining isolation corrections..."
-#cmd="python IsolationCorrection.py"
-#os.system(cmd)
+print "Determining non-closure corrections..."
+cmd="python NonClosureCorrection.py -e "+era
+os.system(cmd)
+print "Determining isolation corrections..."
+cmd="python IsolationCorrection.py -e "+era
+os.system(cmd)

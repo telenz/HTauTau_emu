@@ -2,6 +2,8 @@ import ROOT as rt
 import ConfigParser
 from array import array
 import argparse
+import numpy as np
+
 
 def main():
 
@@ -66,36 +68,24 @@ def main():
     c = rt.TCanvas("c", "canvas", 800, 800)
 
     for jetbin in jet_selection:
+        bins = [0.3,0.9,1.5,2.0,2.4,2.8,3.2,3.6,4.0,4.4,4.8,6.0]  #v1
+        nbins =11
         if (jetbin=="njet0") :
-            bins2 = [0,2.5,3,3.5,4,4.5]
-            nbins2 = 5
-            h_os = rt.TH1F("hist_os","hist_os",nbins2,array('d',bins2))
-            h_ss = rt.TH1F("hist_ss","hist_ss",nbins2,array('d',bins2))
-            h_os_validation = rt.TH1F("hist_os_validation","hist_os_validation",nbins2,array('d',bins2))
-            h_ss_validation = rt.TH1F("hist_ss_validation","hist_ss_validation",nbins2,array('d',bins2))
+            bins = [0.3,1.2,2.0,2.6,3.2,3.8,4.4,5.0,6.0] #v1
+            nbins=8
+        h_os = rt.TH1F("hist_os","hist_os",nbins,array('d',bins))
+        h_ss = rt.TH1F("hist_ss","hist_ss",nbins,array('d',bins))
+        h_os_validation = rt.TH1F("hist_os_validation","hist_os_validation",nbins,array('d',bins))
+        h_ss_validation = rt.TH1F("hist_ss_validation","hist_ss_validation",nbins,array('d',bins))
 
-            h_os_bg = rt.TH1F("hist_os_bg","hist_os_bg",nbins2,array('d',bins2))
-            h_ss_bg = rt.TH1F("hist_ss_bg","hist_ss_bg",nbins2,array('d',bins2))
-            h_os_bg_validation = rt.TH1F("hist_os_bg_validation","hist_os_bg_validation",nbins2,array('d',bins2))
-            h_ss_bg_validation = rt.TH1F("hist_ss_bg_validation","hist_ss_bg_validation",nbins2,array('d',bins2))
-            h_os_bg_total = rt.TH1F("hist_os_bg_total","hist_os_bg_total",nbins2,array('d',bins2))
-            h_ss_bg_total = rt.TH1F("hist_ss_bg_total","hist_ss_bg_total",nbins2,array('d',bins2))
-            h_os_bg_total_validation = rt.TH1F("hist_os_bg_total_validation","hist_os_bg_total_validation",nbins2,array('d',bins2))
-            h_ss_bg_total_validation = rt.TH1F("hist_ss_bg_total_validation","hist_ss_bg_total_validation",nbins2,array('d',bins2))
-        else :
-            h_os = rt.TH1F("hist_os","hist_os",nbins,xmin,xmax)
-            h_ss = rt.TH1F("hist_ss","hist_ss",nbins,xmin,xmax)
-            h_os_validation = rt.TH1F("hist_os_validation","hist_os_validation",nbins,xmin,xmax)
-            h_ss_validation = rt.TH1F("hist_ss_validation","hist_ss_validation",nbins,xmin,xmax)
-
-            h_os_bg = rt.TH1F("hist_os_bg","hist_os_bg",nbins,xmin,xmax)
-            h_ss_bg = rt.TH1F("hist_ss_bg","hist_ss_bg",nbins,xmin,xmax)
-            h_os_bg_validation = rt.TH1F("hist_os_bg_validation","hist_os_bg_validation",nbins,xmin,xmax)
-            h_ss_bg_validation = rt.TH1F("hist_ss_bg_validation","hist_ss_bg_validation",nbins,xmin,xmax)
-            h_os_bg_total = rt.TH1F("hist_os_bg_total","hist_os_bg_total",nbins,xmin,xmax)
-            h_ss_bg_total = rt.TH1F("hist_ss_bg_total","hist_ss_bg_total",nbins,xmin,xmax)
-            h_os_bg_total_validation = rt.TH1F("hist_os_bg_total_validation","hist_os_bg_total_validation",nbins,xmin,xmax)
-            h_ss_bg_total_validation = rt.TH1F("hist_ss_bg_total_validation","hist_ss_bg_total_validation",nbins,xmin,xmax)
+        h_os_bg = rt.TH1F("hist_os_bg","hist_os_bg",nbins,array('d',bins))
+        h_ss_bg = rt.TH1F("hist_ss_bg","hist_ss_bg",nbins,array('d',bins))
+        h_os_bg_validation = rt.TH1F("hist_os_bg_validation","hist_os_bg_validation",nbins,array('d',bins))
+        h_ss_bg_validation = rt.TH1F("hist_ss_bg_validation","hist_ss_bg_validation",nbins,array('d',bins))
+        h_os_bg_total = rt.TH1F("hist_os_bg_total","hist_os_bg_total",nbins,array('d',bins))
+        h_ss_bg_total = rt.TH1F("hist_ss_bg_total","hist_ss_bg_total",nbins,array('d',bins))
+        h_os_bg_total_validation = rt.TH1F("hist_os_bg_total_validation","hist_os_bg_total_validation",nbins,array('d',bins))
+        h_ss_bg_total_validation = rt.TH1F("hist_ss_bg_total_validation","hist_ss_bg_total_validation",nbins,array('d',bins))
 
         h_os_bg_total = None
         h_ss_bg_total = None
@@ -144,47 +134,102 @@ def main():
 
         ratio = h_os.Clone()
         ratio.Divide(ratio, h_ss)
-        ratio.Fit("pol1")
+        f1 = rt.TF1("f1", "[2]*((x-3)^2-3)+[1]*(x-3)+[0]",0.3,6.0 )
+        #f1 = rt.TF1("f1", "[0]*(1-exp(0.2*(x-3)/[0]))+[2] + [3] *(x-3)",0.3,6.0 )
+        f1.SetParameter(0,0.3)
+        f1.SetParameter(1,0.7)
+        f1.SetParameter(2,2.3)
+        ratio.Fit("f1")
+        ratio.GetXaxis().SetTitle("#DeltaR(e,#mu)")
+        ratio.SetTitle("")
+        ratio.GetYaxis().SetTitle("OS/SS transfer factor")
         ratio.Draw("E")
+            
+        p0_err  = f1.GetParError(0)
+        p0  = f1.GetParameter(0)
+        p1_err  = f1.GetParError(1)
+        p1  = f1.GetParameter(1)
+        p2_err  = f1.GetParError(2)
+        p2  = f1.GetParameter(2)
+        
+        x =  np.arange(0.3,6.0,0.01)
+        
+        y = (p0+p0_err) + p1*(x-3) + p2*((x-3)*(x-3)-3)
+        #y = (p0+p0_err)*(1-rt.TMath.Exp(p1*(x-3)))+p2
+        f_0_up = rt.TGraph(x.size, x.astype(np.double),y.astype(np.double))
+        y = (p0-p0_err) + p1*(x-3) + p2*((x-3)*(x-3)-3)
+        #y = (p0-p0_err)*(1-rt.TMath.Exp(p1*(x-3)))+p2
+        f_0_down = rt.TGraph(x.size, x.astype(np.double),y.astype(np.double))
+        
+        y = p0 + (p1+p1_err)*(x-3) + p2*((x-3)*(x-3)-3)
+        #y = p0*(1-rt.TMath.Exp((p1-p1_err)*(x-3)))+p2
+        f_1_up = rt.TGraph(x.size, x.astype(np.double),y.astype(np.double))
+        #y = p0*(1-rt.TMath.Exp((p1+p1_err)*(x-3)))+p2
+        y = p0 + (p1-p1_err)*(x-3)+ p2*((x-3)*(x-3)-3)
+        f_1_down = rt.TGraph(x.size, x.astype(np.double),y.astype(np.double))
+    
+        y = p0 + p1*(x-3) + (p2-p2_err)*((x-3)*(x-3)-3)
+        #y = p0*(1-rt.TMath.Exp(p1*(x-3)))+(p2-p2_err)
+        f_2_up = rt.TGraph(x.size, x.astype(np.double),y.astype(np.double))
+        y = p0 + p1*(x-3) + (p2+p2_err)*((x-3)*(x-3)-3)
+        #y = p0*(1-rt.TMath.Exp(p1*(x-3)))+(p2+p2_err)
+        f_2_down = rt.TGraph(x.size, x.astype(np.double),y.astype(np.double))
+    
+        #bins = []
+        #n = xmax/0.05
+        #for i in range(0,int(n+1)) :
+        #    bins.append(0.05*i)
+        #grint  =  rt.TGraphErrors(len(bins)-1);
+        #for k in range(0,len(bins)-1) :
+        #   grint.SetPoint(k, bins[k], 0);
+        #(rt.TVirtualFitter.GetFitter()).GetConfidenceIntervals(grint,0.68);
+        #grint.SetLineColor(rt.kBlue);
 
-        bins = []
-        n = xmax/0.05
-        for i in range(0,int(n+1)) :
-            bins.append(0.05*i)
-        grint  =  rt.TGraphErrors(len(bins)-1);
-        for k in range(0,len(bins)-1) :
-           grint.SetPoint(k, bins[k], 0);
-        (rt.TVirtualFitter.GetFitter()).GetConfidenceIntervals(grint,0.68);
-        grint.SetLineColor(rt.kBlue);
-
-        grint_Up = rt.TGraphErrors(len(bins)-1);
-        grint_Down = rt.TGraphErrors(len(bins)-1);
-        for k in range(0,len(bins)-1) :
-           x = rt.Double(0)
-           value = rt.Double(0)
-           grint.GetPoint(k,x,value);
-           value_up = value + grint.GetErrorYhigh(k);
-           value_down = value - grint.GetErrorYhigh(k);
-           grint_Up.SetPoint(k, bins[k], value_up );
-           grint_Down.SetPoint(k, bins[k], value_down );
-
-        grint_Up.Draw("same")
-        grint_Down.Draw("same")
+        #grint_Up = rt.TGraphErrors(len(bins)-1);
+        #grint_Down = rt.TGraphErrors(len(bins)-1);
+        #for k in range(0,len(bins)-1) :
+        #   x = rt.Double(0)
+        #   value = rt.Double(0)
+        #   grint.GetPoint(k,x,value);
+        #   value_up = value + grint.GetErrorYhigh(k);
+        #   value_down = value - grint.GetErrorYhigh(k);
+        #   grint_Up.SetPoint(k, bins[k], value_up );
+        #   grint_Down.SetPoint(k, bins[k], value_down );
+        f_0_up.SetLineColor(rt.kGreen+1)
+        f_0_down.SetLineColor(rt.kGreen+1)    
+        f_1_up.SetLineColor(rt.kOrange+1)
+        f_1_down.SetLineColor(rt.kOrange+1) 
+        f_2_up.SetLineColor(rt.kBlue+1)
+        f_2_down.SetLineColor(rt.kBlue+1) 
+        f_0_up.Draw("same")
+        f_0_down.Draw("same")
+        f_1_up.Draw("same")
+        f_1_down.Draw("same")
+        f_2_up.Draw("same")
+        f_2_down.Draw("same")
 
         outFile.cd()
-        transfer_function = ratio.GetFunction("pol1");
+        transfer_function = ratio.GetFunction("f1");
         transfer_function.SetName("OS_SS_transfer_factors_" + jetbin)
-        grint_Up.SetName("OS_SS_transfer_factors_" + jetbin + "_UP")
-        grint_Down.SetName("OS_SS_transfer_factors_" + jetbin + "_DOWN")
-        grint_Up.Write()
-        grint_Down.Write()
+        f_0_up.SetName("OS_SS_transfer_factors_Par0_" + jetbin + "_UP")
+        f_0_down.SetName("OS_SS_transfer_factors_Par0_" + jetbin + "_DOWN")
+        f_0_up.Write()
+        f_0_down.Write()
+        f_1_up.SetName("OS_SS_transfer_factors_Par1_" + jetbin + "_UP")
+        f_1_down.SetName("OS_SS_transfer_factors_Par1_" + jetbin + "_DOWN")
+        f_1_up.Write()
+        f_1_down.Write()
+        f_2_up.SetName("OS_SS_transfer_factors_Par2_" + jetbin + "_UP")
+        f_2_down.SetName("OS_SS_transfer_factors_Par2_" + jetbin + "_DOWN")
+        f_2_up.Write()
+        f_2_down.Write()
         transfer_function.Write()
         c.Print("figures_"+era+"/transfer_factor_drtt_"+ jetbin + ".pdf")
 
         # validation factors -----------------------------------------------------------------------------------------------------------------------------------------------------------
         ratio_validation = h_os_validation.Clone()
         ratio_validation.Divide(ratio_validation, h_ss_validation)
-        ratio_validation.Fit("pol1")
+        ratio_validation.Fit("f1")
         ratio_validation.Draw("E")
 
         grint_validation  =  rt.TGraphErrors(len(bins)-1);
@@ -208,7 +253,7 @@ def main():
         grint_validation_Down.Draw("same")
 
         outFile.cd()
-        transfer_function_validation = ratio_validation.GetFunction("pol1");
+        transfer_function_validation = ratio_validation.GetFunction("f1");
         transfer_function_validation.SetName("OS_SS_transfer_factors_validation_" + jetbin)
         grint_validation_Up.SetName("OS_SS_transfer_factors_validation_" + jetbin + "_UP")
         grint_validation_Down.SetName("OS_SS_transfer_factors_validation_" + jetbin + "_DOWN")
@@ -235,6 +280,10 @@ def openTree(filename,treename):
     f1 = rt.TFile(filename)
     tree = f1.Get(treename)
     return(f1,tree)
+    
+
+
+
 
 
 if __name__ == '__main__':
