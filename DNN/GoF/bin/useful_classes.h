@@ -125,7 +125,7 @@ vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidist
   vector<double> percentile_ranges;
   for(int i=0; i<=10; i++) {
      if (take_percentile_subrange) percentile_ranges.push_back(0.01+i*0.098);
-     else percentile_ranges.push_back(0.0+i*0.1);
+     else percentile_ranges.push_back(0.0+i*0.099);
   }
 
   float min_val = tree->GetMinimum(cat.variable);
@@ -149,7 +149,9 @@ vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidist
   // Check if variable is of type float
   float var;
   int valid_type = tree->SetBranchAddress(cat.variable,&var);
-  if(valid_type!=0){
+  double var1;
+  int valid_type1 = tree->SetBranchAddress(cat.variable,&var1);
+  if(valid_type!=0 && valid_type1!=0){
      cout<<"Variable is not appropriate for percentile range. binning_1d as specified in config is used !"<<endl;
      return cat.binning_1d;
   }
@@ -172,9 +174,15 @@ vector<float> calc_binning_1d(bool take_percentile_subrange, bool apply_equidist
      }
   }
   else {
-     range_low  = hist_aux->GetBinCenter(1);
-     range_low_not_set = false;
-     range_high = hist_aux->GetBinCenter(hist_aux->GetNbinsX());
+     for(int ibin=1; ibin<hist_aux->GetNbinsX()+1; ibin++){
+        count += hist_aux->GetBinContent(ibin);
+        if(count>=0.99*integral){
+           range_high = hist_aux->GetBinCenter(ibin);
+           break;
+        }
+        range_low  = hist_aux->GetBinCenter(1);
+        range_low_not_set = false;
+     }
   }
   cout<<"histo range starts at = "<<range_low<<endl;
   cout<<"histo range ends at   = "<<range_high<<endl;
