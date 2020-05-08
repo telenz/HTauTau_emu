@@ -72,7 +72,7 @@ if era == "2018" :
 #variable_list = [ "nbtag",
 #                  "bpt_1"
 #]
-#pruned list from Simon (core set + extended set), based on selection without b jet veto, pt_tt not in extended set for emu, but in other channels
+#pruned list from Simon (core set )
 variable_list = [ "m_vis",
                   "pt_vis",
                   "pt_2",
@@ -84,20 +84,9 @@ variable_list = [ "m_vis",
                   "pt_1",
                   "ME_q2v1",
                   "ME_q2v2",
-                  "pt_tt",
                   "jpt_2",
-                  "dr_tt",
-                  "mTdileptonMET",
-                  "jdeta", 
-                  "met",
-                  "iso_1",
-                  "iso_2", 
-                  "nbtag",
-                  "bpt_1",
-                  "dzeta",
-                  "mTemu",
-                  "mt_1",
-                  "mt_2"                   
+                  "mTdileptonMET",  
+                  "jdeta"                    
 ]
 # Execute produce_gof_inputs.cpp for all variables
 

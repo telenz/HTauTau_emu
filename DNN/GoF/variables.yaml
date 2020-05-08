@@ -10,9 +10,7 @@ variables:
 - pt_1
 - ME_q2v1
 - ME_q2v2
-- pt_tt
 - jpt_2
-- eta_1
 - mTdileptonMET
 - jdeta
 
@@ -31,9 +29,7 @@ selected_variables:
            - pt_1
            - ME_q2v1
            - ME_q2v2
-           - pt_tt
            - jpt_2
-           - dr_tt
            - mTdileptonMET
            - jdeta
             
@@ -50,9 +46,7 @@ selected_variables:
            - pt_1
            - ME_q2v1
            - ME_q2v2
-           - pt_tt
            - jpt_2
-           - dr_tt
            - mTdileptonMET
            - jdeta      
 
@@ -69,8 +63,6 @@ selected_variables:
            - pt_1
            - ME_q2v1
            - ME_q2v2
-           - pt_tt
            - jpt_2
-           - dr_tt
            - mTdileptonMET
            - jdeta      
