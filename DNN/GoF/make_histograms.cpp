@@ -57,7 +57,7 @@ void make_histograms(TString config_name="config_for_gof_2016.cfg") {
 
   TString weight      = "xsec_lumi_weight*mcweight*puweight*effweight*trigger_filter_weight*prefiringweight*";
   TString mt_cut    = "&& mTdileptonMET<60 ";
-  TString cuts_kine = "&& pt_1>13 && pt_2>10 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron && nbtag == 0";
+  TString cuts_kine = "&& pt_1>15 && pt_2>15 && TMath::Max(pt_1,pt_2)>24 && metFilters && trg_muonelectron && nbtag == 0";
   cuts_kine += mt_cut;
 
   TString cuts_iso_general    = "&& iso_1<0.15 && iso_2<0.2 && extraelec_veto<0.5 && extramuon_veto<0.5 ";
