@@ -92,7 +92,7 @@ void create_dnn_ntuples( TString era = "2017" ){
      // samples_map[channel + "-NOMINAL_ntuple_qqh_2J"                ] = VBFHToTauTau_STXS1p1_Bin203to205_2018;
      // samples_map[channel + "-NOMINAL_ntuple_qqh_PTHGT200"          ] = VBFHToTauTau_STXS1p1_Bin206_2018;
      // samples_map[channel + "-NOMINAL_ntuple_vbftopo"               ] = VBFHToTauTau_STXS1p1_Bin207to210_2018;  //noch weiter trennen?
-     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2018_all_eras/";  
+     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_22/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2018_all_eras/";  
   }
   else if(era == "2017"){
     xsec_map    = &xsec_map_2017;
@@ -133,7 +133,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     // samples_map[channel + "-NOMINAL_ntuple_qqh_PTHGT200"          ] = VBFHToTauTau_STXS1p1_Bin206_2017;
     // samples_map[channel + "-NOMINAL_ntuple_vbftopo"               ] = VBFHToTauTau_STXS1p1_Bin207to210_2017;  //noch weiter trennen?
     //input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/newMETv2/CMSSW_9_4_9/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
-    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_22/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2017_all_eras/";
   }
   else if(era == "2016"){
     xsec_map    = &xsec_map_2016;
@@ -165,7 +165,7 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2016;
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2016;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2016;
-    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_15_patch2/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016_all_eras/";
+    input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_22/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016_all_eras/";
   }
 
   // Needed for stitching
