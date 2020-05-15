@@ -83,6 +83,8 @@ void create_dnn_ntuples( TString era = "2017" ){
      samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2018;
      samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2018;
      samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2018;
+     samples_map[channel + "-NOMINAL_ntuple_ZHWW"       ] = ZHToWW_2018;
+     samples_map[channel + "-NOMINAL_ntuple_WHWW"       ] = WHToWW_2018;
      // samples_map[channel + "-NOMINAL_ntuple_ggh_1J_PTH0to120"      ] = GluGluHToTauTau_STXS1p1_Bin104to105_2018;
      // samples_map[channel + "-NOMINAL_ntuple_ggh_2J"                ] = GluGluHToTauTau_STXS1p1_Bin107to109_2018;
      // samples_map[channel + "-NOMINAL_ntuple_ggh_1J_PTH120to200"    ] = GluGluHToTauTau_STXS1p1_Bin106_2018;
@@ -124,6 +126,8 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2017;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2017;
+    samples_map[channel + "-NOMINAL_ntuple_ZHWW"       ] = ZHToWW_2017;
+    samples_map[channel + "-NOMINAL_ntuple_WHWW"       ] = WHToWW_2017;
     // samples_map[channel + "-NOMINAL_ntuple_ggh_1J_PTH0to120"      ] = GluGluHToTauTau_STXS1p1_Bin104to105_2017;
     // samples_map[channel + "-NOMINAL_ntuple_ggh_2J"                ] = GluGluHToTauTau_STXS1p1_Bin107to109_2017;
     // samples_map[channel + "-NOMINAL_ntuple_ggh_1J_PTH120to200"    ] = GluGluHToTauTau_STXS1p1_Bin106_2017;
@@ -165,6 +169,8 @@ void create_dnn_ntuples( TString era = "2017" ){
     samples_map[channel + "-NOMINAL_ntuple_ggHWW"    ] = ggHToWW_2016;
     samples_map[channel + "-NOMINAL_ntuple_VBFHWW"   ] = VBFHToWW_2016;
     samples_map[channel + "-NOMINAL_ntuple_ttH"      ] = ttH_2016;
+    samples_map[channel + "-NOMINAL_ntuple_ZHWW"       ] = ZHToWW_2016;
+    samples_map[channel + "-NOMINAL_ntuple_WHWW"       ] = WHToWW_2016;
     input_dir="/nfs/dust/cms/user/mameyer/SM_HiggsTauTau/master/CMSSW_10_2_22/src/DesyTauAnalyses/NTupleMaker/test/HTauTau_EMu_2016_all_eras/";
   }
 
@@ -577,7 +583,7 @@ void create_dnn_ntuples( TString era = "2017" ){
 	else if(njets>=2 && mjj>=350 && pt_tt>=200) htxs_reco_flag_qqh = 203;
 
 	// Select hadronic and leptonic part of VH sample
-	if( subsample.Contains("VH") || subsample.Contains("WplusH") || subsample.Contains("WminusH") ){
+	if( subsample.Contains("VH") || subsample.Contains("WplusH") || subsample.Contains("WminusH") || subsample.Contains("HZJ") || subsample.Contains("HWminusJ") || subsample.Contains("HWplusJ") || subsample.Contains("GluGluZH") || subsample.Contains("ggZH")){
 	  if( sample.first.Contains("VBFH") && (htxs_stage1p1cat>210 || htxs_stage1p1cat<200) ) continue;
 	  if( (sample.first.Contains("WH") || sample.first.Contains("ZH")) && htxs_stage1p1cat<=210 && htxs_stage1p1cat>=200 ) continue;
 	}

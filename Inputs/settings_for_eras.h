@@ -35,9 +35,11 @@ const vector<TString> SingleTop_2018       = { "ST_t-channel_antitop_4f_Inclusiv
                                                "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8" ,
                                                "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" ,
                                                "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" };
-const vector<TString> Diboson_2018         = { "WW_TuneCP5_13TeV-pythia8" ,
-                                               "WZ_TuneCP5_13TeV-pythia8" ,
-                                               "ZZ_TuneCP5_13TeV-pythia8" };
+const vector<TString> Diboson_2018         = { "WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8" ,
+                                               "WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8" ,
+                                               "ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8" ,
+                                               "ZZTo4L_TuneCP5_13TeV-amcatnloFXFX-pythia8" ,
+                                               "VVTo2L2Nu_13TeV_amcatnloFXFX_madspin_pythia8" };
 const vector<TString> GluGluHToTauTau_2018 = { "GluGluHToTauTau_M125_13TeV_powheg_pythia8", "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin104to105_M125", "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin107to109_M125", "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin106_M125", "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin110to113_M125", "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin101_M125" };
 const vector<TString> VBFHToTauTau_2018    = { "VBFHToTauTau_M125_13TeV_powheg_pythia8",
                                                "ZHToTauTau_M125_13TeV_powheg_pythia8",
@@ -45,11 +47,23 @@ const vector<TString> VBFHToTauTau_2018    = { "VBFHToTauTau_M125_13TeV_powheg_p
                                                "WminusHToTauTau_M125_13TeV_powheg_pythia8",
                                                "VBFHToTauTau_HTXSFilter_STXS1p1_Bin203to205_M125",
                                                "VBFHToTauTau_HTXSFilter_STXS1p1_Bin206_M125",
-                                               "VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125" };
-const vector<TString> ZHToTauTau_2018      = { "ZHToTauTau_M125_13TeV_powheg_pythia8" };
+                                               "VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125", 
+                                              "ggZH_HToTauTau_ZToQQ_M125_13TeV_powheg_pythia8", 
+                                              "ggZH_HToTauTau_ZToNuNu_M125_13TeV_powheg_pythia8",
+                                              "ggZH_HToTauTau_ZToLL_M125_13TeV_powheg_pythia8"};
+const vector<TString> ZHToTauTau_2018      = { "ZHToTauTau_M125_13TeV_powheg_pythia8", 
+                                              "ggZH_HToTauTau_ZToQQ_M125_13TeV_powheg_pythia8",
+                                              "ggZH_HToTauTau_ZToNuNu_M125_13TeV_powheg_pythia8",
+                                              "ggZH_HToTauTau_ZToLL_M125_13TeV_powheg_pythia8" };
 const vector<TString> WHToTauTau_2018      = { "WplusHToTauTau_M125_13TeV_powheg_pythia8" , "WminusHToTauTau_M125_13TeV_powheg_pythia8" };
 const vector<TString> ggHToWW_2018         = { "GluGluHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" };
-const vector<TString> VBFHToWW_2018        = { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" };
+const vector<TString> VBFHToWW_2018        = { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8",
+                                               "HZJ_HToWW_M125_13TeV_powheg_jhugen714_pythia8_TuneCP5",
+                                               "HWminusJ_HToWW_M125_13TeV_powheg_jhugen724_pythia8_TuneCP5",
+                                               "HWplusJ_HToWW_M125_13TeV_powheg_jhugen724_pythia8_TuneCP5",
+                                              "GluGluZH_HToWW_M125_13TeV_powheg_pythia8_TuneCP5_PSweights"};
+const vector<TString> ZHToWW_2018      = { "HZJ_HToWW_M125_13TeV_powheg_jhugen714_pythia8_TuneCP5", "GluGluZH_HToWW_M125_13TeV_powheg_pythia8_TuneCP5_PSweights" };
+const vector<TString> WHToWW_2018      = { "HWminusJ_HToWW_M125_13TeV_powheg_jhugen724_pythia8_TuneCP5" , "HWplusJ_HToWW_M125_13TeV_powheg_jhugen724_pythia8_TuneCP5" };
 const vector<TString> ttH_2018             = { "ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8" };
 // const vector<TString> GluGluHToTauTau_STXS1p1_Bin104to105_2018 = { "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin104to105_M125" };
 // const vector<TString> GluGluHToTauTau_STXS1p1_Bin107to109_2018 = { "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin107to109_M125" };
@@ -88,9 +102,11 @@ const vector<TString> SingleTop_2017       = { "ST_t-channel_antitop_4f_inclusiv
 					       "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8" ,
 					       "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" ,
 					       "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8" };
-const vector<TString> Diboson_2017         = { "WW_TuneCP5_13TeV-pythia8" ,
-					       "WZ_TuneCP5_13TeV-pythia8" ,
-					       "ZZ_TuneCP5_13TeV-pythia8" };
+const vector<TString> Diboson_2017         = { "WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8", 
+                "WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8", 
+                "ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8", 
+                "ZZTo4L_TuneCP5_13TeV-amcatnloFXFX-pythia8", 
+                "VVTo2L2Nu_13TeV_amcatnloFXFX_madspin_pythia8" };
 const vector<TString> GluGluHToTauTau_2017 = { "GluGluHToTauTau_M125_13TeV_powheg_pythia8", "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin104to105_M125", "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin107to109_M125", "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin106_M125", "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin110to113_M125", "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin101_M125" };
 const vector<TString> VBFHToTauTau_2017    = { "VBFHToTauTau_M125_13TeV_powheg_pythia8",
 					       "ZHToTauTau_M125_13TeV_powheg_pythia8",
@@ -98,11 +114,19 @@ const vector<TString> VBFHToTauTau_2017    = { "VBFHToTauTau_M125_13TeV_powheg_p
                       "WminusHToTauTau_M125_13TeV_powheg_pythia8", 
                       "VBFHToTauTau_HTXSFilter_STXS1p1_Bin203to205_M125",
                       "VBFHToTauTau_HTXSFilter_STXS1p1_Bin206_M125",
-                      "VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125" };
-const vector<TString> ZHToTauTau_2017      = { "ZHToTauTau_M125_13TeV_powheg_pythia8" };
+                      "VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125",
+                      "ggZH_HToTauTau_ZToLL_M125_13TeV_powheg_pythia8",
+                      "ggZH_HToTauTau_ZToNuNu_M125_13TeV_powheg_pythia8",
+                      "ggZH_HToTauTau_ZToQQ_M125_13TeV_powheg_pythia8"};
+const vector<TString> ZHToTauTau_2017      = { "ZHToTauTau_M125_13TeV_powheg_pythia8",
+                                               "ggZH_HToTauTau_ZToLL_M125_13TeV_powheg_pythia8",
+                                               "ggZH_HToTauTau_ZToNuNu_M125_13TeV_powheg_pythia8",
+                                               "ggZH_HToTauTau_ZToQQ_M125_13TeV_powheg_pythia8"};
 const vector<TString> WHToTauTau_2017      = { "WplusHToTauTau_M125_13TeV_powheg_pythia8" , "WminusHToTauTau_M125_13TeV_powheg_pythia8" };
 const vector<TString> ggHToWW_2017         = { "GluGluHToWWTo2L2Nu" };
-const vector<TString> VBFHToWW_2017        = { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" };
+const vector<TString> VBFHToWW_2017        = { "VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8", "HZJ_HToWW_M125_13TeV_powheg_jhugen714_pythia8_TuneCP5", "HWminusJ_HToWW_M125_13TeV_powheg_pythia8_TuneCP5","HWplusJ_HToWW_M125_13TeV_powheg_pythia8_TuneCP5", "GluGluZH_HToWW_M125_13TeV_powheg_pythia8_TuneCP5" };
+const vector<TString> ZHToWW_2017      = { "HZJ_HToWW_M125_13TeV_powheg_jhugen714_pythia8_TuneCP5", "GluGluZH_HToWW_M125_13TeV_powheg_pythia8_TuneCP5" };
+const vector<TString> WHToWW_2017      = { "HWminusJ_HToWW_M125_13TeV_powheg_pythia8_TuneCP5", "HWplusJ_HToWW_M125_13TeV_powheg_pythia8_TuneCP5" };
 const vector<TString> ttH_2017             = { "ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8" };
 // const vector<TString> GluGluHToTauTau_STXS1p1_Bin104to105_2017 = { "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin104to105_M125" };
 // const vector<TString> GluGluHToTauTau_STXS1p1_Bin107to109_2017 = { "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin107to109_M125" };
@@ -118,16 +142,18 @@ const vector<TString> MuonEG_Run2016       = { "MuonEG_Run2016B" , "MuonEG_Run20
 const vector<TString> Embedded_2016        = { "Embedding_Run2016" };
 const vector<TString> DYJets_2016          = { "DY1JetsToLL_M-50" , "DY2JetsToLL_M-50" , "DY3JetsToLL_M-50" , "DY4JetsToLL_M-50" , "DYJetsToLL_M-50" , "DYJetsToLL_M-10to50" , "EWKZ2Jets_ZToLL", "EWKZ2Jets_ZToNuNu" };
 const vector<TString> WJets_2016           = { "W1JetsToLNu" , "W2JetsToLNu" , "W3JetsToLNu" , "W4JetsToLNu" , "WJetsToLNu" , "WGToLNuG" , "WGstarToLNuEE" , "WGstarToLNuMuMu" , "EWKWPlus2Jets" , "EWKWMinus2Jet" };
-const vector<TString> TTbar_2016           = { "TTbar" };
+const vector<TString> TTbar_2016           = { "TTTo2L2Nu", "TTToHadronic", "TTToSemiLeptonic" };
 const vector<TString> SingleTop_2016       = { "ST_t-channel_antitop" , "ST_t-channel_top" , "ST_tW_antitop" , "ST_tW_top" };
 //const vector<TString> Diboson_2016         = { "VVTo2L2Nu" , "WZJToLLLNu" , "WZTo1L1Nu2Q" , "WZTo1L3Nu" , "WZTo2L2Q" , "ZZTo2L2Q" , "ZZTo4L" , "WWToLNuQQ" };
-const vector<TString> Diboson_2016         = { "WW", "WZ", "ZZ" };
-const vector<TString> GluGluHToTauTau_2016 = { "GluGluHToTauTau_M125", "GluGluHToTauTau_M125_ext1" };
-const vector<TString> VBFHToTauTau_2016    = { "VBFHToTauTau_M125" , "VBFHToTauTau_M125_ext1" , "ZHToTauTau_M125" , "WplusHToTauTau_M125" , "WminusHToTauTau_M125" };
-const vector<TString> ZHToTauTau_2016      = { "ZHToTauTau_M125" };
+const vector<TString> Diboson_2016         = {  "VVTo2L2Nu", "WZTo2L2Q", "WZTo3LNu", "ZZTo2L2Q", "ZZTo4L"};
+const vector<TString> GluGluHToTauTau_2016 = { "GluGluHToTauTau_M125", "GluGluHToTauTau_M125_ext1", "GluGluHToTauTau_M125_ext2" };
+const vector<TString> VBFHToTauTau_2016    = { "VBFHToTauTau_M125" , "VBFHToTauTau_M125_ext1" , "VBFHToTauTau_M125_ext2", "ZHToTauTau_M125" , "WplusHToTauTau_M125" , "WminusHToTauTau_M125", "ggZH_HToTauTau_ZToLL_M125_13TeV_powheg_pythia8", "ggZH_HToTauTau_ZToNuNu_M125_13TeV_powheg_pythia8", "ggZH_HToTauTau_ZToQQ_M125_13TeV_powheg_pythia8"};
+const vector<TString> ZHToTauTau_2016      = { "ZHToTauTau_M125" , "ggZH_HToTauTau_ZToLL_M125_13TeV_powheg_pythia8", "ggZH_HToTauTau_ZToNuNu_M125_13TeV_powheg_pythia8", "ggZH_HToTauTau_ZToQQ_M125_13TeV_powheg_pythia8"};
 const vector<TString> WHToTauTau_2016      = { "WplusHToTauTau_M125" , "WminusHToTauTau_M125" };
 const vector<TString> ggHToWW_2016         = { "GluGluHToWWTo2L2Nu_M125" };
-const vector<TString> VBFHToWW_2016        = { "VBFHToWWTo2L2Nu_M125" };
+const vector<TString> VBFHToWW_2016        = { "VBFHToWWTo2L2Nu_M125", "HZJ_HToWW_M125_13TeV_powheg_pythia8", "HWminusJ_HToWW_M125_13TeV_powheg_pythia8","HWplusJ_HToWW_M125_13TeV_powheg_pythia8", "GluGluZH_HToWW_M125_13TeV_powheg_pythia8" };
+const vector<TString> ZHToWW_2016      = { "HZJ_HToWW_M125_13TeV_powheg_pythia8" , "GluGluZH_HToWW_M125_13TeV_powheg_pythia8"};
+const vector<TString> WHToWW_2016      = { "HWminusJ_HToWW_M125_13TeV_powheg_pythia8", "HWplusJ_HToWW_M125_13TeV_powheg_pythia8" };
 const vector<TString> ttH_2016             = { "ttHJetToTT_M125" };
 
 // **************************************************************************************************
@@ -161,9 +187,14 @@ const map<TString, double> xsec_map_2018 = {
    { "WW_TuneCP5_13TeV-pythia8" , 118.7 },  // NNLO
    { "WZ_TuneCP5_13TeV-pythia8" , 27.57 },
    { "ZZ_TuneCP5_13TeV-pythia8" , 12.14 },
+   { "WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8" , 5.52},
+   { "WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8" , 4.43},
+   { "ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8" , 3.38},
+   { "ZZTo4L_TuneCP5_13TeV-amcatnloFXFX-pythia8" , 1.26},
+   { "VVTo2L2Nu_13TeV_amcatnloFXFX_madspin_pythia8" , 13.84},
    { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" , 3.08 }, //bottom quark associated production with 1% of the gluon fusion cross section is included in ggh
    { "VBFHToTauTau_M125_13TeV_powheg_pythia8" , 3.782*0.0627 },
-   { "ZHToTauTau_M125_13TeV_powheg_pythia8" , 0.0554},
+   { "ZHToTauTau_M125_13TeV_powheg_pythia8" ,  0.04774},
    { "WplusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0527 },
    { "WminusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0334 },
    { "GluGluHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 1.091343 }, // 48.58 (Production) * 0.214 (H->WW) * 0.104976 (WW->2l2Nu), from Dennis Roy (Heavy H->WW analysis), SM H->WW analysis still uses old ggh cross section (according to their AN), other values are the same
@@ -176,7 +207,14 @@ const map<TString, double> xsec_map_2018 = {
    { "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin101_M125",  0.0139},
    { "VBFHToTauTau_HTXSFilter_STXS1p1_Bin203to205_M125", 0.1608},
    { "VBFHToTauTau_HTXSFilter_STXS1p1_Bin206_M125", 0.0398 },
-   { "VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125", 0.3338}
+   { "VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125", 0.3338},
+   { "HZJ_HToWW_M125_13TeV_powheg_jhugen714_pythia8_TuneCP5" , 0.163},
+   { "HWminusJ_HToWW_M125_13TeV_powheg_jhugen724_pythia8_TuneCP5", 0.114}, 
+   { "HWplusJ_HToWW_M125_13TeV_powheg_jhugen724_pythia8_TuneCP5", 0.18},
+   { "GluGluZH_HToWW_M125_13TeV_powheg_pythia8_TuneCP5_PSweights", 0.0262},
+   { "ggZH_HToTauTau_ZToQQ_M125_13TeV_powheg_pythia8",  0.00538017},
+   { "ggZH_HToTauTau_ZToNuNu_M125_13TeV_powheg_pythia8", 0.00153915},
+   { "ggZH_HToTauTau_ZToLL_M125_13TeV_powheg_pythia8", 0.00077719}
 };
 // 2017 (checked again - AN-19-177 -> DY xsec updated )
 const map<TString, double> xsec_map_2017 = {
@@ -206,9 +244,14 @@ const map<TString, double> xsec_map_2017 = {
   { "WW_TuneCP5_13TeV-pythia8" , 118.7 },  // NNLO
   { "WZ_TuneCP5_13TeV-pythia8" , 27.57 },
   { "ZZ_TuneCP5_13TeV-pythia8" , 12.14 },
+  { "WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8" , 5.52},
+  { "WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8" , 4.43},
+  { "ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8" , 3.38} ,
+  { "ZZTo4L_TuneCP5_13TeV-amcatnloFXFX-pythia8" , 1.26},
+  { "VVTo2L2Nu_13TeV_amcatnloFXFX_madspin_pythia8", 13.84},
   { "GluGluHToTauTau_M125_13TeV_powheg_pythia8" , 3.08 }, //bottom quark associated production with 1% of the gluon fusion cross section is included in ggh
   { "VBFHToTauTau_M125_13TeV_powheg_pythia8"    , 3.782*0.0627 },
-  { "ZHToTauTau_M125_13TeV_powheg_pythia8"      , 0.0554 },
+  { "ZHToTauTau_M125_13TeV_powheg_pythia8"      ,  0.04774 },
   { "WplusHToTauTau_M125_13TeV_powheg_pythia8"  , 0.0527 },
   { "WminusHToTauTau_M125_13TeV_powheg_pythia8" , 0.0334 },
   { "GluGluHToWWTo2L2Nu"                        , 1.091343 },  // see 2018
@@ -221,7 +264,14 @@ const map<TString, double> xsec_map_2017 = {
   { "GluGluHToTauTau_HTXSFilter_STXS1p1_Bin101_M125", 0.0139 },
   { "VBFHToTauTau_HTXSFilter_STXS1p1_Bin203to205_M125", 0.1606},
   { "VBFHToTauTau_HTXSFilter_STXS1p1_Bin206_M125", 0.0398 },
-  { "VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125", 0.3341}
+  { "VBFHToTauTau_HTXSFilter_STXS1p1_Bin207to210_M125", 0.3341},
+  { "HZJ_HToWW_M125_13TeV_powheg_jhugen714_pythia8_TuneCP5" , 0.163},
+  { "HWminusJ_HToWW_M125_13TeV_powheg_pythia8_TuneCP5", 0.114}, 
+  { "HWplusJ_HToWW_M125_13TeV_powheg_pythia8_TuneCP5", 0.18},
+  { "GluGluZH_HToWW_M125_13TeV_powheg_pythia8_TuneCP5", 0.0262},
+  { "ggZH_HToTauTau_ZToQQ_M125_13TeV_powheg_pythia8",  0.00538017},
+  { "ggZH_HToTauTau_ZToNuNu_M125_13TeV_powheg_pythia8", 0.00153915},
+  { "ggZH_HToTauTau_ZToLL_M125_13TeV_powheg_pythia8", 0.00077719}
 };
 
 // 2016 (taken from AN-19-177)
@@ -238,6 +288,9 @@ const map<TString, double> xsec_map_2016 = {
     { "W3JetsToLNu"              , 1.221*954.8 },// to do: check!
     { "W4JetsToLNu"              , 1.221*485.6 },// to do: check!
     { "TTbar"                    , 831.6 },
+    { "TTTo2L2Nu"                , 88.29}, 
+    { "TTToHadronic"             , 377.96},
+    { "TTToSemiLeptonic"         , 365.35},
     { "ST_t-channel_antitop"     , 80.95 },
     { "ST_t-channel_top"         , 136.02 },
     { "ST_tW_antitop"            , 35.85 },
@@ -253,6 +306,11 @@ const map<TString, double> xsec_map_2016 = {
     {"WW", 118.7},
     {"WZ", 27.57},
     {"ZZ", 12.14},
+    {"VVTo2L2Nu", 13.84}, 
+    {"WZTo2L2Q", 5.52},
+    {"WZTo3LNu", 4.43},
+    {"ZZTo2L2Q", 3.38},
+    {"ZZTo4L", 1.26},
     { "WGToLNuG"                 , 178.4 }, // xsdb
     { "WGstarToLNuMuMu"          , 2.793 },
     { "WGstarToLNuEE"            , 3.526 },
@@ -264,12 +322,21 @@ const map<TString, double> xsec_map_2016 = {
     { "VBFHToTauTau_M125"        , 3.782*0.0627 },
     { "GluGluHToTauTau_M125_ext1" , 3.08 },//bottom quark associated production with 1% of the gluon fusion cross section is included in ggh
     { "VBFHToTauTau_M125_ext1"   , 3.782*0.0627 },
-    { "ZHToTauTau_M125"          , 0.0554 },
+    { "GluGluHToTauTau_M125_ext2" , 3.08 },//bottom quark associated production with 1% of the gluon fusion cross section is included in ggh
+    { "VBFHToTauTau_M125_ext2"   , 3.782*0.0627 },
+    { "ZHToTauTau_M125"          ,  0.04774 },
     { "WplusHToTauTau_M125"      , 0.0527 },
     { "WminusHToTauTau_M125"     , 0.0334 },
     { "GluGluHToWWTo2L2Nu_M125"  , 1.091343 }, // see 2018
     { "VBFHToWWTo2L2Nu_M125"     , 0.084962 }, // see 2018
-    { "ttHJetToTT_M125"          , 0.5071*0.0627 } // see 2017
+    { "HZJ_HToWW_M125_13TeV_powheg_pythia8" , 0.163},
+    { "HWminusJ_HToWW_M125_13TeV_powheg_pythia8" , 0.114},
+    { "HWplusJ_HToWW_M125_13TeV_powheg_pythia8" , 0.18},
+    { "GluGluZH_HToWW_M125_13TeV_powheg_pythia8" , 0.0262},
+    { "ttHJetToTT_M125"          , 0.5071*0.0627 },// see 2017
+    { "ggZH_HToTauTau_ZToQQ_M125_13TeV_powheg_pythia8",  0.00538017},
+    { "ggZH_HToTauTau_ZToNuNu_M125_13TeV_powheg_pythia8", 0.00153915},
+    { "ggZH_HToTauTau_ZToLL_M125_13TeV_powheg_pythia8", 0.00077719} 
   };
 // **************************************************************************************************
 // **************************************************************************************************
@@ -335,15 +402,9 @@ map<TString, int> n_events_per_sample_2017 = {
 {"EWKZ2Jets_ZToLL_M-50_TuneCP5_13TeV-madgraph-pythia8" , 954336},
 {"EWKWMinus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8" , 4449714},
 {"EWKWPlus2Jets_WToLNu_M-50_TuneCP5_13TeV-madgraph-pythia8" , 4453013},
-{"WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8" , 6283083},
-{"ZHToTauTau_M125_13TeV_powheg_pythia8" , 4940230},
-{"WplusHToTauTau_M125_13TeV_powheg_pythia8" , 4000000},
-{"WminusHToTauTau_M125_13TeV_powheg_pythia8" , 3860872},
-{"GluGluHToWWTo2L2Nu" , 953600}, 
-{"VBFHToWWTo2L2Nu_M125_13TeV_powheg2_JHUGenV714_pythia8" , 500000},
-{"ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8" , 21713806},
+{"WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8" , 6283083}
 };
-//TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8, TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8, TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8 , ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, GluGluHToTauTau_M125_13TeV_powheg_pythia8, VBFHToTauTau_M125_13TeV_powheg_pythia8 can be normalized using GetSumOfWeights()
+//TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8, TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8, TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8 , ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8, GluGluHToTauTau_M125_13TeV_powheg_pythia8, VBFHToTauTau_M125_13TeV_powheg_pythia8, exclusive diboson samples can be normalized using GetSumOfWeights()
 
 map<TString, int> n_events_per_sample_2016 = {
 {"WJetsToLNu"  , 86916455},
@@ -373,7 +434,7 @@ map<TString, int> n_events_per_sample_2016 = {
 {"WGstarToLNuMuMu"          ,  2218596},
 {"WGstarToLNuEE"            ,  2149729},
 };
-//signal samples can be normalized using GetSumOfWeights()
+//signal samples, exclusive ttbar, exclusive diboson samples  can be normalized using GetSumOfWeights()
 
 
 double getNEventsProcessed(TString filename)
