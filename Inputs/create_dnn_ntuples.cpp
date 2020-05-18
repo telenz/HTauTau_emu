@@ -583,9 +583,14 @@ void create_dnn_ntuples( TString era = "2017" ){
 	else if(njets>=2 && mjj>=350 && pt_tt>=200) htxs_reco_flag_qqh = 203;
 
 	// Select hadronic and leptonic part of VH sample
-	if( subsample.Contains("VH") || subsample.Contains("WplusH") || subsample.Contains("WminusH") || subsample.Contains("HZJ") || subsample.Contains("HWminusJ") || subsample.Contains("HWplusJ") || subsample.Contains("GluGluZH") || subsample.Contains("ggZH")){
+	if( subsample.Contains("VH") || subsample.Contains("WplusH") || subsample.Contains("WminusH") || subsample.Contains("HZJ") || subsample.Contains("HWminusJ") || subsample.Contains("HWplusJ")){
 	  if( sample.first.Contains("VBFH") && (htxs_stage1p1cat>210 || htxs_stage1p1cat<200) ) continue;
 	  if( (sample.first.Contains("WH") || sample.first.Contains("ZH")) && htxs_stage1p1cat<=210 && htxs_stage1p1cat>=200 ) continue;
+	}
+  // select hadronic and leptonic part of ggZH sample
+  if(subsample.Contains("GluGluZH") || subsample.Contains("ggZH")){
+	  if( (sample.first.Contains("GluGluH") || sample.first.Contains("ggH"))&& (htxs_stage1p1cat>116 || htxs_stage1p1cat< 100) ) continue;
+	  if( (sample.first.Contains("ZH")) && htxs_stage1p1cat<=116 && htxs_stage1p1cat>=100 ) continue;
 	}
 
 	currentTree->Fill();
