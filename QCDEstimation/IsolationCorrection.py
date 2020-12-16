@@ -113,6 +113,12 @@ def main() :
     iso_correction.SetName("IsolationCorrection")
     iso_correction.Write()
     c.Print("figures_"+era+"/iso_correction.pdf")
+    iso_correction.Draw("textcolz e")
+    c.Update()
+    c.Print("figures_"+era+"/iso_correction_error.pdf")
+    c.SetLogx()
+    c.SetLogy()
+    c.Print("figures_"+era+"/iso_correction_log.pdf")
 
 if __name__ == '__main__':
    main()
